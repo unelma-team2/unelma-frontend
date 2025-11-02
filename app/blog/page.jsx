@@ -10,7 +10,7 @@ export default function BlogPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const API_URL = 'http://localhost:1338';
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   useEffect(() => {
     axios
