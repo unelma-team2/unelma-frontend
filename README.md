@@ -62,14 +62,18 @@ http://localhost:3000
 
 ## 🧱 Project Structure
 
+## 🧱 Project Structure
+
+```text
 app/
-├── products/      → Products & Services showcase page
-├── blog/          → Blog list and single blog pages
-├── case-studies/  → “Coming Soon” placeholder
-├── about/         → About page
-├── careers/       → “Coming Soon” placeholder
-├── contact/       → Contact page
-└── page.js        → Home page
+├── products/      # Products & Services showcase page
+├── blog/          # Blog list and single blog pages
+├── case-studies/  # “Coming Soon” placeholder
+├── about/         # About page
+├── careers/       # “Coming Soon” placeholder
+├── contact/       # Contact page
+└── page.js        # Home page
+```
 
 ## 🧩 Environment Files
 
