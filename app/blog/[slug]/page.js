@@ -4,6 +4,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function SingleBlogPage() {
   const { slug } = useParams(); // Gets slug from the URL
@@ -23,7 +24,7 @@ export default function SingleBlogPage() {
       })
       .catch((err) => setError(err))
       .finally(() => setLoading(false));
-  }, [slug]);
+  }, [slug, API_URL]);
 
   if (loading) return <p style={{ padding: "2rem" }}>Loading blog...</p>;
   if (error)
@@ -44,9 +45,11 @@ export default function SingleBlogPage() {
       </h1>
 
       {imageUrl && (
-        <img
+        <Image
           src={imageUrl}
           alt={Title}
+          width={800}
+          height={400}
           style={{
             width: "100%",
             maxHeight: "400px",
