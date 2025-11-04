@@ -53,6 +53,8 @@ export default function BlogPage() {
                     position: "relative",
                     width: "100%",
                     height: "200px",
+                    borderRadius: "10px",
+                    overflow: "hidden", // ensures corners are clipped
                   }}
                 >
                   <Image
@@ -61,7 +63,6 @@ export default function BlogPage() {
                     fill
                     style={{
                       objectFit: "cover",
-                      borderRadius: "10px",
                     }}
                   />
                 </div>
