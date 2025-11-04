@@ -1,8 +1,7 @@
 /** @type {import('next').NextConfig} */
 
-// Create a URL object from your env variable
 const backendUrl = new URL(
-  process.env.NEXT_PUBLIC_API_URL || "http://localhost:1337"
+  process.env.NEXT_PUBLIC_API_URL?.trim() || "http://localhost:1337"
 );
 
 const nextConfig = {

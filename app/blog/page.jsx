@@ -48,17 +48,23 @@ export default function BlogPage() {
               }}
             >
               {imageUrl && (
-                <Image
-                  src={imageUrl}
-                  alt={Title}
-                  width={800}
-                  height={400}
+                <div
                   style={{
+                    position: "relative",
                     width: "100%",
                     height: "200px",
-                    objectFit: "cover",
                   }}
-                />
+                >
+                  <Image
+                    src={imageUrl}
+                    alt={Title}
+                    fill
+                    style={{
+                      objectFit: "cover",
+                      borderRadius: "10px",
+                    }}
+                  />
+                </div>
               )}
               <div style={{ padding: "1rem" }}>
                 <h2>{Title}</h2>
