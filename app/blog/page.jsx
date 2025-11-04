@@ -47,26 +47,17 @@ export default function BlogPage() {
                 boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
               }}
             >
-              {imageUrl && (
-                <div
-                  style={{
-                    position: "relative",
-                    width: "100%",
-                    height: "200px",
-                    borderRadius: "10px",
-                    overflow: "hidden", // ensures corners are clipped
-                  }}
-                >
-                  <Image
-                    src={imageUrl}
-                    alt={Title}
-                    fill
-                    style={{
-                      objectFit: "cover",
-                    }}
-                  />
-                </div>
-              )}
+              <div
+                style={{ position: "relative", width: "100%", height: "200px" }}
+              >
+                <Image
+                  src={imageUrl}
+                  alt={Title}
+                  fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  style={{ objectFit: "cover" }}
+                />
+              </div>
               <div style={{ padding: "1rem" }}>
                 <h2>{Title}</h2>
                 <p style={{ color: "#555" }}>{Description?.slice(0, 150)}...</p>
