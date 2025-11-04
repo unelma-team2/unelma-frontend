@@ -23,7 +23,7 @@ export default function SingleBlogPage() {
       })
       .catch((err) => setError(err))
       .finally(() => setLoading(false));
-  }, [slug]);
+  }, [slug, API_URL]);
 
   if (loading) return <p style={{ padding: "2rem" }}>Loading blog...</p>;
   if (error)
