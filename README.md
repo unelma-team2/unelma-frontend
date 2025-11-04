@@ -1,36 +1,113 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🧭 Unelma Platforms Redesign
 
-## Getting Started
+> **Final Project — Business College Helsinki (Full Stack Web Developer Program)**  
+> Duration: Oct–Dec 2025  
+> Team: 4 members
 
-First, run the development server:
+---
 
+## 🌐 Overview
+
+This project is a **redesign of Unelma Platforms** (https://www.unelmaplatforms.com/), focusing on:
+
+- ⚡ **Performance Optimization** (Target load time < 3s)
+- 🎨 **Visual & Brand Alignment** (Modern, clean design)
+- 🔍 **SEO & Accessibility Compliance**
+- 📱 **Mobile-First Responsive Design**
+- 🔗 **Newsletter API Integration (Unelma Mail)**
+- 🧩 **Headless Architecture (Next.js + Strapi)**
+
+---
+
+## 🧰 Tech Stack
+
+| Layer | Technology |
+|-------|-------------|
+| **Frontend** | Next.js (React) |
+| **Styling** | Tailwind CSS *(or MUI, under review)* |
+| **Backend** | Strapi (Headless CMS) + Supabase (Database) |
+| **Deployment** | Vercel (Frontend) + Render/Strapi Cloud (Backend) |
+| **Version Control** | GitHub (Organization: `unelma-team2`) |
+| **Design Tool** | Figma (Mobile & Desktop wireframes) |
+
+---
+
+## ⚙️ Getting Started (Frontend)
+
+**Step 1: Clone the repository**
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/unelma-team2/unelma-frontend.git
+cd unelma-frontend
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+**Step 2: Install dependencies**
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+**Step 3: Set up environment variables**
+Create a .env.local file in the project root:
+```bash
+NEXT_PUBLIC_API_URL=http://localhost:1337
+```
+(Update this URL to the deployed backend once available.)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+**Step 4: Run the development server**
+```bash
+npm run dev
+```
 
-## Learn More
+**Step 5: Visit the local site**
+http://localhost:3000
 
-To learn more about Next.js, take a look at the following resources:
+## 🧱 Project Structure
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+app/
+├── products/      → Products & Services showcase page  
+├── blog/          → Blog list and single blog pages  
+├── case-studies/  → “Coming Soon” placeholder  
+├── about/         → About page  
+├── careers/       → “Coming Soon” placeholder  
+├── contact/       → Contact page  
+└── page.js        → Home page
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🧩 Environment Files
 
-## Deploy on Vercel
+| File | Purpose |
+|------|----------|
+| `.env.local` | Local development (ignored by Git) |
+| `.env.example` | Example template for teammates |
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🚀 Deployment Notes
+	•	Frontend: Deployed on Vercel￼
+	•	Backend: To be deployed on Strapi Cloud / Render
+	•	Update NEXT_PUBLIC_API_URL in .env.local when backend is live.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📚 Team Focus (Sprint 1)
+
+*(Roles may rotate each sprint based on workload and interest.)*
+
+| Member | Focus This Sprint |
+|---------|------------------|
+| **TJ** | Frontend setup, documentation |
+| **Suganya** | Backend setup, Supabase integration |
+| **Fizza** | Mobile wireframes |
+| **Saara** | Desktop wireframes |
+
+## 🧪 Current Sprint Focus (Sprint 1)
+	•	✅ Frontend & backend repo setup
+	•	✅ Blog connected with local Strapi
+	•	✅ .env.example and README created
+	•	🚧 Supabase + backend deployment in progress
+	•	🚧 Mobile-first and desktop wireframes in Figma
+
+## ✅ Next Steps (Sprint 2 Preview)
+	•	Implement Figma UI design in frontend
+	•	Deploy backend & connect to Supabase
+	•	Add full navigation and “Coming soon” pages
+	•	Integrate Unelma Mail newsletter signup
+
+## 📚 Credits
+
+👩‍💻 Developed collaboratively by Team 2 — Unelma Platforms Redesign
+Business College Helsinki, 2025
