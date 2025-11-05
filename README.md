@@ -24,9 +24,9 @@ This project is a **redesign of Unelma Platforms** (https://www.unelmaplatforms.
 | Layer | Technology |
 |-------|-------------|
 | **Frontend** | Next.js (React) |
-| **Styling** | Tailwind CSS *(or MUI, under review)* |
+| **Styling** | MUI + Custom CSS |
 | **Backend** | Strapi (Headless CMS) + Supabase (Database) |
-| **Deployment** | Vercel (Frontend) + Render/Strapi Cloud (Backend) |
+| **Deployment** | Vercel (Frontend) + Render (Backend) |
 | **Version Control** | GitHub (Organization: `unelma-team2`) |
 | **Design Tool** | Figma (Mobile & Desktop wireframes) |
 
