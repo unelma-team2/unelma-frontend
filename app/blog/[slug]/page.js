@@ -11,7 +11,7 @@ export default function SingleBlogPage() {
   const [blog, setBlog] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:1337";
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
 
   useEffect(() => {
     if (!slug) return;
@@ -33,8 +33,12 @@ export default function SingleBlogPage() {
     );
   if (!blog) return <p style={{ padding: "2rem" }}>Blog not found.</p>;
 
-  const { Title, Description, Blog_image } = blog;
-  const imageUrl = Blog_image?.url ? `${API_URL}${Blog_image.url}` : "";
+  const { Title, Description, blog_image } = blog;
+  const imageUrl = blog_image?.url
+    ? blog_image.url.startsWith("http")
+      ? blog_image.url
+      : `${API_URL}${blog_image.url}`
+    : "";
 
   return (
     <main style={{ padding: "2rem" }}>

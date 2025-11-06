@@ -9,7 +9,7 @@ export default function BlogPage() {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:1337";
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
 
   useEffect(() => {
     axios
@@ -34,8 +34,12 @@ export default function BlogPage() {
         }}
       >
         {blogs.map((blog) => {
-          const { id, Title, Description, Blog_image, slug } = blog;
-          const imageUrl = Blog_image?.url ? `${API_URL}${Blog_image.url}` : "";
+          const { id, Title, Description, blog_image, slug } = blog;
+          const imageUrl = blog_image?.url
+          ? blog_image.url.startsWith("http")
+            ? blog_image.url
+            : `${API_URL}${blog_image.url}`
+          : "";
 
           return (
             <div

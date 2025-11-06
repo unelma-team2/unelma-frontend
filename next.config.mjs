@@ -13,6 +13,11 @@ const nextConfig = {
         port: backendUrl.port, // 1337 / 1338 / etc.
         pathname: "/uploads/**", // path for Strapi uploads
       },
+      {
+        protocol: "https",
+        hostname: "zljsrfapkqfwregvucmx.supabase.co",
+        pathname: "/storage/**",
+      },
     ],
   },
 };
