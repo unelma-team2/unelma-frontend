@@ -1,11 +1,18 @@
-import Link from "next/link";
+"use client";
+import { Button, Typography, Box } from "@mui/material";
 
 export default function HomePage() {
   return (
-    <main style={{ padding: "2rem" }}>
-      <h1>Welcome to Unelma Platforms</h1>
-      <p>Your trusted platform solutions for education and businesses.</p>
-      <Link href="/about">Learn more about us →</Link>
-    </main>
+    <Box textAlign="center" mt={4}>
+      <Typography variant="h2" color="primary">
+        Welcome to Unelma Platforms
+      </Typography>
+      <Typography variant="body1" color="text.secondary" mt={2}>
+        Frontend theme and MUI setup test
+      </Typography>
+      <Button variant="contained" color="secondary" sx={{ mt: 3 }}>
+        Test Button
+      </Button>
+    </Box>
   );
 }
