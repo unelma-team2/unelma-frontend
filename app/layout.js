@@ -1,9 +1,15 @@
+import { Quicksand } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ThemeRegistry from "@/providers/ThemeRegistry";
 import EmotionRegistry from "@/providers/EmotionRegistry";
-import { quicksand } from "@/theme";
+
+const quicksand = Quicksand({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+});
 
 export const metadata = {
   title: "Unelma Platforms",

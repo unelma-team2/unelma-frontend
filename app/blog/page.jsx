@@ -9,7 +9,9 @@ export default function BlogPage() {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
+
+  const API_URL =
+    process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
 
   useEffect(() => {
     axios
@@ -18,6 +20,9 @@ export default function BlogPage() {
       .catch((err) => setError(err))
       .finally(() => setLoading(false));
   }, [API_URL]);
+
+  if (loading) return <p>Loading blogs...</p>;
+  if (error) return <p>Error loading blogs: {error.message}</p>;
 
   return (
     <main style={{ padding: "2rem" }}>
@@ -33,17 +38,17 @@ export default function BlogPage() {
           marginTop: "2rem",
         }}
       >
-        {blogs.map((blog) => {
+        {blogs.map((blog, index) => {
           const { id, Title, Description, blog_image, slug } = blog;
           const imageUrl = blog_image?.url
-          ? blog_image.url.startsWith("http")
-            ? blog_image.url
-            : `${API_URL}${blog_image.url}`
-          : "";
+            ? blog_image.url.startsWith("http")
+              ? blog_image.url
+              : `${API_URL}${blog_image.url}`
+            : "";
 
           return (
             <div
-              key={id}
+              key={id || index}
               style={{
                 border: "1px solid #ddd",
                 borderRadius: "10px",
@@ -51,7 +56,7 @@ export default function BlogPage() {
                 boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
               }}
             >
-              {imageUrl ? (
+              {imageUrl && (
                 <div
                   style={{
                     position: "relative",
@@ -61,17 +66,20 @@ export default function BlogPage() {
                 >
                   <Image
                     src={imageUrl}
-                    alt={Title}
+                    alt={Title || "Blog Image"}
                     fill
+                    priority={index < 2} // ✅ Now defined
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     style={{ objectFit: "cover" }}
-                    priority
                   />
                 </div>
-              ) : null}
+              )}
+
               <div style={{ padding: "1rem" }}>
                 <h2>{Title}</h2>
-                <p style={{ color: "#555" }}>{Description?.slice(0, 150)}...</p>
+                <p style={{ color: "#555" }}>
+                  {Description ? Description.slice(0, 150) + "..." : ""}
+                </p>
                 <Link href={`/blog/${slug}`} style={{ color: "#0070f3" }}>
                   Read more →
                 </Link>

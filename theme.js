@@ -1,11 +1,4 @@
 import { createTheme } from "@mui/material/styles";
-import { Quicksand } from "next/font/google";
-
-const quicksand = Quicksand({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  display: "swap",
-});
 
 const theme = createTheme({
   palette: {
@@ -27,7 +20,7 @@ const theme = createTheme({
     },
   },
   typography: {
-    fontFamily: `${quicksand.style.fontFamily}, 'Roboto', 'Arial', sans-serif`,
+    fontFamily: "'Quicksand', 'Roboto', 'Arial', sans-serif",
     h1: { fontSize: "3rem", fontWeight: 700 },
     h2: { fontSize: "2rem", fontWeight: 600 },
     h3: { fontSize: "1.5rem", fontWeight: 500 },
@@ -64,4 +57,3 @@ const theme = createTheme({
 });
 
 export default theme;
-export { quicksand };
