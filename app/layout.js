@@ -20,9 +20,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className={quicksand.className}>
       <body>
-        {/* Emotion must come first */}
         <EmotionRegistry>
-          {/* Then MUI ThemeProvider */}
           <ThemeRegistry>
             <Header />
             <main style={{ padding: "2rem" }}>{children}</main>
