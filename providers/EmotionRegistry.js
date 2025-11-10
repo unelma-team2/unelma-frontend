@@ -6,8 +6,8 @@ import { CacheProvider } from "@emotion/react";
 export default function EmotionRegistry({ children }) {
   const [cache] = React.useState(() =>
     createCache({
-      key: "mui",
-      prepend: true,
+      key: "mui-custom",
+      prepend: false,
     })
   );
 

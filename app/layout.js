@@ -1,9 +1,9 @@
-import { Quicksand } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import ThemeRegistry from "@/providers/ThemeRegistry";
 import EmotionRegistry from "@/providers/EmotionRegistry";
+import ThemeRegistry from "@/providers/ThemeRegistry";
+import { Quicksand } from "next/font/google";
 
 const quicksand = Quicksand({
   subsets: ["latin"],
@@ -18,9 +18,11 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body className={quicksand.className}>
+    <html lang="en" className={quicksand.className}>
+      <body>
+        {/* Emotion must come first */}
         <EmotionRegistry>
+          {/* Then MUI ThemeProvider */}
           <ThemeRegistry>
             <Header />
             <main style={{ padding: "2rem" }}>{children}</main>

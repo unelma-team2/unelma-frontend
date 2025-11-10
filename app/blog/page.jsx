@@ -68,7 +68,8 @@ export default function BlogPage() {
                     src={imageUrl}
                     alt={Title || "Blog Image"}
                     fill
-                    priority={index < 2} // ✅ Now defined
+                    priority={index === 0}
+                    loading={index === 0 ? "eager" : "lazy"}
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     style={{ objectFit: "cover" }}
                   />
