@@ -9,8 +9,9 @@ export default function Footer() {
       sx={{
         textAlign: "center",
         py: 4,
-        borderTop: (theme) => `1px solid ${theme.palette.divider}`,
-        color: (theme) => theme.palette.text.secondary,
+        borderTop: 1,
+        borderColor: "divider",
+        color: "text.secondary",
         fontSize: "0.9rem",
       }}
     >
