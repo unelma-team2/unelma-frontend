@@ -1,4 +1,11 @@
 import { createTheme } from "@mui/material/styles";
+import { Quicksand } from "next/font/google";
+
+const quicksand = Quicksand({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+});
 
 const theme = createTheme({
   palette: {
@@ -20,7 +27,7 @@ const theme = createTheme({
     },
   },
   typography: {
-    fontFamily: "'Sofia Pro Soft', 'Sofia Pro', 'Roboto', 'Arial', sans-serif",
+    fontFamily: `${quicksand.style.fontFamily}, 'Roboto', 'Arial', sans-serif`,
     h1: { fontSize: "3rem", fontWeight: 700 },
     h2: { fontSize: "2rem", fontWeight: 600 },
     h3: { fontSize: "1.5rem", fontWeight: 500 },
@@ -34,8 +41,9 @@ const theme = createTheme({
     MuiButton: {
       styleOverrides: {
         root: {
-          borderRadious: 10,
+          borderRadius: 10,
           boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+          transition: "box-shadow 0.2s ease-in-out",
           "&:hover": {
             boxShadow: "0px 6px 6px rgba(0, 0, 0, 0.2)",
           },
@@ -48,6 +56,7 @@ const theme = createTheme({
           borderRadius: 4,
           boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
           border: "1px solid rgba(0, 0, 0, 0.1)",
+          backgroundColor: "#FFFFFF",
         },
       },
     },
@@ -55,3 +64,4 @@ const theme = createTheme({
 });
 
 export default theme;
+export { quicksand };
