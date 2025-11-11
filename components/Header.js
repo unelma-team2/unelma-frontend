@@ -30,72 +30,129 @@ export default function Header() {
         backgroundColor: (theme) => theme.palette.primary.main,
         color: (theme) => theme.palette.text.primary,
         boxShadow: "none",
-        py: 1,
+        py: 2.5,
       }}
     >
       <Toolbar
         sx={{
           display: "flex",
-          justifyContent: "space-between",
+          flexDirection: "column",
           alignItems: "center",
-          flexWrap: "wrap",
+          justifyContent: "center",
+          gap: 2,
         }}
       >
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-          <Image
-            src="/logo/unelma-logo.svg"
-            alt="Unelma Platforms"
-            width={120}
-            height={40}
-            priority
-            style={{ height: "auto", width: "auto" }}
-          />
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            width: "100%",
+            flexWrap: "wrap",
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              mt: 2.5,
+            }}
+          >
+            <Image
+              src="/logo/unelma-logo.svg"
+              alt="Unelma Platforms"
+              width={190}
+              height={60}
+              priority
+            />
+          </Box>
+
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 3,
+              mr: { xs: 3, md: 10 },
+              mt: { xs: -1, md: -2 },
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                backgroundColor: (theme) => theme.palette.background.paper,
+                borderRadius: 0,
+                px: 1.5,
+                border: "none",
+              }}
+            >
+              <Search fontSize="small" />
+              <InputBase
+                placeholder="SEARCH"
+                sx={{ ml: 1, fontWeight: 600, width: "130px" }}
+                inputProps={{ "aria-label": "search" }}
+              />
+            </Box>
+            <Button
+              disableRipple
+              disableElevation
+              sx={{
+                backgroundColor: "transparent",
+                color: "#000",
+                fontWeight: 700,
+                border: "none",
+                boxShadow: "none",
+                textTransform: "uppercase",
+                "&:hover": {
+                  backgroundColor: "transparent",
+                  opacity: 0.7,
+                },
+              }}
+            >
+              LOGIN/REGISTER
+            </Button>
+            <IconButton aria-label="Shopping cart">
+              <ShoppingCart />
+            </IconButton>
+          </Box>
         </Box>
 
-        <Box sx={{ display: "flex", gap: 3, flexWrap: "wrap" }}>
-          {navLinks.map(({ label, href }) => (
-            <Link
-              key={label}
-              href={href}
-              style={{ textDecoration: "none", color: "inherit" }}
-            >
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "flex-end",
+            gap: { xs: 3.5, md: 6 },
+            mt: 2.5,
+            width: { xs: "100%", md: "88%" },
+            mx: "auto",
+          }}
+        >
+          {navLinks.map((link) => (
+            <Link key={link.href} href={link.href}>
               <Typography
                 variant="body1"
                 sx={{
                   fontWeight: 600,
                   textTransform: "uppercase",
+                  textAlign: "center",
+                  whiteSpace: "pre-line",
+                  lineHeight: 1.2,
+                  letterSpacing: "0.5px",
                   "&:hover": { opacity: 0.7 },
                 }}
               >
-                {label}
+                {link.label === "Products & Services" ? (
+                  <>
+                    PRODUCTS &<br />
+                    SERVICES
+                  </>
+                ) : (
+                  link.label
+                )}
               </Typography>
             </Link>
           ))}
-        </Box>
-
-        <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              backgroundColor: "white",
-              borderRadius: 1,
-              px: 1,
-              border: "1px solid #000",
-            }}
-          >
-            <Search fontSize="small" />
-            <InputBase
-              placeholder="SEARCH"
-              sx={{ ml: 1, fontWeight: 600, width: "120px" }}
-            />
-          </Box>
-          <Button sx={{ color: "text.primary", fontWeight: 700 }}>
-            LOGIN/REGISTER
-          </Button>
-          <IconButton>
-            <ShoppingCart />
-          </IconButton>
         </Box>
       </Toolbar>
     </AppBar>
