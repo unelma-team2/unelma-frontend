@@ -15,7 +15,7 @@ import { Search, ShoppingCart } from "@mui/icons-material";
 const navLinks = [
   { label: "Home", href: "/" },
   { label: "About Us", href: "/about" },
-  { label: "Products & Services", href: "/products" },
+  { label: "Products & Services", href: "/products", multiline: true },
   { label: "Our Work", href: "/case-studies" },
   { label: "Blog", href: "/blog" },
   { label: "Careers", href: "/careers" },
@@ -71,10 +71,9 @@ export default function Header() {
           <Box
             sx={{
               display: "flex",
-              alignItems: "center",
+              alignItems: "flex-start",
               gap: 3,
               mr: { xs: 3, md: 10 },
-              mt: { xs: -1, md: -2 },
             }}
           >
             <Box
@@ -112,7 +111,7 @@ export default function Header() {
             >
               LOGIN/REGISTER
             </Button>
-            <IconButton aria-label="Shopping cart">
+            <IconButton aria-label="shopping cart">
               <ShoppingCart />
             </IconButton>
           </Box>
@@ -142,7 +141,7 @@ export default function Header() {
                   "&:hover": { opacity: 0.7 },
                 }}
               >
-                {link.label === "Products & Services" ? (
+                {link.multiline ? (
                   <>
                     PRODUCTS &<br />
                     SERVICES
