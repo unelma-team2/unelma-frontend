@@ -1,6 +1,8 @@
 "use client";
+import { useAuth } from "@/app/context/AuthContext";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   AppBar,
   Toolbar,
@@ -22,7 +24,10 @@ const navLinks = [
   { label: "Contact Us", href: "/contact" },
 ];
 
-export default function Header() {
+export default function Header({children}) {
+  const {user, signOut} = useAuth();
+  const router = useRouter();
+
   return (
     <AppBar
       position="static"
@@ -93,7 +98,7 @@ export default function Header() {
                 inputProps={{ "aria-label": "search" }}
               />
             </Box>
-            <Button
+            {/* <Button
               disableRipple
               disableElevation
               sx={{
@@ -110,7 +115,46 @@ export default function Header() {
               }}
             >
               LOGIN/REGISTER
-            </Button>
+            </Button> */}
+
+                {user && (
+                        
+                            <Button 
+                              color="inherit" 
+                              sx={{
+                                backgroundColor: "transparent",
+                                color: "#000",
+                                fontWeight: 700,
+                                border: "none",
+                                boxShadow: "none",
+                                textTransform: "uppercase",
+                                "&:hover": {
+                                  backgroundColor: "transparent",
+                                  opacity: 0.7,
+                                },
+                              }}
+                              onClick={() => signOut()}> Logout </Button>
+                            
+                        
+                    )}
+                    {!user && (
+                        <Button 
+                          color="inherit" 
+                          sx={{
+                            backgroundColor: "transparent",
+                            color: "#000",
+                            fontWeight: 700,
+                            border: "none",
+                            boxShadow: "none",
+                            textTransform: "uppercase",
+                            "&:hover": {
+                              backgroundColor: "transparent",
+                              opacity: 0.7,
+                            },
+                          }}
+                          onClick={() => router.push("/login")}> Login/Register</Button>
+                    )}
+
             <IconButton aria-label="shopping cart">
               <ShoppingCart />
             </IconButton>
