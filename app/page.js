@@ -1,18 +1,23 @@
-"use client";
-import { Button, Typography, Box } from "@mui/material";
+import HeroSection from "@/components/home/HeroSection";
+import ProjectInquiry from "@/components/home/ProjectInquiry";
+import ServicesSection from "@/components/home/ServicesSection";
+import ProductsSection from "@/components/home/ProductsSection";
+import OrderingProcess from "@/components/home/OrderingProcess";
+import RecentWork from "@/components/home/RecentWork";
+import ClientFeedback from "@/components/home/ClientFeedback";
+import RecentBlogPosts from "@/components/home/RecentBlogPosts";
 
 export default function HomePage() {
   return (
-    <Box textAlign="center" mt={4}>
-      <Typography variant="h2" color="primary">
-        Welcome to Unelma Platforms
-      </Typography>
-      <Typography variant="body1" color="text.secondary" mt={2}>
-        Frontend theme and MUI setup test
-      </Typography>
-      <Button variant="contained" color="secondary" sx={{ mt: 3 }}>
-        Test Button
-      </Button>
-    </Box>
+    <main>
+      <HeroSection />
+      <ProjectInquiry />
+      <ServicesSection />
+      <ProductsSection />
+      <OrderingProcess />
+      <RecentWork />
+      <ClientFeedback />
+      <RecentBlogPosts />
+    </main>
   );
 }

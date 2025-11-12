@@ -3,8 +3,8 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import EmotionRegistry from "@/providers/EmotionRegistry";
 import ThemeRegistry from "@/providers/ThemeRegistry";
+import { AuthProvider } from "@/app/context/AuthContext";
 import { Quicksand } from "next/font/google";
-import { AuthProvider } from "./context/AuthContext";
 
 const quicksand = Quicksand({
   subsets: ["latin"],
