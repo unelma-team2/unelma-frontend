@@ -1,4 +1,5 @@
 "use client";
+
 import { useAuth } from "@/app/context/AuthContext";
 import Image from "next/image";
 import Link from "next/link";
@@ -24,8 +25,8 @@ const navLinks = [
   { label: "Contact Us", href: "/contact" },
 ];
 
-export default function Header({children}) {
-  const {user, signOut} = useAuth();
+export default function Header() {
+  const { user, signOut } = useAuth();
   const router = useRouter();
 
   return (
@@ -86,9 +87,7 @@ export default function Header({children}) {
                 display: "flex",
                 alignItems: "center",
                 backgroundColor: (theme) => theme.palette.background.paper,
-                borderRadius: 0,
                 px: 1.5,
-                border: "none",
               }}
             >
               <Search fontSize="small" />
@@ -98,62 +97,34 @@ export default function Header({children}) {
                 inputProps={{ "aria-label": "search" }}
               />
             </Box>
-            {/* <Button
-              disableRipple
-              disableElevation
-              sx={{
-                backgroundColor: "transparent",
-                color: "#000",
-                fontWeight: 700,
-                border: "none",
-                boxShadow: "none",
-                textTransform: "uppercase",
-                "&:hover": {
-                  backgroundColor: "transparent",
-                  opacity: 0.7,
-                },
-              }}
-            >
-              LOGIN/REGISTER
-            </Button> */}
 
-                {user && (
-                        
-                            <Button 
-                              color="inherit" 
-                              sx={{
-                                backgroundColor: "transparent",
-                                color: "#000",
-                                fontWeight: 700,
-                                border: "none",
-                                boxShadow: "none",
-                                textTransform: "uppercase",
-                                "&:hover": {
-                                  backgroundColor: "transparent",
-                                  opacity: 0.7,
-                                },
-                              }}
-                              onClick={() => signOut()}> Logout </Button>
-                            
-                        
-                    )}
-                    {!user && (
-                        <Button 
-                          color="inherit" 
-                          sx={{
-                            backgroundColor: "transparent",
-                            color: "#000",
-                            fontWeight: 700,
-                            border: "none",
-                            boxShadow: "none",
-                            textTransform: "uppercase",
-                            "&:hover": {
-                              backgroundColor: "transparent",
-                              opacity: 0.7,
-                            },
-                          }}
-                          onClick={() => router.push("/login")}> Login/Register</Button>
-                    )}
+            {user ? (
+              <Button
+                onClick={() => signOut()}
+                sx={{
+                  backgroundColor: "transparent",
+                  color: "#000",
+                  fontWeight: 700,
+                  textTransform: "uppercase",
+                  "&:hover": { backgroundColor: "transparent", opacity: 0.7 },
+                }}
+              >
+                Logout
+              </Button>
+            ) : (
+              <Button
+                onClick={() => router.push("/login")}
+                sx={{
+                  backgroundColor: "transparent",
+                  color: "#000",
+                  fontWeight: 700,
+                  textTransform: "uppercase",
+                  "&:hover": { backgroundColor: "transparent", opacity: 0.7 },
+                }}
+              >
+                Login/Register
+              </Button>
+            )}
 
             <IconButton aria-label="shopping cart">
               <ShoppingCart />
@@ -172,27 +143,24 @@ export default function Header({children}) {
           }}
         >
           {navLinks.map((link) => (
-            <Link key={link.href} href={link.href}>
+            <Link
+              key={link.href}
+              href={link.href}
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
               <Typography
                 variant="body1"
                 sx={{
                   fontWeight: 600,
                   textTransform: "uppercase",
                   textAlign: "center",
-                  whiteSpace: "pre-line",
+                  whiteSpace: link.multiline ? "pre-line" : "normal",
                   lineHeight: 1.2,
                   letterSpacing: "0.5px",
                   "&:hover": { opacity: 0.7 },
                 }}
               >
-                {link.multiline ? (
-                  <>
-                    PRODUCTS &<br />
-                    SERVICES
-                  </>
-                ) : (
-                  link.label
-                )}
+                {link.label}
               </Typography>
             </Link>
           ))}
