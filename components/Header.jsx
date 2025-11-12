@@ -77,9 +77,10 @@ export default function Header() {
           <Box
             sx={{
               display: "flex",
-              alignItems: "flex-start",
+              alignItems: "center",
               gap: 3,
               mr: { xs: 3, md: 10 },
+              mt: {xs: -1, md: -2},
             }}
           >
             <Box
@@ -105,6 +106,7 @@ export default function Header() {
                   backgroundColor: "transparent",
                   color: "#000",
                   fontWeight: 700,
+                  boxShadow: "none",
                   textTransform: "uppercase",
                   "&:hover": { backgroundColor: "transparent", opacity: 0.7 },
                 }}
@@ -118,6 +120,8 @@ export default function Header() {
                   backgroundColor: "transparent",
                   color: "#000",
                   fontWeight: 700,
+                  border: "none",
+                  boxShadow: "none",
                   textTransform: "uppercase",
                   "&:hover": { backgroundColor: "transparent", opacity: 0.7 },
                 }}
@@ -160,7 +164,14 @@ export default function Header() {
                   "&:hover": { opacity: 0.7 },
                 }}
               >
-                {link.label}
+                {link.multiline ? (
+                  <>
+                    PRODUCTS &<br />
+                    SERVICES
+                  </>
+                ) : (
+                  link.label
+                )}
               </Typography>
             </Link>
           ))}
