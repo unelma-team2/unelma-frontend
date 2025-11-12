@@ -1,33 +1,20 @@
 import "./globals.css";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
 import EmotionRegistry from "@/providers/EmotionRegistry";
 import ThemeRegistry from "@/providers/ThemeRegistry";
-import { AuthProvider } from "@/app/context/AuthContext";
-import { Quicksand } from "next/font/google";
-
-const quicksand = Quicksand({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  display: "swap",
-});
+import ClientLayoutWrapper from "@/components/ClientLayoutWrapper";
 
 export const metadata = {
   title: "Unelma Platforms",
-  description: "Redesign project for Unelma Platforms",
+  description: "Redesign project",
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={quicksand.className}>
+    <html lang="en">
       <body>
         <EmotionRegistry>
           <ThemeRegistry>
-            <AuthProvider>
-              <Header />
-              <main style={{ padding: "2rem" }}>{children}</main>
-              <Footer />
-            </AuthProvider>
+            <ClientLayoutWrapper>{children}</ClientLayoutWrapper>
           </ThemeRegistry>
         </EmotionRegistry>
       </body>

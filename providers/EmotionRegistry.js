@@ -1,15 +1,11 @@
 "use client";
-import * as React from "react";
+
 import createCache from "@emotion/cache";
 import { CacheProvider } from "@emotion/react";
+import { useState } from "react";
 
 export default function EmotionRegistry({ children }) {
-  const [cache] = React.useState(() =>
-    createCache({
-      key: "mui-custom",
-      prepend: false,
-    })
-  );
+  const [cache] = useState(() => createCache({ key: "mui", prepend: true }));
 
   return <CacheProvider value={cache}>{children}</CacheProvider>;
 }

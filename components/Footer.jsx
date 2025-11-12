@@ -25,7 +25,7 @@ export default function Footer() {
           wrap="wrap"
         >
 
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
             <Box sx={{ mb: 2 }}>
               <Image src="/logo/unelma-logo.svg" alt="Unelma Platforms" width={120} height={90} />
             </Box>
@@ -37,7 +37,7 @@ export default function Footer() {
             </Typography>
           </Grid>
 
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
             <Typography fontWeight="700" sx={{ fontSize: 28, mb: 2, color: theme.palette.primary.contrastText }}>Resources</Typography>
             <Box sx={{ fontSize: 22, mb: 4 }}>
               <Link href="/blog">&gt; Blog</Link><br />
@@ -53,7 +53,7 @@ export default function Footer() {
             </Box>
           </Grid>
 
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
             <Typography fontWeight="700" sx={{ fontSize: 28, mb: 2, color: theme.palette.primary.contrastText }}>Contact Us</Typography>
             <Box sx={{ fontSize: 22 }}>
               <a href="#">&gt; Request a Price Quote</a><br />
@@ -69,9 +69,7 @@ export default function Footer() {
           </Grid>
 
           <Grid
-            item
-            xs={12}
-            md={3}
+            size={{ xs: 12, md: 3 }}
             sx={{
               display: 'flex',
               justifyContent: { xs: 'center', md: 'flex-end' },
