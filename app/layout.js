@@ -4,6 +4,7 @@ import Footer from "@/components/Footer";
 import EmotionRegistry from "@/providers/EmotionRegistry";
 import ThemeRegistry from "@/providers/ThemeRegistry";
 import { Quicksand } from "next/font/google";
+import { AuthProvider } from "./context/AuthContext";
 
 const quicksand = Quicksand({
   subsets: ["latin"],
@@ -22,9 +23,11 @@ export default function RootLayout({ children }) {
       <body>
         <EmotionRegistry>
           <ThemeRegistry>
-            <Header />
-            <main style={{ padding: "2rem" }}>{children}</main>
-            <Footer />
+            <AuthProvider>
+              <Header />
+              <main style={{ padding: "2rem" }}>{children}</main>
+              <Footer />
+            </AuthProvider>
           </ThemeRegistry>
         </EmotionRegistry>
       </body>
