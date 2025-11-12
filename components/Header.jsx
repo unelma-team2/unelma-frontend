@@ -80,7 +80,7 @@ export default function Header() {
               alignItems: "center",
               gap: 3,
               mr: { xs: 3, md: 10 },
-              mt: {xs: -1, md: -2},
+              mt: { xs: -1, md: -2 },
             }}
           >
             <Box
@@ -106,6 +106,7 @@ export default function Header() {
                   backgroundColor: "transparent",
                   color: "#000",
                   fontWeight: 700,
+                  border: "none",
                   boxShadow: "none",
                   textTransform: "uppercase",
                   "&:hover": { backgroundColor: "transparent", opacity: 0.7 },
