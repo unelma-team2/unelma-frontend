@@ -8,7 +8,7 @@ export default function ClientLayoutWrapper({ children }) {
   return (
     <AuthProvider>
       <Header />
-      <main>{children}</main>
+      {children}
       <Footer />
     </AuthProvider>
   );
