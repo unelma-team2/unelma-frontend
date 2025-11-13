@@ -3,53 +3,70 @@ import { createTheme } from "@mui/material/styles";
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#33C0A4",
-      contrastText: "#000000",
+      main: "#2F2E2E",
+      contrastText: "#FFFFFF",
     },
     secondary: {
-      main: "#FFBAF6",
-      contrastText: "#000000",
+      main: "#EDFCFF",
+      contrastText: "#2F2E2E",
     },
     text: {
-      primary: "#000000",
-      secondary: "#2F2E2E",
+      primary: "#2F2E2E",
+      secondary: "#565656",
     },
     background: {
       default: "#FFFFFF",
-      paper: "#EFEFEF",
+      paper: "#FFFFFF",
+      mint: "#C1FCFF",
+      footer: "#EDFCFF",
     },
   },
+
   typography: {
-    fontFamily: "'Quicksand', 'Roboto', 'Arial', sans-serif",
-    h1: { fontSize: "3rem", fontWeight: 700 },
-    h2: { fontSize: "2rem", fontWeight: 600 },
-    h3: { fontSize: "1.5rem", fontWeight: 500 },
-    body1: { fontSize: "1rem", fontWeight: 400 },
-    button: { textTransform: "none", fontWeight: 600 },
+    fontFamily: "'Quicksand', 'Arial', sans-serif",
+
+    h1: {
+      fontFamily: "'Stack Sans Notch', 'Quicksand', sans-serif",
+      fontSize: "64px",
+      fontWeight: 700,
+      color: "#2F2E2E",
+    },
+    h2: {
+      fontFamily: "'Stack Sans Notch', 'Quicksand', sans-serif",
+      fontSize: "48px",
+      fontWeight: 700,
+      color: "#2F2E2E",
+    },
+    h3: {
+      fontFamily: "'Quicksand', sans-serif",
+      fontSize: "20px",
+      fontWeight: 600,
+      color: "#2F2E2E",
+    },
+
+    body1: {
+      fontSize: "16px",
+      fontWeight: 400,
+    },
+    button: {
+      textTransform: "none",
+      fontWeight: 600,
+    },
   },
+
   shape: {
     borderRadius: 10,
   },
+
   components: {
     MuiButton: {
       styleOverrides: {
         root: {
           borderRadius: 10,
-          boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
-          transition: "box-shadow 0.2s ease-in-out",
+          boxShadow: "0px 4px 4px rgba(0,0,0,0.15)",
           "&:hover": {
-            boxShadow: "0px 6px 6px rgba(0, 0, 0, 0.2)",
+            boxShadow: "0px 6px 6px rgba(0,0,0,0.2)",
           },
-        },
-      },
-    },
-    MuiCard: {
-      styleOverrides: {
-        root: {
-          borderRadius: 4,
-          boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
-          backgroundColor: "#FFFFFF",
-          border: "1px solid rgba(0, 0, 0, 0.1)",
         },
       },
     },
