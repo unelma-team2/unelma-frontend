@@ -11,11 +11,16 @@ export default function Footer() {
   const theme = useTheme();
 
   return (
-    <Box component="footer" sx={{
-      bgcolor: theme.palette.background.footer,
-      color: theme.palette.primary.main,
-      borderTop: 1, borderColor: "#000000ff", mt: 4,
-    }}>
+    <Box
+      component="footer"
+      sx={{
+        bgcolor: theme.palette.background.footer,
+        color: theme.palette.primary.main,
+        borderTop: 1,
+        borderColor: "#000000ff",
+        mt: 4,
+      }}
+    >
       <Box sx={{ maxWidth: 1400, mx: "auto", px: { xs: 2, md: 6 }, py: 6 }}>
         <Grid
           container
@@ -24,8 +29,7 @@ export default function Footer() {
           justifyContent="space-between"
           wrap="wrap"
         >
-
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid xs={12} sm={6} md={3}>
             <Box sx={{ mb: 2 }}>
               <Image src="/logo/unelma-logo.svg" alt="Unelma Platforms" width={120} height={90} />
             </Box>
@@ -37,7 +41,7 @@ export default function Footer() {
             </Typography>
           </Grid>
 
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid xs={12} sm={6} md={3}>
             <Typography fontWeight="700" sx={{ fontSize: 28, mb: 2, color: theme.palette.primary.main }}>Resources</Typography>
             <Box sx={{ fontSize: 22, mb: 4 }}>
               <Link href="/blog">&gt; Blog</Link><br />
@@ -53,7 +57,7 @@ export default function Footer() {
             </Box>
           </Grid>
 
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid xs={12} sm={6} md={3}>
             <Typography fontWeight="700" sx={{ fontSize: 28, mb: 2, color: theme.palette.primary.main }}>Contact Us</Typography>
             <Box sx={{ fontSize: 22 }}>
               <a href="#">&gt; Request a Price Quote</a><br />
@@ -69,7 +73,7 @@ export default function Footer() {
           </Grid>
 
           <Grid
-            item xs={12} md={3}
+            xs={12} md={3}
             sx={{
               display: 'flex',
               justifyContent: { xs: 'center', md: 'flex-end' },
@@ -78,16 +82,21 @@ export default function Footer() {
               order: { xs: 4, md: 4 },
             }}
           >
-            <Paper elevation={5} sx={{
-              p: 4,
-              minWidth: 320,
-              background: '#C1FCFF',
-              border: '2px solid #222',
-              maxWidth: 400,
-              color: '#000',
-              width: '100%'
-            }}>
-              <Typography fontWeight="700" sx={{ mb: 2, fontSize: 22, color: '#000', letterSpacing: .6 }}>Sign up for email updates!</Typography>
+            <Paper
+              elevation={5}
+              sx={{
+                p: 4,
+                minWidth: 320,
+                maxWidth: 400,
+                background: '#C1FCFF',
+                border: '2px solid #222',
+                color: '#000',
+                width: '100%',
+              }}
+            >
+              <Typography fontWeight="700" sx={{ mb: 2, fontSize: 22, color: '#000', letterSpacing: 0.6 }}>
+                Sign up for email updates!
+              </Typography>
               <Box component="form" sx={{ display: 'flex', mb: 2, alignItems: 'center' }}>
                 <TextField
                   size="small"
@@ -103,7 +112,25 @@ export default function Footer() {
                     ),
                   }}
                 />
-                <Button type="submit" variant="contained" sx={{ ml: 2, bgcolor: '#222', color: '#fff', fontWeight: 700, px: 3, py: 0.5, borderRadius: 1, textTransform: 'none', boxShadow: 'none', fontSize: 18, ':hover': { bgcolor: '#444' } }}>SUBMIT</Button>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  sx={{
+                    ml: 2,
+                    bgcolor: '#222',
+                    color: '#fff',
+                    fontWeight: 700,
+                    px: 3,
+                    py: 0.5,
+                    borderRadius: 1,
+                    textTransform: 'none',
+                    boxShadow: 'none',
+                    fontSize: 18,
+                    ':hover': { bgcolor: '#444' },
+                  }}
+                >
+                  SUBMIT
+                </Button>
               </Box>
               <Typography component="p" variant="body2" sx={{ color: '#000', fontSize: 15, mt: 1 }}>
                 In accordance with GDPR, we will contact you only when necessary, and all personal data collected will be anonymized.
@@ -112,23 +139,32 @@ export default function Footer() {
           </Grid>
         </Grid>
 
-        <Box sx={{
-          display: 'flex',
-          flexDirection: { xs: 'column', md: 'row' },
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: { xs: 4, md: 0 },
-          mt: { xs: 4, md: 6 },
-          mb: 2,
-        }}>
-
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: { xs: 'column', md: 'row' },
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: { xs: 4, md: 0 },
+            mt: { xs: 4, md: 6 },
+            mb: 2,
+          }}
+        >
           <Box sx={{ display: 'flex', gap: 3, mb: { xs: 3, md: 0 } }}>
             <Image src="/logo/linkedin.svg" alt="LinkedIn" width={60} height={60} />
             <Image src="/logo/twitter.svg" alt="Twitter" width={60} height={60} />
             <Image src="/logo/facebook.svg" alt="Facebook" width={60} height={60} />
           </Box>
-  
-          <Box sx={{ display: 'flex', gap: { xs: 2, md: 6 }, flexWrap: 'wrap', justifyContent: { xs: 'center', md: 'flex-end' }, alignItems: 'center' }}>
+
+          <Box
+            sx={{
+              display: 'flex',
+              gap: { xs: 2, md: 6 },
+              flexWrap: 'wrap',
+              justifyContent: { xs: 'center', md: 'flex-end' },
+              alignItems: 'center',
+            }}
+          >
             <Image src="/logo/business_finland.svg" width={120} height={40} alt="Business Finland" />
             <Image src="/logo/estonia.svg" width={140} height={135} alt="Estonia" />
             <Image src="/logo/sortlist.svg" width={140} height={135} alt="sortlist" />
