@@ -50,8 +50,8 @@ const Login = () => {
                     },
                     },
                 }}
-                providers={["google","github"]}
-                socialLayout="horizontal"
+                providers={["google", "github", "linkedin_oidc","facebook"]}
+                socialLayout="vertical"
                 view="sign_in"
                 />
             </Paper>
