@@ -32,11 +32,11 @@ export default function Header() {
   return (
     <AppBar
       position="static"
+      elevation={0}
       sx={{
-        backgroundColor: (theme) => theme.palette.primary.main,
+        backgroundColor: (theme) => theme.palette.background.default,
         color: (theme) => theme.palette.text.primary,
         boxShadow: "none",
-        py: 2.5,
       }}
     >
       <Toolbar
