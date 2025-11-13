@@ -10,8 +10,8 @@ function CustomStepIcon(props) {
         backgroundColor: '#C1FCFF',
         border: '2px solid #000000',
         color: '#000',
-        width: 70,
-        height: 70,
+        width: 60,
+        height: 60,
         borderRadius: '50%',
         display: 'flex',
         justifyContent: 'center',
@@ -60,7 +60,36 @@ export default function OrderingProcess() {
                 Ordering Process
             </Typography>
             
-
+            <Stepper 
+                activeStep={-1}
+                alternativeLabel
+                connector={<NullStepConnector />}
+                sx={{ 
+                    width: '100%',
+                    '& .MuiStep-root': {
+                        paddingLeft: { xs: 0, sm: 1 },
+                        paddingRight: { xs: 0, sm: 1 },
+                    },
+                }}
+            >
+                {steps.map((label) => (
+                    <Step key={label}>
+                        <StepLabel 
+                            StepIconComponent={CustomStepIcon}
+                            sx={{ 
+                                '& .MuiStepLabel-label': {
+                                    marginTop: 3,
+                                    fontSize: '1rem',
+                                    fontWeight: 800,
+                                    color: '#000',
+                                },
+                            }}
+                        >
+                            {label}
+                        </StepLabel>
+                    </Step>
+                ))}
+            </Stepper>
         </Container>
     </Box>
   );
