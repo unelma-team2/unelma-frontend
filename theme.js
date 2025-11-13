@@ -23,31 +23,29 @@ const theme = createTheme({
   },
 
   typography: {
-    fontFamily: "'Quicksand', 'Arial', sans-serif",
+    fontFamily: "var(--font-quicksand), Arial, sans-serif",
 
     h1: {
-      fontFamily: "'Stack Sans Notch', 'Quicksand', sans-serif",
-      fontSize: "64px",
+      fontFamily:
+        "var(--font-stack-sans-notch), var(--font-quicksand), sans-serif",
       fontWeight: 700,
-      color: "#2F2E2E",
     },
     h2: {
-      fontFamily: "'Stack Sans Notch', 'Quicksand', sans-serif",
-      fontSize: "48px",
-      fontWeight: 700,
-      color: "#2F2E2E",
+      fontFamily:
+        "var(--font-stack-sans-notch), var(--font-quicksand), sans-serif",
+      fontWeight: 600,
     },
     h3: {
-      fontFamily: "'Quicksand', sans-serif",
-      fontSize: "20px",
-      fontWeight: 600,
-      color: "#2F2E2E",
+      fontFamily:
+        "var(--font-stack-sans-notch), var(--font-quicksand), sans-serif",
+      fontWeight: 500,
     },
 
     body1: {
       fontSize: "16px",
       fontWeight: 400,
     },
+
     button: {
       textTransform: "none",
       fontWeight: 600,
