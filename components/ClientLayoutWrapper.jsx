@@ -1,8 +1,8 @@
 "use client";
 
-import { AuthProvider } from "@/app/context/AuthContext";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { AuthProvider } from "@/app/context/AuthContext";
 
 export default function ClientLayoutWrapper({ children }) {
   return (
