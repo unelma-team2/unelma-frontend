@@ -12,9 +12,9 @@ export default function Footer() {
 
   return (
     <Box component="footer" sx={{
-      bgcolor: theme.palette.primary.main,
-      color: theme.palette.primary.contrastText,
-      borderTop: 1, borderColor: "#cccccc", mt: 4,
+      bgcolor: theme.palette.background.footer,
+      color: theme.palette.primary.main,
+      borderTop: 1, borderColor: "#000000ff", mt: 4,
     }}>
       <Box sx={{ maxWidth: 1400, mx: "auto", px: { xs: 2, md: 6 }, py: 6 }}>
         <Grid
@@ -29,23 +29,23 @@ export default function Footer() {
             <Box sx={{ mb: 2 }}>
               <Image src="/logo/unelma-logo.svg" alt="Unelma Platforms" width={120} height={90} />
             </Box>
-            <Typography component="div" sx={{ fontWeight: 700, mt: 4, fontSize: 24, color: theme.palette.primary.contrastText }}>
+            <Typography component="div" sx={{ fontWeight: 700, mt: 4, fontSize: 24, color: theme.palette.primary.main }}>
               <span>&gt; </span>Products
             </Typography>
-            <Typography component="div" sx={{ fontWeight: 700, mt: 2, fontSize: 24, color: theme.palette.primary.contrastText }}>
+            <Typography component="div" sx={{ fontWeight: 700, mt: 2, fontSize: 24, color: theme.palette.primary.main }}>
               <span>&gt; </span>Services
             </Typography>
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <Typography fontWeight="700" sx={{ fontSize: 28, mb: 2, color: theme.palette.primary.contrastText }}>Resources</Typography>
+            <Typography fontWeight="700" sx={{ fontSize: 28, mb: 2, color: theme.palette.primary.main }}>Resources</Typography>
             <Box sx={{ fontSize: 22, mb: 4 }}>
               <Link href="/blog">&gt; Blog</Link><br />
               <Link href="/case-studies">&gt; Case Studies</Link><br />
               <a href="#">&gt; Customer Testimonials</a><br />
               <a href="#">&gt; Tech Support</a>
             </Box>
-            <Typography fontWeight="700" sx={{ mt: 3, mb: 2, fontSize: 28, color: theme.palette.primary.contrastText }}>Company</Typography>
+            <Typography fontWeight="700" sx={{ mt: 3, mb: 2, fontSize: 28, color: theme.palette.primary.main }}>Company</Typography>
             <Box sx={{ fontSize: 22 }}>
               <Link href="/about">&gt; About Us</Link><br />
               <Link href="/careers">&gt; Careers</Link><br />
@@ -54,7 +54,7 @@ export default function Footer() {
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <Typography fontWeight="700" sx={{ fontSize: 28, mb: 2, color: theme.palette.primary.contrastText }}>Contact Us</Typography>
+            <Typography fontWeight="700" sx={{ fontSize: 28, mb: 2, color: theme.palette.primary.main }}>Contact Us</Typography>
             <Box sx={{ fontSize: 22 }}>
               <a href="#">&gt; Request a Price Quote</a><br />
               <Link href="/contact">&gt; Send a Message/Question</Link><br />
@@ -81,7 +81,7 @@ export default function Footer() {
             <Paper elevation={5} sx={{
               p: 4,
               minWidth: 320,
-              background: '#FFCCF7',
+              background: '#C1FCFF',
               border: '2px solid #222',
               maxWidth: 400,
               color: '#000',
@@ -137,7 +137,7 @@ export default function Footer() {
           </Box>
         </Box>
 
-        <Typography align="center" sx={{ mt: 2, fontSize: 17, color: theme.palette.primary.contrastText, fontWeight: 500 }}>
+        <Typography align="center" sx={{ mt: 2, fontSize: 17, color: theme.palette.primary.main, fontWeight: 500 }}>
           © {new Date().getFullYear()} by Unelma Platforms
         </Typography>
       </Box>
