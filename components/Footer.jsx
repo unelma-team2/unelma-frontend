@@ -69,9 +69,7 @@ export default function Footer() {
           </Grid>
 
           <Grid
-            item
-            xs={12}
-            md={3}
+            item xs={12} md={3}
             sx={{
               display: 'flex',
               justifyContent: { xs: 'center', md: 'flex-end' },
