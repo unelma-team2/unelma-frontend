@@ -1,6 +1,7 @@
 "use client";
 
-import { Box, Typography, Button, useTheme, Link } from "@mui/material";
+import { Box, Typography, useTheme, Link as MUILink } from "@mui/material";
+import NextLink from "next/link";
 import Image from "next/image";
 
 export default function HeroSection() {
@@ -109,7 +110,8 @@ export default function HeroSection() {
                 operations, and boost customer engagement.
               </Typography>
 
-              <Link
+              <MUILink
+                component={NextLink}
                 href="/about"
                 underline="none"
                 sx={{
@@ -124,7 +126,7 @@ export default function HeroSection() {
                 }}
               >
                 Learn more about Unelma Platforms →
-              </Link>
+              </MUILink>
             </Box>
           </Box>
         </Box>
