@@ -1,6 +1,5 @@
 import HeroSection from "@/components/home/HeroSection";
-import ProjectInquiry from "@/components/home/ProjectInquiry";
-import MetricsSection from "@/components/home/MetricsSection";
+import InquiryAndMetrics from "@/components/home/InquiryAndMetrics";
 import ServicesSection from "@/components/home/ServicesSection";
 import ProductsSection from "@/components/home/ProductsSection";
 import OrderingProcess from "@/components/home/OrderingProcess";
@@ -12,8 +11,7 @@ export default function HomePage() {
   return (
     <>
       <HeroSection />
-      <ProjectInquiry />
-      <MetricsSection />
+      <InquiryAndMetrics />
       <ServicesSection />
       <ProductsSection />
       <OrderingProcess />
