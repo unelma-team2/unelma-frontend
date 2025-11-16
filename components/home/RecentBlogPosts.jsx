@@ -20,6 +20,8 @@ export default function RecentBlogPosts() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const theme = useTheme();
+
   const API_URL =
     process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
 
@@ -34,7 +36,7 @@ export default function RecentBlogPosts() {
   if (loading) return <p>Loading blogs...</p>;
   if (error) return <p>Error loading blogs: {error.message}</p>;
 
-  const theme = useTheme();
+  
 
   const cardSx = {
     height: "100%",
