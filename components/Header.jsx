@@ -65,13 +65,17 @@ export default function Header() {
               mt: 2.5,
             }}
           >
+            <Link href="/" style={{ display: "flex", alignItems: "center" }}>
             <Image
-              src="/logo/unelma-logo.svg"
+              src="/logo/unelma-logo.png"
               alt="Unelma Platforms"
-              width={190}
-              height={60}
+              width={400}
+              height={250}
               priority
+              style={{ cursor: "pointer" }}
             />
+          </Link>
+
           </Box>
 
           <Box

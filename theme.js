@@ -23,8 +23,8 @@ const theme = createTheme({
       paper: "#FFFFFF",
 
       // Section backgrounds per style guide
-      mint: "#C1FCFF", // light mint (used in hero/sections)
-      footer: "#EDFCFF", // footer background
+      lightmint: "#EDFCFF", 
+      darkmint: "#C1FCFF", 
     },
   },
 
@@ -49,7 +49,7 @@ const theme = createTheme({
 
     // Small section headers
     h3: {
-      fontFamily: headingFont,
+      fontFamily: bodyFont,
       fontWeight: 700,
       fontSize: "20px",
       lineHeight: 1.2,
@@ -57,7 +57,7 @@ const theme = createTheme({
 
     // H4 = medium text (16 pt medium)
     h4: {
-      fontFamily: headingFont,
+      fontFamily: bodyFont,
       fontWeight: 500,
       fontSize: "16px",
     },
@@ -66,14 +66,15 @@ const theme = createTheme({
     body1: {
       fontFamily: bodyFont,
       fontSize: "16px",
-      fontWeight: 400,
+      fontWeight: 500,
+      lineHeight: 1.3,
     },
 
     // Smaller body text 14pt
     body2: {
       fontFamily: bodyFont,
       fontSize: "14px",
-      fontWeight: 400,
+      fontWeight: 500,
     },
 
     button: {
