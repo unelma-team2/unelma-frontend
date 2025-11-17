@@ -27,7 +27,7 @@ export default function Footer() {
 
           <Grid size={{ xs: 12, sm: 6, md: 3 }}>
             <Box sx={{ mb: 2 }}>
-              <Image src="/logo/unelma-logo.svg" alt="Unelma Platforms" width={120} height={90} />
+              <Image src="/logo/unelma-logo.png"alt="Unelma Platforms" width={400} height={250} />
             </Box>
             <Typography component="div" sx={{ fontWeight: 700, mt: 4, fontSize: 24, color: theme.palette.primary.main }}>
               <span>&gt; </span>Products
