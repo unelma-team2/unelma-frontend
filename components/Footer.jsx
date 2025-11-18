@@ -6,15 +6,18 @@ import Link from "next/link";
 import Image from "next/image";
 import { Box, TextField, Button, Paper, useTheme, InputAdornment } from "@mui/material";
 import EmailIcon from '@mui/icons-material/Email';
+import SocialButtons from "./SocialButtons";
+import NewsletterSubscription from "./NewsletterSubscription";
+
 
 export default function Footer() {
   const theme = useTheme();
 
   return (
     <Box component="footer" sx={{
-      bgcolor: theme.palette.background.footer,
+      bgcolor:  theme.palette.background.lightMint,
       color: theme.palette.primary.main,
-      borderTop: 1, borderColor: "#000000ff", mt: 4,
+      borderTop: 1, borderColor: "theme.palette.primary.main", mt: 4,
     }}>
       <Box sx={{ maxWidth: 1400, mx: "auto", px: { xs: 2, md: 6 }, py: 6 }}>
         <Grid
@@ -27,7 +30,7 @@ export default function Footer() {
 
           <Grid size={{ xs: 12, sm: 6, md: 3 }}>
             <Box sx={{ mb: 2 }}>
-              <Image src="/logo/unelma-logo.png"alt="Unelma Platforms" width={400} height={250} />
+              <Image src="/images/logos/logo-unelma.png"alt="Unelma Platforms" width={174} height={92} />
             </Box>
             <Typography component="div" sx={{ fontWeight: 700, mt: 4, fontSize: 24, color: theme.palette.primary.main }}>
               <span>&gt; </span>Products
@@ -69,47 +72,18 @@ export default function Footer() {
           </Grid>
 
           <Grid
-            size={{ xs: 12, md: 3 }}
-            sx={{
-              display: 'flex',
-              justifyContent: { xs: 'center', md: 'flex-end' },
-              alignItems: { xs: 'center', md: 'flex-start' },
-              mt: { xs: 3, md: 0 },
-              order: { xs: 4, md: 4 },
-            }}
-          >
-            <Paper elevation={5} sx={{
-              p: 4,
-              minWidth: 320,
-              background: '#C1FCFF',
-              border: '2px solid #222',
-              maxWidth: 400,
-              color: '#000',
-              width: '100%'
-            }}>
-              <Typography fontWeight="700" sx={{ mb: 2, fontSize: 22, color: '#000', letterSpacing: .6 }}>Sign up for email updates!</Typography>
-              <Box component="form" sx={{ display: 'flex', mb: 2, alignItems: 'center' }}>
-                <TextField
-                  size="small"
-                  variant="outlined"
-                  placeholder="Email"
-                  fullWidth
-                  sx={{ bgcolor: '#fff', borderRadius: 1, '& .MuiInputBase-input': { color: '#000' } }}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <EmailIcon sx={{ color: '#000' }} />
-                      </InputAdornment>
-                    ),
-                  }}
-                />
-                <Button type="submit" variant="contained" sx={{ ml: 2, bgcolor: '#222', color: '#fff', fontWeight: 700, px: 3, py: 0.5, borderRadius: 1, textTransform: 'none', boxShadow: 'none', fontSize: 18, ':hover': { bgcolor: '#444' } }}>SUBMIT</Button>
-              </Box>
-              <Typography component="p" variant="body2" sx={{ color: '#000', fontSize: 15, mt: 1 }}>
-                In accordance with GDPR, we will contact you only when necessary, and all personal data collected will be anonymized.
-              </Typography>
-            </Paper>
-          </Grid>
+  size={{ xs: 12, md: 3 }}
+  sx={{
+    display: "flex",
+    justifyContent: { xs: "center", md: "flex-end" },
+    alignItems: { xs: "center", md: "flex-start" },
+    mt: { xs: 3, md: 0 },
+    order: { xs: 4, md: 4 },
+  }}
+>
+  <NewsletterSubscription />
+</Grid>
+
         </Grid>
 
         <Box sx={{
@@ -122,18 +96,15 @@ export default function Footer() {
           mb: 2,
         }}>
 
-          <Box sx={{ display: 'flex', gap: 3, mb: { xs: 3, md: 0 } }}>
-            <Image src="/logo/linkedin.svg" alt="LinkedIn" width={60} height={60} />
-            <Image src="/logo/twitter.svg" alt="Twitter" width={60} height={60} />
-            <Image src="/logo/facebook.svg" alt="Facebook" width={60} height={60} />
-          </Box>
+         <SocialButtons />
+         
   
           <Box sx={{ display: 'flex', gap: { xs: 2, md: 6 }, flexWrap: 'wrap', justifyContent: { xs: 'center', md: 'flex-end' }, alignItems: 'center' }}>
-            <Image src="/logo/business_finland.svg" width={120} height={40} alt="Business Finland" />
-            <Image src="/logo/estonia.svg" width={140} height={135} alt="Estonia" />
-            <Image src="/logo/sortlist.svg" width={140} height={135} alt="sortlist" />
-            <Image src="/logo/winner.svg" width={90} height={95} alt="Winner" />
-            <Image src="/logo/award.svg" width={100} height={70} alt="Award" />
+            <Image src="/images/logos/logo-businessfinland.png" width={112} height={48} alt="Business Finland" />
+            <Image src="/images/logos/logo-estonia.png" width={193} height={83} alt="Estonia" />
+            <Image src="/images/logos/logo-sortlist.png" width={253} height={89} alt="sortlist" />
+            <Image src="/images/logos/logo-gotd.png" width={98} height={116} alt="Gotd" />
+            <Image src="/images/logos/logo-drupal.png" width={121} height={95} alt="Drupal" />
           </Box>
         </Box>
 

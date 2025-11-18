@@ -1,26 +1,28 @@
-"use client"; // <-- Add this at the top
+"use client";
 
 import React from "react";
-import { Box, Typography, Tabs, Tab, Card, CardMedia, CardContent, Button, IconButton } from "@mui/material";
+import { Box, Typography, Tabs, Tab, Card, CardMedia, CardContent, Button, IconButton, useTheme } from "@mui/material";
 import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
+import Image from "next/image";
 
 export default function RecentWorkSection() {
+  const theme = useTheme();
   const [tab, setTab] = React.useState(0);
   const handleChange = (e, newVal) => setTab(newVal);
 
   const items = [
     {
       title: "Multipurpose CMS",
-      img: "/recent-work/joao-paulo-m-ramos-paulo-e7TIvspb-Dg-unsplash.jpg",
+      img: "/images/homepage-recentwork/joao-paulo-m-ramos-paulo-e7TIvspb-Dg-unsplash.jpg",
     },
     {
       title: "E-Commerce Website",
-      img: "/recent-work/pexels-canvastudio-3194519.jpg",
+      img: "/images/homepage-recentwork/pexels-canvastudio-3194519.jpg",
     },
     {
       title: "Knowledge Base Website",
-      img: "recent-work/pexels-cottonbro-5990037.jpg",
+      img: "/images/homepage-recentwork/pexels-cottonbro-5990037.jpg",
     },
   ];
 
@@ -66,7 +68,7 @@ export default function RecentWorkSection() {
             sx={{
              
               textAlign: "center",
-              border: "2px solid #2F2E2E",
+              border: `2px solid ${theme.palette.primary.main}`,
               borderRadius: "10px",
               width: 300,
               boxShadow: 3,
@@ -78,7 +80,7 @@ export default function RecentWorkSection() {
             }}
           >
             <CardMedia component="img" height="335px" image={item.img} />
-            <CardContent sx={{ background: "#C8F4FF" }}>
+            <CardContent sx={{ background: theme.palette.background.lightMint }}>
               <Typography fontWeight={700} align="center">{item.title}</Typography>
             </CardContent>
           </Card>
@@ -86,30 +88,30 @@ export default function RecentWorkSection() {
       </Box>
 
      <Box sx={{ mt: 6, display: "flex", justifyContent: "center", gap: 3 }}>
-  <IconButton
-    aria-label="previous"
-    sx={{
-      color: "primary.main",
-      '&:hover': {
-        color: "background.darkMint",
-      },
-    }}
-  >
-    <ArrowCircleLeftIcon sx={{ fontSize: 48 }} />
-  </IconButton>
+      <IconButton
+        aria-label="previous"
+        sx={{
+          color: theme.palette.primary.main,
+          '&:hover': {
+            color: theme.palette.background.darkMint,
+          },
+        }}
+      >
+        <ArrowCircleLeftIcon sx={{ fontSize: 48 }} />
+      </IconButton>
 
-  <IconButton
-    aria-label="next"
-    sx={{
-      color: "primary.main",
-      '&:hover': {
-        color: "background.darkMint",
-      },
-    }}
-  >
-    <ArrowCircleRightIcon sx={{ fontSize: 48 }} />
-  </IconButton>
-</Box>
+      <IconButton
+        aria-label="next"
+        sx={{
+          color: theme.palette.primary.main,
+          '&:hover': {
+            color: theme.palette.background.darkMint,
+          },
+        }}
+      >
+        <ArrowCircleRightIcon sx={{ fontSize: 48 }} />
+      </IconButton>
+  </Box>
     </Box>
   );
 }

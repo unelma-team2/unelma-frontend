@@ -23,8 +23,8 @@ const theme = createTheme({
       paper: "#FFFFFF",
 
       // Section backgrounds per style guide
-      lightmint: "#EDFCFF", 
-      darkmint: "#C1FCFF", 
+      lightMint: "#EDFCFF", 
+      darkMint: "#C1FCFF",
     },
   },
 

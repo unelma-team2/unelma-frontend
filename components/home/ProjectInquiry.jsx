@@ -26,8 +26,8 @@ export default function ProjectInquiry() {
       >
         <Box
           sx={{
-            bgcolor: "#C1FCFF",
-            border: "2px solid #2F2E2E",
+            bgcolor: theme.palette.background.darkMint,
+            border: `2px solid ${theme.palette.primary.main}`,
             borderTopRightRadius: "120px",
             borderBottom: "none",
             p: { xs: 3, md: 6 },
@@ -42,7 +42,7 @@ export default function ProjectInquiry() {
               fontSize: { xs: 26, md: 32 },
               fontWeight: 700,
               mb: 3,
-              color: "#2F2E2E",
+              color: theme.palette.text.primary,
             }}
           >
             Have a project <br /> in mind?
@@ -54,7 +54,7 @@ export default function ProjectInquiry() {
               fontSize: 16,
               lineHeight: 1.6,
               mb: 3,
-              color: "#2F2E2E",
+              color: theme.palette.text.primary,
               maxWidth: 420,
             }}
           >
@@ -69,7 +69,7 @@ export default function ProjectInquiry() {
           <Button href="/contact"
             variant="contained"
             sx={{
-              bgcolor: "#2F2E2E",
+              bgcolor: theme.palette.primary.main,
               color: "#fff",
               px: 3,
               py: 1,
