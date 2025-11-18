@@ -1,10 +1,9 @@
 "use client";
 
 import React from "react";
-import { Box, Typography, Tabs, Tab, Card, CardMedia, CardContent, Button, IconButton, useTheme } from "@mui/material";
+import { Box, Typography, Tabs, Tab, Card, CardMedia, CardContent, IconButton, useTheme } from "@mui/material";
 import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
-import Image from "next/image";
 
 export default function RecentWorkSection() {
   const theme = useTheme();
