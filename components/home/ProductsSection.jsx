@@ -7,8 +7,8 @@ import {
   Container,
   Grid,
   Typography,
+  useTheme
 } from "@mui/material";
-import { useTheme } from "@mui/material/styles";
 
 export default function ProductsSection() {
   const theme = useTheme();
@@ -78,7 +78,7 @@ export default function ProductsSection() {
             <Box sx={imageContainerSx}>
               <Box
                 component="img"
-                src="/products/mail.svg"
+                src="/images/homepage-products/unelmamail.png"
                 alt="UnelmaMail illustration"
                 sx={imageSx}
               />
@@ -159,7 +159,7 @@ export default function ProductsSection() {
             <Box sx={imageContainerSx}>
               <Box
                 component="img"
-                src="/products/crm.svg"
+                src="/images/homepage-products/unelmacrm.png"
                 alt="UnelmaCRM cover"
                 sx={imageSx}
               />
@@ -238,7 +238,7 @@ export default function ProductsSection() {
             <Box sx={imageContainerSx}>
               <Box
                 component="img"
-                src="/products/cloud.svg"
+                src="/images/homepage-products/unelmacloud.png"
                 alt="UnelmaCloud badge"
                 sx={imageSx}
               />
@@ -318,7 +318,7 @@ export default function ProductsSection() {
             <Box sx={imageContainerSx}>
               <Box
                 component="img"
-                src="/products/open-source.svg"
+                src="/images/homepage-products/opensourcesoftware.png"
                 alt="Open-source logo"
                 sx={imageSx}
               />

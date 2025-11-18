@@ -23,8 +23,8 @@ const theme = createTheme({
       paper: "#FFFFFF",
 
       // Section backgrounds per style guide
-      lightmint: "#EDFCFF", 
-      darkmint: "#C1FCFF", 
+      lightMint: "#EDFCFF", 
+      darkMint: "#C1FCFF",
     },
   },
 
@@ -58,7 +58,7 @@ const theme = createTheme({
     // H4 = medium text (16 pt medium)
     h4: {
       fontFamily: bodyFont,
-      fontWeight: 500,
+      fontWeight: 600,
       fontSize: "16px",
     },
 

@@ -67,10 +67,10 @@ export default function Header() {
           >
             <Link href="/" style={{ display: "flex", alignItems: "center" }}>
             <Image
-              src="/logo/unelma-logo.png"
-              alt="Unelma Platforms"
-              width={400}
-              height={250}
+              src="/images/logos/logo-unelma.png"
+              alt="Unelma Platforms logo"
+              width={174}
+              height={92}
               priority
               style={{ cursor: "pointer" }}
             />
@@ -136,7 +136,14 @@ export default function Header() {
             )}
 
             <IconButton aria-label="shopping cart">
-              <ShoppingCart />
+              <Image
+              src="/images/icons/icons8-shopping-cart-64.png"
+              alt="Shopping cart icon"
+              width={20}
+              height={20}
+              priority
+              style={{ cursor: "pointer" }}
+            />
             </IconButton>
           </Box>
         </Box>

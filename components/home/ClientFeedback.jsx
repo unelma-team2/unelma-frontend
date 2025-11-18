@@ -1,30 +1,35 @@
+"use client";
+
 import Image from "next/image";
-import { Box, Typography, Paper, Avatar, IconButton } from "@mui/material";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import { Box, Typography, Paper, Avatar, IconButton, useTheme } from "@mui/material";
+import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
+import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
+import theme from "@/theme";
 
 const feedbacks = [
   {
     id: 1,
     text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
     reviewer: "Reviewer Name",
+    avatar: "/images/avatars/avatar1.png",
     avatar: "/avatar1.png",
   },
   {
     id: 2,
     text: "Ut enim ad minim veniam, quis nostrud exercitation ullamco.",
     reviewer: "Reviewer Name",
-    avatar: "/avatar1.png",
+    avatar: "images/avatars/avatar2.png",
   },
   {
     id: 3,
     text: "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
     reviewer: "Reviewer Name",
-    avatar: "/avatar1.png",
+    avatar: "/images/avatars/avatar3.png",
   },
 ];
 
 function FeedbackCard({ text, reviewer, avatar }) {
+  const theme = useTheme();
   return (
     <Paper
       elevation={3}
@@ -37,16 +42,18 @@ function FeedbackCard({ text, reviewer, avatar }) {
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
-        border: "2px solid #2F2E2E",
+        border: `2px solid ${theme.palette.primary.main}`,
       }}
     >
       <Box
         sx={{
           mx: "auto",
           mb: 2,
-          width: 79,
-          height: 79,
+          width: 70,
+          height: 70,
           borderRadius: "50%",
+          border: `2px solid ${theme.palette.primary.main}`,
+          backgroundColor: theme.palette.background.darkMint,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -56,11 +63,11 @@ function FeedbackCard({ text, reviewer, avatar }) {
         }}
       >
         <Image
-          src="/icons/quote.svg"
+          src="/images/icons/icons8-quote-96.png"
           alt="quote"
-          width={79}
-          height={79}
-          style={{ objectFit: "cover" }}
+          width={40}
+          height={40}
+          style={{ objectFit: "contain" }}
         />
       </Box>
       <Typography
@@ -109,7 +116,7 @@ export default function ClientFeedback() {
     <Box
       component="section"
       sx={{
-        bgcolor: "#EDFCFF",
+        backgroundColor: theme.palette.background.lightMint,
         py: { xs: 8, md: 12 },
         px: { xs: 2, md: 6 },
         borderRadius: "0 0 48px 48px",
@@ -140,37 +147,32 @@ export default function ClientFeedback() {
           <FeedbackCard key={fb.id} {...fb} />
         ))}
       </Box>
-      <Box
+
+     <Box sx={{ mt: 6, display: "flex", justifyContent: "center", gap: 3 }}>
+      <IconButton
+        aria-label="previous"
         sx={{
-          display: "flex",
-          justifyContent: "center",
-          gap: 4,
-          mt: 6,
+          color: theme.palette.primary.main,
+          '&:hover': {
+            color: theme.palette.background.darkMint,
+          },
         }}
       >
-        <IconButton
-          sx={{
-            width: 56,
-            height: 56,
-            borderRadius: "50%",
-            border: "2px solid #2F2E2E",
-            bgcolor: "transparent",
-          }}
-        >
-          <ArrowBackIcon sx={{ fontSize: 32 }} />
-        </IconButton>
-        <IconButton
-          sx={{
-            width: 56,
-            height: 56,
-            borderRadius: "50%",
-            border: "2px solid #2F2E2E",
-            bgcolor: "transparent",
-          }}
-        >
-          <ArrowForwardIcon sx={{ fontSize: 32 }} />
-        </IconButton>
-      </Box>
+        <ArrowCircleLeftIcon sx={{ fontSize: 48 }} />
+      </IconButton>
+
+      <IconButton
+        aria-label="next"
+        sx={{
+          color: theme.palette.primary.main,
+          '&:hover': {
+            color: theme.palette.background.darkMint,
+          },
+        }}
+      >
+        <ArrowCircleRightIcon sx={{ fontSize: 48 }} />
+      </IconButton>
+  </Box>
     </Box>
   );
 }
