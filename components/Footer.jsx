@@ -4,7 +4,7 @@ import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Link from "next/link";
 import Image from "next/image";
-import { Box, TextField, Button, Paper, useTheme, InputAdornment } from "@mui/material";
+import { Box, useTheme } from "@mui/material";
 import EmailIcon from '@mui/icons-material/Email';
 import SocialButtons from "./SocialButtons";
 import NewsletterSubscription from "./NewsletterSubscription";
