@@ -12,6 +12,7 @@ const feedbacks = [
     text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
     reviewer: "Reviewer Name",
     avatar: "/images/avatars/avatar1.png",
+    avatar: "/avatar1.png",
   },
   {
     id: 2,
