@@ -38,7 +38,7 @@ export default function HeroSection() {
           }}
         >
           <Image
-            src="/hero/hero-illustration.png"
+            src="/images/homepage-hero/home-hero.png"
             alt="Software Development Illustration"
             width={600}
             height={600}
