@@ -8,7 +8,6 @@ import axios from "axios";
 export default function Metrics() {
 
     const [metrics, setMetrics] = useState([]);
-    const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
   
     const API_URL =
@@ -21,10 +20,8 @@ export default function Metrics() {
       .get(`${API_URL}/api/home?populate[Metrics][populate]=*`)
       .then((res) => setMetrics(res.data.data?.Metrics || null))
       .catch((err) => setError(err))
-      .finally(() => setLoading(false));
   }, [API_URL]);
   
-  if (loading) return <p>Loading hero section...</p>;
   if (error) return <p>Error: {error.message}</p>;
   if (!metrics) return <p>No Metrics section found.</p>;
   
