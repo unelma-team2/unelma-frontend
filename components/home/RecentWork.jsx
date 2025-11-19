@@ -4,26 +4,40 @@ import React from "react";
 import { Box, Typography, Tabs, Tab, Card, CardMedia, CardContent, IconButton, useTheme } from "@mui/material";
 import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 export default function RecentWorkSection() {
   const theme = useTheme();
   const [tab, setTab] = React.useState(0);
+  const [works, setWorks] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [error, setError] = useState(null);
+
   const handleChange = (e, newVal) => setTab(newVal);
 
-  const items = [
-    {
-      title: "Multipurpose CMS",
-      img: "/images/homepage-recentwork/joao-paulo-m-ramos-paulo-e7TIvspb-Dg-unsplash.jpg",
-    },
-    {
-      title: "E-Commerce Website",
-      img: "/images/homepage-recentwork/pexels-canvastudio-3194519.jpg",
-    },
-    {
-      title: "Knowledge Base Website",
-      img: "/images/homepage-recentwork/pexels-cottonbro-5990037.jpg",
-    },
-  ];
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
+  
+
+  useEffect(() => {
+    axios
+      .get(`${API_URL}/api/home?populate[Category][populate]=*&populate[RecentWorks][populate]=*`)
+      .then((res) => {
+        const data = res.data.data;
+        setCategories(data?.Category || []); 
+        setWorks(data?.RecentWorks || []);  
+      })
+      .catch((err) => setError(err))
+  }, [API_URL]);
+  
+  if (error) return <p>Error: {error.message}</p>;
+  if (!works || !categories) return <p>No RecentWorks or categories found.</p>;
+  
+  const { image, title, type } = works;
+  const { name } = categories;
+
+
+
 
   return (
     <Box sx={{ p: 0, minWidth: 0, border: 'none', color: 'black', '&:hover': { backgroundColor: 'transparent' } }}>
@@ -31,7 +45,7 @@ export default function RecentWorkSection() {
           component="h2"
           align="right"
           sx={{ fontWeight: 700, mb: 6 }}>
-          Our Recent Work
+          Our Recent Works
         </Typography>
 
      <Tabs
@@ -46,10 +60,11 @@ export default function RecentWorkSection() {
     },
   }}
 >
-  {["All", "Web Development", "Website Design", "Mobile Development", "Cyber Support"].map((label, index) => (
+  
+  { categories.map((category, index) => (
     <Tab
       key={index}
-      label={label}
+      label={category.name}
       sx={{
         fontSize: 16,
         fontWeight: 700,       
@@ -61,30 +76,38 @@ export default function RecentWorkSection() {
 
 
       <Box sx={{ display: "flex", justifyContent: "center", gap: 8 }}>
-        {items.map((item, i) => (
-          <Card
-            key={i}
-            sx={{
-             
-              textAlign: "center",
-              border: `2px solid ${theme.palette.primary.main}`,
-              borderRadius: "10px",
-              width: 300,
-              boxShadow: 3,
-              transition: "0.3s",
-              '&:hover': {
-                transform: 'translateY(-6px)',
-                boxShadow: 6,
-              },
-            }}
-          >
-            <CardMedia component="img" height="335px" image={item.img} />
-            <CardContent sx={{ background: theme.palette.background.lightMint }}>
-              <Typography fontWeight={700} align="center">{item.title}</Typography>
-            </CardContent>
-          </Card>
-        ))}
-      </Box>
+
+        {works.map((work, i) => {
+            const imageUrl = work.image?.url
+                ? work.image.url.startsWith("http")
+                ? work.image.url
+                : `${API_URL}${work.image.url}`
+                : null;
+
+            return (
+                <Card
+                    key={i}
+                    sx={{
+                    
+                    textAlign: "center",
+                    border: `2px solid ${theme.palette.primary.main}`,
+                    borderRadius: "10px",
+                    width: 300,
+                    boxShadow: 3,
+                    transition: "0.3s",
+                    '&:hover': {
+                        transform: 'translateY(-6px)',
+                        boxShadow: 6,
+                    },
+                    }}
+                >
+                    <CardMedia component="img" height="335px" image={imageUrl} />
+                    <CardContent sx={{ background: theme.palette.background.lightMint }}>
+                    <Typography fontWeight={700} align="center">{work.title}</Typography>
+                    </CardContent>
+                </Card>
+                )})}
+            </Box>
 
      <Box sx={{ mt: 6, display: "flex", justifyContent: "center", gap: 3 }}>
       <IconButton

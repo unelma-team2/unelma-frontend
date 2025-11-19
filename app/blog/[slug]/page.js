@@ -2,29 +2,38 @@
 
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 
 export default function SingleBlogPage() {
-  const { slug } = useParams(); // Gets slug from the URL
+  const { slug } = useParams();
+  const router = useRouter();
+
   const [blog, setBlog] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
+
+  const API_URL =
+    process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
 
   useEffect(() => {
     if (!slug) return;
 
     axios
       .get(`${API_URL}/api/blogs?filters[slug][$eq]=${slug}&populate=*`)
-      .then((res) => {
-        const blogData = res.data.data[0]; // get first matching blog
-        setBlog(blogData);
-      })
+      .then((res) => setBlog(res.data.data[0]))
       .catch((err) => setError(err))
       .finally(() => setLoading(false));
   }, [slug, API_URL]);
+
+  const fromPage =
+    typeof window !== "undefined" ? localStorage.getItem("fromPage") : null;
+
+  const handleBack = () => {
+    if (fromPage === "home") router.push("/");
+    else router.push("/blog");
+  };
 
   if (loading) return <p style={{ padding: "2rem" }}>Loading blog...</p>;
   if (error)
@@ -42,11 +51,20 @@ export default function SingleBlogPage() {
 
   return (
     <main style={{ padding: "2rem" }}>
-      <Link href="/blog">← Back to all blogs</Link>
+      <button
+        onClick={handleBack}
+        style={{
+          marginBottom: "1rem",
+          background: "none",
+          border: "none",
+          cursor: "pointer",
+          color: "#0070f3",
+        }}
+      >
+        ← Back
+      </button>
 
-      <h1 style={{ marginTop: "1rem", fontSize: "2rem", fontWeight: "bold" }}>
-        {Title}
-      </h1>
+      <h1 style={{ fontSize: "2rem", fontWeight: "bold" }}>{Title}</h1>
 
       {imageUrl && (
         <Image
