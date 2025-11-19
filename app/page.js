@@ -6,6 +6,7 @@ import OrderingProcess from "@/components/home/OrderingProcess";
 import RecentWork from "@/components/home/RecentWork";
 import ClientFeedback from "@/components/home/ClientFeedback";
 import RecentBlogPosts from "@/components/home/RecentBlogPosts";
+import BackToTopButton from "@/components/BackToTopButton";
 
 export default function HomePage() {
   return (
@@ -18,6 +19,7 @@ export default function HomePage() {
       <RecentWork />
       <ClientFeedback />
       <RecentBlogPosts />
+      <BackToTopButton />
     </>
   );
 }

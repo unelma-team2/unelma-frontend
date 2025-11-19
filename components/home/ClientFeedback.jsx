@@ -5,31 +5,21 @@ import { Box, Typography, Paper, Avatar, IconButton, useTheme } from "@mui/mater
 import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
 import theme from "@/theme";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
-const feedbacks = [
-  {
-    id: 1,
-    text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    reviewer: "Reviewer Name",
-    avatar: "/images/avatars/avatar1.png",
-    avatar: "/avatar1.png",
-  },
-  {
-    id: 2,
-    text: "Ut enim ad minim veniam, quis nostrud exercitation ullamco.",
-    reviewer: "Reviewer Name",
-    avatar: "images/avatars/avatar2.png",
-  },
-  {
-    id: 3,
-    text: "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    reviewer: "Reviewer Name",
-    avatar: "/images/avatars/avatar3.png",
-  },
-];
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
 
-function FeedbackCard({ text, reviewer, avatar }) {
+function FeedbackCard({ name, message, avatar }) {
   const theme = useTheme();
+
+  const avatarUrl = avatar?.url
+    ? avatar.url.startsWith("http")
+        ? avatar.url
+            : `${API_URL}${avatar.url}`
+    : "/images/avatars/default.png"; 
+
+  
   return (
     <Paper
       elevation={3}
@@ -78,7 +68,7 @@ function FeedbackCard({ text, reviewer, avatar }) {
           textAlign: "justify",
         }}
       >
-        {text}
+        {message}
       </Typography>
       <Box
         sx={{
@@ -91,7 +81,7 @@ function FeedbackCard({ text, reviewer, avatar }) {
         }}
       >
         <Avatar
-          src={avatar}
+          src={avatarUrl}
           sx={{
             width: 50,
             height: 50,
@@ -104,7 +94,7 @@ function FeedbackCard({ text, reviewer, avatar }) {
             fontWeight: 600,
           }}
         >
-          {reviewer}
+          {name}
         </Typography>
       </Box>
     </Paper>
@@ -112,6 +102,23 @@ function FeedbackCard({ text, reviewer, avatar }) {
 }
 
 export default function ClientFeedback() {
+
+    const [feedback, setFeedback] = useState([]);
+  const [error, setError] = useState(null);
+
+
+useEffect(() => {
+  axios
+    .get(`${API_URL}/api/feedback-forms?populate=*`)
+    .then((res) => setFeedback(res.data.data))
+    .catch((err) => setError(err))
+}, [API_URL]);
+
+if (error) return <p>Error: {error.message}</p>;
+if (!feedback) return <p>No Feedback found.</p>;
+
+const { name, message, avatar, id } = feedback;
+
   return (
     <Box
       component="section"
@@ -143,7 +150,7 @@ export default function ClientFeedback() {
           justifyContent: "center",
         }}
       >
-        {feedbacks.map((fb) => (
+        {feedback.map((fb) => (
           <FeedbackCard key={fb.id} {...fb} />
         ))}
       </Box>
