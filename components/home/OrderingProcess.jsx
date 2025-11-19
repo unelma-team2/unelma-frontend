@@ -2,6 +2,8 @@
 
 import React from 'react';
 import { Box, Container, Typography, Stepper, Step, StepLabel } from "@mui/material";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 function CustomStepIcon(props) {
   return (
@@ -27,14 +29,26 @@ function CustomStepIcon(props) {
 }
 
 const NullStepConnector = () => <Box sx={{ display: 'none' }} />;
+
 export default function OrderingProcess() {
-  const steps = [
-    'Register/Login',
-    'Select Product or Service',
-    'Submit Your Order',
-    'Provide Contents',
-    'Payment & Delivery',
-  ];
+
+    const [orderProcess, setOrderProcess] = useState([]);
+    const [error, setError] = useState(null);
+
+    const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
+    
+
+  useEffect(() => {
+    axios
+      .get(`${API_URL}/api/home?populate[OrderingProcess][populate]=*`)
+      .then((res) => setOrderProcess(res.data.data?.OrderingProcess || null))
+      .catch((err) => setError(err))
+  }, [API_URL]);
+  
+  if (error) return <p>Error: {error.message}</p>;
+  if (!orderProcess) return <p>No Product section found.</p>;
+  
+  const { number, title } = orderProcess;
 
   return (
     <Box 
@@ -72,8 +86,8 @@ export default function OrderingProcess() {
                     },
                 }}
             >
-                {steps.map((label) => (
-                    <Step key={label}>
+                {orderProcess.map((process, i) => (
+                    <Step key={process.number || i}>
                         <StepLabel 
                             StepIconComponent={CustomStepIcon}
                             sx={{ 
@@ -85,7 +99,7 @@ export default function OrderingProcess() {
                                 },
                             }}
                         >
-                            {label}
+                            {process.title}
                         </StepLabel>
                     </Step>
                 ))}
