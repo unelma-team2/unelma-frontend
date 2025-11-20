@@ -97,7 +97,6 @@ export default function ContactPage() {
           : formData.selectedServices.filter((s) => s !== service),
       });
     } else if (field === "contactType") {
-      // Reset form data when contact type changes
       setFormData({
         contactType: event.target.value,
         name: "",
@@ -115,7 +114,6 @@ export default function ContactPage() {
       });
       setFileName("");
     } else if (field === "feedbackType") {
-      // Reset selectedServiceOrProduct when feedback type changes
       setFormData({
         ...formData,
         feedbackType: event.target.value,
@@ -132,7 +130,6 @@ export default function ContactPage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle form submission here
     console.log("Form submitted:", formData);
   };
 
@@ -143,7 +140,6 @@ export default function ContactPage() {
   return (
     <Container maxWidth="md" sx={{ py: 6, px: { xs: 2, sm: 4 } }}>
       <Box sx={{ maxWidth: 800, mx: "auto" }}>
-        {/* Contact Us Heading with Images */}
         <Box
           sx={{
             display: "flex",
@@ -173,50 +169,6 @@ export default function ContactPage() {
               flex: "1 1 auto",
             }}
           >
-            {/* First Cube Image */}
-            <Box
-              sx={{
-                width: { xs: 60, md: 80 },
-                height: { xs: 60, md: 80 },
-                position: "relative",
-                mt: { xs: -1, md: -2 },
-              }}
-            >
-              <Box
-                sx={{
-                  width: "100%",
-                  height: "100%",
-                  background:
-                    "linear-gradient(135deg, #4A90E2 0%, #50C8FF 50%, #FF6B9D 100%)",
-                  borderRadius: "12px",
-                  opacity: 0.8,
-                  transform: "rotate(-15deg)",
-                  boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
-                }}
-              />
-            </Box>
-            {/* Second Cube Image */}
-            <Box
-              sx={{
-                width: { xs: 60, md: 80 },
-                height: { xs: 60, md: 80 },
-                position: "relative",
-                mt: { xs: 2, md: 3 },
-              }}
-            >
-              <Box
-                sx={{
-                  width: "100%",
-                  height: "100%",
-                  background:
-                    "linear-gradient(135deg, #6B46C1 0%, #9333EA 50%, #EC4899 100%)",
-                  borderRadius: "12px",
-                  opacity: 0.8,
-                  transform: "rotate(15deg)",
-                  boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
-                }}
-              />
-            </Box>
           </Box>
         </Box>
 
@@ -247,7 +199,6 @@ export default function ContactPage() {
         </Typography>
 
         <Box component="form" onSubmit={handleSubmit}>
-          {/* Contact Type Dropdown */}
           <FormControl fullWidth sx={{ mb: 3 }}>
             <InputLabel id="contact-type-label">Select contact type</InputLabel>
             <Select
@@ -287,7 +238,6 @@ export default function ContactPage() {
             </Select>
           </FormControl>
 
-          {/* Name Field - Always shown */}
           <TextField
             fullWidth
             label="Name"
@@ -298,7 +248,6 @@ export default function ContactPage() {
             sx={{ mb: 3 }}
           />
 
-          {/* Email Field - Always shown */}
           <TextField
             fullWidth
             label="Email"
@@ -310,7 +259,6 @@ export default function ContactPage() {
             sx={{ mb: 3 }}
           />
 
-          {/* Phone Number Field - Always shown */}
           <Box sx={{ mb: 3 }}>
             <Typography
               variant="body2"
@@ -356,7 +304,6 @@ export default function ContactPage() {
             </Box>
           </Box>
 
-          {/* Price Quote Request - Services Checkboxes */}
           {formData.contactType === "Price quote request" && (
             <Box sx={{ mb: 3 }}>
               <Typography
@@ -410,7 +357,6 @@ export default function ContactPage() {
             </Box>
           )}
 
-          {/* Feedback/Review - Feedback Type Select */}
           {formData.contactType === "Feedback/review" && (
             <>
               <FormControl fullWidth sx={{ mb: 3 }}>
@@ -439,7 +385,6 @@ export default function ContactPage() {
                 </Select>
               </FormControl>
 
-              {/* Choose service/product - Conditional dropdown */}
               {formData.feedbackType &&
                 formData.feedbackType !== "Other" && (
                   <FormControl fullWidth sx={{ mb: 3 }}>
@@ -475,7 +420,6 @@ export default function ContactPage() {
                   </FormControl>
                 )}
 
-              {/* Rating Stars */}
               <Box sx={{ mb: 3 }}>
                 <Typography
                   variant="body2"
@@ -504,7 +448,6 @@ export default function ContactPage() {
                 />
               </Box>
 
-              {/* Can be published radio */}
               <Box sx={{ mb: 3 }}>
                 <Typography
                   variant="body2"
@@ -548,7 +491,6 @@ export default function ContactPage() {
                 </RadioGroup>
               </Box>
 
-              {/* Wish to be contacted radio */}
               <Box sx={{ mb: 3 }}>
                 <Typography
                   variant="body2"
@@ -594,7 +536,6 @@ export default function ContactPage() {
             </>
           )}
 
-          {/* How can we help? - Only for Price quote request */}
           {formData.contactType === "Price quote request" && (
             <Box sx={{ mb: 3 }}>
               <Typography
@@ -638,7 +579,6 @@ export default function ContactPage() {
             </Box>
           )}
 
-          {/* Message Field - Shown for Message/question */}
           {formData.contactType === "Message/question" && (
             <TextField
               fullWidth
@@ -652,7 +592,6 @@ export default function ContactPage() {
             />
           )}
 
-          {/* Your feedback/review - Only for Feedback/review */}
           {formData.contactType === "Feedback/review" && (
             <Box sx={{ mb: 3 }}>
               <Typography
@@ -696,7 +635,6 @@ export default function ContactPage() {
             </Box>
           )}
 
-          {/* File Upload - Shown for Message/question and Price quote request */}
           {(formData.contactType === "Message/question" ||
             formData.contactType === "Price quote request") && (
             <Box sx={{ mb: 4 }}>
@@ -746,7 +684,6 @@ export default function ContactPage() {
             </Box>
           )}
 
-          {/* Submit Button */}
           <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
             <Button
               type="submit"
