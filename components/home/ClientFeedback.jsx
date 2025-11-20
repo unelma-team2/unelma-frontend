@@ -7,6 +7,8 @@ import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
 import theme from "@/theme";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import LoadingSpinner from "../LoadingSpinner";
+import ArrowButtons from "../ArrowButtons";
 
   const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
   //const API_URL = "http://localhost:1337";
@@ -104,9 +106,9 @@ function FeedbackCard({ name, message, avatar }) {
 
 export default function ClientFeedback() {
 
-    const [feedback, setFeedback] = useState([]);
+  const [feedback, setFeedback] = useState([]);
   const [error, setError] = useState(null);
-
+  const [loading, setLoading] = useState(true); 
 
 useEffect(() => {
   axios
@@ -115,6 +117,8 @@ useEffect(() => {
     .catch((err) => setError(err))
 }, [API_URL]);
 
+
+if (loading) return <LoadingSpinner />;
 if (error) return <p>Error: {error.message}</p>;
 if (!feedback) return <p>No Feedback found.</p>;
 
@@ -132,7 +136,7 @@ const { name, message, avatar, id } = feedback;
       }}
     >
       <Typography
-        variant="h2"
+      
         sx={{
           fontWeight: 700,
           fontSize: { xs: "2rem", md: "2.75rem" },
@@ -155,32 +159,7 @@ const { name, message, avatar, id } = feedback;
           <FeedbackCard key={fb.id} {...fb} />
         ))}
       </Box>
-
-     <Box sx={{ mt: 6, display: "flex", justifyContent: "center", gap: 3 }}>
-      <IconButton
-        aria-label="previous"
-        sx={{
-          color: theme.palette.primary.main,
-          '&:hover': {
-            color: theme.palette.background.darkMint,
-          },
-        }}
-      >
-        <ArrowCircleLeftIcon sx={{ fontSize: 48 }} />
-      </IconButton>
-
-      <IconButton
-        aria-label="next"
-        sx={{
-          color: theme.palette.primary.main,
-          '&:hover': {
-            color: theme.palette.background.darkMint,
-          },
-        }}
-      >
-        <ArrowCircleRightIcon sx={{ fontSize: 48 }} />
-      </IconButton>
-  </Box>
+      <ArrowButtons />
     </Box>
   );
 }

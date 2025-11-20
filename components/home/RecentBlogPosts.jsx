@@ -18,15 +18,13 @@ import {
 } from "@mui/material";
 
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
-import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
 import ShareIcon from "@mui/icons-material/Share";
 import CommentIcon from "@mui/icons-material/Comment";
 import PersonIcon from "@mui/icons-material/Person";
 import CategoryIcon from "@mui/icons-material/Category";
-
 import { motion } from "framer-motion";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import ArrowButtons from "../ArrowButtons";
 
 export default function RecentBlogPosts() {
   const theme = useTheme();
@@ -35,9 +33,7 @@ export default function RecentBlogPosts() {
   const [error, setError] = useState(null);
 
   //const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
-    const API_URL = "http://localhost:1337";
-
-
+  const API_URL = "http://localhost:1337";
 
   // --- Carousel Settings ---
   const CARD_WIDTH = 300;
@@ -215,13 +211,14 @@ export default function RecentBlogPosts() {
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
-                        fontWeight: 700,
-                        fontSize: "0.7rem",
+                        fontWeight: "bold",
+                        lineHeight: 1.3
+                        //fontSize: "0.7rem",
                       }}
                     >
                     <div style={{ textAlign: "center" }}>
-                      <div style={{ fontSize: "12pt", fontWeight: "bold" }}>{dayMonth}</div>
-                      <div style={{ fontSize: "10pt" }}>{year}</div>
+                      <div style={{ fontSize: "12pt" }}>{dayMonth}</div>
+                      <div style={{ fontSize: "8pt" }}>{year}</div>
                   </div>
                     </Box>
                   </Box>
@@ -292,15 +289,7 @@ export default function RecentBlogPosts() {
         </Box>
       </Box>
 
-      {/* Arrows */}
-      <Box sx={{ mt: 6, display: "flex", justifyContent: "center", gap: 3 }}>
-        <IconButton onClick={handlePrev}>
-          <ArrowCircleLeftIcon sx={{ fontSize: 48 }} />
-        </IconButton>
-        <IconButton onClick={handleNext}>
-          <ArrowCircleRightIcon sx={{ fontSize: 48 }} />
-        </IconButton>
-      </Box>
+      <ArrowButtons />
     </Box>
   );
 }

@@ -5,6 +5,7 @@ import NextLink from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import LoadingSpinner from "../LoadingSpinner";
 
 export default function HeroSection() {
   const theme = useTheme();
@@ -13,8 +14,8 @@ export default function HeroSection() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
-      //const API_URL = "http://localhost:1337";
+    //const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
+      const API_URL = "http://localhost:1337";
     
 
   useEffect(() => {
@@ -25,7 +26,7 @@ export default function HeroSection() {
       .finally(() => setLoading(false));
   }, [API_URL]);
 
-  if (loading) return <p>Loading hero section...</p>;
+  if (loading) return <LoadingSpinner />;
   if (error) return <p>Error: {error.message}</p>;
   if (!heroSection) return <p>No hero section found.</p>;
 

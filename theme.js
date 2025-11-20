@@ -35,7 +35,7 @@ const theme = createTheme({
     // Hero & main heading
     h1: {
       fontFamily: headingFont,
-      fontWeight: 700,
+      fontWeight: 800,
       fontSize: "64px", // per style guide
       lineHeight: 1.1,
     },
@@ -43,7 +43,7 @@ const theme = createTheme({
     // Section titles
     h2: {
       fontFamily: headingFont,
-      fontWeight: 700,
+      fontWeight: 800,
       fontSize: "48px",
       lineHeight: 1.15,
     },
@@ -51,7 +51,7 @@ const theme = createTheme({
     // Small section headers
     h3: {
       fontFamily: bodyFont,
-      fontWeight: 700,
+      fontWeight: 800,
       fontSize: "20px",
       lineHeight: 1.2,
     },
@@ -68,7 +68,7 @@ const theme = createTheme({
       fontFamily: bodyFont,
       fontSize: "16px",
       fontWeight: 500,
-      lineHeight: 1.3,
+     // lineHeight: 1.3,
     },
 
     // Smaller body text 14pt
@@ -106,9 +106,6 @@ const theme = createTheme({
       height: "180px",   
       zIndex: 3,
     },
-    homeSectionRight: {
-       borderBottom: "2px solid #2F2E2E",
-    },
     homeBoxRight: {
       borderBottom: "2px solid #2F2E2E",
       position: "absolute",
@@ -127,10 +124,7 @@ const theme = createTheme({
       left: 0,
       width: "50vw",      
       height: "200px",
-      zIndex: 2,
-    },
-    homeSectionLeft: {
-      borderBottom: "2px solid #2F2E2E",
+      zIndex: 3,
     },
   },
 
@@ -143,12 +137,20 @@ const theme = createTheme({
     MuiButton: {
       styleOverrides: {
         root: {
-          borderRadius: 10,
+          px: 4,
+          py: 1,
+          backgroundColor: "#2F2E2E",
+          color: "#fff",
+          borderRadius: "8px",
+          fontSize: "0.85rem",
           boxShadow: "0px 4px 4px rgba(0,0,0,0.15)",
           transition: "box-shadow 0.3s ease",
+            transition: "0.25s ease",
 
           "&:hover": {
             boxShadow: "0px 6px 6px rgba(0,0,0,0.20)",
+            backgroundColor: "#9D00A0",
+            transform: "scale(1.1)",
           },
         },
       },
@@ -157,7 +159,8 @@ const theme = createTheme({
     MuiCard: {
       styleOverrides: {
         root: {
-          borderRadius: 8,
+          border:"2px solid #2F2E2E",
+          borderRadius: "10px",
           boxShadow: "0px 2px 4px rgba(0,0,0,0.1)",
         },
       },

@@ -6,14 +6,16 @@ import Image from "next/image";
 import theme from "@/theme";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import LoadingSpinner from "../LoadingSpinner";
 
 
 export default function ServicesSection() {
     const [services, setServices] = useState([]);
     const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(true);
 
-    const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
-    //  const API_URL = "https://localhost:1337";
+    //const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
+    const API_URL = "https://localhost:1337";
   
 
   useEffect(() => {
@@ -22,21 +24,23 @@ export default function ServicesSection() {
       .then((res) => setServices(res.data.data?.Services || null))
       .catch((err) => setError(err))
   }, [API_URL]);
+
   
+  if (loading) return <LoadingSpinner />;
   if (error) return <p>Error: {error.message}</p>;
   if (!services) return <p>No Services are available.</p>;
   
   const { image, title, description} = services;
 
   return (
-    <Box sx={{ position: "relative", width: "100%", height: "600px", py: 10, zIndex: 1,borderBottom: "2px solid #2F2E2E" }}>
+    <Box sx={{ position: "relative", width: "100%", height: "1200px", py: 10, zIndex: 1, borderBottom: "2px solid #2F2E2E" }}>
           <Box sx={{ ...theme.mixins.homeBoxLeft, backgroundColor: theme.palette.background.darkMint, borderBottom: "2px solid #2F2E2E", borderRight: "2px solid #2F2E2E" }} />
           <Box sx={{ ...theme.mixins.homeTitleRight, backgroundColor: theme.palette.background.lightMint   }}>
           <Typography
           variant="h2"
           component="h2"
         align="right"
-          sx={{ marginRight: "170px", marginY: "4rem" }}>
+          sx={{ marginRight: "170px", marginY: "5rem" }}>
       
           Our Services
         </Typography>
@@ -69,10 +73,10 @@ export default function ServicesSection() {
                     sx={{
                     width: 300,
                     height: 320,
-                    borderRadius: "10px",
+                    //borderRadius: "10px",
                     p: 2,
                     textAlign: "center",
-                    border: "2px solid #2F2E2E",
+                    //border: "2px solid #2F2E2E",
                     }}
                 >
                     <CardContent>
@@ -87,7 +91,7 @@ export default function ServicesSection() {
                         justifyContent: "center",
                         mx: "auto",
                         mb: 2,
-                        border: "2px solid #2F2E2E",
+                        border: "2px solid " + theme.palette.primary.main,
                         overflow: "hidden",
                         }}
                     >

@@ -4,11 +4,13 @@ import { Box, Typography } from "@mui/material";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import LoadingSpinner from "../LoadingSpinner";
 
 export default function Metrics() {
 
     const [metrics, setMetrics] = useState([]);
     const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(true);
   
     const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
     //  const API_URL = "http://localhost:1337";
@@ -21,6 +23,8 @@ export default function Metrics() {
       .catch((err) => setError(err))
   }, [API_URL]);
   
+
+  if (loading) return <LoadingSpinner />;
   if (error) return <p>Error: {error.message}</p>;
   if (!metrics) return <p>No Metrics section found.</p>;
   

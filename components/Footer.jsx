@@ -7,6 +7,8 @@ import Image from "next/image";
 import { Box, useTheme } from "@mui/material";
 import SocialButtons from "./SocialButtons";
 import NewsletterSubscription from "./NewsletterSubscription";
+import { ArrowForward } from "@mui/icons-material";
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 
 export default function Footer() {
@@ -16,7 +18,7 @@ export default function Footer() {
     <Box component="footer" sx={{
       bgcolor:  theme.palette.background.lightMint,
       color: theme.palette.primary.main,
-      borderTop: 1, borderColor: "theme.palette.primary.main", mt: 4,
+      borderTop: 2, borderColor: "theme.palette.primary.main", mt: 4,
     }}>
       <Box sx={{ maxWidth: 1400, mx: "auto", px: { xs: 2, md: 6 }, py: 6 }}>
         <Grid
@@ -31,24 +33,25 @@ export default function Footer() {
             <Box sx={{ mb: 2 }}>
               <Image src="/images/logos/logo-unelma.png"alt="Unelma Platforms" width={174} height={92} />
             </Box>
-            <Typography component="div" sx={{ fontWeight: 700, mt: 4, fontSize: 24, color: theme.palette.primary.main }}>
+            <Typography variant="h3" sx={{ mt: 9, color: theme.palette.primary.main }}>
               <span>&gt; </span>Products
             </Typography>
-            <Typography component="div" sx={{ fontWeight: 700, mt: 2, fontSize: 24, color: theme.palette.primary.main }}>
+            <Typography variant="h3" sx={{ mt: 2, color: theme.palette.primary.main }}>
               <span>&gt; </span>Services
             </Typography>
           </Grid>
 
           <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-            <Typography fontWeight="700" sx={{ fontSize: 28, mb: 2, color: theme.palette.primary.main }}>Resources</Typography>
-            <Box sx={{ fontSize: 22, mb: 4 }}>
+            <Typography variant="h3" sx={{ mb: 2, color: theme.palette.primary.main }}>Resources</Typography>
+            <Box sx={{ fontSize: 16, fontWeight: "semi-bold", mb: 4 }}>
               <Link href="/blog">&gt; Blog</Link><br />
               <Link href="/case-studies">&gt; Case Studies</Link><br />
               <a href="#">&gt; Customer Testimonials</a><br />
               <a href="#">&gt; Tech Support</a>
+     
             </Box>
-            <Typography fontWeight="700" sx={{ mt: 3, mb: 2, fontSize: 28, color: theme.palette.primary.main }}>Company</Typography>
-            <Box sx={{ fontSize: 22 }}>
+            <Typography variant="h3" sx={{ mt: 3, mb: 2, color: theme.palette.primary.main }}>Company</Typography>
+            <Box sx={{ fontSize: 16, fontWeight: "semi-bold" }}>
               <Link href="/about">&gt; About Us</Link><br />
               <Link href="/careers">&gt; Careers</Link><br />
               <a href="#">&gt; Internship/Traineeship</a>
@@ -56,8 +59,8 @@ export default function Footer() {
           </Grid>
 
           <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-            <Typography fontWeight="700" sx={{ fontSize: 28, mb: 2, color: theme.palette.primary.main }}>Contact Us</Typography>
-            <Box sx={{ fontSize: 22 }}>
+            <Typography variant="h3" sx={{ mb: 2, color: theme.palette.primary.main }}>Contact Us</Typography>
+            <Box sx={{ fontSize: 16, fontWeight: "semi-bold" }}>
               <a href="#">&gt; Request a Price Quote</a><br />
               <Link href="/contact">&gt; Send a Message/Question</Link><br />
               <a href="#">&gt; Give Feedback</a><br />

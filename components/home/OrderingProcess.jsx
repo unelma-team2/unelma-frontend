@@ -1,26 +1,28 @@
 "use client";
 
 import React from 'react';
-import { Box, Container, Typography, Stepper, Step, StepLabel } from "@mui/material";
+import { Box, Container, Typography, Stepper, Step, StepLabel, useTheme } from "@mui/material";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import LoadingSpinner from "../LoadingSpinner";
 
 function CustomStepIcon(props) {
+    const theme = useTheme();
   return (
     <Box
       sx={{
-        backgroundColor: '#C1FCFF',
-        border: '2px solid #000000',
-        color: '#000',
-        width: 60,
-        height: 60,
+        backgroundColor: theme.palette.background.darkMint,
+        border: `2px solid ${theme.palette.primary.main}`,
+        color: theme.palette.primary.main,
+        width: 50,
+        height: 50,
         borderRadius: '50%',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
         fontSize: '1.5rem',
         fontWeight: 'bold',
-        zIndex: 1,
+        //zIndex: 1,
       }}
     >
       {String(props.icon)}
@@ -31,9 +33,11 @@ function CustomStepIcon(props) {
 const NullStepConnector = () => <Box sx={{ display: 'none' }} />;
 
 export default function OrderingProcess() {
+    const theme = useTheme();
 
     const [orderProcess, setOrderProcess] = useState([]);
     const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
     
@@ -45,6 +49,7 @@ export default function OrderingProcess() {
       .catch((err) => setError(err))
   }, [API_URL]);
   
+  if (loading) return <LoadingSpinner />;
   if (error) return <p>Error: {error.message}</p>;
   if (!orderProcess) return <p>No Product section found.</p>;
   
@@ -56,9 +61,9 @@ export default function OrderingProcess() {
         sx={{ 
             paddingTop: { xs: 8, md: 10 }, 
             paddingBottom: { xs: 8, md: 12 },
-            backgroundColor: '#EDFCFF',
-            textAlign: 'center',
-            border: '1px solid black',
+            backgroundColor: theme.palette.background.lightMint,
+            textAlign: "center",
+            height: "600px",
         }}
     >
         <Container maxWidth="lg">
@@ -67,7 +72,7 @@ export default function OrderingProcess() {
                 component="h2" 
                 sx={{ 
                     marginBottom: { xs: 6, md: 8 }, 
-                    fontWeight: 'bold',
+                    fontWeight: "bold",
                     fontSize: { xs: "2rem", md: "2.5rem" }
                 }}
             > 
@@ -79,8 +84,8 @@ export default function OrderingProcess() {
                 alternativeLabel
                 connector={<NullStepConnector />}
                 sx={{ 
-                    width: '100%',
-                    '& .MuiStep-root': {
+                    width: "100%",
+                    "& .MuiStep-root": {
                         paddingLeft: { xs: 0, sm: 1 },
                         paddingRight: { xs: 0, sm: 1 },
                     },
@@ -91,11 +96,11 @@ export default function OrderingProcess() {
                         <StepLabel 
                             StepIconComponent={CustomStepIcon}
                             sx={{ 
-                                '& .MuiStepLabel-label': {
+                                "& .MuiStepLabel-label": {
                                     marginTop: 3,
-                                    fontSize: '1rem',
-                                    fontWeight: 800,
-                                    color: '#000',
+                                    fontSize: "1rem",
+                                    fontWeight: "semi-bold",
+                                    color: theme.palette.text.primary,
                                 },
                             }}
                         >

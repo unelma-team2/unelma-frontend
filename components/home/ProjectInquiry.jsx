@@ -12,8 +12,8 @@ export default function ProjectInquiry() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
-  //  const API_URL = "http://localhost:1337";
+  //const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
+    const API_URL = "http://localhost:1337";
   
 
 useEffect(() => {
@@ -40,9 +40,9 @@ const { title1, title2, description1, description2, link, link_description } = p
     >
       <Box
         sx={{
-          bgcolor: "#C1FCFF",
-          borderTop: "2px solid #2F2E2E",
-          borderRight: "2px solid #2F2E2E",
+          bgcolor: theme.palette.background.darkMint,
+          borderTop: `2px solid ${theme.palette.primary.main}`,
+          borderRight: `2px solid ${theme.palette.primary.main}`,
           borderTopRightRadius: "120px",
           width: "100%",
           height: "600px",
@@ -76,7 +76,7 @@ const { title1, title2, description1, description2, link, link_description } = p
               fontSize: { xs: 26, md: 32 },
               fontWeight: 700,
               mb: 3,
-              color: "#2F2E2E",
+              color: theme.palette.primary.main,
             }}
           >
             {title1} <br /> {title2}
@@ -84,11 +84,11 @@ const { title1, title2, description1, description2, link, link_description } = p
 
           <Typography
             sx={{
-              fontFamily: "Quicksand, sans-serif",
+              fontFamily: "Outfit, sans-serif",
               fontSize: 16,
               lineHeight: 1.6,
               mb: 3,
-              color: "#2F2E2E",
+              color: theme.palette.primary.main,
               maxWidth: 420,
             }}
           >
@@ -99,17 +99,17 @@ const { title1, title2, description1, description2, link, link_description } = p
           </Typography>
 
           <Button href={link}
-            variant="contained"
+            //variant="contained"
             sx={{
-              bgcolor: "#2F2E2E",
-              color: "#fff",
+             // bgcolor: "#2F2E2E",
+              //color: "#fff",
               px: 3,
               py: 1,
-              borderRadius: 1,
-              textTransform: "none",
-              fontWeight: 600,
-              fontFamily: "Quicksand, sans-serif",
-              ":hover": { bgcolor: "#444" },
+            //  borderRadius: 1,
+            //  textTransform: "none",
+            //  fontWeight: 600,
+            //  fontFamily: "Quicksand, sans-serif",
+            //  ":hover": { bgcolor: "#444" },
             }}
           >
             {link_description}

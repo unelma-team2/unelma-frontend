@@ -2,10 +2,10 @@
 
 import React from "react";
 import { Box, Typography, Tabs, Tab, Card, CardMedia, CardContent, IconButton, useTheme } from "@mui/material";
-import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
-import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import ArrowButtons from "../ArrowButtons";
+import LoadingSpinner from "../LoadingSpinner";
 
 export default function RecentWorkSection() {
   const theme = useTheme();
@@ -13,11 +13,12 @@ export default function RecentWorkSection() {
   const [works, setWorks] = useState([]);
   const [categories, setCategories] = useState([]);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const handleChange = (e, newVal) => setTab(newVal);
+  //onst handleChange = (e, newVal) => setTab(newVal);
 
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
-  //  const API_URL = "http://localhost:1337";
+ // const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
+   const API_URL = "http://localhost:1337";
 
   useEffect(() => {
     axios
@@ -30,23 +31,51 @@ export default function RecentWorkSection() {
       .catch((err) => setError(err))
   }, [API_URL]);
   
+  if (loading) return <LoadingSpinner />;
   if (error) return <p>Error: {error.message}</p>;
-  if (!works || !categories) return <p>No RecentWorks or categories found.</p>;
+  if (!works || !categories) return <p>No Recent Work or categories found.</p>;
   
   const { image, title, type } = works;
   const { name } = categories;
 
+  const handleChange = (e, newVal) => setTab(newVal);
+
+  const handleNext = () => {
+    setTab((prev) =>
+      prev + 1 < categories.length ? prev + 1 : 0
+    );
+  };
+
+  const handlePrev = () => {
+    setTab((prev) =>
+      prev - 1 >= 0 ? prev - 1 : categories.length - 1
+    );
+  };
 
 
 
   return (
-    <Box sx={{ p: 0, minWidth: 0, border: 'none', color: 'black', '&:hover': { backgroundColor: 'transparent' } }}>
+    <Box sx={{ position: "relative", width: "100%", height: "1200px", py: 10, zIndex: 1, borderBottom: `2px solid ${theme.palette.primary.main}`, backgroundColor: theme.palette.background.lightMint  }}>
+           <Box sx={{ ...theme.mixins.homeBoxLeft, backgroundColor: theme.palette.background.lightMint, borderBottom: `2px solid ${theme.palette.primary.main}`, }} />
+          <Box sx={{ ...theme.mixins.homeTitleRight, backgroundColor: theme.palette.background.default }}>
+            <Typography
+            variant="h2"
+            component="h2"
+          align="right"
+            sx={{ marginRight: "170px", marginY: "5rem" }}>
+        
+            Recent Work
+          </Typography>
+        </Box>
+    {/*<Box sx={{ p: 0, minWidth: 0, border: 'none', color: 'black', '&:hover': { backgroundColor: 'transparent' } }}>
       <Typography  variant="h2"
           component="h2"
           align="right"
           sx={{ fontWeight: 700, mb: 6 }}>
           Our Recent Works
-        </Typography>
+        </Typography>*/}
+         <Box sx={{ position: "relative", zIndex: 2, backgroundColor: theme.palette.background.default, py: 28, px: 4 }}>
+           <Box sx={{ maxWidth: "1100px", mx: "auto" }}>
 
      <Tabs
   value={tab}
@@ -56,7 +85,7 @@ export default function RecentWorkSection() {
     mb: 6,
     '& .MuiTabs-indicator': {
       height: 4,             
-      backgroundColor: 'primary.main',
+      backgroundColor: theme.palette.primary.main,
     },
   }}
 >
@@ -67,7 +96,7 @@ export default function RecentWorkSection() {
       label={category.name}
       sx={{
         fontSize: 16,
-        fontWeight: 700,       
+        fontWeight: "semi-bold",       
         textTransform: 'none'
       }}
     />
@@ -88,11 +117,14 @@ export default function RecentWorkSection() {
                 <Card
                     key={i}
                     sx={{
-                    
-                    textAlign: "center",
-                    border: `2px solid ${theme.palette.primary.main}`,
-                    borderRadius: "10px",
+                    backgroundColor: theme.palette.background.lightMint,
                     width: 300,
+                    height: 400,
+                    //
+                    textAlign: "center",
+                    //border: `2px solid ${theme.palette.primary.main}`,
+                    //borderRadius: "10px",
+                    //width: 300,
                     boxShadow: 3,
                     transition: "0.3s",
                     '&:hover': {
@@ -109,31 +141,10 @@ export default function RecentWorkSection() {
                 )})}
             </Box>
 
-     <Box sx={{ mt: 6, display: "flex", justifyContent: "center", gap: 3 }}>
-      <IconButton
-        aria-label="previous"
-        sx={{
-          color: theme.palette.primary.main,
-          '&:hover': {
-            color: theme.palette.background.darkMint,
-          },
-        }}
-      >
-        <ArrowCircleLeftIcon sx={{ fontSize: 48 }} />
-      </IconButton>
-
-      <IconButton
-        aria-label="next"
-        sx={{
-          color: theme.palette.primary.main,
-          '&:hover': {
-            color: theme.palette.background.darkMint,
-          },
-        }}
-      >
-        <ArrowCircleRightIcon sx={{ fontSize: 48 }} />
-      </IconButton>
-  </Box>
+      <ArrowButtons onPrev={handlePrev} onNext={handleNext} />
     </Box>
+    </Box>
+    </Box>
+    
   );
 }
