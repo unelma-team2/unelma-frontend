@@ -34,7 +34,7 @@ export default function ProductsSection() {
 
   const cardSx = {
     height: "100%",
-    border: "2px solid black",
+    border: `2px solid ${theme.palette.primary.main}`,
     borderRadius: "20px",
     boxShadow: "0px 8px 24px rgba(0,0,0,0.08)",
     display: "flex",
