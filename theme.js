@@ -1,8 +1,9 @@
+import { BorderBottom } from "@mui/icons-material";
 import { createTheme } from "@mui/material/styles";
 
 // Custom font variables from layout.js
 const headingFont = "var(--font-stack-sans-notch), sans-serif";
-const bodyFont = "var(--font-quicksand), sans-serif";
+const bodyFont = "var(--font-outfit), sans-serif";
 
 const theme = createTheme({
   palette: {
@@ -16,7 +17,7 @@ const theme = createTheme({
     },
     text: {
       primary: "#2F2E2E",
-      secondary: "#6A6A6A",
+      secondary: "#2F2E2E",
     },
     background: {
       default: "#FFFFFF",
@@ -83,9 +84,58 @@ const theme = createTheme({
       fontFamily: bodyFont,
     },
   },
+  
+   mixins: {
+    homeBoxLeft: {
+      borderBottom: "2px solid #2F2E2E",
+      position: "absolute",
+      top: 0,
+      left: 0,
+      width: "50vw",   
+      height: "180px",   
+      zIndex: 3,
+    },
+    homeTitleRight: {
+      borderTop: "2px solid #2F2E2E",
+      borderLeft: "2px solid #2F2E2E",
+      borderTopLeftRadius: "120px",
+      position: "absolute",
+      top: 0,
+      right: 0,
+      width: "50vw",   
+      height: "180px",   
+      zIndex: 3,
+    },
+    homeSectionRight: {
+       borderBottom: "2px solid #2F2E2E",
+    },
+    homeBoxRight: {
+      borderBottom: "2px solid #2F2E2E",
+      position: "absolute",
+      top: 0,
+      right: 0,
+      width: "50vw",   
+      height: "180px",   
+      zIndex: 3,
+    },
+    homeTitleLeft: {
+      borderTop: "2px solid #2F2E2E",
+      borderRight: "2px solid #2F2E2E",
+      borderTopRightRadius: "120px",
+      position: "absolute",
+      top: 0,
+      left: 0,
+      width: "50vw",      
+      height: "200px",
+      zIndex: 2,
+    },
+    homeSectionLeft: {
+      borderBottom: "2px solid #2F2E2E",
+    },
+  },
 
   shape: {
-    borderRadius: 10, // matches your cards & buttons style
+    borderRadius: "10px", // matches your cards & buttons style
   },
 
   components: {

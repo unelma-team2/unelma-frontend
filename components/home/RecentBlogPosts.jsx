@@ -34,8 +34,8 @@ export default function RecentBlogPosts() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const API_URL =
-    process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
+  //const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
+    const API_URL = "http://localhost:1337";
 
 
 
@@ -162,7 +162,7 @@ export default function RecentBlogPosts() {
             ? blog_image.data.attributes.url.startsWith("http")
             ? blog_image.data.attributes.url
             : `${API_URL}${blog_image.data.attributes.url}`
-            : "/images/blog/placeholder.png"; // fallback to local placeholder
+            : "/images/blog/placeholder.png"; 
 
             const date = new Date(createdAt);
 

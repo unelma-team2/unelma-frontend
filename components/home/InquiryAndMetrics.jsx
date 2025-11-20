@@ -1,10 +1,12 @@
 "use client";
 
-import { Box } from "@mui/material";
+import { Box, useTheme } from "@mui/material";
 import ProjectInquiry from "./ProjectInquiry";
 import Metrics from "./Metrics";
 
 export default function InquiryAndMetrics() {
+  const theme = useTheme();
+
   return (
     <Box
       sx={{
@@ -13,9 +15,7 @@ export default function InquiryAndMetrics() {
         flexDirection: { xs: "column", md: "row" },
         justifyContent: "space-between",
         alignItems: "flex-start",
-        borderLeft: "2px solid #2F2E2E",
-        borderBottom: "2px solid #2F2E2E",
-        borderRight: "none",
+      
       }}
     >
       <Box

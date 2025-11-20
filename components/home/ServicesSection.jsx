@@ -13,6 +13,7 @@ export default function ServicesSection() {
     const [error, setError] = useState(null);
 
     const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
+    //  const API_URL = "https://localhost:1337";
   
 
   useEffect(() => {
@@ -28,16 +29,22 @@ export default function ServicesSection() {
   const { image, title, description} = services;
 
   return (
-    <Box sx={{ backgroundColor: theme.palette.background.lightMint, py: 8, px: 4 }}>
-      <Box sx={{ maxWidth: "1200px", mx: "auto" }}>
-        <Typography
+    <Box sx={{ position: "relative", width: "100%", height: "600px", py: 10, zIndex: 1,borderBottom: "2px solid #2F2E2E" }}>
+          <Box sx={{ ...theme.mixins.homeBoxLeft, backgroundColor: theme.palette.background.darkMint, borderBottom: "2px solid #2F2E2E", borderRight: "2px solid #2F2E2E" }} />
+          <Box sx={{ ...theme.mixins.homeTitleRight, backgroundColor: theme.palette.background.lightMint   }}>
+          <Typography
           variant="h2"
           component="h2"
-          align="right"
-          sx={{ fontWeight: 700, mb: 6 }}
-        >
+        align="right"
+          sx={{ marginRight: "170px", marginY: "4rem" }}>
+      
           Our Services
         </Typography>
+        </Box>
+
+    <Box sx={{ position: "relative", zIndex: 2, backgroundColor: theme.palette.background.lightMint, py: 28, px: 4 }}>
+      <Box sx={{ maxWidth: "1100px", mx: "auto" }}>
+        
 
         <Grid container spacing={8} justifyContent="center">
           {services.map((service, index) => {
@@ -110,6 +117,7 @@ export default function ServicesSection() {
           )})}
         </Grid>
       </Box>
+    </Box>
     </Box>
   );
 }

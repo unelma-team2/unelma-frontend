@@ -13,8 +13,8 @@ export default function HeroSection() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    const API_URL =
-    process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
+    const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
+      //const API_URL = "http://localhost:1337";
     
 
   useEffect(() => {
