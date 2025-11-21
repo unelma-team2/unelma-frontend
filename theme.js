@@ -2,7 +2,7 @@ import { createTheme } from "@mui/material/styles";
 
 // Custom font variables from layout.js
 const headingFont = "var(--font-stack-sans-notch), sans-serif";
-const bodyFont = "var(--font-quicksand), sans-serif";
+const bodyFont = "var(--font-outfit), sans-serif";
 
 const theme = createTheme({
   palette: {

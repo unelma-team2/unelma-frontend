@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import BlogPageHero from "@/components/blog/BlogPageHero";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 function formatBlogDate(date, fallback) {
   const d = date || fallback;
@@ -38,7 +39,7 @@ export default function BlogPage() {
       .finally(() => setLoading(false));
   }, [API_URL]);
 
-  if (loading) return <p>Loading blogs...</p>;
+  if (loading) return <LoadingSpinner />;
   if (error) return <p>Error loading blogs: {error.message}</p>;
 
   // Filter blogs by search term

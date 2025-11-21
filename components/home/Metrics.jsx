@@ -55,7 +55,7 @@ export default function Metrics() {
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
-            fontFamily: "Quicksand, sans-serif",
+            fontFamily: "Outfit, sans-serif",
             mx: "auto",
           }}
         >

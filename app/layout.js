@@ -1,5 +1,5 @@
 import localFont from "next/font/local";
-import { Quicksand } from "next/font/google";
+import { Quicksand, Outfit } from "next/font/google";
 import "./globals.css";
 import EmotionRegistry from "@/providers/EmotionRegistry";
 import ThemeRegistry from "@/providers/ThemeRegistry";
@@ -21,6 +21,13 @@ const quicksand = Quicksand({
   display: "swap",
 });
 
+const outfit = Outfit({
+  subsets: ["latin"],
+  weight: ["100","200","300","400","500","600","700","800","900"],
+  variable: "--font-outfit",
+  display: "swap",
+});
+
 export const metadata = {
   title: "Unelma Platforms",
   description: "Redesign project",
@@ -30,7 +37,7 @@ export default function RootLayout({ children }) {
   return (
     <html
       lang="en"
-      className={`${stackSansNotch.variable} ${quicksand.variable}`}
+      className={`${stackSansNotch.variable} ${quicksand.variable} ${outfit.variable}`}
     >
       <body>
         <EmotionRegistry>
