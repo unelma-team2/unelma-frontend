@@ -5,19 +5,15 @@ import {
   Box,
   Container,
   Typography,
-  TextField,
-  MenuItem,
   Button,
   Select,
   FormControl,
   InputLabel,
-  Checkbox,
-  FormControlLabel,
-  Radio,
-  RadioGroup,
-  Rating,
+  MenuItem,
 } from "@mui/material";
-import { AttachFile } from "@mui/icons-material";
+import MessageQuestionSection from "@/components/contact/MessageQuestionSection";
+import PriceQuoteSection from "@/components/contact/PriceQuoteSection";
+import FeedbackReviewSection from "@/components/contact/FeedbackReviewSection";
 
 const contactTypes = [
   "Message/question",
@@ -94,7 +90,7 @@ export default function ContactPage() {
         ...formData,
         selectedServices: checked
           ? [...formData.selectedServices, service]
-          : formData.selectedServices.filter((s) => s !== service),
+          : formData.selectedServices.filter((item) => item !== service),
       });
     } else if (field === "contactType") {
       setFormData({
@@ -193,7 +189,7 @@ export default function ContactPage() {
             lineHeight: 1.6,
           }}
         >
-          We&apos;d love to hear from you. Please select the reason you are
+          We'd love to hear from you. Please select the reason you are
           contacting us from the list below and then fill out the rest of the
           form.
         </Typography>
@@ -238,450 +234,38 @@ export default function ContactPage() {
             </Select>
           </FormControl>
 
-          <TextField
-            fullWidth
-            label="Name"
-            placeholder="Name"
-            value={formData.name}
-            onChange={handleChange("name")}
-            required
-            sx={{ mb: 3 }}
-          />
-
-          <TextField
-            fullWidth
-            label="Email"
-            type="email"
-            placeholder="you@company.com"
-            value={formData.email}
-            onChange={handleChange("email")}
-            required
-            sx={{ mb: 3 }}
-          />
-
-          <Box sx={{ mb: 3 }}>
-            <Typography
-              variant="body2"
-              sx={{
-                mb: 1,
-                fontSize: "14px",
-                fontWeight: 500,
-                color: "#000",
-              }}
-            >
-              Phone number (optional)
-            </Typography>
-            <Box sx={{ display: "flex", gap: 1 }}>
-              <FormControl sx={{ minWidth: 120 }}>
-                <Select
-                  value={formData.countryCode}
-                  onChange={handleChange("countryCode")}
-                  sx={{
-                    backgroundColor: "#fff",
-                    "& .MuiOutlinedInput-notchedOutline": {
-                      borderColor: "#000",
-                    },
-                  }}
-                >
-                  {countryCodes.map((cc) => (
-                    <MenuItem key={cc.code} value={cc.code}>
-                      {cc.country}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-              <TextField
-                fullWidth
-                placeholder={selectedCountry?.format || "+ 358 (0) 00-0000000"}
-                value={formData.phone}
-                onChange={handleChange("phone")}
-                sx={{
-                  "& .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "#000",
-                  },
-                }}
-              />
-            </Box>
-          </Box>
-
-          {formData.contactType === "Price quote request" && (
-            <Box sx={{ mb: 3 }}>
-              <Typography
-                variant="body2"
-                sx={{
-                  mb: 2,
-                  fontSize: "14px",
-                  fontWeight: 500,
-                  color: "#000",
-                }}
-              >
-                Choose the services you are interested in
-              </Typography>
-              <Box
-                sx={{
-                  display: "grid",
-                  gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" },
-                  gap: 1.5,
-                }}
-              >
-                {services.map((service) => (
-                  <FormControlLabel
-                    key={service}
-                    control={
-                      <Checkbox
-                        checked={formData.selectedServices.includes(service)}
-                        onChange={handleChange("selectedServices")}
-                        value={service}
-                        sx={{
-                          color: "#000",
-                          "&.Mui-checked": {
-                            color: "#000",
-                          },
-                          "& .MuiSvgIcon-root": {
-                            borderRadius: "4px",
-                          },
-                        }}
-                      />
-                    }
-                    label={service}
-                    sx={{
-                      "& .MuiFormControlLabel-label": {
-                        fontSize: "14px",
-                        color: "#000",
-                        ml: 1,
-                      },
-                    }}
-                  />
-                ))}
-              </Box>
-            </Box>
-          )}
-
-          {formData.contactType === "Feedback/review" && (
-            <>
-              <FormControl fullWidth sx={{ mb: 3 }}>
-                <InputLabel id="feedback-type-label">
-                  I want to review/leave feedback for
-                </InputLabel>
-                <Select
-                  labelId="feedback-type-label"
-                  id="feedback-type"
-                  value={formData.feedbackType}
-                  label="I want to review/leave feedback for"
-                  onChange={handleChange("feedbackType")}
-                  sx={{
-                    backgroundColor: "#fff",
-                    "& .MuiOutlinedInput-notchedOutline": {
-                      borderColor: "#000",
-                    },
-                  }}
-                >
-                  {feedbackTypes.map((type) => (
-                    <MenuItem key={type} value={type}>
-                      {type}
-                      {type === "Other" && " (specify below)"}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-
-              {formData.feedbackType &&
-                formData.feedbackType !== "Other" && (
-                  <FormControl fullWidth sx={{ mb: 3 }}>
-                    <InputLabel id="service-product-label">
-                      Choose service/product
-                    </InputLabel>
-                    <Select
-                      labelId="service-product-label"
-                      id="service-product"
-                      value={formData.selectedServiceOrProduct}
-                      label="Choose service/product"
-                      onChange={handleChange("selectedServiceOrProduct")}
-                      sx={{
-                        backgroundColor: "#fff",
-                        "& .MuiOutlinedInput-notchedOutline": {
-                          borderColor: "#000",
-                        },
-                      }}
-                    >
-                      {formData.feedbackType === "Service" &&
-                        feedbackServices.map((service) => (
-                          <MenuItem key={service} value={service}>
-                            {service}
-                          </MenuItem>
-                        ))}
-                      {formData.feedbackType === "Product" &&
-                        products.map((product) => (
-                          <MenuItem key={product} value={product}>
-                            {product}
-                          </MenuItem>
-                        ))}
-                    </Select>
-                  </FormControl>
-                )}
-
-              <Box sx={{ mb: 3 }}>
-                <Typography
-                  variant="body2"
-                  sx={{
-                    mb: 1,
-                    fontSize: "14px",
-                    fontWeight: 500,
-                    color: "#000",
-                  }}
-                >
-                  Please rate your experience
-                </Typography>
-                <Rating
-                  name="rating"
-                  value={formData.rating}
-                  onChange={handleRatingChange}
-                  max={5}
-                  sx={{
-                    "& .MuiRating-iconFilled": {
-                      color: "#2F2E2E",
-                    },
-                    "& .MuiRating-iconEmpty": {
-                      color: "#ccc",
-                    },
-                  }}
-                />
-              </Box>
-
-              <Box sx={{ mb: 3 }}>
-                <Typography
-                  variant="body2"
-                  sx={{
-                    mb: 1,
-                    fontSize: "14px",
-                    fontWeight: 500,
-                    color: "#000",
-                  }}
-                >
-                  My rating/review can be published on the Unelma Platforms
-                  website
-                </Typography>
-                <RadioGroup
-                  row
-                  value={formData.canBePublished}
-                  onChange={handleChange("canBePublished")}
-                >
-                  <FormControlLabel
-                    value="yes"
-                    control={<Radio sx={{ color: "#000" }} />}
-                    label="Yes"
-                    sx={{
-                      "& .MuiFormControlLabel-label": {
-                        fontSize: "14px",
-                        color: "#000",
-                      },
-                    }}
-                  />
-                  <FormControlLabel
-                    value="no"
-                    control={<Radio sx={{ color: "#000" }} />}
-                    label="No"
-                    sx={{
-                      "& .MuiFormControlLabel-label": {
-                        fontSize: "14px",
-                        color: "#000",
-                      },
-                    }}
-                  />
-                </RadioGroup>
-              </Box>
-
-              <Box sx={{ mb: 3 }}>
-                <Typography
-                  variant="body2"
-                  sx={{
-                    mb: 1,
-                    fontSize: "14px",
-                    fontWeight: 500,
-                    color: "#000",
-                  }}
-                >
-                  Do you wish to be contacted by Unelma Platforms about your
-                  feedback?
-                </Typography>
-                <RadioGroup
-                  row
-                  value={formData.wishToBeContacted}
-                  onChange={handleChange("wishToBeContacted")}
-                >
-                  <FormControlLabel
-                    value="yes"
-                    control={<Radio sx={{ color: "#000" }} />}
-                    label="Yes"
-                    sx={{
-                      "& .MuiFormControlLabel-label": {
-                        fontSize: "14px",
-                        color: "#000",
-                      },
-                    }}
-                  />
-                  <FormControlLabel
-                    value="no"
-                    control={<Radio sx={{ color: "#000" }} />}
-                    label="No"
-                    sx={{
-                      "& .MuiFormControlLabel-label": {
-                        fontSize: "14px",
-                        color: "#000",
-                      },
-                    }}
-                  />
-                </RadioGroup>
-              </Box>
-            </>
-          )}
-
-          {formData.contactType === "Price quote request" && (
-            <Box sx={{ mb: 3 }}>
-              <Typography
-                variant="body2"
-                sx={{
-                  mb: 1.5,
-                  fontSize: "14px",
-                  fontWeight: 500,
-                  color: "#000",
-                }}
-              >
-                How can we help?
-              </Typography>
-              <TextField
-                fullWidth
-                multiline
-                rows={6}
-                placeholder="Tell us a little about your project/need for our services"
-                value={formData.message}
-                onChange={handleChange("message")}
-                required
-                sx={{
-                  "& .MuiOutlinedInput-root": {
-                    borderRadius: "8px",
-                    "& .MuiOutlinedInput-notchedOutline": {
-                      borderColor: "#000",
-                    },
-                    "&:hover .MuiOutlinedInput-notchedOutline": {
-                      borderColor: "#000",
-                    },
-                    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                      borderColor: "#000",
-                    },
-                    "& .MuiInputBase-input::placeholder": {
-                      color: "#999",
-                      opacity: 1,
-                    },
-                  },
-                }}
-              />
-            </Box>
-          )}
-
           {formData.contactType === "Message/question" && (
-            <TextField
-              fullWidth
-              label="Message"
-              multiline
-              rows={6}
-              value={formData.message}
-              onChange={handleChange("message")}
-              required
-              sx={{ mb: 3 }}
+            <MessageQuestionSection
+              formData={formData}
+              handleChange={handleChange}
+              countryCodes={countryCodes}
+              selectedCountry={selectedCountry}
+              fileName={fileName}
+            />
+          )}
+
+          {formData.contactType === "Price quote request" && (
+            <PriceQuoteSection
+              formData={formData}
+              handleChange={handleChange}
+              countryCodes={countryCodes}
+              selectedCountry={selectedCountry}
+              services={services}
+              fileName={fileName}
             />
           )}
 
           {formData.contactType === "Feedback/review" && (
-            <Box sx={{ mb: 3 }}>
-              <Typography
-                variant="body2"
-                sx={{
-                  mb: 1.5,
-                  fontSize: "14px",
-                  fontWeight: 500,
-                  color: "#000",
-                }}
-              >
-                Your feedback/review
-              </Typography>
-              <TextField
-                fullWidth
-                multiline
-                rows={6}
-                placeholder="Tell us a little about your experience"
-                value={formData.message}
-                onChange={handleChange("message")}
-                required
-                sx={{
-                  "& .MuiOutlinedInput-root": {
-                    borderRadius: "8px",
-                    "& .MuiOutlinedInput-notchedOutline": {
-                      borderColor: "#000",
-                    },
-                    "&:hover .MuiOutlinedInput-notchedOutline": {
-                      borderColor: "#000",
-                    },
-                    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                      borderColor: "#000",
-                    },
-                    "& .MuiInputBase-input::placeholder": {
-                      color: "#999",
-                      opacity: 1,
-                    },
-                  },
-                }}
-              />
-            </Box>
-          )}
-
-          {(formData.contactType === "Message/question" ||
-            formData.contactType === "Price quote request") && (
-            <Box sx={{ mb: 4 }}>
-              <Typography
-                variant="body2"
-                sx={{
-                  mb: 1,
-                  fontSize: "14px",
-                  fontWeight: 500,
-                  color: "#000",
-                }}
-              >
-                {formData.contactType === "Price quote request"
-                  ? "Add file (accepted filetypes)"
-                  : "Add your file (optional)"}
-              </Typography>
-              <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                <AttachFile sx={{ color: "#666", fontSize: 24 }} />
-                <Button
-                  variant="outlined"
-                  component="label"
-                  sx={{
-                    borderColor: "#ccc",
-                    color: "#666",
-                    textTransform: "none",
-                    backgroundColor: "#f5f5f5",
-                    "&:hover": {
-                      borderColor: "#999",
-                      backgroundColor: "#e8e8e8",
-                    },
-                  }}
-                >
-                  Choose file
-                  <input
-                    type="file"
-                    hidden
-                    onChange={handleChange("file")}
-                    accept="*/*"
-                  />
-                </Button>
-                {fileName && (
-                  <Typography variant="body2" sx={{ color: "#666" }}>
-                    {fileName}
-                  </Typography>
-                )}
-              </Box>
-            </Box>
+            <FeedbackReviewSection
+              formData={formData}
+              handleChange={handleChange}
+              countryCodes={countryCodes}
+              selectedCountry={selectedCountry}
+              feedbackTypes={feedbackTypes}
+              feedbackServices={feedbackServices}
+              products={products}
+              handleRatingChange={handleRatingChange}
+            />
           )}
 
           <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
@@ -692,11 +276,11 @@ export default function ContactPage() {
                 backgroundColor: "#2F2E2E",
                 color: "#fff",
                 py: 1,
-                px: 6,
+                px: 4,
                 fontSize: "14px",
                 fontWeight: 600,
                 textTransform: "uppercase",
-                borderRadius: "10px",
+                borderRadius: "25px",
                 minWidth: "120px",
                 "&:hover": {
                   backgroundColor: "#1a1a1a",
