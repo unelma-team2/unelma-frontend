@@ -2,14 +2,30 @@
 
 import { Box, Typography } from "@mui/material";
 import Image from "next/image";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 export default function Metrics() {
-  const metrics = [
-    { number: "1 M+", label1: "Happy", label2: "Users" },
-    { number: "3 M+", label1: "Total", label2: "Downloads" },
-    { number: "2", label1: "Awards", label2: "Won" },
-    { number: "18", label1: "Total", label2: "Agents" },
-  ];
+
+    const [metrics, setMetrics] = useState([]);
+    const [error, setError] = useState(null);
+  
+    const API_URL =
+    process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
+    
+  
+  useEffect(() => {
+    axios
+      .get(`${API_URL}/api/home?populate[Metrics][populate]=*`)
+      .then((res) => setMetrics(res.data.data?.Metrics || null))
+      .catch((err) => setError(err))
+  }, [API_URL]);
+  
+  if (error) return <p>Error: {error.message}</p>;
+  if (!metrics) return <p>No Metrics section found.</p>;
+  
+  const { number, label1, label2 } = metrics;
+  console.log("Metrics data:", metrics);
 
   return (
      <Box

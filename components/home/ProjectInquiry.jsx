@@ -1,9 +1,33 @@
 "use client";
 
 import { Box, Typography, Button, useTheme } from "@mui/material";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 export default function ProjectInquiry() {
   const theme = useTheme();
+
+  const [projectInquiry, setProjectInquiry] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const API_URL =
+  process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
+  
+
+useEffect(() => {
+  axios
+    .get(`${API_URL}/api/home?populate[ProjectInquiry][populate]=*`)
+    .then((res) => setProjectInquiry(res.data.data?.ProjectInquiry || null))
+    .catch((err) => setError(err))
+    .finally(() => setLoading(false));
+}, [API_URL]);
+
+if (loading) return <p>Loading hero section...</p>;
+if (error) return <p>Error: {error.message}</p>;
+if (!projectInquiry) return <p>No ProjectInquiry section found.</p>;
+
+const { title1, title2, description1, description2, link, link_description } = projectInquiry;
 
   return (
     <Box
@@ -45,7 +69,7 @@ export default function ProjectInquiry() {
               color: "#2F2E2E",
             }}
           >
-            Have a project <br /> in mind?
+            {title1} <br /> {title2}
           </Typography>
 
           <Typography
@@ -58,15 +82,13 @@ export default function ProjectInquiry() {
               maxWidth: 420,
             }}
           >
-            We’d love to hear about it. Whether you're developing a new idea or
-            seeking guidance on a proposal, our experts are here to help.
+            {description1}
             <br />
             <br />
-            Get in touch — our initial advice and recommendations are always
-            free.
+            {description2}
           </Typography>
 
-          <Button href="/contact"
+          <Button href={link}
             variant="contained"
             sx={{
               bgcolor: "#2F2E2E",
@@ -80,7 +102,7 @@ export default function ProjectInquiry() {
               ":hover": { bgcolor: "#444" },
             }}
           >
-            GET IN TOUCH
+            {link_description}
           </Button>
         </Box>
       </Box>

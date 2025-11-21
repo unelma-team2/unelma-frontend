@@ -3,9 +3,38 @@
 import { Box, Typography, useTheme, Link as MUILink } from "@mui/material";
 import NextLink from "next/link";
 import Image from "next/image";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 export default function HeroSection() {
   const theme = useTheme();
+
+    const [heroSection, setHeroSection] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    const API_URL =
+    process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
+    
+
+  useEffect(() => {
+    axios
+      .get(`${API_URL}/api/home?populate[HeroSection][populate]=*`)
+      .then((res) => setHeroSection(res.data.data?.HeroSection || null))
+      .catch((err) => setError(err))
+      .finally(() => setLoading(false));
+  }, [API_URL]);
+
+  if (loading) return <p>Loading hero section...</p>;
+  if (error) return <p>Error: {error.message}</p>;
+  if (!heroSection) return <p>No hero section found.</p>;
+
+  const { hero_title, hero_description1, hero_description2, hero_image, hero_link, hero_link_description } = heroSection;
+  const imageUrl = hero_image?.url
+            ? hero_image.url.startsWith("http")
+              ? hero_image.url
+              : `${API_URL}${hero_image.url}`
+            : "";
 
   return (
     <Box
@@ -38,8 +67,8 @@ export default function HeroSection() {
           }}
         >
           <Image
-            src="/hero/hero-illustration.png"
-            alt="Software Development Illustration"
+            src={imageUrl}
+            alt={hero_title || "Hero Image"}
             width={600}
             height={600}
             style={{ width: "100%", height: "auto" }}
@@ -72,9 +101,7 @@ export default function HeroSection() {
                 lineHeight: 1.02,
               }}
             >
-              Cutting-edge <br />
-              Software <br />
-              Development.
+             {hero_title}
             </Typography>
 
             <Box sx={{ maxWidth: 380, ml: "auto", mt: 3 }}>
@@ -88,10 +115,7 @@ export default function HeroSection() {
                   textAlign: "justify",
                 }}
               >
-                Unelma Platforms is a global software development company
-                operating across Asia, the EU, and North America. We specialize
-                in cutting-edge, business-specific software solutions and expert
-                IT consulting services.
+              {hero_description1}
               </Typography>
 
               <Typography
@@ -104,15 +128,12 @@ export default function HeroSection() {
                   textAlign: "justify",
                 }}
               >
-                Our team builds custom applications, web platforms, and APIs
-                that empower organizations in education, healthcare, and
-                business to harness the power of the cloud, streamline
-                operations, and boost customer engagement.
+              {hero_description2}
               </Typography>
 
               <MUILink
                 component={NextLink}
-                href="/about"
+                href={hero_link}
                 underline="none"
                 sx={{
                   fontSize: 18,
@@ -125,7 +146,7 @@ export default function HeroSection() {
                   cursor: "pointer",
                 }}
               >
-                Learn more about Unelma Platforms →
+                {hero_link_description} →
               </MUILink>
             </Box>
           </Box>
