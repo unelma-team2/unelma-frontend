@@ -35,7 +35,7 @@ const theme = createTheme({
     h1: {
       fontFamily: headingFont,
       fontWeight: 700,
-      fontSize: "64px", // per style guide
+      fontSize: "54px", // per style guide
       lineHeight: 1.1,
     },
 
@@ -43,7 +43,7 @@ const theme = createTheme({
     h2: {
       fontFamily: headingFont,
       fontWeight: 700,
-      fontSize: "48px",
+      fontSize: "38px",
       lineHeight: 1.15,
     },
 

@@ -15,28 +15,27 @@ export default function AboutPageHero() {
             py: 8,
             width: "1440px",
             height: "550px",
-            mb: 4,
+            mb: 12,
         }}
         >
             <Typography
                 variant="h1"
                 sx={{
                     fontWeight: 700,
-                    fontSize: "72px",
+                    fontSize: "72pt",
                     flexGrow: 1,
-                   // marginLeft: "170px",
                 }}
                 >
                     About Us
                 </Typography>
             <Box sx={{  
-                 //marginRight: "170px", 
+
                  flexGrow: 1 }}>
                 <Image
                     src="/images/about/about-hero.png"
                     alt="About Hero"
-                    width={412}
-                    height={548}
+                    width={304}
+                    height={404}
                     />
             </Box>
         </Box>

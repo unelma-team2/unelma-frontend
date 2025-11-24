@@ -4,6 +4,7 @@ import "./globals.css";
 import EmotionRegistry from "@/providers/EmotionRegistry";
 import ThemeRegistry from "@/providers/ThemeRegistry";
 import ClientLayoutWrapper from "@/components/ClientLayoutWrapper";
+import { Box } from "@mui/material";
 
 // STACK SANS NOTCH (local variable font)
 const stackSansNotch = localFont({
@@ -42,10 +43,21 @@ export default function RootLayout({ children }) {
       <body>
         <EmotionRegistry>
           <ThemeRegistry>
-            <ClientLayoutWrapper>{children}</ClientLayoutWrapper>
+            <ClientLayoutWrapper>
+              <Box
+                sx={{
+                  mx: { xs: 2, md: "170px" },
+                  my: "2rem",
+                }}
+              >
+                {children}
+              </Box>
+            </ClientLayoutWrapper>
           </ThemeRegistry>
         </EmotionRegistry>
       </body>
     </html>
   );
 }
+
+

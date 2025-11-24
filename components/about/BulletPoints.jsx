@@ -17,14 +17,13 @@ export default function BulletPoints({ text, gradient }) {
         //alignItems: "center",
         boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
         mb: 4,
-        paddingLeft: 3,
+        paddingLeft: 4,
       }}
     >
       <Typography
-        variant="h4"
+        variant="h3"
         fontWeight={600}
         width={"500px"}
-    
       >
         {text}
       </Typography>

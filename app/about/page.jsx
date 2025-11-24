@@ -2,17 +2,18 @@
 
 import AboutPageHero from "@/components/about/AboutPageHero";
 import BulletPoints from "@/components/about/BulletPoints";
-import { Box, Container, Typography } from "@mui/material";
+import AboutImageList from "@/components/about/AboutImageList";
+import { Box, Container, Typography, useTheme } from "@mui/material";
 
 export default function AboutPage() {
+  const theme = useTheme();
+
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
       <AboutPageHero />
 
-      <Typography variant="h1" align="right" mb={12} gutterBottom>
-        We Have
-        <br />
-        15 Years of
+      <Typography variant="h1" fontSize={"60pt"} align="right" mb={12} gutterBottom>
+        We Have 15 Years of
         <br />
         Experience in
         <br />
@@ -20,24 +21,22 @@ export default function AboutPage() {
       </Typography>
 
       {/* Main Section Wrapper */}
-      <Box sx={{ display: "flex", position: "relative", gap: 6, minHeight: 2500  }}>
+      <Box sx={{ display: "flex", position: "relative", gap: 6, minHeight: 2600  }}>
         {/* LEFT COLUMN */}
         <Box sx={{ flex: 1, position: "relative" }}>
           {/* Empowerment Section */}
           <Box sx={{ position: "absolute", top: 100, width: "100%" }}>
-            <Typography variant="h2" mb={8}>
+            <Typography variant="h1" mb={12}>
               Welcome to
               <br />
               Unelma Platforms
               <br />
-              — Empowering People
-              <br />
-              Through Technology
+              — Empowering People Through Technology
             </Typography>
             <Typography
               variant="body1"
-              color="text.secondary"
-              maxWidth="450px"
+              color="text.primary"
+              maxWidth="400px"
               align="justify"
             >
                At Unelma Platforms, our mission has always been simple yet
@@ -79,8 +78,8 @@ export default function AboutPage() {
             </Typography>
             <Typography
               variant="body1"
-              color="text.secondary"
-              maxWidth="450px"
+              color="text.primary"
+              maxWidth="400px"
               align="justify"
             >
              We believe in the boundless potential of technology to create positive change.
@@ -96,8 +95,8 @@ export default function AboutPage() {
             </Typography>
             <Typography
               variant="body1"
-              color="text.secondary"
-              maxWidth="450px"
+              color="text.primary"
+              maxWidth="400px"
               align="justify"
             >
               From local startups to global enterprises, we proudly serve a diverse network of clients worldwide.
@@ -114,52 +113,46 @@ export default function AboutPage() {
               alt="Team"
               sx={{ width: "100%", borderRadius: "10px" }}
             />
-
-           <Box
-            component="img"
-            src="/images/about/signature.png"
-            alt="Signature"
-            sx={{
-              position: "absolute",
-              top: 2400,
-              width: "100%",
-              borderRadius: 2,
-            }}
-          />
           </Box>
         </Box>
 
         {/* RIGHT COLUMN */}
         <Box sx={{ flex: 1, position: "relative" }}>
-          {/* Placeholder Image */}
+          {/* Image List Grid */}
           <Box
-            component="img"
-            src="/images/about/placeholder-img.png"
-            alt="IT Illustration"
-            sx={{ position: "absolute", top: 0, right: 0, width: "100%", borderRadius: 2 }}
-          />
-
-          {/* Products */}
-          <Box sx={{ position: "absolute", top: 1100, right: 0, width: "100%" }}>
-            <Typography variant="h2" fontWeight={700} mb={4} align="right">
-              Our Products
-              <br />
-              and Innovations
-            </Typography>
-            <Typography
-              variant="body1"
-              color="text.secondary"
-              maxWidth="450px"
-              align="justify"
-            >
-              Our suite of products — including UnelmaMail, UnelmaBrowser, and Unelma Code Translator — reflects our commitment to creating technology that truly makes a difference. 
-              </Typography>
-              <Typography variant="body1" color="text.secondary" mb={2} maxWidth={"450px"} align="justify"> Each solution is built around the user, offering continuous support, security, and a seamless experience. 
-              </Typography>
-              <Typography variant="body1" color="text.secondary" mb={2} maxWidth={"450px"} align="justify"> At Unelma, we don’t just build technology — we build opportunities that empower individuals and businesses to grow and succeed.
-            </Typography>
+            alt="Images of Team and Workspaces"
+            sx={{ position: "absolute", top: 0, display: "flex", justifyContent: "flex-end", right: 0, width: "100%", borderRadius: "10px" }}
+          >
+            <AboutImageList />
           </Box>
 
+          {/* Products */}
+          <Box 
+            sx={{ 
+              position: "absolute",
+              top: 1100,
+              right: 0,
+              width: "100%",
+              display: "flex",
+              justifyContent: "flex-end",
+            }}
+          >
+            <Box sx={{ maxWidth: 400 }}>
+              <Typography variant="h2" mb={4} align="right">
+                Our Products
+                <br />
+                and Innovations
+              </Typography>
+
+              <Typography variant="body1" color="text.primary" align="justify">
+                Our suite of products — including UnelmaMail, UnelmaBrowser, and Unelma Code Translator — reflects our commitment to creating technology that truly makes a difference. 
+                <br /><br />
+                Each solution is built around the user, offering continuous support, security, and a seamless experience. 
+                <br /><br />
+                At Unelma, we don’t just build technology — we build opportunities that empower individuals and businesses to grow and succeed.
+              </Typography>
+            </Box>
+          </Box>
           {/* Map Image */}
           <Box
             component="img"
@@ -167,34 +160,54 @@ export default function AboutPage() {
             alt="Global Map"
             sx={{
               position: "absolute",
-              top: 1500,
+              top: 1600,
               width: "100%",
               borderRadius: "10px",
+              opacity: 0.8,
+              scale: "1.3",
             }}
           />
 
           {/* Promise Section */}
-          <Box sx={{ position: "absolute", top: 2050, right: 0, width: "100%" }}>
-            <Typography variant="h2" fontWeight={1900} mb={4} align="right">
-              Our Promise
-            </Typography>
-            <Typography
-              variant="body1"
-              color="text.secondary"
-              maxWidth="450px"
-              align="justify"
-              right={0}
-            >
-              For more than 15 years, Unelma Platforms has been at the forefront of helping businesses harness the power of technology to drive success. Our broad range of innovative and user-friendly software solutions have enabled businesses to operate more efficiently, reach their customers effectively, and ultimately, boost their bottom line. 
+          <Box 
+            sx={{ 
+              position: "absolute",
+              top: 2050,
+              right: 0,
+              width: "100%",
+              display: "flex",
+              justifyContent: "flex-end",
+            }}
+          >
+            <Box sx={{ maxWidth: 400 }}>
+              <Typography variant="h2" fontWeight={900} mb={4} align="right">
+                Our Promise
               </Typography>
-               <Typography variant="body1" color="text.secondary" mb={2} maxWidth="450px" align="justify"> With a rich experience spanning over a decade, Unelma Platforms stands as a reliable partner in the journey of businesses toward growth and success. Our goal has, and always will be, to empower businesses with the best tech tools and services. 
-                <br /><br /> 
-                Join us on this journey. Together, let's build technology that inspires and transforms.
-            </Typography>
-          </Box>
 
+              <Typography variant="body1" color="text.primary" align="justify">
+                For more than 15 years, Unelma Platforms has been at the forefront of helping businesses harness the power of technology to drive success. Our broad range of innovative and user-friendly software solutions have enabled businesses to operate more efficiently, reach their customers effectively, and ultimately, boost their bottom line.
+                <br /><br />
+                With a rich experience spanning over a decade, Unelma Platforms stands as a reliable partner in the journey of businesses toward growth and success. Our goal has, and always will be, to empower businesses with the best tech tools and services.
+                <br /><br />
+                Join us on this journey. Together, let's build technology that inspires and transforms.
+              </Typography>
+            </Box>
+         <Box
+            component="img"
+            src="/images/about/signature.png"
+            alt="Signature"
+            sx={{
+              position: "absolute",
+              bottom: "-100px",
+              width: "110px",
+              height: "65px",
+              borderRadius: "10px",
+            }}
+          />
         </Box>
+        
       </Box>
+    </Box>
     </Container>
   );
 }
