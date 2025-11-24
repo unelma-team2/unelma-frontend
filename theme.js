@@ -7,98 +7,160 @@ const bodyFont = "var(--font-outfit), sans-serif";
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#2F2E2E", // dark grey — main brand color
-      contrastText: "#FFFFFF",
-    },
-    secondary: {
-      main: "#2F2E2E", // same tone (you can change later if needed)
-      contrastText: "#FFFFFF",
+      main: "#2F2E2E", 
+      mint: "#90F0FF",
+      blue: "#6756E3",
+       violet: "#7E3398",
+      pink: "#C55FCB",
+      redOrange: "#ED608A"
     },
     text: {
       primary: "#2F2E2E",
       secondary: "#6A6A6A",
+      contrastText: "#FFFFFF",
     },
     background: {
       default: "#FFFFFF",
       paper: "#FFFFFF",
-
-      // Section backgrounds per style guide
-      lightMint: "#EDFCFF", 
-      darkMint: "#C1FCFF",
+      lightMint: "#DDFAFF", 
+      lightBlue: "#E0E7FF",
     },
   },
 
   typography: {
     fontFamily: bodyFont,
-
-    // Hero & main heading
-    h1: {
+    hero: {
       fontFamily: headingFont,
-      fontWeight: 700,
-      fontSize: "54px", // per style guide
+      fontWeight: 800,
+      fontSize: "96px",
       lineHeight: 1.1,
     },
-
-    // Section titles
+    h1: {
+      fontFamily: headingFont,
+      fontWeight: 800,
+      fontSize: "54px",
+      lineHeight: 1.1,
+    },
     h2: {
       fontFamily: headingFont,
-      fontWeight: 700,
+      fontWeight: 800,
       fontSize: "38px",
       lineHeight: 1.15,
     },
-
-    // Small section headers
     h3: {
       fontFamily: bodyFont,
-      fontWeight: 700,
+      fontWeight: 800,
       fontSize: "20px",
       lineHeight: 1.2,
     },
-
-    // H4 = medium text (16 pt medium)
     h4: {
       fontFamily: bodyFont,
-      fontWeight: 600,
+      fontWeight: 800,
+      fontSize: "18px",
+    },
+    h5: {
+      fontFamily: bodyFont,
+      fontWeight: 800,
       fontSize: "16px",
     },
-
-    // Body text 16pt
-    body1: {
+    body16med: {
       fontFamily: bodyFont,
       fontSize: "16px",
-      fontWeight: 500,
+      fontWeight: 600,
+      lineHeight: 1.3,
+    },
+    body16reg: {
+      fontFamily: bodyFont,
+      fontSize: "16px",
+      fontWeight: 400,
+      lineHeight: 1.3,
+    },
+    body14med: {
+      fontFamily: bodyFont,
+      fontSize: "14px",
+      fontWeight: 600,
+      lineHeight: 1.3,
+    },
+    body14reg: {
+      fontFamily: bodyFont,
+      fontSize: "14px",
+      fontWeight: 400,
       lineHeight: 1.3,
     },
 
-    // Smaller body text 14pt
-    body2: {
-      fontFamily: bodyFont,
-      fontSize: "14px",
-      fontWeight: 500,
-    },
-
     button: {
-      textTransform: "none",
+      textTransform: "uppercase",
       fontWeight: 600,
       fontFamily: bodyFont,
     },
   },
 
+  mixins: {
+    homeBoxLeft: {
+      borderBottom: "2px solid #2F2E2E",
+      position: "absolute",
+      top: 0,
+      left: 0,
+      width: "50vw",   
+      height: "180px",   
+      zIndex: 3,
+    },
+    homeTitleRight: {
+      borderTop: "2px solid #2F2E2E",
+      borderLeft: "2px solid #2F2E2E",
+      borderTopLeftRadius: "120px",
+      position: "absolute",
+      top: 0,
+      right: 0,
+      width: "50vw",   
+      height: "180px",   
+      zIndex: 3,
+    },
+    homeBoxRight: {
+      borderBottom: "2px solid #2F2E2E",
+      position: "absolute",
+      top: 0,
+      right: 0,
+      width: "50vw",   
+      height: "180px",   
+      zIndex: 3,
+    },
+    homeTitleLeft: {
+      borderTop: "2px solid #2F2E2E",
+      borderRight: "2px solid #2F2E2E",
+      borderTopRightRadius: "120px",
+      position: "absolute",
+      top: 0,
+      left: 0,
+      width: "50vw",      
+      height: "200px",
+      zIndex: 3,
+    },
+  },
+
+
   shape: {
-    borderRadius: 10, // matches your cards & buttons style
+    borderRadius: 10,
+    border: "2px solid #2F2E2E",
+
   },
 
   components: {
-    // Buttons per wireframe
+
     MuiButton: {
       styleOverrides: {
         root: {
-          borderRadius: 10,
+          px: 4,
+          py: 1,
+          borderRadius: "8px",
           boxShadow: "0px 4px 4px rgba(0,0,0,0.15)",
           transition: "box-shadow 0.3s ease",
+          transition: "0.25s ease",
 
           "&:hover": {
             boxShadow: "0px 6px 6px rgba(0,0,0,0.20)",
+            backgroundColor: "#9D00A0",
+            transform: "scale(1.1)",
           },
         },
       },
@@ -107,7 +169,18 @@ const theme = createTheme({
     MuiCard: {
       styleOverrides: {
         root: {
-          borderRadius: 8,
+          border:"2px solid #2F2E2E",
+          borderRadius: "10px",
+          boxShadow: "0px 2px 4px rgba(0,0,0,0.1)",
+        },
+      },
+    },
+
+    MuiInputBase: {
+      styleOverrides: {
+        root: {
+          border: "2px solid #2F2E2E",
+          borderRadius: "10px",
           boxShadow: "0px 2px 4px rgba(0,0,0,0.1)",
         },
       },

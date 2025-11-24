@@ -1,6 +1,7 @@
-import { Box } from "@mui/material";
+import { Box, useTheme } from "@mui/material";
 
 export default function LoadingSpinner() {
+  const theme = useTheme();
 
   return (
     <Box
@@ -15,8 +16,8 @@ export default function LoadingSpinner() {
         sx={{
           width: 50,
           height: 50,
-          border: "4px solid #36EBFD",
-          borderTop: "4px solid #9D00A0",
+          border: "4px solid" + theme.palette.primary.mint,
+          borderTop: "4px solid" + theme.palette.primary.violet,
           borderRadius: "50%",
           animation: "spin 1s linear infinite",
         }}
