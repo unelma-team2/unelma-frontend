@@ -40,7 +40,7 @@ export default function BlogPage() {
       .finally(() => setLoading(false));
   }, [API_URL]);
 
-  if (loading) return <p>Loading blogs...</p>;
+  if (loading) return <LoadingSpinner />;
   if (error) return <p>Error loading blogs: {error.message}</p>;
 
   // Filter blogs by search term

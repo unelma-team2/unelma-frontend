@@ -2,7 +2,7 @@ import { createTheme } from "@mui/material/styles";
 
 // Custom font variables from layout.js
 const headingFont = "var(--font-stack-sans-notch), sans-serif";
-const bodyFont = "var(--font-quicksand), sans-serif";
+const bodyFont = "var(--font-outfit), sans-serif";
 
 const theme = createTheme({
   palette: {
@@ -35,7 +35,7 @@ const theme = createTheme({
     h1: {
       fontFamily: headingFont,
       fontWeight: 700,
-      fontSize: "64px", // per style guide
+      fontSize: "54px", // per style guide
       lineHeight: 1.1,
     },
 
@@ -43,7 +43,7 @@ const theme = createTheme({
     h2: {
       fontFamily: headingFont,
       fontWeight: 700,
-      fontSize: "48px",
+      fontSize: "38px",
       lineHeight: 1.15,
     },
 
