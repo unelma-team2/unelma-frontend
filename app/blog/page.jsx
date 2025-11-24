@@ -7,6 +7,12 @@ import Image from "next/image";
 import BlogPageHero from "@/components/blog/BlogPageHero";
 import ShareIcon from "@mui/icons-material/Share";
 import CommentIcon from "@mui/icons-material/Comment";
+import LoadingSpinner from "@/components/LoadingSpinner";
+import { Typography, useTheme } from "@mui/material";
+import { ArrowForward } from "@mui/icons-material";
+
+import { TextField, InputAdornment, IconButton } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
 
 function formatBlogDate(date, fallback) {
   const d = date || fallback;
@@ -20,6 +26,7 @@ function formatBlogDate(date, fallback) {
 }
 
 export default function BlogPage() {
+  const theme = useTheme();
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -137,7 +144,7 @@ export default function BlogPage() {
             <div
               style={{
                 display: "flex",
-                border: "2px solid #222",
+                border: `2px solid ${theme.palette.primary.main}`,
                 borderRadius: "8px",
                 overflow: "hidden",
                 boxShadow: "0 4px 16px rgba(0,0,0,0.10)",
@@ -236,7 +243,7 @@ export default function BlogPage() {
                   style={{
                     fontWeight: 700,
                     fontSize: "1.5rem",
-                    margin: "0 0 1rem 0",
+                    margin: "1rem 0 1rem 0",
                   }}
                 >
                   {featured.Title || "Blog Title"}
@@ -278,11 +285,14 @@ export default function BlogPage() {
                 </div>
                 <div style={{ marginTop: "auto", textAlign: "right" }}>
                   <Link
-                    href={`/blog/${featured.slug}`}
-                    style={{ color: "#9D00A0", fontWeight: 600 }}
-                  >
-                    Read more →
-                  </Link>
+                        href={`/blog/${featured.slug}`}
+                      >
+                        <Typography sx={{ color: "#9D00A0", fontWeight: 700, textTransform: "uppercase" }} >
+                           Read more 
+                           <ArrowForward sx={{ color: "#9D00A0",verticalAlign: "middle", ml: 0.5 }} />
+                        </Typography>
+                        
+                      </Link>
                 </div>
               </div>
             </div>
@@ -311,13 +321,14 @@ export default function BlogPage() {
                   key={blog.id || index}
                   style={{
                     display: "flex",
-                    border: "1px solid #ddd",
+                    border: `2px solid ${theme.palette.primary.main}`,
                     borderRadius: "8px",
                     overflow: "hidden",
                     boxShadow: "0 4px 8px rgba(0,0,0,0.08)",
                     background: "#fff",
-                    height: "380px",
-                    maxWidth: "761px",
+                    height: "350px",
+                    width: "760px",
+                    maxWidth: "760px",
                     marginLeft: "auto",
                     marginRight: "auto",
                   }}
@@ -348,6 +359,7 @@ export default function BlogPage() {
                       flex: 1,
                       display: "flex",
                       flexDirection: "column",
+                      padding: "1rem",
                     }}
                   >
                     <div
@@ -406,15 +418,13 @@ export default function BlogPage() {
                         {blog.category || "Category"}
                       </span>
                     </div>
-                    <h2
-                      style={{
-                        fontWeight: 700,
-                        fontSize: "1.5rem",
-                        margin: "0 0 1rem 0",
-                      }}
-                    >
-                      {blog.Title}
-                    </h2>
+                    <Typography   
+                      variant="h3"
+                      my={2}
+                      fontSize={"1.5rem"}
+                      >
+                        {blog.Title}
+                    </Typography>
                     <p
                       style={{
                         color: "#555",
@@ -433,9 +443,12 @@ export default function BlogPage() {
                     <div style={{ marginTop: "auto", textAlign: "right" }}>
                       <Link
                         href={`/blog/${blog.slug}`}
-                        style={{ color: "#9D00A0", fontWeight: 600 }}
                       >
-                        Read more →
+                        <Typography sx={{ color: "#9D00A0", fontWeight: 700, textTransform: "uppercase" }} >
+                           Read more 
+                           <ArrowForward sx={{ color: "#9D00A0",verticalAlign: "middle", ml: 0.5 }} />
+                        </Typography>
+                        
                       </Link>
                     </div>
                   </div>
@@ -459,12 +472,15 @@ export default function BlogPage() {
           {/* Search */}
           <section
             style={{
-              border: "1px solid #ccc",
+              border: `2px solid ${theme.palette.primary.main}`,
               borderRadius: "8px",
               padding: "1rem",
               background: "#fff",
             }}
           >
+            <h3 style={{ marginBottom: "1rem", fontWeight: 700 }}>
+              Search
+            </h3>
             <form onSubmit={(e) => e.preventDefault()}>
               <input
                 type="text"
@@ -474,21 +490,21 @@ export default function BlogPage() {
                 style={{
                   width: "80%",
                   padding: "0.5rem",
-                  borderRadius: "4px",
-                  border: "1px solid #aaa",
-                  marginRight: "0.5rem",
+                  borderRadius: "6px",
+                  border: `2px solid ${theme.palette.primary.main}`,
                 }}
               />
               <button
                 type="submit"
                 style={{
-                  padding: "0.5rem 1rem",
-                  borderRadius: "4px",
+                  padding: "0.5rem",
+                  borderRadius: "6px",
                   border: "none",
-                  background: "#222",
+                  background: theme.palette.primary.main,
                   color: "#fff",
                   fontWeight: 600,
                   cursor: "pointer",
+                  display: "inline-flex",
                 }}
               >
                 🔍
@@ -499,8 +515,8 @@ export default function BlogPage() {
           {/* Categories */}
           <section
             style={{
-              border: "1px solid #ccc",
-              borderRadius: "8px",
+              border: `2px solid ${theme.palette.primary.main}`,
+              borderRadius: "10px",
               padding: "1rem",
               background: "#fff",
             }}
@@ -547,8 +563,8 @@ export default function BlogPage() {
 
           <section
             style={{
-              border: "1px solid #ccc",
-              borderRadius: "8px",
+              border: `2px solid ${theme.palette.primary.main}`,
+              borderRadius: "10px",
               padding: "1rem",
               background: "#fff",
             }}
