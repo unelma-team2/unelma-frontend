@@ -1,5 +1,16 @@
 {
-    "workbench.colorCustomizations": {
+  "files.watcherExclude": {
+    "**/node_modules/*": true,
+    "**/.next/*": true,
+    "**/dist/*": true,
+    "**/.git/*": true
+  },
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/.next": true,
+    "**/dist": true
+  },
+  "workbench.colorCustomizations": {
         "activityBar.activeBackground": "#93e6fc",
         "activityBar.background": "#93e6fc",
         "activityBar.foreground": "#15202b",
