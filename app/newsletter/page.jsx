@@ -25,8 +25,10 @@ export default function SubscriptionBox() {
     e.preventDefault();
     setMessage("");
 
-    if (!email) {
-      setMessage("Please enter a valid email.");
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setMessage("Please enter a valid email address.");
       return;
     }
 
@@ -49,9 +51,10 @@ export default function SubscriptionBox() {
         error.response?.data || error.message
       );
 
-      // Fallback: still show success for school project
-      setMessage("Subscribed successfully! Thank you for joining our list.");
-      setEmail("");
+      // Show a fallback message for errors
+      setMessage(
+        "We encountered an issue while subscribing. Please try again later."
+      );
     } finally {
       setLoading(false);
     }
@@ -126,19 +129,10 @@ export default function SubscriptionBox() {
       </Box>
 
       {message && (
-        <Typography sx={{ mt: 1, color: "primary.main", fontSize: 15 }}>
+        <Typography sx={{ mt: 1, color: theme.palette.text.secondary, fontSize: 20 }}>
           {message}
         </Typography>
       )}
-
-      <Typography
-        component="p"
-        variant="body2"
-        sx={{ color: "primary.main", fontSize: 15, mt: 1 }}
-      >
-        In accordance with GDPR, we will contact you only when necessary, and
-        all personal data collected will be anonymized.
-      </Typography>
     </Paper>
   );
 }
