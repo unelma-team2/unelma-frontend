@@ -2,112 +2,247 @@
 
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
-import Link from "next/link";
+import NextLink from "next/link";
+import MUILink from "@mui/material/Link";
 import Image from "next/image";
-import { Box, useTheme } from "@mui/material";
+import { Box, Link, useTheme } from "@mui/material";
 import SocialButtons from "./SocialButtons";
 import NewsletterSubscription from "./NewsletterSubscription";
-
 
 export default function Footer() {
   const theme = useTheme();
 
-  return (
-    <Box component="footer" sx={{
-      bgcolor:  theme.palette.background.lightMint,
-      color: theme.palette.primary.main,
-      borderTop: 1, borderColor: "theme.palette.primary.main", mt: 4,
-    }}>
-      <Box sx={{ maxWidth: 1400, mx: "auto", px: { xs: 2, md: 6 }, py: 6 }}>
-        <Grid
-          container
-          spacing={{ xs: 2, md: 4 }}
-          alignItems="flex-start"
-          justifyContent="space-between"
-          wrap="wrap"
-        >
+  const linkSx = {
+    fontSize: "14pt",
+    color: theme.palette.primary.main,
+    textDecoration: "none",
+    display: "inline-block",
+    transition: "color 0.18s ease",
+    "&:hover": {
+      color: theme.palette.primary.blue,
+      transform: "scale(1.05)",
+    },
+  };
 
+  return (
+    <Box
+      component="footer"
+      sx={{
+        bgcolor: theme.palette.background.lightMint,
+        color: theme.palette.primary.main,
+        borderTop: 2,
+        borderColor: theme.palette.primary.main,
+        mt: 4,
+      }}
+    >
+      <Box sx={{ maxWidth: 1500, mx: "auto", px: { xs: 2, md: 6 }, py: 6 }}>
+        <Grid container spacing={{ xs: 2, md: 4 }} justifyContent="space-between">
+          {/* Column 1 */}
           <Grid size={{ xs: 12, sm: 6, md: 3 }}>
             <Box sx={{ mb: 2 }}>
-              <Image src="/images/logos/logo-unelma.png"alt="Unelma Platforms" width={174} height={92} />
+              <Image
+                src="/images/logos/logo-unelma.png"
+                alt="Unelma Platforms"
+                width={190}
+                height={92}
+              />
             </Box>
-            <Typography component="div" sx={{ fontWeight: 700, mt: 4, fontSize: 24, color: theme.palette.primary.main }}>
-              <span>&gt; </span>Products
+
+            <Link href="#">
+              <Typography variant="h4" sx={{ ...linkSx, fontSize: "18pt", mt: 10 }} >
+              &#x25B8; Products
             </Typography>
-            <Typography component="div" sx={{ fontWeight: 700, mt: 2, fontSize: 24, color: theme.palette.primary.main }}>
-              <span>&gt; </span>Services
+            </Link>
+            <br />
+            <Link href="#">
+              <Typography variant="h4" sx={{ ...linkSx, fontSize: "18pt", mt: 4 }} >
+              &#x25B8; Services
             </Typography>
+            </Link>
+
           </Grid>
 
+          {/* Column 2 */}
           <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-            <Typography fontWeight="700" sx={{ fontSize: 28, mb: 2, color: theme.palette.primary.main }}>Resources</Typography>
-            <Box sx={{ fontSize: 22, mb: 4 }}>
-              <Link href="/blog">&gt; Blog</Link><br />
-              <Link href="/case-studies">&gt; Case Studies</Link><br />
-              <a href="#">&gt; Customer Testimonials</a><br />
-              <a href="#">&gt; Tech Support</a>
+            <Typography variant="h4" sx={{ mb: 2 }}>
+              Resources
+            </Typography>
+
+            <Box sx={{ mb: 4 }}>
+              <Link href="/blog">
+                <Typography  sx={{ ...linkSx }} >
+                  &#x25B8; Blog
+                </Typography>
+              </Link>
+              <br />
+              <Link href="/case-studies">
+                <Typography  sx={{ ...linkSx }} >
+                  &#x25B8; Case Studies
+                </Typography>
+              </Link>
+               <br />
+              <Link href="/customer-testimonials">
+                <Typography  sx={{ ...linkSx }} >
+                  &#x25B8; Customer Testimonials
+                </Typography>
+              </Link>
+              <br />
+              <Link href="https://unelmasupport.com/">
+                <Typography  sx={{ ...linkSx }} >
+                  &#x25B8; Tech Support
+                </Typography>
+              </Link>
             </Box>
-            <Typography fontWeight="700" sx={{ mt: 3, mb: 2, fontSize: 28, color: theme.palette.primary.main }}>Company</Typography>
-            <Box sx={{ fontSize: 22 }}>
-              <Link href="/about">&gt; About Us</Link><br />
-              <Link href="/careers">&gt; Careers</Link><br />
-              <a href="#">&gt; Internship/Traineeship</a>
+
+            <Typography variant="h4" sx={{ mb: 2 }}>
+              Company
+            </Typography>
+
+            <Box sx={{  mb: 4  }}>
+              <Link href="/about">
+                <Typography  sx={{ ...linkSx }} >
+                  &#x25B8; About Us
+                </Typography>
+              </Link>
+               <br />
+              <Link href="/careers">
+                <Typography  sx={{ ...linkSx }} >
+                  &#x25B8; Careers  
+                </Typography>
+              </Link>
+              <br />
+              <Link href="/careers">
+                <Typography  sx={{ ...linkSx }} >
+                  &#x25B8; Internship/Traineeship
+                </Typography>
+              </Link>
             </Box>
           </Grid>
 
+          {/* Column 3 */}
           <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-            <Typography fontWeight="700" sx={{ fontSize: 28, mb: 2, color: theme.palette.primary.main }}>Contact Us</Typography>
-            <Box sx={{ fontSize: 22 }}>
-              <a href="#">&gt; Request a Price Quote</a><br />
-              <Link href="/contact">&gt; Send a Message/Question</Link><br />
-              <a href="#">&gt; Give Feedback</a><br />
-              <a href="#">&gt; Book a Meeting</a><br />
-              <a href="#">&gt; Our Offices</a><br />
-              <span style={{ display: 'block', paddingLeft: 22 }}>&gt; South Asia</span>
-              <span style={{ display: 'block', paddingLeft: 22 }}>&gt; USA</span>
-              <span style={{ display: 'block', paddingLeft: 22 }}>&gt; Canada</span>
-              <span style={{ display: 'block', paddingLeft: 22 }}>&gt; Northern Europe</span>
+            <Typography variant="h4" sx={{ mb: 2 }}>
+              Contact Us
+            </Typography>
+
+            <Box sx={{  mb: 4  }}>
+              <Link href="/about">
+                <Typography  sx={{ ...linkSx }} >
+                  &#x25B8; Request a Price Quote
+                </Typography>
+              </Link>
+               <br />
+              <Link href="/contact">
+                <Typography  sx={{ ...linkSx }} >
+                  &#x25B8; Send a Message/Question
+                </Typography>
+              </Link>
+              <br />
+              <Link href="/contact">
+                <Typography  sx={{ ...linkSx }} >
+                  &#x25B8; Give Feedback
+                </Typography>
+              </Link>
+              <br />
+              <Link href="/contact">
+                <Typography  sx={{ ...linkSx }} >
+                  &#x25B8; Book a Meeting
+                </Typography>
+              </Link>
+              <br />
+              <Link href="/contact">
+                <Typography  sx={{ ...linkSx }} >
+                  &#x25B8; Our Offices
+                </Typography>
+              </Link>
+              <br />
+
+              {/* Indented office items */}
+              <Box component="span" sx={{ paddingLeft: 2.75, display: "block" }}>
+                <Link href="/contact">
+                  <Typography  sx={{ ...linkSx }} >
+                    &#x25B8; Northern Europe
+                  </Typography>
+                </Link>
+                <br />
+                <Link href="/contact">
+                  <Typography  sx={{ ...linkSx }} >
+                    &#x25B8; USA
+                  </Typography>
+                </Link>
+                <br />
+                <Link href="/contact">
+                  <Typography  sx={{ ...linkSx }} >
+                    &#x25B8; Canada
+                  </Typography>
+                </Link>
+                <br />
+                <Link href="/contact">
+                  <Typography  sx={{ ...linkSx }} >
+                    &#x25B8; South Asia
+                  </Typography>
+                </Link>
+              </Box>
             </Box>
           </Grid>
 
+          {/* Newsletter Subscription*/}
           <Grid
-  size={{ xs: 12, md: 3 }}
-  sx={{
-    display: "flex",
-    justifyContent: { xs: "center", md: "flex-end" },
-    alignItems: { xs: "center", md: "flex-start" },
-    mt: { xs: 3, md: 0 },
-    order: { xs: 4, md: 4 },
-  }}
->
-  <NewsletterSubscription />
-</Grid>
-
+            size={{ xs: 12, md: 3 }}
+            sx={{
+              display: "flex",
+              justifyContent: { xs: "center", md: "flex-end" },
+              alignItems: "center",
+            }}
+          >
+            <NewsletterSubscription />
+          </Grid>
         </Grid>
 
-        <Box sx={{
-          display: 'flex',
-          flexDirection: { xs: 'column', md: 'row' },
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: { xs: 4, md: 0 },
-          mt: { xs: 4, md: 6 },
-          mb: 2,
-        }}>
+        {/* Bottom Logos */}
+        <Box
+  sx={{
+    display: "flex",
+    flexDirection: { xs: "column", md: "row" },
+    justifyContent: "space-between",
+    alignItems: "center",
+    mt: { xs: 4, md: 8 },
+  }}
+>
+  <SocialButtons />
 
-         <SocialButtons />
-         
-  
-          <Box sx={{ display: 'flex', gap: { xs: 2, md: 6 }, flexWrap: 'wrap', justifyContent: { xs: 'center', md: 'flex-end' }, alignItems: 'center' }}>
-            <Image src="/images/logos/logo-businessfinland.png" width={112} height={48} alt="Business Finland" />
-            <Image src="/images/logos/logo-estonia.png" width={193} height={83} alt="Estonia" />
-            <Image src="/images/logos/logo-sortlist.png" width={253} height={89} alt="sortlist" />
-            <Image src="/images/logos/logo-gotd.png" width={98} height={116} alt="Gotd" />
-            <Image src="/images/logos/logo-drupal.png" width={121} height={95} alt="Drupal" />
-          </Box>
-        </Box>
+  <Box
+    sx={{
+      display: "flex",
+      flexWrap: "wrap",
+      gap: { xs: 2, md: 5 },
+      justifyContent: { xs: "center", md: "flex-end" },
+    }}
+  >
+    {[
+      { src: "/images/logos/logo-businessfinland.png", w: 112, h: 48 },
+      { src: "/images/logos/logo-estonia.png", w: 193, h: 83 },
+      { src: "/images/logos/logo-sortlist.png", w: 253, h: 89 },
+      { src: "/images/logos/logo-gotd.png", w: 89, h: 105 },
+      { src: "/images/logos/logo-drupal.png", w: 121, h: 95 },
+    ].map((logo, i) => (
+      <Box
+        key={i}
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          height: 120, 
+        }}
+      >
+        <Image src={logo.src} width={logo.w} height={logo.h} alt="" />
+      </Box>
+    ))}
+  </Box>
+</Box>
 
-        <Typography align="center" sx={{ mt: 2, fontSize: 17, color: theme.palette.primary.main, fontWeight: 500 }}>
+
+        <Typography align="center" sx={{ mt: 2, fontSize: 12, fontWeight: 500,  }}>
           © {new Date().getFullYear()} by Unelma Platforms
         </Typography>
       </Box>

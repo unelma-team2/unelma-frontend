@@ -32,42 +32,42 @@ const theme = createTheme({
     fontFamily: bodyFont,
     hero: {
       fontFamily: headingFont,
-      fontWeight: 800,
+      fontWeight: 700,
       fontSize: "92pt",
       lineHeight: 1.1,
     },
     h1: {
       fontFamily: headingFont,
-      fontWeight: 800,
+      fontWeight: 700,
       fontSize: "54pt",
       lineHeight: 1.1,
     },
     h2: {
       fontFamily: headingFont,
-      fontWeight: 800,
+      fontWeight: 700,
       fontSize: "38pt",
       lineHeight: 1.15,
     },
     h3: {
       fontFamily: bodyFont,
-      fontWeight: 800,
+      fontWeight: 700,
       fontSize: "20pt",
       lineHeight: 1.2,
     },
     h4: {
       fontFamily: bodyFont,
-      fontWeight: 800,
+      fontWeight: 700,
       fontSize: "18pt",
     },
     h5: {
       fontFamily: bodyFont,
-      fontWeight: 800,
+      fontWeight: 700,
       fontSize: "16pt",
     },
     body16med: {
       fontFamily: bodyFont,
       fontSize: "16pt",
-      fontWeight: 600,
+      fontWeight: 500,
       lineHeight: 1.3,
     },
     body16reg: {
@@ -79,7 +79,7 @@ const theme = createTheme({
     body14med: {
       fontFamily: bodyFont,
       fontSize: "14pt",
-      fontWeight: 600,
+      fontWeight: 500,
       lineHeight: 1.3,
     },
     body14reg: {
@@ -180,13 +180,13 @@ const theme = createTheme({
     MuiInput: {
       styleOverrides: {
         root: {
-          border: "none",
+          border: "2px solid #2F2E2E",
           borderRadius: "6px",
           boxShadow: "0px 2px 4px rgba(0,0,0,0.1)",
         },
       },
     },
-
+    
 MuiInputBase: {
       styleOverrides: {
         root: {

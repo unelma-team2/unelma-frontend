@@ -26,13 +26,13 @@ export default function SocialButtons() {
             height: 70,
             borderRadius: "50%",
             border: `2px solid ${theme.palette.primary.main}`,
-            backgroundColor: theme.palette.background.darkMint,
+            backgroundColor: theme.palette.primary.mint,
             overflow: "hidden",
             padding: 0,
             transition: "0.25s ease",
             "&:hover": {
               transform: "scale(1.1)",
-              bgcolor: theme.palette.primary.violet,
+              bgcolor: theme.palette.primary.blue,
               color: "#fff"
             },
           }}
