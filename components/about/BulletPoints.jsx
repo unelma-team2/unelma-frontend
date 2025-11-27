@@ -21,9 +21,9 @@ export default function BulletPoints({ text, gradient }) {
       }}
     >
       <Typography
-        variant="h3"
-        fontWeight={600}
-        width={"500px"}
+        variant="body14med"
+        fontWeight={700}
+        width={"430px"}
       >
         {text}
       </Typography>

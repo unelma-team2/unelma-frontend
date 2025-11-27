@@ -26,7 +26,7 @@ export default function AboutPage() {
         <Box sx={{ flex: 1, position: "relative" }}>
           {/* Empowerment Section */}
           <Box sx={{ position: "absolute", top: 100, width: "100%" }}>
-            <Typography variant="h1" mb={12}>
+            <Typography variant="h2" mb={12}>
               Welcome to
               <br />
               Unelma Platforms
@@ -34,7 +34,7 @@ export default function AboutPage() {
               — Empowering People Through Technology
             </Typography>
             <Typography
-              variant="body1"
+              variant="body14med"
               color="text.primary"
               maxWidth="400px"
               align="justify"
@@ -77,7 +77,7 @@ export default function AboutPage() {
               Our Philosophy
             </Typography>
             <Typography
-              variant="body1"
+              variant="body14reg"
               color="text.primary"
               maxWidth="400px"
               align="justify"
@@ -94,7 +94,7 @@ export default function AboutPage() {
               A Global Network
             </Typography>
             <Typography
-              variant="body1"
+              variant="body14reg"
               color="text.primary"
               maxWidth="400px"
               align="justify"
@@ -144,7 +144,7 @@ export default function AboutPage() {
                 and Innovations
               </Typography>
 
-              <Typography variant="body1" color="text.primary" align="justify">
+              <Typography variant="body14reg" color="text.primary" align="justify">
                 Our suite of products — including UnelmaMail, UnelmaBrowser, and Unelma Code Translator — reflects our commitment to creating technology that truly makes a difference. 
                 <br /><br />
                 Each solution is built around the user, offering continuous support, security, and a seamless experience. 
@@ -160,11 +160,11 @@ export default function AboutPage() {
             alt="Global Map"
             sx={{
               position: "absolute",
-              top: 1600,
+              top: 1650,
               width: "100%",
               borderRadius: "10px",
               opacity: 0.8,
-              scale: "1.3",
+              scale: "1.1",
             }}
           />
 
@@ -180,11 +180,11 @@ export default function AboutPage() {
             }}
           >
             <Box sx={{ maxWidth: 400 }}>
-              <Typography variant="h2" fontWeight={900} mb={4} align="right">
+              <Typography variant="h2" mb={4} align="right">
                 Our Promise
               </Typography>
 
-              <Typography variant="body1" color="text.primary" align="justify">
+              <Typography variant="body14reg" color="text.primary" align="justify">
                 For more than 15 years, Unelma Platforms has been at the forefront of helping businesses harness the power of technology to drive success. Our broad range of innovative and user-friendly software solutions have enabled businesses to operate more efficiently, reach their customers effectively, and ultimately, boost their bottom line.
                 <br /><br />
                 With a rich experience spanning over a decade, Unelma Platforms stands as a reliable partner in the journey of businesses toward growth and success. Our goal has, and always will be, to empower businesses with the best tech tools and services.
@@ -205,7 +205,6 @@ export default function AboutPage() {
             }}
           />
         </Box>
-        
       </Box>
     </Box>
     </Container>

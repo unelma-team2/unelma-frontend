@@ -19,10 +19,8 @@ import axios from "axios";
 
 export default function FeedbackReviewSection({feedbackForm, countryCodes}) {
 
-  const API_URL = "http://localhost:1337";
-  
-//   const API_URL =
-//   process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
+  const API_URL =
+   "https://unelma-backend.onrender.com";
 
   const [formData, setFormData] = useState({
     name: "",
@@ -266,3 +264,4 @@ export default function FeedbackReviewSection({feedbackForm, countryCodes}) {
     </Box>
   );
 }
+

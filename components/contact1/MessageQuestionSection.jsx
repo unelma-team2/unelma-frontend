@@ -13,9 +13,9 @@ import {
   
   export default function MessageQuestionSection({contactForm, countryCodes}) {
 
-    // const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
+    const API_URL = "https://unelma-backend.onrender.com";
 
-    const API_URL =  "http://localhost:1337";
+   // const API_URL =  "http://localhost:1337";
   
     const [formData, setFormData] = useState({
       name: "",
@@ -242,26 +242,6 @@ import {
               fontWeight: 500,
             }}
           >
-<<<<<<< HEAD
-            Choose file
-            <input
-              type="file"
-              hidden
-              onChange={handleChange("file")}
-              accept="*/*"
-            />
-          </Button>
-          {fileName && (
-            <Typography variant="body2" sx={{ color: "#666" }}>
-              {fileName}
-            </Typography>
-          )}
-        </Box>
-      </Box>
-    </>
-  );
-}
-=======
             {status.message}
           </Typography>
         )}
@@ -269,4 +249,3 @@ import {
     );
   }
   
->>>>>>> 9ea1e2e913f4be4fca72e75d28c95f51f4288bf5
