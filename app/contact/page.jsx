@@ -14,6 +14,8 @@ import {
 import MessageQuestionSection from "@/components/contact/MessageQuestionSection";
 import PriceQuoteSection from "@/components/contact/PriceQuoteSection";
 import FeedbackReviewSection from "@/components/contact/FeedbackReviewSection";
+import MapLocation from "@/components/contact/MapLocation";
+import SocialAndSupport from "@/components/contact/SocialAndSupport";
 
 const contactTypes = [
   "Message/question",
@@ -291,6 +293,9 @@ export default function ContactPage() {
             </Button>
           </Box>
         </Box>
+
+        <MapLocation />
+        <SocialAndSupport />
       </Box>
     </Container>
   );
