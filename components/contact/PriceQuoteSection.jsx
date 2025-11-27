@@ -263,8 +263,4 @@ export default function PriceQuoteSection({requestQuote,countryCodes}) {
       )}
     </form>
   );
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 9ea1e2e913f4be4fca72e75d28c95f51f4288bf5
