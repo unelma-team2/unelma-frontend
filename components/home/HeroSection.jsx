@@ -7,27 +7,27 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import LoadingSpinner from "../LoadingSpinner";
 
-export default function HeroSection() {
+export default function HeroSection({heroSection}) {
   const theme = useTheme();
 
-  const [heroSection, setHeroSection] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  // const [heroSection, setHeroSection] = useState([]);
+  // const [loading, setLoading] = useState(true);
+  // const [error, setError] = useState(null);
 
-  const API_URL =
-    process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
+  // const API_URL =
+  //   process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
 
-  useEffect(() => {
-    axios
-      .get(`${API_URL}/api/home?populate[HeroSection][populate]=*`)
-      .then((res) => setHeroSection(res.data.data?.HeroSection || null))
-      .catch((err) => setError(err))
-      .finally(() => setLoading(false));
-  }, [API_URL]);
+  // useEffect(() => {
+  //   axios
+  //     .get(`${API_URL}/api/home?populate[HeroSection][populate]=*`)
+  //     .then((res) => setHeroSection(res.data.data?.HeroSection || null))
+  //     .catch((err) => setError(err))
+  //     .finally(() => setLoading(false));
+  // }, [API_URL]);
 
-  if (loading) return <LoadingSpinner />;
-  if (error) return <p>Error: {error.message}</p>;
-  if (!heroSection) return <p>No hero section found.</p>;
+  // if (loading) return <LoadingSpinner />;
+  // if (error) return <p>Error: {error.message}</p>;
+  // if (!heroSection) return <p>No hero section found.</p>;
 
   const {
     hero_title,

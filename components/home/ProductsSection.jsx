@@ -12,23 +12,23 @@ import {
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-export default function ProductsSection() {
+export default function ProductsSection({products}) {
     const theme = useTheme();
-    const [products, setProducts] = useState([]);
-    const [error, setError] = useState(null);
+  //   const [products, setProducts] = useState([]);
+  //   const [error, setError] = useState(null);
 
-    const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
+  //   const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
     
 
-  useEffect(() => {
-    axios
-      .get(`${API_URL}/api/home?populate[Products][populate]=*`)
-      .then((res) => setProducts(res.data.data?.Products || null))
-      .catch((err) => setError(err))
-  }, [API_URL]);
+  // useEffect(() => {
+  //   axios
+  //     .get(`${API_URL}/api/home?populate[Products][populate]=*`)
+  //     .then((res) => setProducts(res.data.data?.Products || null))
+  //     .catch((err) => setError(err))
+  // }, [API_URL]);
   
-  if (error) return <p>Error: {error.message}</p>;
-  if (!products) return <p>No Product section found.</p>;
+  // if (error) return <p>Error: {error.message}</p>;
+  // if (!products) return <p>No Product section found.</p>;
   
   const { image, title, description, link, link_description } = products;
 

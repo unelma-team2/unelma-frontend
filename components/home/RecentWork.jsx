@@ -7,32 +7,33 @@ import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-export default function RecentWorkSection() {
+export default function RecentWorkSection({works,categories}) {
   const theme = useTheme();
   const [tab, setTab] = React.useState(0);
-  const [works, setWorks] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [error, setError] = useState(null);
+  // const [works, setWorks] = useState([]);
+  // const [categories, setCategories] = useState([]);
+  // const [error, setError] = useState(null);
 
+  
+  // const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
+  
+  
+  // useEffect(() => {
+  //   axios
+  //   .get(`${API_URL}/api/home?populate[Category][populate]=*&populate[RecentWorks][populate]=*`)
+  //   .then((res) => {
+  //     const data = res.data.data;
+  //     setCategories(data?.Category || []); 
+  //     setWorks(data?.RecentWorks || []);  
+  //   })
+  //   .catch((err) => setError(err))
+  // }, [API_URL]);
+  
+  // if (error) return <p>Error: {error.message}</p>;
+  // if (!works || !categories) return <p>No RecentWorks or categories found.</p>;
+  
   const handleChange = (e, newVal) => setTab(newVal);
 
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
-  
-
-  useEffect(() => {
-    axios
-      .get(`${API_URL}/api/home?populate[Category][populate]=*&populate[RecentWorks][populate]=*`)
-      .then((res) => {
-        const data = res.data.data;
-        setCategories(data?.Category || []); 
-        setWorks(data?.RecentWorks || []);  
-      })
-      .catch((err) => setError(err))
-  }, [API_URL]);
-  
-  if (error) return <p>Error: {error.message}</p>;
-  if (!works || !categories) return <p>No RecentWorks or categories found.</p>;
-  
   const { image, title, type } = works;
   const { name } = categories;
 
