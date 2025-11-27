@@ -4,7 +4,7 @@ import { Box } from "@mui/material";
 import ProjectInquiry from "./ProjectInquiry";
 import Metrics from "./Metrics";
 
-export default function InquiryAndMetrics() {
+export default function InquiryAndMetrics({metrics,projectInquiry}) {
   return (
     <Box
       sx={{
@@ -24,7 +24,7 @@ export default function InquiryAndMetrics() {
           minWidth: { xs: "100%", md: "50%" },
         }}
       >
-        <ProjectInquiry />
+        <ProjectInquiry projectInquiry={projectInquiry}/>
       </Box>
 
       <Box
@@ -38,7 +38,7 @@ export default function InquiryAndMetrics() {
           justifyContent: "center",
         }}
       >
-        <Metrics />
+        <Metrics metrics={metrics}/>
       </Box>
     </Box>
   );
