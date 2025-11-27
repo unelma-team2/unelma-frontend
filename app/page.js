@@ -1,11 +1,25 @@
-import Link from "next/link";
+import HeroSection from "@/components/home/HeroSection";
+import InquiryAndMetrics from "@/components/home/InquiryAndMetrics";
+import ServicesSection from "@/components/home/ServicesSection";
+import ProductsSection from "@/components/home/ProductsSection";
+import OrderingProcess from "@/components/home/OrderingProcess";
+import RecentWork from "@/components/home/RecentWork";
+import ClientFeedback from "@/components/home/ClientFeedback";
+import RecentBlogPosts from "@/components/home/RecentBlogPosts";
+import BackToTopButton from "@/components/BackToTopButton";
 
 export default function HomePage() {
   return (
-    <main style={{ padding: "2rem" }}>
-      <h1>Welcome to Unelma Platforms</h1>
-      <p>Your trusted platform solutions for education and businesses.</p>
-      <Link href="/about">Learn more about us →</Link>
-    </main>
+    <>
+      <HeroSection />
+      <InquiryAndMetrics />
+      <ServicesSection />
+      <ProductsSection />
+      <OrderingProcess />
+      <RecentWork />
+      <ClientFeedback />
+      <RecentBlogPosts />
+      <BackToTopButton />
+    </>
   );
 }
