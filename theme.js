@@ -9,8 +9,9 @@ const theme = createTheme({
     primary: {
       main: "#2F2E2E", 
       mint: "#90F0FF",
-      blue: "#6756E3",
-       violet: "#7E3398",
+    //  blue: "#6756E3",
+      blue: "#5662e3ff",
+      violet: "#7E3398",
       pink: "#C55FCB",
       redOrange: "#ED608A"
     },
@@ -31,59 +32,59 @@ const theme = createTheme({
     fontFamily: bodyFont,
     hero: {
       fontFamily: headingFont,
-      fontWeight: 800,
-      fontSize: "96px",
+      fontWeight: 700,
+      fontSize: "92pt",
       lineHeight: 1.1,
     },
     h1: {
       fontFamily: headingFont,
-      fontWeight: 800,
-      fontSize: "54px",
+      fontWeight: 700,
+      fontSize: "54pt",
       lineHeight: 1.1,
     },
     h2: {
       fontFamily: headingFont,
-      fontWeight: 800,
-      fontSize: "38px",
+      fontWeight: 700,
+      fontSize: "38pt",
       lineHeight: 1.15,
     },
     h3: {
       fontFamily: bodyFont,
-      fontWeight: 800,
-      fontSize: "20px",
+      fontWeight: 700,
+      fontSize: "20pt",
       lineHeight: 1.2,
     },
     h4: {
       fontFamily: bodyFont,
-      fontWeight: 800,
-      fontSize: "18px",
+      fontWeight: 700,
+      fontSize: "18pt",
     },
     h5: {
       fontFamily: bodyFont,
-      fontWeight: 800,
-      fontSize: "16px",
+      fontWeight: 700,
+      fontSize: "16pt",
     },
     body16med: {
       fontFamily: bodyFont,
-      fontSize: "16px",
-      fontWeight: 600,
+      fontSize: "16pt",
+      fontWeight: 500,
       lineHeight: 1.3,
     },
     body16reg: {
       fontFamily: bodyFont,
-      fontSize: "16px",
+      fontSize: "16pt",
       fontWeight: 400,
       lineHeight: 1.3,
     },
     body14med: {
       fontFamily: bodyFont,
-      fontSize: "14px",
-      fontWeight: 600,
+      fontSize: "14pt",
+      fontWeight: 500,
       lineHeight: 1.3,
     },
     body14reg: {
       fontFamily: bodyFont,
-      fontSize: "14px",
+      fontSize: "14pt",
       fontWeight: 400,
       lineHeight: 1.3,
     },
@@ -176,11 +177,21 @@ const theme = createTheme({
       },
     },
 
-    MuiInputBase: {
+    MuiInput: {
       styleOverrides: {
         root: {
           border: "2px solid #2F2E2E",
-          borderRadius: "10px",
+          borderRadius: "6px",
+          boxShadow: "0px 2px 4px rgba(0,0,0,0.1)",
+        },
+      },
+    },
+    
+MuiInputBase: {
+      styleOverrides: {
+        root: {
+          border: "2px solid #2F2E2E",
+          borderRadius: "6px",
           boxShadow: "0px 2px 4px rgba(0,0,0,0.1)",
         },
       },
