@@ -65,7 +65,7 @@ export default function HeroSection() {
         }}
       >
         <Image
-          src={"/images/home/hero/herox.png"}
+          src={"/images/home/hero/home-hero.png"}
           alt={hero_title || "Hero Image"}
           width={950}
           height={1174}
@@ -79,8 +79,8 @@ export default function HeroSection() {
         variant="h1"
         sx={{
           position: "absolute",
-          top: "45%",          // MOVE FREELY
-          right: 0,         // MOVE FREELY
+          top: "45%",          
+          right: 0,         
           zIndex: 2,
          // fontSize: { xs: "2.5rem", md: "4rem", lg: "4.8rem" },
           width: "40%",

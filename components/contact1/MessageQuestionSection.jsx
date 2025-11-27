@@ -13,9 +13,9 @@ import {
   
   export default function MessageQuestionSection({contactForm, countryCodes}) {
 
-    // const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
+    const API_URL = "https://unelma-backend.onrender.com";
 
-    const API_URL =  "http://localhost:1337";
+   // const API_URL =  "http://localhost:1337";
   
     const [formData, setFormData] = useState({
       name: "",
