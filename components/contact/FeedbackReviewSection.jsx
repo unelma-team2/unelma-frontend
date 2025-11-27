@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Box,
   Typography,
@@ -10,107 +12,173 @@ import {
   RadioGroup,
   Radio,
   FormControlLabel,
+  Button,
 } from "@mui/material";
+import { useState } from "react";
+import axios from "axios";
 
-export default function FeedbackReviewSection({
-  formData,
-  handleChange,
-  countryCodes,
-  selectedCountry,
-  feedbackTypes,
-  feedbackServices,
-  products,
-  handleRatingChange,
-}) {
+export default function FeedbackReviewSection({feedbackForm, countryCodes}) {
+
+  const API_URL = "http://localhost:1337";
+  
+//   const API_URL =
+//   process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
+
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    countryCode: "+358",
+    feedbackType: "",
+    selectedServiceOrProduct: "",
+    message: "",
+    rating: 0,
+    canBePublished: "",
+    wishToBeContacted: "",
+  });
+
+  const [status, setStatus] = useState({ loading: false, message: "", error: false });
+  
+  const selectedCountry = countryCodes.find((cc) => cc.code === formData.countryCode);
+  
+  const {feedbackTypes, feedbackServices, feedbackProducts,feedback_title,rating_title,message_title,canBePublish_title, wishToBeContact_title,attachement_title, attachement_description, phone_number_title} = feedbackForm;
+
+ 
+  const handleChange = (field) => (e) => {
+    setFormData({
+      ...formData,
+      [field]: e.target.value,
+    });
+  };
+
+  const handleRatingChange = (event, newValue) => {
+    setFormData({ ...formData, rating: newValue });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log("Submitting formData:", formData);
+    setStatus({ loading: true, message: "Sending...", error: false });
+
+    try {
+
+      const payload = {
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        feedbackType: formData.feedbackType,
+        selectedServiceOrProduct: formData.selectedServiceOrProduct,
+        message: formData.message,
+        rating: formData.rating,
+        canBePublished: formData.canBePublished === "yes", 
+        wishToBeContacted: formData.wishToBeContacted === "yes", 
+      };
+
+      const res = await axios.post(`${API_URL}/api/feedback-forms`, {
+        data: payload,
+      });
+      setStatus({ loading: false, message: "Feedback sent successfully!", error: false });
+
+     
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        countryCode: "+358",
+        feedbackType: "",
+        selectedServiceOrProduct: "",
+        message: "",
+        rating: 0,
+        canBePublished: "",
+        wishToBeContacted: "",
+      });
+
+    } catch (error) {
+      console.error("Strapi error:", error.response?.data || error.message);
+      setStatus({ loading: false, message: "Failed to send message.", error: true });
+    }
+  };
+
   return (
-    <>
+    <Box component="form" onSubmit={handleSubmit} sx={{ maxWidth: 600, mx: "auto" }}>
+        <Typography
+  variant="body2"
+  sx={{ mb: 1, fontSize: "14px", fontWeight: 500, color: "#000" }}
+>
+   Name
+</Typography>
       <TextField
         fullWidth
         label="Name"
-        placeholder="Name"
+        name="name"
         value={formData.name}
         onChange={handleChange("name")}
         required
         sx={{ mb: 3 }}
       />
-
+      <Typography
+  variant="body2"
+  sx={{ mb: 1, fontSize: "14px", fontWeight: 500, color: "#000" }}
+>
+ Email
+</Typography>
       <TextField
         fullWidth
         label="Email"
+        name="email"
         type="email"
-        placeholder="you@company.com"
         value={formData.email}
         onChange={handleChange("email")}
         required
         sx={{ mb: 3 }}
       />
-
-      <Box sx={{ mb: 3 }}>
-        <Typography
-          variant="body2"
-          sx={{
-            mb: 1,
-            fontSize: "14px",
-            fontWeight: 500,
-            color: "#000",
-          }}
-        >
-          Phone number (optional)
-        </Typography>
-        <Box sx={{ display: "flex", gap: 1 }}>
-          <FormControl sx={{ minWidth: 120 }}>
-            <Select
-              value={formData.countryCode}
-              onChange={handleChange("countryCode")}
-              sx={{
-                backgroundColor: "#fff",
-                "& .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "#000",
-                },
-              }}
-            >
-              {countryCodes.map((cc) => (
-                <MenuItem key={cc.code} value={cc.code}>
-                  {cc.country}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <TextField
-            fullWidth
-            placeholder={selectedCountry?.format || "+ 358 (0) 00-0000000"}
-            value={formData.phone}
-            onChange={handleChange("phone")}
-            sx={{
-              "& .MuiOutlinedInput-notchedOutline": {
-                borderColor: "#000",
-              },
-            }}
-          />
-        </Box>
+      <Typography
+  variant="body2"
+  sx={{ mb: 1, fontSize: "14px", fontWeight: 500, color: "#000" }}
+>
+  {phone_number_title}
+</Typography>
+      <Box sx={{ display: "flex", gap: 1, mb: 3 }}>
+        <FormControl sx={{ minWidth: 120 }}>
+          <Select
+            name="countryCode"
+            value={formData.countryCode}
+            onChange={handleChange("countryCode")}
+          >
+            {countryCodes.map((cc) => (
+              <MenuItem key={cc.code} value={cc.code}>
+                {cc.country}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        
+        <TextField
+          fullWidth
+          name="phone"
+          placeholder={selectedCountry?.format || "+ 358 (0) 00-0000000"}
+          value={formData.phone}
+          onChange={handleChange("phone")}
+        />
       </Box>
+      <Typography
+  variant="body2"
+  sx={{ mb: 1, fontSize: "14px", fontWeight: 500, color: "#000" }}
+>
+  {feedback_title}
+</Typography>
 
       <FormControl fullWidth sx={{ mb: 3 }}>
-        <InputLabel id="feedback-type-label">
-          I want to review/leave feedback for
-        </InputLabel>
+        <InputLabel id="feedback-type-label">Feedback Type</InputLabel>
         <Select
           labelId="feedback-type-label"
-          id="feedback-type"
+          name="feedbackType"
           value={formData.feedbackType}
-          label="I want to review/leave feedback for"
           onChange={handleChange("feedbackType")}
-          sx={{
-            backgroundColor: "#fff",
-            "& .MuiOutlinedInput-notchedOutline": {
-              borderColor: "#000",
-            },
-          }}
         >
           {feedbackTypes.map((type) => (
             <MenuItem key={type} value={type}>
               {type}
-              {type === "Other" && " (specify below)"}
             </MenuItem>
           ))}
         </Select>
@@ -118,30 +186,23 @@ export default function FeedbackReviewSection({
 
       {formData.feedbackType && formData.feedbackType !== "Other" && (
         <FormControl fullWidth sx={{ mb: 3 }}>
-          <InputLabel id="service-product-label">Choose service/product</InputLabel>
+          <InputLabel id="service-product-label">Choose Service/Product</InputLabel>
           <Select
             labelId="service-product-label"
-            id="service-product"
+            name="selectedServiceOrProduct"
             value={formData.selectedServiceOrProduct}
-            label="Choose service/product"
             onChange={handleChange("selectedServiceOrProduct")}
-            sx={{
-              backgroundColor: "#fff",
-              "& .MuiOutlinedInput-notchedOutline": {
-                borderColor: "#000",
-              },
-            }}
           >
             {formData.feedbackType === "Service" &&
-              feedbackServices.map((service) => (
-                <MenuItem key={service} value={service}>
-                  {service}
+              feedbackServices.map((s) => (
+                <MenuItem key={s} value={s}>
+                  {s}
                 </MenuItem>
               ))}
             {formData.feedbackType === "Product" &&
-              products.map((product) => (
-                <MenuItem key={product} value={product}>
-                  {product}
+              feedbackProducts.map((p) => (
+                <MenuItem key={p} value={p}>
+                  {p}
                 </MenuItem>
               ))}
           </Select>
@@ -149,157 +210,60 @@ export default function FeedbackReviewSection({
       )}
 
       <Box sx={{ mb: 3 }}>
-        <Typography
-          variant="body2"
-          sx={{
-            mb: 1,
-            fontSize: "14px",
-            fontWeight: 500,
-            color: "#000",
-          }}
-        >
-          Please rate your experience
-        </Typography>
-        <Rating
-          name="rating"
-          value={formData.rating}
-          onChange={handleRatingChange}
-          max={5}
-          sx={{
-            "& .MuiRating-iconFilled": {
-              color: "#2F2E2E",
-            },
-            "& .MuiRating-iconEmpty": {
-              color: "#ccc",
-            },
-          }}
-        />
+        <Typography>{rating_title}</Typography>
+        <Rating name="rating" value={formData.rating} onChange={handleRatingChange} />
       </Box>
 
-      <Box sx={{ mb: 3 }}>
-        <Typography
-          variant="body2"
-          sx={{
-            mb: 1.5,
-            fontSize: "14px",
-            fontWeight: 500,
-            color: "#000",
-          }}
-        >
-          Your feedback/review
-        </Typography>
-        <TextField
-          fullWidth
-          multiline
-          rows={6}
-          placeholder="Tell us a little about your experience"
-          value={formData.message}
-          onChange={handleChange("message")}
-          required
-          sx={{
-            "& .MuiOutlinedInput-root": {
-              borderRadius: "8px",
-              "& .MuiOutlinedInput-notchedOutline": {
-                borderColor: "#000",
-              },
-              "&:hover .MuiOutlinedInput-notchedOutline": {
-                borderColor: "#000",
-              },
-              "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                borderColor: "#000",
-              },
-              "& .MuiInputBase-input::placeholder": {
-                color: "#999",
-                opacity: 1,
-              },
-            },
-          }}
-        />
-      </Box>
+      <Typography
+  variant="body2"
+  sx={{ mb: 1, fontSize: "14px", fontWeight: 500, color: "#000" }}
+>
+  {message_title}
+</Typography>
 
-      <Box sx={{ mb: 3 }}>
-        <Typography
-          variant="body2"
-          sx={{
-            mb: 1,
-            fontSize: "14px",
-            fontWeight: 500,
-            color: "#000",
-          }}
-        >
-          My rating/review can be published on the Unelma Platforms website
-        </Typography>
-        <RadioGroup
-          row
-          value={formData.canBePublished}
-          onChange={handleChange("canBePublished")}
-        >
-          <FormControlLabel
-            value="yes"
-            control={<Radio sx={{ color: "#000" }} />}
-            label="Yes"
-            sx={{
-              "& .MuiFormControlLabel-label": {
-                fontSize: "14px",
-                color: "#000",
-              },
-            }}
-          />
-          <FormControlLabel
-            value="no"
-            control={<Radio sx={{ color: "#000" }} />}
-            label="No"
-            sx={{
-              "& .MuiFormControlLabel-label": {
-                fontSize: "14px",
-                color: "#000",
-              },
-            }}
-          />
-        </RadioGroup>
-      </Box>
+      <TextField
+        fullWidth
+        multiline
+        rows={4}
+        name="message"
+        value={formData.message}
+        onChange={handleChange("message")}
+        placeholder="Write your feedback here..."
+        sx={{ mb: 3 }}
+      />
 
-      <Box sx={{ mb: 3 }}>
-        <Typography
-          variant="body2"
-          sx={{
-            mb: 1,
-            fontSize: "14px",
-            fontWeight: 500,
-            color: "#000",
-          }}
-        >
-          Do you wish to be contacted by Unelma Platforms about your feedback?
+      <Typography sx={{ mb: 1 }}>{canBePublish_title}</Typography>
+      <RadioGroup
+        row
+        name="canBePublished"
+        value={formData.canBePublished}
+        onChange={handleChange("canBePublished")}
+      >
+        <FormControlLabel value="yes" control={<Radio />} label="Yes" />
+        <FormControlLabel value="no" control={<Radio />} label="No" />
+      </RadioGroup>
+
+      <Typography sx={{ mb: 1, mt: 2 }}>{wishToBeContact_title}</Typography>
+      <RadioGroup
+        row
+        name="wishToBeContacted"
+        value={formData.wishToBeContacted}
+        onChange={handleChange("wishToBeContacted")}
+      >
+        <FormControlLabel value="yes" control={<Radio />} label="Yes" />
+        <FormControlLabel value="no" control={<Radio />} label="No" />
+      </RadioGroup>
+
+      <Button type="submit" variant="contained" sx={{ mt: 3 }}>
+        Submit
+      </Button>
+
+      {status.message && (
+        <Typography color={status.error ? "error" : "primary"} sx={{ mt: 2 }}>
+          {status.message}
         </Typography>
-        <RadioGroup
-          row
-          value={formData.wishToBeContacted}
-          onChange={handleChange("wishToBeContacted")}
-        >
-          <FormControlLabel
-            value="yes"
-            control={<Radio sx={{ color: "#000" }} />}
-            label="Yes"
-            sx={{
-              "& .MuiFormControlLabel-label": {
-                fontSize: "14px",
-                color: "#000",
-              },
-            }}
-          />
-          <FormControlLabel
-            value="no"
-            control={<Radio sx={{ color: "#000" }} />}
-            label="No"
-            sx={{
-              "& .MuiFormControlLabel-label": {
-                fontSize: "14px",
-                color: "#000",
-              },
-            }}
-          />
-        </RadioGroup>
-      </Box>
-    </>
+      )}
+    </Box>
   );
 }
+
