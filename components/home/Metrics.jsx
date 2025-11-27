@@ -60,7 +60,7 @@ export default function Metrics({metrics}) {
           }}
         >
           <Image
-            src="/icons/smile.svg"
+            src="/icons/smile.svg" 
             alt="smile"
             width={52}      
             height={52}
