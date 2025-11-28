@@ -1,7 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, Stack } from "@mui/material";
+import LocationPinIcon from '@mui/icons-material/LocationPin';
+import MailOutlineIcon from '@mui/icons-material/MailOutline';
+import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 
 const officesLeft = [
   {
@@ -15,6 +18,7 @@ const officesLeft = [
   {
     title: "Canada",
     company: "Unelma Pay Ltd",
+    incorporation: "Incorporation number: 1000986742",
     phone: "+1 (705) 709 8047",
     email: "unelmapayca@gmail.com",
     extra: "215 Anne Street N, Barrie, Ontario, Canada",
@@ -34,6 +38,7 @@ const officesRight = [
   {
     title: "South Asia",
     company: "Unelma Platforms Pvt. Ltd",
+    id: `Business ID / VAT / PAN: 606863094`,
     phone: "+977 56 562 130",
     email: "hello@unelma.com.np",
     extra: "Ratnanagar, Chitwan 4 44204, Nepal",
@@ -47,35 +52,46 @@ export default function MapLocation() {
   return (
     <Box sx={{ mt: 8, mb: 8 }}>
       <Typography
-        variant="h3"
-        sx={{ fontWeight: 700, textAlign: "center", mb: 1 }}
+        variant="h2"
+        sx={{ fontWeight: 700, textAlign: "center", mb: 4 }}
       >
         Contact Our Offices Worldwide
       </Typography>
-      <Typography variant="body2" sx={{ textAlign: "center", mb: 4 }}>
+      <Typography variant="h6" sx={{ textAlign: "center", mb: 4 }}>
         Opening hours Mon-Fri 10AM-5PM
       </Typography>
 
       <Box
         sx={{
           display: "flex",
+          flexDirection: { xs: "column", md: "row" },
           justifyContent: "center",
-          alignItems: "stretch",
-          flexWrap: "wrap",
-          gap: 3,
+          alignItems: "flex-start",
+          gap: 4,
         }}
       >
-        <OfficeColumn
-          offices={officesLeft}
-          setSelectedLocation={setSelectedLocation}
-          selectedLocation={selectedLocation}
-        />
-        <MapBox mapQuery={selectedLocation} />
-        <OfficeColumn
-          offices={officesRight}
-          setSelectedLocation={setSelectedLocation}
-          selectedLocation={selectedLocation}
-        />
+        {/* Left offices */}
+        <Box sx={{ flexBasis: { xs: "100%", md: "240px" }, flexShrink: 0 }}>
+          <OfficeColumn
+            offices={officesLeft}
+            setSelectedLocation={setSelectedLocation}
+            selectedLocation={selectedLocation}
+          />
+        </Box>
+
+        {/* Map — grows and is centered */}
+        <Box sx={{ flexGrow: 1, display: "flex", justifyContent: "center" }}>
+          <MapBox mapQuery={selectedLocation} />
+        </Box>
+
+        {/* Right offices */}
+        <Box sx={{ flexBasis: { xs: "100%", md: "240px" }, flexShrink: 0 }}>
+          <OfficeColumn
+            offices={officesRight}
+            setSelectedLocation={setSelectedLocation}
+            selectedLocation={selectedLocation}
+          />
+        </Box>
       </Box>
     </Box>
   );
@@ -85,11 +101,9 @@ function OfficeColumn({ offices, setSelectedLocation, selectedLocation }) {
   return (
     <Box
       sx={{
-        minWidth: { xs: "100%", sm: 240 },
-        maxWidth: 260,
         display: "flex",
         flexDirection: "column",
-        gap: 3,
+        gap: 2,
       }}
     >
       {offices.map((office) => (
@@ -104,14 +118,9 @@ function OfficeColumn({ offices, setSelectedLocation, selectedLocation }) {
   );
 }
 
-function OfficeInfo({
-  title,
-  company,
-  phone,
-  email,
-  extra,
-  onClick,
-  isActive,
+function OfficeInfo({ 
+  title, company, phone, email, extra, incorporation, id, 
+  onClick, isActive 
 }) {
   return (
     <Box
@@ -119,8 +128,7 @@ function OfficeInfo({
       sx={{
         cursor: "pointer",
         p: 2,
-        borderRadius: 2,
-        border: isActive ? "2px solid #6c2cff" : "1px solid #eee",
+        border: isActive ? "2px solid #C1FCFF" : "1px solid #ffffffff",
         transition: "border-color 0.2s",
       }}
     >
@@ -128,11 +136,38 @@ function OfficeInfo({
         {title}
       </Typography>
       <Typography variant="body2">{company}</Typography>
-      <Typography variant="body2">📞 {phone}</Typography>
-      <Typography variant="body2">✉️ {email}</Typography>
-      <Typography variant="caption" sx={{ display: "block", mt: 1, color: "#6c2cff" }}>
-        {extra}
-      </Typography>
+      {incorporation && (
+        <Typography variant="body2" sx={{ mt: 0.5 }}>
+          {incorporation}
+        </Typography>
+      )}
+      {id && (
+        <Typography variant="body2" sx={{ mt: 0.5 }}>
+          {id}
+        </Typography>
+      )}
+
+      <Stack direction="row" alignItems="center" spacing={1} sx={{ mt: 1 }}>
+        <LocalPhoneIcon sx={{ color: "#0018a0ff" }} />
+        <Typography variant="body2">{phone}</Typography>
+      </Stack>
+
+      <Stack direction="row" alignItems="center" spacing={1} sx={{ mt: 1 }}>
+        <MailOutlineIcon sx={{ color: "#0018a0ff" }} />
+        <Typography variant="body2">{email}</Typography>
+      </Stack>
+
+      {extra && (
+        <Typography
+          variant="caption"
+          sx={{ display: "block", mt: 1, color: "#9D00A0" }}
+        >
+          <Stack direction="row" alignItems="center" spacing={0.5} component="span">
+            <LocationPinIcon sx={{ color: "#9D00A0" }} />
+            <span>{extra}</span>
+          </Stack>
+        </Typography>
+      )}
     </Box>
   );
 }
@@ -145,9 +180,9 @@ function MapBox({ mapQuery }) {
   return (
     <Box
       sx={{
-        width: { xs: "100%", sm: 420, md: 500 },
-        height: 320,
-        borderRadius: 3,
+        width: { xs: "100%", sm: 420, md: 600 },
+        height: 450,
+        borderRadius: 0.2,
         overflow: "hidden",
         boxShadow: 2,
       }}
@@ -160,8 +195,7 @@ function MapBox({ mapQuery }) {
         style={{ border: 0 }}
         loading="lazy"
         referrerPolicy="no-referrer-when-downgrade"
-      ></iframe>
+      />
     </Box>
   );
 }
-
