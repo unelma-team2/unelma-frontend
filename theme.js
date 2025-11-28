@@ -51,18 +51,24 @@ const theme = createTheme({
     h3: {
       fontFamily: bodyFont,
       fontWeight: 700,
-      fontSize: "20pt",
+      fontSize: "24pt",
       lineHeight: 1.2,
     },
     h4: {
       fontFamily: bodyFont,
       fontWeight: 700,
-      fontSize: "18pt",
+      fontSize: "20pt",
     },
     h5: {
       fontFamily: bodyFont,
       fontWeight: 700,
       fontSize: "16pt",
+    },
+      body16bold: {
+      fontFamily: bodyFont,
+      fontSize: "16pt",
+      fontWeight: 700,
+      lineHeight: 1.3,
     },
     body16med: {
       fontFamily: bodyFont,
@@ -74,6 +80,12 @@ const theme = createTheme({
       fontFamily: bodyFont,
       fontSize: "16pt",
       fontWeight: 400,
+      lineHeight: 1.3,
+    },
+    body14bold: {
+      fontFamily: bodyFont,
+      fontSize: "14pt",
+      fontWeight: 700,
       lineHeight: 1.3,
     },
     body14med: {
@@ -97,6 +109,11 @@ const theme = createTheme({
   },
 
   mixins: {
+    sectionBox: {
+      border:"2px solid #2F2E2E",
+      borderRadius: "10px",
+      boxShadow: "0px 2px 4px rgba(0,0,0,0.1)",
+    },
     homeBoxLeft: {
       borderBottom: "2px solid #2F2E2E",
       position: "absolute",
@@ -137,8 +154,8 @@ const theme = createTheme({
       height: "200px",
       zIndex: 3,
     },
-  },
 
+  },
 
   shape: {
     borderRadius: 10,
@@ -153,6 +170,8 @@ const theme = createTheme({
         root: {
           px: 4,
           py: 1,
+          color: "#FFFFFF",
+          backgroundColor: "#2F2E2E",
           borderRadius: "8px",
           boxShadow: "0px 4px 4px rgba(0,0,0,0.15)",
           transition: "box-shadow 0.3s ease",
@@ -171,7 +190,7 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           border:"2px solid #2F2E2E",
-          borderRadius: "10px",
+          borderRadius: 8,
           boxShadow: "0px 2px 4px rgba(0,0,0,0.1)",
         },
       },

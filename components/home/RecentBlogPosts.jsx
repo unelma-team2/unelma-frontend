@@ -66,6 +66,10 @@ export default function RecentBlogPosts() {
     ...blogs.slice(0, VISIBLE_CARDS),
   ];
 
+  const uniqueExtendedBlogs = Array.from(
+  new Map(extendedBlogs.map(blog => [blog.id, blog])).values()
+);
+
   // Handle CSS reset after fake slide
   const handleTransitionEnd = () => {
     isTransitioning.current = false;
@@ -152,8 +156,7 @@ export default function RecentBlogPosts() {
             width: `${extendedBlogs.length * TOTAL_WIDTH}px`,
           }}
         >
-          {extendedBlogs.map((blog, i) => {
-            const realIndex = i;
+          {uniqueExtendedBlogs.map((blog, index) => {
             const { id, Title, Description, slug, blog_image, createdAt } =
               blog.attributes || blog;
 
@@ -171,7 +174,7 @@ export default function RecentBlogPosts() {
 
             return (
               <motion.div
-                key={id || `${slug}-${i}`}
+                key={blog.id || `${blog.slug}-${blog.createdAt}`}
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4 }}

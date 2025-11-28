@@ -100,6 +100,10 @@ export default function BlogPage() {
     currentPage * postsPerPage
   );
 
+  const uniquePaginatedPosts = Array.from(
+  new Map(paginatedPosts.map(blog => [blog.id, blog])).values()
+);
+
   return (
     <main>
       <BlogPageHero />
@@ -186,9 +190,9 @@ export default function BlogPage() {
           )}
 
           {/* Blog List */}
-          {paginatedPosts.map((blog, index) => (
+          {uniquePaginatedPosts.map((blog, index) => (
             <Box
-              key={blog.id || index}
+              key={blog.id || `${blog.slug}-${blog.createdAt}`}
               sx={{
                 display: "flex",
                 flexDirection: { xs: "column", md: "row" },

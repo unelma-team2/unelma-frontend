@@ -1,5 +1,5 @@
 import localFont from "next/font/local";
-import { Quicksand, Outfit } from "next/font/google";
+import { Outfit } from "next/font/google";
 import "./globals.css";
 import EmotionRegistry from "@/providers/EmotionRegistry";
 import ThemeRegistry from "@/providers/ThemeRegistry";
@@ -14,14 +14,6 @@ const stackSansNotch = localFont({
   display: "swap",
 });
 
-// QUICKSAND (google)
-const quicksand = Quicksand({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-  variable: "--font-quicksand",
-  display: "swap",
-});
-
 const outfit = Outfit({
   subsets: ["latin"],
   weight: ["100","200","300","400","500","600","700","800","900"],
@@ -31,14 +23,23 @@ const outfit = Outfit({
 
 export const metadata = {
   title: "Unelma Platforms",
-  description: "Redesign project",
+  description: "Website Redesign Project",
+  icons: {
+    icon: [
+      { url: "/favicon/favicon.ico?v=2", type: "image/x-icon" },
+      { url: "/favicon/favicon.png?v=2", type: "image/png" },
+      { url: "/favicon/favicon.svg?v=2", type: "image/svg+xml" },
+    ],
+    apple: "/favicon/apple-touch-icon.png?v=2",
+  },
+  manifest: "/favicon/site.webmanifest",
 };
 
 export default function RootLayout({ children }) {
   return (
     <html
       lang="en"
-      className={`${stackSansNotch.variable} ${quicksand.variable} ${outfit.variable}`}
+      className={`${stackSansNotch.variable} ${outfit.variable}`}
     >
       <body>
         <EmotionRegistry>
