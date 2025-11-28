@@ -2,8 +2,8 @@
 
 import HeroSection from "@/components/home/HeroSection";
 import InquiryAndMetrics from "@/components/home/InquiryAndMetrics";
-import Services from "@/components/home/Services.jsx";
-import Products from "@/components/home/Products.jsx";
+import ServicesSection from "@/components/home/ServicesSection";
+import ProductsSection from "@/components/home/ProductsSection";
 import OrderingProcess from "@/components/home/OrderingProcess";
 import RecentWork from "@/components/home/RecentWork";
 import ClientFeedback from "@/components/home/ClientFeedback";
@@ -53,12 +53,12 @@ export default function HomePage() {
 
   return (
     <>
-      <HeroSection />
-      <InquiryAndMetrics />
-      <Services />
-      <Products />
-      <OrderingProcess />
-      <RecentWork />
+      <HeroSection heroSection={heroSection} />
+      <InquiryAndMetrics metrics={metrics} projectInquiry={projectInquiry} />
+      <ServicesSection services={services} />
+      <ProductsSection products={products} />
+      <OrderingProcess orderProcess={orderProcess} />
+      <RecentWork works={works} categories={categories} />
       <ClientFeedback />
       <RecentBlogPosts />
       <BackToTopButton />
