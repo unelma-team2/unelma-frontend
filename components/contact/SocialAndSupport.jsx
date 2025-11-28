@@ -6,19 +6,19 @@ import ArrowForwardTwoToneIcon from '@mui/icons-material/ArrowForwardTwoTone';
 
 export default function SocialAndSupport() {
   return (
-    <Box sx={{ mt: 10, mb: 6, textAlign: "center" }}>
-      <Typography variant="h2" sx={{ fontWeight: 700, mb: 6 }}>
+    <Box sx={{ mt: 20, mb: 6, textAlign: "center" }}>
+      <Typography variant="h2" sx={{ fontWeight: 700, mb: 4 }}>
         Find Us on Social Media
       </Typography>
-      <Typography variant="body2" sx={{ mb: 3 }}>
+      <Typography variant="body2" sx={{ mb: 8 }}>
         Follow Unelma Platforms for news and updates.
       </Typography>
 
-      <Box sx={{ display: "flex", justifyContent: "center", gap: 2, mb: 16 }}>
+      <Box sx={{ display: "flex", justifyContent: "center", gap: 2, mb: 22 }}>
       <SocialButtons sx={{ backgroundColor: "#C1FCFF" }} />
       </Box>
 
-      <Typography variant="h2" sx={{ fontWeight: 700, mb: 10 }}>
+      <Typography variant="h2" sx={{ fontWeight: 700, mb: 8 }}>
         Tech Support
       </Typography>
       <Typography variant="body2" sx={{ mb: 4 }}>
