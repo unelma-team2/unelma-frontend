@@ -30,23 +30,23 @@ function CustomStepIcon(props) {
 
 const NullStepConnector = () => <Box sx={{ display: 'none' }} />;
 
-export default function OrderingProcess() {
+export default function OrderingProcess({orderProcess}) {
 
-    const [orderProcess, setOrderProcess] = useState([]);
-    const [error, setError] = useState(null);
+//     const [orderProcess, setOrderProcess] = useState([]);
+//     const [error, setError] = useState(null);
 
-    const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
+//     const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
     
 
-  useEffect(() => {
-    axios
-      .get(`${API_URL}/api/home?populate[OrderingProcess][populate]=*`)
-      .then((res) => setOrderProcess(res.data.data?.OrderingProcess || null))
-      .catch((err) => setError(err))
-  }, [API_URL]);
+//   useEffect(() => {
+//     axios
+//       .get(`${API_URL}/api/home?populate[OrderingProcess][populate]=*`)
+//       .then((res) => setOrderProcess(res.data.data?.OrderingProcess || null))
+//       .catch((err) => setError(err))
+//   }, [API_URL]);
   
-  if (error) return <p>Error: {error.message}</p>;
-  if (!orderProcess) return <p>No Product section found.</p>;
+//   if (error) return <p>Error: {error.message}</p>;
+//   if (!orderProcess) return <p>No Product section found.</p>;
   
   const { number, title } = orderProcess;
 
