@@ -50,7 +50,7 @@ export default function MapLocation() {
   const [selectedLocation, setSelectedLocation] = useState("Tallinn Estonia");
 
   return (
-    <Box sx={{ mt: 8, mb: 8 }}>
+    <Box sx={{ mt: 22, mb: 8 }}>
       <Typography
         variant="h2"
         sx={{ fontWeight: 700, textAlign: "center", mb: 4 }}
@@ -70,7 +70,6 @@ export default function MapLocation() {
           gap: 4,
         }}
       >
-        {/* Left offices */}
         <Box sx={{ flexBasis: { xs: "100%", md: "240px" }, flexShrink: 0 }}>
           <OfficeColumn
             offices={officesLeft}
@@ -78,13 +77,9 @@ export default function MapLocation() {
             selectedLocation={selectedLocation}
           />
         </Box>
-
-        {/* Map — grows and is centered */}
         <Box sx={{ flexGrow: 1, display: "flex", justifyContent: "center" }}>
           <MapBox mapQuery={selectedLocation} />
         </Box>
-
-        {/* Right offices */}
         <Box sx={{ flexBasis: { xs: "100%", md: "240px" }, flexShrink: 0 }}>
           <OfficeColumn
             offices={officesRight}
