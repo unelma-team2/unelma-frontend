@@ -98,7 +98,7 @@ const theme = createTheme({
       fontFamily: bodyFont,
       fontSize: "14pt",
       fontWeight: 400,
-      lineHeight: 1.3,
+      lineHeight: 1.1,
     },
 
     button: {

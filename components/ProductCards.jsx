@@ -101,7 +101,7 @@ export default function ProductCards({ products = [], apiUrl = "" }) {
                   alignSelf: "center",
                   px: 2,
                   py: 1,
-                  fontSize: 15,
+                  fontSize: 14,
                 }}
               >
                 {product.link_description}

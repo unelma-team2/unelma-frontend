@@ -6,11 +6,10 @@ import ThemeRegistry from "@/providers/ThemeRegistry";
 import ClientLayoutWrapper from "@/components/ClientLayoutWrapper";
 import { Box } from "@mui/material";
 
-// STACK SANS NOTCH (local variable font)
 const stackSansNotch = localFont({
   src: "../public/fonts/stack-sans-notch/StackSansNotch-VariableFont_wght.ttf",
   variable: "--font-stack-sans-notch",
-  weight: "100 900", // variable range
+  weight: "100 900", 
   display: "swap",
 });
 
