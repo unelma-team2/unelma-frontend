@@ -4,28 +4,28 @@ import { Box, Typography, Button, useTheme } from "@mui/material";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-export default function ProjectInquiry() {
+export default function ProjectInquiry({projectInquiry}) {
   const theme = useTheme();
 
-  const [projectInquiry, setProjectInquiry] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+//   const [projectInquiry, setProjectInquiry] = useState([]);
+//   const [loading, setLoading] = useState(true);
+//   const [error, setError] = useState(null);
 
-  const API_URL =
-  process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
+//   const API_URL =
+//   process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
   
 
-useEffect(() => {
-  axios
-    .get(`${API_URL}/api/home?populate[ProjectInquiry][populate]=*`)
-    .then((res) => setProjectInquiry(res.data.data?.ProjectInquiry || null))
-    .catch((err) => setError(err))
-    .finally(() => setLoading(false));
-}, [API_URL]);
+// useEffect(() => {
+//   axios
+//     .get(`${API_URL}/api/home?populate[ProjectInquiry][populate]=*`)
+//     .then((res) => setProjectInquiry(res.data.data?.ProjectInquiry || null))
+//     .catch((err) => setError(err))
+//     .finally(() => setLoading(false));
+// }, [API_URL]);
 
-if (loading) return <p>Loading hero section...</p>;
-if (error) return <p>Error: {error.message}</p>;
-if (!projectInquiry) return <p>No ProjectInquiry section found.</p>;
+// if (loading) return <p>Loading hero section...</p>;
+// if (error) return <p>Error: {error.message}</p>;
+// if (!projectInquiry) return <p>No ProjectInquiry section found.</p>;
 
 const { title1, title2, description1, description2, link, link_description } = projectInquiry;
 

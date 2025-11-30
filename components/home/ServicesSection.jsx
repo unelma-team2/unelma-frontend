@@ -8,22 +8,22 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 
 
-export default function ServicesSection() {
-    const [services, setServices] = useState([]);
-    const [error, setError] = useState(null);
+export default function ServicesSection({services}) {
+  //   const [services, setServices] = useState([]);
+  //   const [error, setError] = useState(null);
 
-    const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
+  //   const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
   
 
-  useEffect(() => {
-    axios
-      .get(`${API_URL}/api/home?populate[Services][populate]=*`)
-      .then((res) => setServices(res.data.data?.Services || null))
-      .catch((err) => setError(err))
-  }, [API_URL]);
+  // useEffect(() => {
+  //   axios
+  //     .get(`${API_URL}/api/home?populate[Services][populate]=*`)
+  //     .then((res) => setServices(res.data.data?.Services || null))
+  //     .catch((err) => setError(err))
+  // }, [API_URL]);
   
-  if (error) return <p>Error: {error.message}</p>;
-  if (!services) return <p>No Services are available.</p>;
+  // if (error) return <p>Error: {error.message}</p>;
+  // if (!services) return <p>No Services are available.</p>;
   
   const { image, title, description} = services;
 
