@@ -11,11 +11,10 @@ import { AttachFile } from "@mui/icons-material";
 import { useState } from "react";
 import axios from "axios";
 
-export default function MessageQuestionSection({contactForm, countryCodes}) {
-
+export default function MessageQuestionSection({ contactForm, countryCodes }) {
   // const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
 
-  const API_URL =  "http://localhost:1337";
+  const API_URL = "http://localhost:1337";
 
   const [formData, setFormData] = useState({
     name: "",
@@ -33,11 +32,17 @@ export default function MessageQuestionSection({contactForm, countryCodes}) {
     error: false,
   });
 
-  const selectedCountry = countryCodes.find((cc) => cc.code === formData.countryCode);
+  const selectedCountry = countryCodes.find(
+    (cc) => cc.code === formData.countryCode
+  );
 
-  const {message_title, attachement_title, attachement_description,phone_number_title} = contactForm;
+  const {
+    message_title,
+    attachement_title,
+    attachement_description,
+    phone_number_title,
+  } = contactForm;
 
-  
   const handleChange = (field) => (e) => {
     if (field === "file") {
       const file = e.target.files[0];
@@ -51,7 +56,6 @@ export default function MessageQuestionSection({contactForm, countryCodes}) {
     }
   };
 
-  
   const uploadFile = async () => {
     if (!formData.file) return null;
 
@@ -59,10 +63,9 @@ export default function MessageQuestionSection({contactForm, countryCodes}) {
     fileData.append("files", formData.file);
 
     const uploadRes = await axios.post(`${API_URL}/api/upload`, fileData);
-    return uploadRes.data[0].id; 
+    return uploadRes.data[0].id;
   };
 
-  
   const handleSubmit = async () => {
     setStatus({ loading: true, message: "Sending...", error: false });
 
@@ -89,7 +92,6 @@ export default function MessageQuestionSection({contactForm, countryCodes}) {
         error: false,
       });
 
-      
       setFormData({
         name: "",
         email: "",
@@ -112,31 +114,31 @@ export default function MessageQuestionSection({contactForm, countryCodes}) {
 
   return (
     <>
-    <Typography
-variant="body2"
-sx={{ mb: 1, fontSize: "14px", fontWeight: 500, color: "#000" }}
->
- Name
-</Typography>
+      <Typography
+        variant="body2"
+        sx={{ mb: 1, fontSize: "14px", fontWeight: 500, color: "#000" }}
+      >
+        Name
+      </Typography>
+
       <TextField
         fullWidth
-        label="Name"
         placeholder="Name"
         value={formData.name}
         onChange={handleChange("name")}
         required
         sx={{ mb: 3 }}
       />
+
       <Typography
-variant="body2"
-sx={{ mb: 1, fontSize: "14px", fontWeight: 500, color: "#000" }}
->
- Email
-</Typography>
+        variant="body2"
+        sx={{ mb: 1, fontSize: "14px", fontWeight: 500, color: "#000" }}
+      >
+        Email
+      </Typography>
 
       <TextField
         fullWidth
-        label="Email"
         type="email"
         placeholder="you@company.com"
         value={formData.email}
@@ -175,31 +177,31 @@ sx={{ mb: 1, fontSize: "14px", fontWeight: 500, color: "#000" }}
           />
         </Box>
       </Box>
+
       <Typography
-variant="body2"
-sx={{ mb: 1, fontSize: "14px", fontWeight: 500, color: "#000" }}
->
-{message_title}
-</Typography>
+        variant="body2"
+        sx={{ mb: 1, fontSize: "14px", fontWeight: 500, color: "#000" }}
+      >
+        {message_title}
+      </Typography>
 
       <TextField
         fullWidth
-        label="Message"
         multiline
         rows={6}
+        placeholder="Message"
         value={formData.message}
         onChange={handleChange("message")}
         required
         sx={{ mb: 3 }}
       />
 
-      
       <Box sx={{ mb: 4 }}>
         <Typography
           variant="body2"
           sx={{ mb: 1, fontSize: "14px", fontWeight: 500, color: "#000" }}
         >
-         {attachement_title}
+          {attachement_title}
         </Typography>
 
         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
@@ -222,12 +224,9 @@ sx={{ mb: 1, fontSize: "14px", fontWeight: 500, color: "#000" }}
         </Box>
       </Box>
 
-     
       <Button
         variant="contained"
-        sx={{
-          mt:3
-        }}
+        sx={{ mt: 3 }}
         onClick={handleSubmit}
         disabled={status.loading}
       >
