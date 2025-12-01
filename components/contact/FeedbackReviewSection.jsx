@@ -17,12 +17,11 @@ import {
 import { useState } from "react";
 import axios from "axios";
 
-export default function FeedbackReviewSection({feedbackForm, countryCodes}) {
-
+export default function FeedbackReviewSection({ feedbackForm, countryCodes }) {
   const API_URL = "http://localhost:1337";
-  
-//   const API_URL =
-//   process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
+
+  //   const API_URL =
+  //   process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
 
   const [formData, setFormData] = useState({
     name: "",
@@ -37,13 +36,30 @@ export default function FeedbackReviewSection({feedbackForm, countryCodes}) {
     wishToBeContacted: "",
   });
 
-  const [status, setStatus] = useState({ loading: false, message: "", error: false });
-  
-  const selectedCountry = countryCodes.find((cc) => cc.code === formData.countryCode);
-  
-  const {feedbackTypes, feedbackServices, feedbackProducts,feedback_title,rating_title,message_title,canBePublish_title, wishToBeContact_title,attachement_title, attachement_description, phone_number_title} = feedbackForm;
+  const [status, setStatus] = useState({
+    loading: false,
+    message: "",
+    error: false,
+  });
 
- 
+  const selectedCountry = countryCodes.find(
+    (cc) => cc.code === formData.countryCode
+  );
+
+  const {
+    feedbackTypes,
+    feedbackServices,
+    feedbackProducts,
+    feedback_title,
+    rating_title,
+    message_title,
+    canBePublish_title,
+    wishToBeContact_title,
+    attachement_title,
+    attachement_description,
+    phone_number_title,
+  } = feedbackForm;
+
   const handleChange = (field) => (e) => {
     setFormData({
       ...formData,
@@ -61,7 +77,6 @@ export default function FeedbackReviewSection({feedbackForm, countryCodes}) {
     setStatus({ loading: true, message: "Sending...", error: false });
 
     try {
-
       const payload = {
         name: formData.name,
         email: formData.email,
@@ -70,16 +85,19 @@ export default function FeedbackReviewSection({feedbackForm, countryCodes}) {
         selectedServiceOrProduct: formData.selectedServiceOrProduct,
         message: formData.message,
         rating: formData.rating,
-        canBePublished: formData.canBePublished === "yes", 
-        wishToBeContacted: formData.wishToBeContacted === "yes", 
+        canBePublished: formData.canBePublished === "yes",
+        wishToBeContacted: formData.wishToBeContacted === "yes",
       };
 
       const res = await axios.post(`${API_URL}/api/feedback-forms`, {
         data: payload,
       });
-      setStatus({ loading: false, message: "Feedback sent successfully!", error: false });
+      setStatus({
+        loading: false,
+        message: "Feedback sent successfully!",
+        error: false,
+      });
 
-     
       setFormData({
         name: "",
         email: "",
@@ -92,21 +110,31 @@ export default function FeedbackReviewSection({feedbackForm, countryCodes}) {
         canBePublished: "",
         wishToBeContacted: "",
       });
-
     } catch (error) {
       console.error("Strapi error:", error.response?.data || error.message);
-      setStatus({ loading: false, message: "Failed to send message.", error: true });
+      setStatus({
+        loading: false,
+        message: "Failed to send message.",
+        error: true,
+      });
     }
   };
 
   return (
-    <Box component="form" onSubmit={handleSubmit} sx={{ maxWidth: 600, mx: "auto" }}>
-        <Typography
-  variant="body2"
-  sx={{ mb: 1, fontSize: "14px", fontWeight: 500, color: "#000" }}
->
-   Name
-</Typography>
+    <Box
+      component="form"
+      onSubmit={handleSubmit}
+      sx={{
+        width: "100%",
+        mx: "auto",
+      }}
+    >
+      <Typography
+        variant="body2"
+        sx={{ mb: 1, fontSize: "14px", fontWeight: 500, color: "#000" }}
+      >
+        Name
+      </Typography>
       <TextField
         fullWidth
         label="Name"
@@ -117,11 +145,11 @@ export default function FeedbackReviewSection({feedbackForm, countryCodes}) {
         sx={{ mb: 3 }}
       />
       <Typography
-  variant="body2"
-  sx={{ mb: 1, fontSize: "14px", fontWeight: 500, color: "#000" }}
->
- Email
-</Typography>
+        variant="body2"
+        sx={{ mb: 1, fontSize: "14px", fontWeight: 500, color: "#000" }}
+      >
+        Email
+      </Typography>
       <TextField
         fullWidth
         label="Email"
@@ -133,11 +161,11 @@ export default function FeedbackReviewSection({feedbackForm, countryCodes}) {
         sx={{ mb: 3 }}
       />
       <Typography
-  variant="body2"
-  sx={{ mb: 1, fontSize: "14px", fontWeight: 500, color: "#000" }}
->
-  {phone_number_title}
-</Typography>
+        variant="body2"
+        sx={{ mb: 1, fontSize: "14px", fontWeight: 500, color: "#000" }}
+      >
+        {phone_number_title}
+      </Typography>
       <Box sx={{ display: "flex", gap: 1, mb: 3 }}>
         <FormControl sx={{ minWidth: 120 }}>
           <Select
@@ -152,7 +180,7 @@ export default function FeedbackReviewSection({feedbackForm, countryCodes}) {
             ))}
           </Select>
         </FormControl>
-        
+
         <TextField
           fullWidth
           name="phone"
@@ -162,11 +190,11 @@ export default function FeedbackReviewSection({feedbackForm, countryCodes}) {
         />
       </Box>
       <Typography
-  variant="body2"
-  sx={{ mb: 1, fontSize: "14px", fontWeight: 500, color: "#000" }}
->
-  {feedback_title}
-</Typography>
+        variant="body2"
+        sx={{ mb: 1, fontSize: "14px", fontWeight: 500, color: "#000" }}
+      >
+        {feedback_title}
+      </Typography>
 
       <FormControl fullWidth sx={{ mb: 3 }}>
         <InputLabel id="feedback-type-label">Feedback Type</InputLabel>
@@ -186,7 +214,9 @@ export default function FeedbackReviewSection({feedbackForm, countryCodes}) {
 
       {formData.feedbackType && formData.feedbackType !== "Other" && (
         <FormControl fullWidth sx={{ mb: 3 }}>
-          <InputLabel id="service-product-label">Choose Service/Product</InputLabel>
+          <InputLabel id="service-product-label">
+            Choose Service/Product
+          </InputLabel>
           <Select
             labelId="service-product-label"
             name="selectedServiceOrProduct"
@@ -211,15 +241,19 @@ export default function FeedbackReviewSection({feedbackForm, countryCodes}) {
 
       <Box sx={{ mb: 3 }}>
         <Typography>{rating_title}</Typography>
-        <Rating name="rating" value={formData.rating} onChange={handleRatingChange} />
+        <Rating
+          name="rating"
+          value={formData.rating}
+          onChange={handleRatingChange}
+        />
       </Box>
 
       <Typography
-  variant="body2"
-  sx={{ mb: 1, fontSize: "14px", fontWeight: 500, color: "#000" }}
->
-  {message_title}
-</Typography>
+        variant="body2"
+        sx={{ mb: 1, fontSize: "14px", fontWeight: 500, color: "#000" }}
+      >
+        {message_title}
+      </Typography>
 
       <TextField
         fullWidth
