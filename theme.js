@@ -179,7 +179,7 @@ const theme = createTheme({
 
           "&:hover": {
             boxShadow: "0px 6px 6px rgba(0,0,0,0.20)",
-            backgroundColor: "#9D00A0",
+            backgroundColor: "#5662e3ff",
             transform: "scale(1.1)",
           },
         },
@@ -196,25 +196,25 @@ const theme = createTheme({
       },
     },
 
-    MuiInput: {
-      styleOverrides: {
-        root: {
-          border: "2px solid #2F2E2E",
-          borderRadius: "6px",
-          boxShadow: "0px 2px 4px rgba(0,0,0,0.1)",
-        },
-      },
-    },
+    // MuiInput: {
+    //   styleOverrides: {
+    //     root: {
+    //       border: "2px solid #2F2E2E",
+    //       borderRadius: "6px",
+    //       boxShadow: "0px 2px 4px rgba(0,0,0,0.1)",
+    //     },
+    //   },
+    // },
     
-MuiInputBase: {
-      styleOverrides: {
-        root: {
-          border: "2px solid #2F2E2E",
-          borderRadius: "6px",
-          boxShadow: "0px 2px 4px rgba(0,0,0,0.1)",
-        },
-      },
-    },
+// MuiInputBase: {
+//       styleOverrides: {
+//         root: {
+//           border: "2px solid #2F2E2E",
+//           borderRadius: "6px",
+//           boxShadow: "0px 2px 4px rgba(0,0,0,0.1)",
+//         },
+//       },
+//     },
   },
 });
 
