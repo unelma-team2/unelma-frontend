@@ -1,17 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Box,
   Container,
   Typography,
-  Button,
-  Select,
   FormControl,
   InputLabel,
+  Select,
   MenuItem,
 } from "@mui/material";
-import MessageQuestionSection from "@/components/contact/MessageQuestionSection";
+import axios from "axios";
+
 import PriceQuoteSection from "@/components/contact/PriceQuoteSection";
 import FeedbackReviewSection from "@/components/contact/FeedbackReviewSection";
 import MapLocation from "@/components/contact/MapLocation";
@@ -61,237 +61,143 @@ const countryCodes = [
   { code: "+49", country: "DEU", format: "+49 000 0000000" },
 ];
 
-export default function ContactPage() {
-  const [formData, setFormData] = useState({
-    contactType: "Message/question",
-    name: "",
-    email: "",
-    countryCode: "+358",
-    phone: "",
-    message: "",
-    file: null,
-    selectedServices: [],
-    feedbackType: "",
-    selectedServiceOrProduct: "",
-    rating: 0,
-    canBePublished: "",
-    wishToBeContacted: "",
-  });
+  // Fetch from Strapi
+  useEffect(() => {
+    setLoading(true);
+    axios
+      .get(
+        `${API_URL}/api/contact?populate[Banner][populate]=*&populate[ContactType]=*&populate[ContactForm]=*&populate[RequestQuote]=*&populate[FeedbackForm]=*`
+      )
+      .then((res) => {
+        const data = res.data?.data || {};
+        setBanner(data.Banner || null);
+        setContactTypeData(data.ContactType || null);
+        setContactForm((data.ContactForm && data.ContactForm[0]) || null);
+        setRequestQuote(data.RequestQuote || null);
+        setFeedbackForm(data.FeedbackForm || null);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error(err);
+        setError(err);
+        setLoading(false);
+      });
+  }, [API_URL]);
 
-  const [fileName, setFileName] = useState("");
+  if (loading)
+    return <Container sx={{ py: 8 }}>Loading contact page...</Container>;
+  if (error)
+    return (
+      <Container sx={{ py: 8 }}>
+        Error loading contact page: {error.message}
+      </Container>
+    );
+
+  // const contactTypeOptions = contactTypeData?.contact_type || [
+  //   "Message/question",
+  //   "Price quote request",
+  //   "Feedback/review",
+  //   "Appointment booking",
+  // ];
+
+  // const bannerTitle = banner?.title || "Contact";
+  // const bannerSubtitle = banner?.sub_title || "";
+  // const bannerDescription = banner?.description || "";
+
+  const {contact_type_title,contact_type} = contactTypeData;
+
+  const {title, sub_title,description,image}= banner;
+
+  const imageUrl = image?.url
+            ? image.url.startsWith("http")
+              ? image.url
+              : `${API_URL}${image.url}`
+            : "";
 
   const handleChange = (field) => (event) => {
-    if (field === "file") {
-      const file = event.target.files[0];
-      setFormData({ ...formData, file });
-      setFileName(file ? file.name : "");
-    } else if (field === "selectedServices") {
-      const service = event.target.value;
-      const checked = event.target.checked;
-      setFormData({
-        ...formData,
-        selectedServices: checked
-          ? [...formData.selectedServices, service]
-          : formData.selectedServices.filter((item) => item !== service),
-      });
-    } else if (field === "contactType") {
-      setFormData({
-        contactType: event.target.value,
-        name: "",
-        email: "",
-        countryCode: "+358",
-        phone: "",
-        message: "",
-        file: null,
-        selectedServices: [],
-        feedbackType: "",
-        selectedServiceOrProduct: "",
-        rating: 0,
-        canBePublished: "",
-        wishToBeContacted: "",
-      });
-      setFileName("");
-    } else if (field === "feedbackType") {
-      setFormData({
-        ...formData,
-        feedbackType: event.target.value,
-        selectedServiceOrProduct: "",
-      });
-    } else {
-      setFormData({ ...formData, [field]: event.target.value });
-    }
+    setFormData((prev) => ({
+      ...prev,
+      [field]: event.target.value,
+    }));
   };
-
-  const handleRatingChange = (event, newValue) => {
-    setFormData({ ...formData, rating: newValue });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Form submitted:", formData);
-  };
-
-  const selectedCountry = countryCodes.find(
-    (cc) => cc.code === formData.countryCode
-  );
 
   return (
     <Container maxWidth="md" sx={{ py: 6, px: { xs: 2, sm: 4 } }}>
-      <Box sx={{ maxWidth: 800, mx: "auto" }}>
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            mb: 6,
-            gap: 2,
-            flexWrap: "wrap",
-          }}
-        >
-          <Typography
-            variant="h1"
-            sx={{
-              fontSize: { xs: "36px", md: "64px" },
-              fontWeight: 700,
-              color: "#000",
-              flex: "0 0 auto",
-            }}
-          >
-            Contact Us
-          </Typography>
-          <Box
-            sx={{
-              display: "flex",
-              gap: 1,
-              alignItems: "flex-start",
-              ml: { xs: 0, sm: 2 },
-              flex: "1 1 auto",
-            }}
-          >
-          </Box>
-        </Box>
-
+      <Box sx={{ maxWidth: 900, mx: "auto" }}>
         <Typography
           variant="h1"
           sx={{
-            fontSize: { xs: "36px", md: "48px" },
+            fontSize: { xs: "28px", md: "44px" },
             fontWeight: 700,
             mb: 2,
-            color: "#000",
           }}
         >
-          Get in touch
+          {title}
         </Typography>
 
         <Typography
-          variant="body1"
+          variant="h2"
           sx={{
-            mb: 4,
-            color: "#000",
-            fontSize: "16px",
-            lineHeight: 1.6,
+            fontSize: { xs: "18px", md: "24px" },
+            fontWeight: 600,
+            mb: 2,
           }}
         >
-          We'd love to hear from you. Please select the reason you are
-          contacting us from the list below and then fill out the rest of the
-          form.
+          {sub_title}
         </Typography>
 
-        <Box component="form" onSubmit={handleSubmit}>
+        <Typography variant="body1" sx={{ mb: 4 }}>
+          {description}
+        </Typography>
+
+        {/* ❌ Removed form — replaced with plain Box to avoid nested forms */}
+        <Box>
           <FormControl fullWidth sx={{ mb: 3 }}>
-            <InputLabel id="contact-type-label">Select contact type</InputLabel>
+          <Typography
+  variant="body2"
+  sx={{ mb: 1, fontSize: "14px", fontWeight: 500, color: "#000" }}
+>
+{contact_type_title}
+</Typography>
+            {/* <InputLabel id="contact-type-label">
+              {contact_type_title}
+            </InputLabel> */}
+
             <Select
               labelId="contact-type-label"
               id="contact-type"
               value={formData.contactType}
-              label="Select contact type"
               onChange={handleChange("contactType")}
-              sx={{
-                backgroundColor: "#fff",
-                "& .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "#000",
-                },
-                "&:hover .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "#000",
-                },
-                "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "#000",
-                },
-              }}
             >
-              {contactTypes.map((type) => (
-                <MenuItem
-                  key={type}
-                  value={type}
-                  disabled={type === "Appointment booking"}
-                  sx={{
-                    "&.Mui-disabled": {
-                      opacity: 0.5,
-                      color: "#999",
-                    },
-                  }}
-                >
+              {contact_type.map((type, idx) => (
+                <MenuItem key={idx} value={type}>
                   {type}
                 </MenuItem>
               ))}
             </Select>
           </FormControl>
 
-          {formData.contactType === "Message/question" && (
+          {/* Content Sections */}
+          {formData.contactType === "Message/question" && requestQuote && (
             <MessageQuestionSection
-              formData={formData}
-              handleChange={handleChange}
               countryCodes={countryCodes}
-              selectedCountry={selectedCountry}
-              fileName={fileName}
+              contactForm={contactForm}
             />
           )}
 
-          {formData.contactType === "Price quote request" && (
+          {formData.contactType === "Price quote request" && requestQuote && (
             <PriceQuoteSection
-              formData={formData}
-              handleChange={handleChange}
-              countryCodes={countryCodes}
-              selectedCountry={selectedCountry}
-              services={services}
-              fileName={fileName}
+            countryCodes={countryCodes}
+              requestQuote={requestQuote}
             />
           )}
 
-          {formData.contactType === "Feedback/review" && (
+          {formData.contactType === "Feedback/review" && feedbackForm && (
             <FeedbackReviewSection
-              formData={formData}
-              handleChange={handleChange}
-              countryCodes={countryCodes}
-              selectedCountry={selectedCountry}
-              feedbackTypes={feedbackTypes}
-              feedbackServices={feedbackServices}
-              products={products}
-              handleRatingChange={handleRatingChange}
-            />
+            countryCodes={countryCodes}
+              feedbackForm={feedbackForm}
+             />
           )}
-
-          <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
-            <Button
-              type="submit"
-              variant="contained"
-              sx={{
-                backgroundColor: "#2F2E2E",
-                color: "#fff",
-                py: 1,
-                px: 4,
-                fontSize: "14px",
-                fontWeight: 600,
-                textTransform: "uppercase",
-                borderRadius: "25px",
-                minWidth: "120px",
-                "&:hover": {
-                  backgroundColor: "#1a1a1a",
-                },
-              }}
-            >
-              Submit
-            </Button>
-          </Box>
         </Box>
 
         <MapLocation />

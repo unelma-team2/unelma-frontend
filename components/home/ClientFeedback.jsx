@@ -17,7 +17,7 @@ function FeedbackCard({ name, message, avatar }) {
     ? avatar.url.startsWith("http")
         ? avatar.url
             : `${API_URL}${avatar.url}`
-    : "/images/avatars/default.png"; 
+    : "/images/avatars/avatar4.png"; 
 
   
   return (

@@ -5,24 +5,24 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-export default function Metrics() {
+export default function Metrics({metrics}) {
 
-    const [metrics, setMetrics] = useState([]);
-    const [error, setError] = useState(null);
+  //   const [metrics, setMetrics] = useState([]);
+  //   const [error, setError] = useState(null);
   
-    const API_URL =
-    process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
+  //   const API_URL =
+  //   process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
     
   
-  useEffect(() => {
-    axios
-      .get(`${API_URL}/api/home?populate[Metrics][populate]=*`)
-      .then((res) => setMetrics(res.data.data?.Metrics || null))
-      .catch((err) => setError(err))
-  }, [API_URL]);
+  // useEffect(() => {
+  //   axios
+  //     .get(`${API_URL}/api/home?populate[Metrics][populate]=*`)
+  //     .then((res) => setMetrics(res.data.data?.Metrics || null))
+  //     .catch((err) => setError(err))
+  // }, [API_URL]);
   
-  if (error) return <p>Error: {error.message}</p>;
-  if (!metrics) return <p>No Metrics section found.</p>;
+  // if (error) return <p>Error: {error.message}</p>;
+  // if (!metrics) return <p>No Metrics section found.</p>;
   
   const { number, label1, label2 } = metrics;
   console.log("Metrics data:", metrics);
@@ -60,7 +60,7 @@ export default function Metrics() {
           }}
         >
           <Image
-            src="/icons/smile.svg"
+            src="/icons/smile.svg" 
             alt="smile"
             width={52}      
             height={52}
