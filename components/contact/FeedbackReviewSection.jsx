@@ -121,55 +121,31 @@ export default function FeedbackReviewSection({ feedbackForm, countryCodes }) {
   };
 
   return (
-    <Box
-      component="form"
-      onSubmit={handleSubmit}
-      sx={{
-        width: "100%",
-        mx: "auto",
-      }}
-    >
-      <Typography
-        variant="body2"
-        sx={{ mb: 1, fontSize: "14px", fontWeight: 500, color: "#000" }}
-      >
-        Name
-      </Typography>
+    <Box component="form" onSubmit={handleSubmit} sx={{ width: "100%" }}>
+
+      <Typography sx={labelStyle}>Name</Typography>
       <TextField
         fullWidth
-        label="Name"
-        name="name"
+        placeholder="Your name"
         value={formData.name}
         onChange={handleChange("name")}
-        required
         sx={{ mb: 3 }}
       />
-      <Typography
-        variant="body2"
-        sx={{ mb: 1, fontSize: "14px", fontWeight: 500, color: "#000" }}
-      >
-        Email
-      </Typography>
+
+      <Typography sx={labelStyle}>Email</Typography>
       <TextField
         fullWidth
-        label="Email"
-        name="email"
+        placeholder="you@company.com"
         type="email"
         value={formData.email}
         onChange={handleChange("email")}
-        required
         sx={{ mb: 3 }}
       />
-      <Typography
-        variant="body2"
-        sx={{ mb: 1, fontSize: "14px", fontWeight: 500, color: "#000" }}
-      >
-        {phone_number_title}
-      </Typography>
+
+      <Typography sx={labelStyle}>{phone_number_title}</Typography>
       <Box sx={{ display: "flex", gap: 1, mb: 3 }}>
         <FormControl sx={{ minWidth: 120 }}>
           <Select
-            name="countryCode"
             value={formData.countryCode}
             onChange={handleChange("countryCode")}
           >
@@ -183,27 +159,22 @@ export default function FeedbackReviewSection({ feedbackForm, countryCodes }) {
 
         <TextField
           fullWidth
-          name="phone"
-          placeholder={selectedCountry?.format || "+ 358 (0) 00-0000000"}
+          placeholder={selectedCountry?.format}
           value={formData.phone}
           onChange={handleChange("phone")}
         />
       </Box>
-      <Typography
-        variant="body2"
-        sx={{ mb: 1, fontSize: "14px", fontWeight: 500, color: "#000" }}
-      >
-        {feedback_title}
-      </Typography>
 
+      <Typography sx={labelStyle}>{feedback_title}</Typography>
       <FormControl fullWidth sx={{ mb: 3 }}>
-        <InputLabel id="feedback-type-label">Feedback Type</InputLabel>
         <Select
-          labelId="feedback-type-label"
-          name="feedbackType"
           value={formData.feedbackType}
           onChange={handleChange("feedbackType")}
+          displayEmpty
         >
+          <MenuItem disabled value="">
+            Select Feedback Type
+          </MenuItem>
           {feedbackTypes.map((type) => (
             <MenuItem key={type} value={type}>
               {type}
@@ -213,63 +184,57 @@ export default function FeedbackReviewSection({ feedbackForm, countryCodes }) {
       </FormControl>
 
       {formData.feedbackType && formData.feedbackType !== "Other" && (
-        <FormControl fullWidth sx={{ mb: 3 }}>
-          <InputLabel id="service-product-label">
-            Choose Service/Product
-          </InputLabel>
-          <Select
-            labelId="service-product-label"
-            name="selectedServiceOrProduct"
-            value={formData.selectedServiceOrProduct}
-            onChange={handleChange("selectedServiceOrProduct")}
-          >
-            {formData.feedbackType === "Service" &&
-              feedbackServices.map((s) => (
-                <MenuItem key={s} value={s}>
-                  {s}
-                </MenuItem>
-              ))}
-            {formData.feedbackType === "Product" &&
-              feedbackProducts.map((p) => (
-                <MenuItem key={p} value={p}>
-                  {p}
-                </MenuItem>
-              ))}
-          </Select>
-        </FormControl>
+        <>
+          <Typography sx={labelStyle}>Choose Service/Product</Typography>
+          <FormControl fullWidth sx={{ mb: 3 }}>
+            <Select
+              value={formData.selectedServiceOrProduct}
+              onChange={handleChange("selectedServiceOrProduct")}
+              displayEmpty
+            >
+              <MenuItem disabled value="">
+                Select
+              </MenuItem>
+
+              {formData.feedbackType === "Service" &&
+                feedbackServices.map((s) => (
+                  <MenuItem key={s} value={s}>
+                    {s}
+                  </MenuItem>
+                ))}
+
+              {formData.feedbackType === "Product" &&
+                feedbackProducts.map((p) => (
+                  <MenuItem key={p} value={p}>
+                    {p}
+                  </MenuItem>
+                ))}
+            </Select>
+          </FormControl>
+        </>
       )}
 
-      <Box sx={{ mb: 3 }}>
-        <Typography>{rating_title}</Typography>
-        <Rating
-          name="rating"
-          value={formData.rating}
-          onChange={handleRatingChange}
-        />
-      </Box>
+      <Typography sx={{ fontWeight: 500, mb: 1 }}>{rating_title}</Typography>
+      <Rating
+        value={formData.rating}
+        onChange={handleRatingChange}
+        sx={{ mb: 3 }}
+      />
 
-      <Typography
-        variant="body2"
-        sx={{ mb: 1, fontSize: "14px", fontWeight: 500, color: "#000" }}
-      >
-        {message_title}
-      </Typography>
-
+      <Typography sx={labelStyle}>{message_title}</Typography>
       <TextField
         fullWidth
         multiline
         rows={4}
-        name="message"
+        placeholder="Write your feedback here..."
         value={formData.message}
         onChange={handleChange("message")}
-        placeholder="Write your feedback here..."
         sx={{ mb: 3 }}
       />
 
       <Typography sx={{ mb: 1 }}>{canBePublish_title}</Typography>
       <RadioGroup
         row
-        name="canBePublished"
         value={formData.canBePublished}
         onChange={handleChange("canBePublished")}
       >
@@ -277,10 +242,9 @@ export default function FeedbackReviewSection({ feedbackForm, countryCodes }) {
         <FormControlLabel value="no" control={<Radio />} label="No" />
       </RadioGroup>
 
-      <Typography sx={{ mb: 1, mt: 2 }}>{wishToBeContact_title}</Typography>
+      <Typography sx={{ mt: 2, mb: 1 }}>{wishToBeContact_title}</Typography>
       <RadioGroup
         row
-        name="wishToBeContacted"
         value={formData.wishToBeContacted}
         onChange={handleChange("wishToBeContacted")}
       >
@@ -300,3 +264,9 @@ export default function FeedbackReviewSection({ feedbackForm, countryCodes }) {
     </Box>
   );
 }
+const labelStyle = {
+  mb: 1,
+  fontSize: "14px",
+  fontWeight: 500,
+  color: "#000",
+};
