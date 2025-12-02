@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { Box, Typography } from "@mui/material";
 
-export default function ProductsPageHero() {
+export default function ProductsSinglePageHero() {
     return (
         <Box sx={{
             display: "flex",
