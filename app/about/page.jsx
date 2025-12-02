@@ -4,20 +4,98 @@ import AboutPageHero from "@/components/about/AboutPageHero";
 import BulletPoints from "@/components/about/BulletPoints";
 import AboutImageList from "@/components/about/AboutImageList";
 import { Box, Container, Typography, useTheme } from "@mui/material";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 export default function AboutPage() {
   const theme = useTheme();
+   const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
+  //  const API_URL = "http://localhost:1337";
+
+   const [bannerSection, setBannerSection] = useState(null);
+   const [welcomeSection, setWelcomeSection] = useState(null);
+   const [bulletPoints, setBulletPoints] = useState(null);
+   const [philosophySection, setPhilosophySection] = useState(null);
+   const [networkSection, setNetworkSection] = useState(null);
+   const [innovationSection, setInnovationSection] = useState(null);
+   const [PromiseSection, setPromiseSection] = useState(null);
+   const [loading, setLoading] = useState(true);
+   const [error, setError] = useState(null);
+
+   useEffect(() => {
+    setLoading(true);
+    axios
+      .get(
+        `${API_URL}/api/about?populate[AboutBannerSection][populate]=*&populate[WelcomeSection]=*&populate[BulletPoints]=*&populate[PhilosophySection]=*&populate[NetworkSection][populate]=*&populate[InnovationSection]=*&populate[PromiseSection][populate]=*`
+      )
+      .then((res) => {
+        const data = res.data?.data || {};
+        setBannerSection(data.AboutBannerSection || null);
+        setWelcomeSection(data.WelcomeSection || null);
+        setBulletPoints(data.BulletPoints || null);
+        setPhilosophySection(data.PhilosophySection || null);
+        setNetworkSection(data.NetworkSection || null);
+        setInnovationSection(data.InnovationSection || null);
+        setPromiseSection(data.PromiseSection || null);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error(err);
+        setError(err);
+        setLoading(false);
+      });
+  }, [API_URL]);
+
+  if (loading)
+    return <Container sx={{ py: 8 }}>Loading contact page...</Container>;
+  if (error)
+    return (
+      <Container sx={{ py: 8 }}>
+        Error loading contact page: {error.message}
+      </Container>
+    );
+
+  const { banner_description1, banner_description2, banner_description3} = bannerSection;
+
+  const {welcome_title1, welcome_title2,welcome_title3,welcome_description1, welcome_description2}= welcomeSection;
+
+  const {point1, point2, point3, point4} = bulletPoints;
+
+  const {philosophy_title, philosophy_description1, philosophy_description2}= philosophySection;
+
+  const {network_title, network_description1, network_description2, network_image}= networkSection;
+
+  const {innovation_title1, innovation_title2, innovation_description1, innovation_description2,innovation_description3 }= innovationSection;
+
+  const {promise_title, promise_description1, promise_description2, promise_description3, promise_image}= PromiseSection;
+
+
+  const imageUrl = (image) => {
+    if (!image) return null;
+  
+    if (image?.data?.attributes?.url) {
+      const url = image.data.attributes.url;
+      return url.startsWith("http") ? url : `${API_URL}${url}`;
+    }
+  
+    if (image?.url) {
+      return image.url.startsWith("http") ? image.url : `${API_URL}${image.url}`;
+    }
+  
+    return null;
+  };
+  
 
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
-      <AboutPageHero />
+      <AboutPageHero bannerSection={bannerSection} imageUrl={imageUrl}/>
 
       <Typography variant="h1" fontSize={"60pt"} align="right" mb={12} gutterBottom>
-        We Have 15 Years of
+        {banner_description1}
         <br />
-        Experience in
+       {banner_description2}
         <br />
-        IT Solutions.
+       {banner_description3}
       </Typography>
 
       {/* Main Section Wrapper */}
@@ -27,11 +105,11 @@ export default function AboutPage() {
           {/* Empowerment Section */}
           <Box sx={{ position: "absolute", top: 100, width: "100%" }}>
             <Typography variant="h2" mb={12}>
-              Welcome to
+              {welcome_title1}
               <br />
-              Unelma Platforms
+              {welcome_title2}
               <br />
-              — Empowering People Through Technology
+              {welcome_title3}
             </Typography>
             <Typography
               variant="body14med"
@@ -39,34 +117,29 @@ export default function AboutPage() {
               maxWidth="400px"
               align="justify"
             >
-               At Unelma Platforms, our mission has always been simple yet
-              powerful: to empower people through technology. With over 15
-              years of innovation and excellence, we build trusted, user-focused,
-              and purpose-driven digital solutions.
+               {welcome_description1}
               <br />
               <br />
-              Our solutions are designed to create meaningful change and help
-              organizations thrive in the digital era. From cybersecurity to
-              workflow optimization, we deliver results.
+              {welcome_description2}
             </Typography>
           </Box>
 
           {/* Bullet Points */}
           <Box sx={{ position: "absolute", top: 800, width: "100%", height: "100%" }}>
             <BulletPoints
-              text="End-to-end IT services tailored for your business"
+              text={point1}
               gradient="linear-gradient(135deg, #B060FF, #FF62CE)"
             />
             <BulletPoints
-              text="Complete cyber security solutions for all industries"
+              text={point2}
               gradient="linear-gradient(135deg, #8469FF, #C862FF)"
             />
             <BulletPoints
-              text="Skilled professionals delivering trusted results"
+              text={point3}
               gradient="linear-gradient(135deg, #597BFF, #7C5CFF)"
             />
             <BulletPoints
-              text="Worldwide support & service, at any hour"
+              text={point4}
               gradient="linear-gradient(135deg, #6FEAFF, #A7F0FF)"
             />
           </Box>
@@ -74,7 +147,7 @@ export default function AboutPage() {
           {/* Philosophy */}
           <Box sx={{ position: "absolute", top: 1300, width: "100%" }}>
             <Typography variant="h2" mb={4}>
-              Our Philosophy
+             {philosophy_title}
             </Typography>
             <Typography
               variant="body14reg"
@@ -82,16 +155,16 @@ export default function AboutPage() {
               maxWidth="400px"
               align="justify"
             >
-             We believe in the boundless potential of technology to create positive change.
+             {philosophy_description1}
              <br /><br />
-            Our passionate team of professionals develops intuitive, efficient, and groundbreaking platforms that help organizations optimize workflows, solve challenges, and thrive in the digital era.
+            {philosophy_description2}
             </Typography>
           </Box>
 
           {/* Global Network */}
           <Box sx={{ position: "absolute", top: 1650, width: "100%" }}>
             <Typography variant="h2" mb={4}>
-              A Global Network
+              {network_title}
             </Typography>
             <Typography
               variant="body14reg"
@@ -99,9 +172,9 @@ export default function AboutPage() {
               maxWidth="400px"
               align="justify"
             >
-              From local startups to global enterprises, we proudly serve a diverse network of clients worldwide.
+              {network_description1}
               <br /><br />
-              Our consistent innovation, reliability, and exceptional service have earned us trust across continents — a true reflection of our mission to empower people through technology, beyond boundaries.
+              {network_description2}
             </Typography>
           </Box>
 
@@ -139,17 +212,17 @@ export default function AboutPage() {
           >
             <Box sx={{ maxWidth: 400 }}>
               <Typography variant="h2" mb={4} align="right">
-                Our Products
+                {innovation_title1}
                 <br />
-                and Innovations
+                {innovation_title2}
               </Typography>
 
               <Typography variant="body14reg" color="text.primary" align="justify">
-                Our suite of products — including UnelmaMail, UnelmaBrowser, and Unelma Code Translator — reflects our commitment to creating technology that truly makes a difference. 
+                {innovation_description1} 
                 <br /><br />
-                Each solution is built around the user, offering continuous support, security, and a seamless experience. 
+                {innovation_description2} 
                 <br /><br />
-                At Unelma, we don’t just build technology — we build opportunities that empower individuals and businesses to grow and succeed.
+                {innovation_description3}
               </Typography>
             </Box>
           </Box>
@@ -181,20 +254,20 @@ export default function AboutPage() {
           >
             <Box sx={{ maxWidth: 400 }}>
               <Typography variant="h2" mb={4} align="right">
-                Our Promise
+                {promise_title}
               </Typography>
 
               <Typography variant="body14reg" color="text.primary" align="justify">
-                For more than 15 years, Unelma Platforms has been at the forefront of helping businesses harness the power of technology to drive success. Our broad range of innovative and user-friendly software solutions have enabled businesses to operate more efficiently, reach their customers effectively, and ultimately, boost their bottom line.
+                {promise_description1}
                 <br /><br />
-                With a rich experience spanning over a decade, Unelma Platforms stands as a reliable partner in the journey of businesses toward growth and success. Our goal has, and always will be, to empower businesses with the best tech tools and services.
+                {promise_description2}
                 <br /><br />
-                Join us on this journey. Together, let's build technology that inspires and transforms.
+                {promise_description3}
               </Typography>
             </Box>
          <Box
             component="img"
-            src="/images/about/signature.png"
+            src={"/images/about/signature.png"}
             alt="Signature"
             sx={{
               position: "absolute",
