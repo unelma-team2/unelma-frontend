@@ -40,7 +40,7 @@ export default function RecentBlogPosts() {
       ? blog_image.data.attributes.url.startsWith("http")
         ? blog_image.data.attributes.url
         : `${API_URL}${blog_image.data.attributes.url}`
-      : "/images/blog/placeholder.png";
+      : "/images/blog/pngwing.com - 2025-11-17T021857.109 copy.png";
 
     const date = new Date(createdAt);
     const dayMonth = `${date.getDate()} ${date.toLocaleString("en-US", { month: "short" })}`;
@@ -61,15 +61,15 @@ export default function RecentBlogPosts() {
           flexDirection: "column",
           justifyContent: "space-between",
         }}
-      >
+      > 
         {/* Image */}
-        <Box sx={{ position: "relative", height: 220 }}>
+        <Box sx={{ position: "relative", height: 240 }}>
           {imageUrl && (
             <Image
               src={imageUrl}
               alt={Title || "Blog Image"}
               fill
-              style={{ objectFit: "cover" }}
+              style={{ objectFit: "contain" }}
             />
           )}
           <Box
@@ -77,7 +77,7 @@ export default function RecentBlogPosts() {
               position: "absolute",
               top: 10,
               left: 10,
-              background: theme.palette.background.lightMint,
+              background: theme.palette.background.lightBlue,
               width: 90,
               height: 90,
               borderRadius: "50%",
@@ -100,12 +100,12 @@ export default function RecentBlogPosts() {
         <CardContent sx={{ flexGrow: 1 }}>
           <Stack direction="row" spacing={2} mb={4}>
             <Stack direction="row" spacing={0.5} alignItems="center">
-              <PersonIcon sx={{ fontSize: 20, color: "#777" }} />
-              <Typography variant="bodyreg12">Author</Typography>
+              <Image src="/images/icons/icons8-writing-64.png" alt="Author" width={24} height={24} />
+              <Typography variant="bodyreg12" color="#6079F1">Author</Typography>
             </Stack>
             <Stack direction="row" spacing={0.5} alignItems="center">
-              <CategoryIcon sx={{ fontSize: 20, color: "#777" }} />
-              <Typography variant="bodyreg12">Category</Typography>
+              <Image src="/images/icons/icons8-opened-folder-64.png" alt="Category" width={24} height={24} />
+              <Typography variant="bodyreg12" color="#6079F1">Category</Typography>
             </Stack>
           </Stack>
 
@@ -128,12 +128,12 @@ export default function RecentBlogPosts() {
             mt: "auto",
           }}
         >
-          <Stack direction="row" spacing={1}>
+          <Stack direction="row" spacing={1.5}>
             <IconButton size="small">
-              <ShareIcon fontSize="small" />
+              <ShareIcon fontSize="small" sx={{ color: '#9D00A0' }} />
             </IconButton>
             <IconButton size="small">
-              <CommentIcon fontSize="small" />
+              <CommentIcon fontSize="small" sx={{ color: '#9D00A0' }} />
             </IconButton>
           </Stack>
 
@@ -148,7 +148,7 @@ export default function RecentBlogPosts() {
                 cursor: "pointer",
                 display: "flex",
                 alignItems: "center",
-                gap: "4px",
+                gap: "3px",
               }}
             >
               Read More <ArrowForwardIcon sx={{ fontSize: 24 }} />

@@ -18,7 +18,7 @@ function FeedbackCard({ name, message, avatar }) {
     ? avatar.url.startsWith("http")
       ? avatar.url
       : `${API_URL}${avatar.url}`
-    : "/images/avatars/avatar4.png";
+    : "/images/avatars/avatar_placeholder.png";
 
   return (
     <Box
@@ -42,9 +42,9 @@ function FeedbackCard({ name, message, avatar }) {
           mb: 2,
           width: 70,
           height: 70,
-          borderRadius: "50%",
-          border: `2px solid ${theme.palette.primary.main}`,
-          backgroundColor: theme.palette.background.darkMint,
+         // borderRadius: "50%",
+         // border: `2px solid ${theme.palette.primary.main}`,
+         // backgroundColor: theme.palette.background.darkMint,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -52,10 +52,10 @@ function FeedbackCard({ name, message, avatar }) {
         }}
       >
         <Image
-          src="/images/icons/icons8-quote-96.png"
+          src="/images/icons/icons8-quote-100.png"
           alt="quote"
-          width={40}
-          height={40}
+          width={70}
+          height={70}
           style={{ objectFit: "contain" }}
         />
       </Box>
@@ -73,7 +73,7 @@ function FeedbackCard({ name, message, avatar }) {
       </Typography>
 
       <Box sx={{ display: "flex", alignItems: "center", mt: 2 }}>
-        <Avatar src={avatarUrl} sx={{ width: 50, height: 50, mr: 2 }} />
+        <Avatar src={avatarUrl} sx={{ width: 55, height: 55, mr: 2, border: `2px solid ${theme.palette.primary.main}`, borderRadius: "50%" }} />
         <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
           {name}
         </Typography>

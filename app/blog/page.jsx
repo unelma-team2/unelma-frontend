@@ -102,7 +102,7 @@ export default function BlogPage() {
 
   const uniquePaginatedPosts = Array.from(
   new Map(paginatedPosts.map(blog => [blog.id, blog])).values()
-);
+);console.log("Blog categories:", blogs.map(b => b.category));
 
   return (
     <main>
@@ -156,17 +156,27 @@ export default function BlogPage() {
               <Box sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
                 <Box sx={{ display: "flex", gap: "1.5rem", alignItems: "center", marginBottom: "0.5rem", fontSize: "0.95rem", color: "#6079F1" }}>
                   <Box sx={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                    <Image src="/icons/calendar.svg" alt="Date" width={20} height={20} />
+                    <Image src="/images/icons/icons8-calendar-32_1.png" alt="Date" width={22} height={22} />
                     {formatBlogDate(featured.date || featured.publishedAt)}
                   </Box>
                   <Box sx={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                    <Image src="/icons/author.svg" alt="Author" width={20} height={20} />
+                    <Image src="/images/icons/icons8-writing-64_1.png" alt="Author" width={24} height={24} />
                     {featured.author_name || "Author's Name"}
                   </Box>
-                  <Box sx={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                    <Image src="/icons/category.svg" alt="Category" width={20} height={20} />
-                    {featured.category || "Category"}
-                  </Box>
+                  <Link
+                    href={`/category/${featured.category}`}
+                    style={{ textDecoration: "none", color: "inherit" }}
+                  >
+                    <Box sx={{ display: "flex", alignItems: "center", gap: "0.5rem", cursor: "pointer" }}>
+                      <Image
+                        src="/images/icons/icons8-opened-folder-64.png"
+                        alt="Category"
+                        width={24}
+                        height={24}
+                      />
+                      {featured.category || "Category"}
+                    </Box>
+                  </Link>
                 </Box>
                 <Typography variant="h3" sx={{ fontWeight: 700, fontSize: "1.5rem", marginBottom: "1rem" }}>
                   {featured.Title || "Featured Blog Title"}
@@ -189,8 +199,26 @@ export default function BlogPage() {
             </Box>
           )}
 
+          {/* No Results Message */}
+          {filteredBlogs.length === 0 && (
+            <Box
+              sx={{
+                padding: "2rem",
+                border: `2px solid ${theme.palette.primary.main}`,
+                borderRadius: "8px",
+                background: "#fff",
+                textAlign: "center",
+                fontSize: "1.2rem",
+                fontWeight: 600,
+                color: "#9D00A0",
+              }}
+            >
+              No blog posts found.
+            </Box>
+          )}
+
           {/* Blog List */}
-          {uniquePaginatedPosts.map((blog, index) => (
+          {filteredBlogs.length > 0 && uniquePaginatedPosts.map((blog, index) => (
             <Box
               key={blog.id || `${blog.slug}-${blog.createdAt}`}
               sx={{
@@ -219,17 +247,27 @@ export default function BlogPage() {
               <Box sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
                 <Box sx={{ display: "flex", gap: "1.5rem", alignItems: "center", marginBottom: "0.5rem", fontSize: "0.9rem", color: "#6079F1" }}>
                   <Box sx={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                    <Image src="/images/icons/calendar.svg" alt="Date" width={20} height={20} />
+                    <Image src="/images/icons/icons8-calendar-32_1.png" alt="Date" width={22} height={22} />
                     {formatBlogDate(blog.date || blog.publishedAt)}
                   </Box>
                   <Box sx={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                    <Image src="images/icons/author.svg" alt="Author" width={20} height={20} />
+                    <Image src="/images/icons/icons8-writing-64_1.png" alt="Author" width={24} height={24} />
                     {blog.author_name || "Author's Name"}
                   </Box>
-                  <Box sx={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                    <Image src="/images/icons/category.svg" alt="Category" width={20} height={20} />
-                    {blog.category || "Category"}
-                  </Box>
+                 <Link
+                    href={`/category/${blog.category}`}
+                    style={{ textDecoration: "none", color: "inherit" }}
+                  >
+                    <Box sx={{ display: "flex", alignItems: "center", gap: "0.5rem", cursor: "pointer" }}>
+                      <Image
+                        src="/images/icons/icons8-opened-folder-64.png"
+                        alt="Category"
+                        width={24}
+                        height={24}
+                      />
+                      {blog.category || "Category"}
+                    </Box>
+                  </Link>
                 </Box>
                 <Typography variant="h4" sx={{ fontWeight: 700, marginBottom: "0.5rem" }}>
                   {blog.Title}
