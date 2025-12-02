@@ -1,28 +1,27 @@
 "use client";
 
+import { Box, Typography, Avatar, useTheme } from "@mui/material";
 import Image from "next/image";
-import { Box, Typography, Paper, Avatar, IconButton, useTheme } from "@mui/material";
-import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
-import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
-import theme from "@/theme";
-import { useEffect, useState } from "react";
 import axios from "axios";
+import { useEffect, useState } from "react";
 
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
+import Carousel from "../Carousel.jsx"; // your reusable carousel
+import ArrowButtons from "../ArrowButtons.jsx";
+
+const API_URL =
+  process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
 
 function FeedbackCard({ name, message, avatar }) {
   const theme = useTheme();
 
   const avatarUrl = avatar?.url
     ? avatar.url.startsWith("http")
-        ? avatar.url
-            : `${API_URL}${avatar.url}`
-    : "/images/avatars/avatar4.png"; 
+      ? avatar.url
+      : `${API_URL}${avatar.url}`
+    : "/images/avatars/avatar4.png";
 
-  
   return (
-    <Paper
-      elevation={3}
+    <Box
       sx={{
         p: 4,
         width: 300,
@@ -33,6 +32,8 @@ function FeedbackCard({ name, message, avatar }) {
         flexDirection: "column",
         justifyContent: "space-between",
         border: `2px solid ${theme.palette.primary.main}`,
+        borderRadius: 2,
+        backgroundColor: theme.palette.background.paper,
       }}
     >
       <Box
@@ -48,8 +49,6 @@ function FeedbackCard({ name, message, avatar }) {
           alignItems: "center",
           justifyContent: "center",
           overflow: "hidden",
-          flexShrink: 0,
-          flexGrow: 0,
         }}
       >
         <Image
@@ -60,64 +59,43 @@ function FeedbackCard({ name, message, avatar }) {
           style={{ objectFit: "contain" }}
         />
       </Box>
+
       <Typography
         variant="body1"
         sx={{
           mb: 2,
           fontSize: 14,
           textAlign: "justify",
+          flexGrow: 1,
         }}
       >
         {message}
       </Typography>
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "flex-start",
-          mt: 2,
-          ml: 1,
-          height: 50,
-        }}
-      >
-        <Avatar
-          src={avatarUrl}
-          sx={{
-            width: 50,
-            height: 50,
-            mr: 2,
-          }}
-        />
-        <Typography
-          variant="subtitle1"
-          sx={{
-            fontWeight: 600,
-          }}
-        >
+
+      <Box sx={{ display: "flex", alignItems: "center", mt: 2 }}>
+        <Avatar src={avatarUrl} sx={{ width: 50, height: 50, mr: 2 }} />
+        <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
           {name}
         </Typography>
       </Box>
-    </Paper>
+    </Box>
   );
 }
 
 export default function ClientFeedback() {
-
-    const [feedback, setFeedback] = useState([]);
+  const theme = useTheme();
+  const [feedback, setFeedback] = useState([]);
   const [error, setError] = useState(null);
 
+  useEffect(() => {
+    axios
+      .get(`${API_URL}/api/feedback-forms?populate=*`)
+      .then((res) => setFeedback(res.data.data || []))
+      .catch((err) => setError(err));
+  }, []);
 
-useEffect(() => {
-  axios
-    .get(`${API_URL}/api/feedback-forms?populate=*`)
-    .then((res) => setFeedback(res.data.data))
-    .catch((err) => setError(err))
-}, [API_URL]);
-
-if (error) return <p>Error: {error.message}</p>;
-if (!feedback) return <p>No Feedback found.</p>;
-
-const { name, message, avatar, id } = feedback;
+  if (error) return <p>Error: {error.message}</p>;
+  if (!feedback?.length) return <p>No feedback found.</p>;
 
   return (
     <Box
@@ -132,54 +110,24 @@ const { name, message, avatar, id } = feedback;
     >
       <Typography
         variant="h2"
-        sx={{
-          fontWeight: 700,
-          fontSize: { xs: "2rem", md: "2.75rem" },
-          mb: 6,
-        }}
+        sx={{ fontWeight: 700, fontSize: { xs: "2rem", md: "2.75rem" }, mb: 6 }}
       >
         Feedback From
         <br />
         Our Clients
       </Typography>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: { xs: "column", md: "row" },
-          gap: 10,
-          justifyContent: "center",
-        }}
-      >
-        {feedback.map((fb) => (
-          <FeedbackCard key={fb.id} {...fb} />
-        ))}
-      </Box>
 
-     <Box sx={{ mt: 6, display: "flex", justifyContent: "center", gap: 3 }}>
-      <IconButton
-        aria-label="previous"
-        sx={{
-          color: theme.palette.primary.main,
-          '&:hover': {
-            color: theme.palette.background.darkMint,
-          },
-        }}
-      >
-        <ArrowCircleLeftIcon sx={{ fontSize: 48 }} />
-      </IconButton>
-
-      <IconButton
-        aria-label="next"
-        sx={{
-          color: theme.palette.primary.main,
-          '&:hover': {
-            color: theme.palette.background.darkMint,
-          },
-        }}
-      >
-        <ArrowCircleRightIcon sx={{ fontSize: 48 }} />
-      </IconButton>
-  </Box>
+      <Carousel
+        items={feedback}
+        renderItem={(item) => (
+          <FeedbackCard
+            key={item.id}
+            name={item.name}
+            message={item.message}
+            avatar={item.avatar}
+          />
+        )}
+      />
     </Box>
   );
 }

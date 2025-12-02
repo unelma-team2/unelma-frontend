@@ -28,8 +28,8 @@ export default function ServiceCards({ services = [], apiUrl = "" }) {
           >
             <Card
             sx={{
-                width: 300,
-                height: 485,
+                width: 345,
+                height: 450,
                 p: 2,
                 textAlign: "center",
                 display: "flex",
@@ -45,10 +45,10 @@ export default function ServiceCards({ services = [], apiUrl = "" }) {
             >
                 <Box
                 sx={{
-                    width: 90,
-                    height: 90,
-                    minWidth: 90,
-                    minHeight: 90,
+                    width: 100,
+                    height: 100,
+                    minWidth: 100,
+                    minHeight: 100,
                     borderRadius: "50%",
                     backgroundColor: theme.palette.background.lightMint,
                     display: "flex",
@@ -63,8 +63,8 @@ export default function ServiceCards({ services = [], apiUrl = "" }) {
                 <Image
                     src={imageUrl}
                     alt={service.title}
-                    width={60}
-                    height={60}
+                    width={70}
+                    height={70}
                     style={{ objectFit: "contain" }}
                 />
                 </Box>

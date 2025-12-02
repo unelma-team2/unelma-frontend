@@ -1,19 +1,19 @@
 "use client";
 
-import { Card, Box, Typography, Button, Grid, useTheme } from "@mui/material";
+import { Card, Box, Typography, Button, useTheme } from "@mui/material";
 
-export default function ProductCards({ products = [], apiUrl = "" }) {
+export default function ProductCard({ product, apiUrl = "" }) {
   const theme = useTheme();
 
   const cardSx = {
-    height: 560,
-    width: 370,
+    height: 640,
+    width: 345,
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
     paddingTop: 8,
-    paddingBottom: 2,
+    paddingBottom: 4,
     paddingX: 6,
     overflow: "hidden",
   };
@@ -22,94 +22,50 @@ export default function ProductCards({ products = [], apiUrl = "" }) {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    height: 200,
-    width: 200,
-    maxHeight: 200,
-    maxWidth: 200,
-    minHeight: 200,
-    minWidth: 200,
-    paddingBottom: 4,
+    height: 160,
+    width: 160,
+    maxHeight: 160,
+    maxWidth: 160,
+    minHeight: 160,
+    minWidth: 160,
+    paddingBottom: 6,
+    marginBottom: 2,
   };
 
   const imageSx = {
     flexGrow: 1,
-    width: "100%",
-    height: 200,
+    padding: 0.5,
+    maxWidth: "100%",
+    height: 160,
     borderRadius: 50,
-    backgroundColor: "#B7EBEC",
-    objectFit: "fill",
+    objectFit: "contain",
     overflow: "hidden",
     border: `2px solid ${theme.palette.primary.main}`,
-    boxShadow: "inset 0 2px 4px rgba(0, 0, 0, 0.2), 0 2px 4px rgba(0, 0, 0, 0.1)",
+    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
   };
 
+  const imageUrl = product.image?.url
+    ? product.image.url.startsWith("http")
+      ? product.image.url
+      : `${apiUrl}${product.image.url}`
+    : null;
+
   return (
-    <Grid
-      sx={{
-        display: "grid",
-        gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" },
-        gap: 8,
-        justifyItems: "center",
-        alignItems: "center",
-      }}
-    >
-      {products.map((product, i) => {
-        const imageUrl = product.image?.url
-          ? product.image.url.startsWith("http")
-            ? product.image.url
-            : `${apiUrl}${product.image.url}`
-          : null;
+    <Card sx={cardSx}>
+      <Box sx={imageContainerSx}>
+        <Box component="img" src={imageUrl} alt={product.title} sx={imageSx} />
+      </Box>
 
-        return (
-          <Card sx={cardSx} key={i}>
-            <Box sx={imageContainerSx}>
-              <Box
-                component="img"
-                src={imageUrl}
-                alt={product.title}
-                sx={imageSx}
-              />
-            </Box>
+      <Box sx={{ display: "flex", flexDirection: "column", gap: 2.5, flexGrow: 1 }}>
+        <Typography variant="h4" align="center">{product.title}</Typography>
+        <Typography variant="body14reg" sx={{ lineHeight: 1.2, textAlign: "justify", pb: 2 }}>
+          {product.description}
+        </Typography>
+      </Box>
 
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                gap: 2.5,
-                flexGrow: 1,
-              }}
-            >
-              <Typography variant="h3" align="center">
-                {product.title}
-              </Typography>
-
-              <Typography
-                variant="body14med"
-                sx={{
-                  lineHeight: 1.2,
-                  textAlign: "justify",
-                  pb: 2,
-                }}
-              >
-                {product.description}
-              </Typography>
-
-              <Button
-                href={product.link || "/products"}
-                sx={{
-                  alignSelf: "center",
-                  px: 2,
-                  py: 1,
-                  fontSize: 14,
-                }}
-              >
-                {product.link_description}
-              </Button>
-            </Box>
-          </Card>
-        );
-      })}
-    </Grid>
+      <Button href={product.link || "/products"} sx={{ mt: 2, alignSelf: "center", px: 2, py: 1, fontSize: 14 }}>
+        {product.link_description}
+      </Button>
+    </Card>
   );
 }

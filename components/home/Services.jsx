@@ -29,8 +29,13 @@ export default function Services() {
   if (!services) return <p>No Service section found.</p>;
 
   return (
-    <Box sx={{ backgroundColor: theme.palette.background.lightMint, py: 8, px: 4 }}>
-      <Box sx={{ maxWidth: "1200px", mx: "auto" }}>
+    <Box sx={{ backgroundColor: theme.palette.background.lightMint, py: 8, 
+    //px: 4
+     }}>
+      <Box sx={{ 
+        //maxWidth: "1200px", 
+       // mx: "auto" 
+        }}>
         <Typography
           variant="h2"
           align="right"
