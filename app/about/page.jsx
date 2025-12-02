@@ -55,7 +55,7 @@ export default function AboutPage() {
       </Container>
     );
 
-  const {banner_title, banner_description1, banner_description2, banner_description3,banner_image} = bannerSection;
+  const { banner_description1, banner_description2, banner_description3} = bannerSection;
 
   const {welcome_title1, welcome_title2,welcome_title3,welcome_description1, welcome_description2}= welcomeSection;
 
@@ -69,17 +69,26 @@ export default function AboutPage() {
 
   const {promise_title, promise_description1, promise_description2, promise_description3, promise_image}= PromiseSection;
 
+
   const imageUrl = (image) => {
-    const url = image?.data?.attributes?.url;
-    if (!url) return "";
-    return url.startsWith("http") ? url : `${API_URL}${url}`;
+    if (!image) return null;
+  
+    if (image?.data?.attributes?.url) {
+      const url = image.data.attributes.url;
+      return url.startsWith("http") ? url : `${API_URL}${url}`;
+    }
+  
+    if (image?.url) {
+      return image.url.startsWith("http") ? image.url : `${API_URL}${image.url}`;
+    }
+  
+    return null;
   };
   
 
-
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
-      <AboutPageHero />
+      <AboutPageHero bannerSection={bannerSection} imageUrl={imageUrl}/>
 
       <Typography variant="h1" fontSize={"60pt"} align="right" mb={12} gutterBottom>
         {banner_description1}
