@@ -100,6 +100,10 @@ export default function BlogPage() {
     currentPage * postsPerPage
   );
 
+  const uniquePaginatedPosts = Array.from(
+  new Map(paginatedPosts.map(blog => [blog.id, blog])).values()
+);
+
   return (
     <main>
       <BlogPageHero />
@@ -186,9 +190,9 @@ export default function BlogPage() {
           )}
 
           {/* Blog List */}
-          {paginatedPosts.map((blog, index) => (
+          {uniquePaginatedPosts.map((blog, index) => (
             <Box
-              key={blog.id || index}
+              key={blog.id || `${blog.slug}-${blog.createdAt}`}
               sx={{
                 display: "flex",
                 flexDirection: { xs: "column", md: "row" },
@@ -215,15 +219,15 @@ export default function BlogPage() {
               <Box sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
                 <Box sx={{ display: "flex", gap: "1.5rem", alignItems: "center", marginBottom: "0.5rem", fontSize: "0.9rem", color: "#6079F1" }}>
                   <Box sx={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                    <Image src="/icons/calendar.svg" alt="Date" width={20} height={20} />
+                    <Image src="/images/icons/calendar.svg" alt="Date" width={20} height={20} />
                     {formatBlogDate(blog.date || blog.publishedAt)}
                   </Box>
                   <Box sx={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                    <Image src="/icons/author.svg" alt="Author" width={20} height={20} />
+                    <Image src="images/icons/author.svg" alt="Author" width={20} height={20} />
                     {blog.author_name || "Author's Name"}
                   </Box>
                   <Box sx={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                    <Image src="/icons/category.svg" alt="Category" width={20} height={20} />
+                    <Image src="/images/icons/category.svg" alt="Category" width={20} height={20} />
                     {blog.category || "Category"}
                   </Box>
                 </Box>

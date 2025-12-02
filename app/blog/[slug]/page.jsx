@@ -171,7 +171,7 @@ export default function SingleBlogPage() {
                   sx={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
                 >
                   <Image
-                    src="/icons/calendar.svg"
+                    src="/images/icons/calendar.svg"
                     alt="Date"
                     width={20}
                     height={20}
@@ -182,7 +182,7 @@ export default function SingleBlogPage() {
                   sx={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
                 >
                   <Image
-                    src="/icons/author.svg"
+                    src="/images/icons/author.svg"
                     alt="Author"
                     width={20}
                     height={20}
@@ -193,7 +193,7 @@ export default function SingleBlogPage() {
                   sx={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
                 >
                   <Image
-                    src="/icons/category.svg"
+                    src="/images/icons/category.svg"
                     alt="Category"
                     width={20}
                     height={20}

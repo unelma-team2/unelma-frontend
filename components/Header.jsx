@@ -105,7 +105,7 @@ export default function Header() {
                 alignItems: "center",
                 backgroundColor: theme.palette.background.paper,
                 px: 1.5,
-                gap: 4
+                gap: 3
               }}
             >
               <Box
@@ -257,7 +257,7 @@ export default function Header() {
               style={{ textDecoration: "none", color: "inherit" }}
             >
               <Typography
-                variant="body14med"
+                variant="body14bold"
                 sx={{
                   textTransform: "uppercase",
                   textAlign: "center",
