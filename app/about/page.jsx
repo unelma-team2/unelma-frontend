@@ -9,8 +9,8 @@ import { useEffect, useState } from "react";
 
 export default function AboutPage() {
   const theme = useTheme();
-  //  const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
-   const API_URL = "http://localhost:1337";
+   const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
+  //  const API_URL = "http://localhost:1337";
 
    const [bannerSection, setBannerSection] = useState(null);
    const [welcomeSection, setWelcomeSection] = useState(null);
