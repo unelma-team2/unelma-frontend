@@ -1,13 +1,14 @@
 "use client";
 
 import { Card, Box, Typography, Button, useTheme } from "@mui/material";
+import Link from "next/link";
 
 export default function ProductCard({ product, apiUrl = "" }) {
   const theme = useTheme();
 
   const cardSx = {
     height: 640,
-    width: 345,
+    maxWidth: 345,
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -56,16 +57,39 @@ export default function ProductCard({ product, apiUrl = "" }) {
         <Box component="img" src={imageUrl} alt={product.title} sx={imageSx} />
       </Box>
 
-      <Box sx={{ display: "flex", flexDirection: "column", gap: 2.5, flexGrow: 1 }}>
-        <Typography variant="h4" align="center">{product.title}</Typography>
-        <Typography variant="body14reg" sx={{ lineHeight: 1.2, textAlign: "justify", pb: 2 }}>
+      <Box
+        sx={{ display: "flex", flexDirection: "column", gap: 2.5, flexGrow: 1 }}
+      >
+        <Typography variant="h4" align="center">
+          {product.title}
+        </Typography>
+        <Typography
+          variant="body14reg"
+          sx={{ lineHeight: 1.2, textAlign: "justify", pb: 2 }}
+        >
           {product.description}
         </Typography>
       </Box>
 
-      <Button href={product.link || "/products"} sx={{ mt: 2, alignSelf: "center", px: 2, py: 1, fontSize: 14 }}>
-        {product.link_description}
-      </Button>
+      {/* "Buy Online" Button */}
+      <Link href={`/products/${product.slug}`} passHref>
+        <Button
+          sx={{
+            mt: 2,
+            alignSelf: "center",
+            px: 2,
+            py: 1,
+            fontSize: 14,
+            backgroundColor: theme.palette.primary.main,
+            color: "#fff",
+            "&:hover": {
+              backgroundColor: theme.palette.primary.dark,
+            },
+          }}
+        >
+          Buy Online
+        </Button>
+      </Link>
     </Card>
   );
 }
