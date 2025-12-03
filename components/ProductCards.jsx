@@ -7,8 +7,8 @@ export default function ProductCard({ product, apiUrl = "" }) {
   const theme = useTheme();
 
   const cardSx = {
-    height: 640,
-    maxWidth: 345,
+    height: 450,
+    width: 300,
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -60,14 +60,21 @@ export default function ProductCard({ product, apiUrl = "" }) {
       <Box
         sx={{ display: "flex", flexDirection: "column", gap: 2.5, flexGrow: 1 }}
       >
-        <Typography variant="h4" align="center">
+        {/* Centered Title */}
+        <Typography variant="h4" align="center" sx={{ textAlign: "center" }}>
           {product.title}
         </Typography>
+
+        {/* Centered Description */}
         <Typography
           variant="body14reg"
-          sx={{ lineHeight: 1.2, textAlign: "justify", pb: 2 }}
+          sx={{
+            lineHeight: 1.2,
+            textAlign: "center", // Center the description text
+            pb: 2,
+          }}
         >
-          {product.description}
+          {product.product_type}
         </Typography>
       </Box>
 

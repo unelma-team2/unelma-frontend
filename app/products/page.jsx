@@ -17,7 +17,7 @@ import {
   TextField,
 } from "@mui/material";
 import ProductCard from "@/components/ProductCards";
-import ServiceCards from "@/components/ServiceCards"; // Import ServicesCards component
+import ServiceCards from "@/components/ServiceCards"; 
 
 export default function ProductsPage() {
   const theme = useTheme();
