@@ -1,21 +1,52 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { Box, Container, Typography, Button, Rating, IconButton, TextField } from "@mui/material";
+import {
+  Box,
+  Container,
+  Typography,
+  Button,
+  Rating,
+  IconButton,
+  TextField,
+  Grid,
+} from "@mui/material";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ProductsSinglePageHero from "@/components/products/ProductsSinglePageHero";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import ProductCard from "@/components/ProductCards";
+import axios from "axios";
 
 export default function ProductPage() {
-  const { productSlug } = useParams(); // Get the slug from the dynamic route
+  const { productSlug } = useParams();
 
   const productData = {
     name: "UnelmaMail",
-    shortDescription: "Revolutionize email marketing with AI-powered campaigns.",
-    detailedDescription:
-      "Unleash the full potential of your email marketing with UnelmaMail! Harness the power of AI to secure the edge your business needs in today's competitive marketing landscape. Our platform is packed with advanced features, user-friendly design, and unprecedented efficiencies to support your unique business needs.",
+    product_type: "Email Marketing Software",
+    detailedDescription: `
+Meet UnelmaMail — the world’s first AI-powered, all-in-one email marketing automation platform designed to simplify how you reach and engage your audience. Built by Unelma Platforms, it blends powerful features, automation, and intelligent analytics into a user-friendly SaaS solution for businesses of any size.
+
+What UnelmaMail offers:
+- Comprehensive mailing list & contact management — handle single or double opt-in flows, import/export contacts, segment lists, manage subscriptions, and blacklist unwanted addresses to keep your lists clean.
+- Flexible Email Builder & Templates — use the responsive editor and choose from dozens of pre-built layouts, or import your own email designs, to create attractive campaigns without coding.
+- Automation & Autoresponders — trigger campaigns or follow-up emails based on subscriber behavior (opens, clicks), subscription events, or recurring schedules. Great for drip sequences, newsletters, or engagement follow-ups.
+- Full delivery tracking & analytics — monitor opens, clicks, bounces, complaints; get real-time reports and insights on performance, list growth, and campaign effectiveness right from the dashboard.
+- API & third-party integrations — integrate UnelmaMail with your websites or applications via RESTful API; works with major sending services such as Amazon SES, SendGrid, SparkPost, and Elastic Email — giving you flexibility and scalability.
+- Easy start & affordable pricing — try the platform with a free plan supporting up to 2,500 contacts. Paid plans start affordably (e.g., a standard plan at $7.99 per month), with higher tiers and enterprise-ready options available for growing businesses.
+- Open-source foundation — built using open-source technologies under a flexible framework, making maintenance easier and allowing for custom developments as business needs evolve.
+- Support & long-term reliability — backed by Unelma Platforms’ commitment to support, maintenance, security updates, and bug fixes — giving you peace of mind as your campaigns scale.
+
+Who is UnelmaMail for?
+Whether you’re a solo entrepreneur, a marketing professional, or an enterprise-level company, UnelmaMail is built to suit your needs. It’s ideal if you want:
+- A unified platform for managing your email marketing from list building to campaign analytics.
+- Easy-to-use tools without needing deep technical skills — but with power available when you need it.
+- Reliable software with active updates, technical support, and scalability for growing businesses.
+- A cost-effective solution that works with composing an ROI-driven campaign strategy.
+
+UnelmaMail SoftwareLive consumer software version is available at https://unelmamail.com.
+`,
     price: "$49.90",
     image: "/images/products/unelmamail-image.png",
     logo: "/images/products/unelmamail-logo.png",
@@ -26,9 +57,9 @@ export default function ProductPage() {
     ],
   };
 
-  const [rating, setRating] = useState(0); 
+  const [rating, setRating] = useState(0);
 
-  const [quantity, setQuantity] = useState(1); 
+  const [quantity, setQuantity] = useState(1);
   // State to manage favorite status
   const [isFavorite, setIsFavorite] = useState(false);
 
@@ -37,19 +68,33 @@ export default function ProductPage() {
 
   const [relatedItems, setRelatedItems] = useState([]); // State for related items
 
-  useEffect(() => {
-    // Mock data for related items
-    const mockRelatedItems = [
-      { id: 1, name: "Related Product 1", image: "/images/products/related-item1.png" },
-      { id: 2, name: "Related Product 2", image: "/images/products/related-item2.png" },
-      { id: 3, name: "Related Product 3", image: "/images/products/related-item3.png" },
-    ];
+   const API_URL =
+    process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
 
-    // Simulate API call delay
-    setTimeout(() => {
-      setRelatedItems(mockRelatedItems); // Use mock data
-    }, 500); // Simulate a delay of 500ms
-  }, []);
+  useEffect(() => {
+    // Fetch all products from the backend
+    axios
+      .get(`${API_URL}/api/home?populate[Products][populate]=*`)
+      .then((res) => {
+        const allProducts = res.data.data?.Products || [];
+
+        // Filter out the current product
+        const filteredProducts = allProducts.filter(
+          (item) => item.slug !== productSlug
+        );
+
+        // Function to pick random 3 items
+        const getRandomItems = (items, count) => {
+          const shuffled = items.sort(() => 0.5 - Math.random()); // Shuffle the array
+          return shuffled.slice(0, count); // Return the first 'count' items
+        };
+
+        // Set related items to random 3 products
+        setRelatedItems(getRandomItems(filteredProducts, 3));
+      })
+      .catch((err) => console.error("Error fetching products:", err));
+  }, [API_URL, productSlug]);
+
   const handleRatingChange = (newValue) => {
     setRating(newValue);
     console.log("Rating submitted:", newValue);
@@ -61,7 +106,11 @@ export default function ProductPage() {
 
   const toggleFavorite = () => {
     setIsFavorite(!isFavorite);
-    console.log(`${productData.name} is ${!isFavorite ? "added to" : "removed from"} favorites.`);
+    console.log(
+      `${productData.name} is ${
+        !isFavorite ? "added to" : "removed from"
+      } favorites.`
+    );
   };
 
   const handleImageClick = (image) => {
@@ -76,7 +125,7 @@ export default function ProductPage() {
       {/* Breadcrumb */}
       <Box sx={{ mt: 4, mb: 2 }}>
         <Typography variant="h6" sx={{ color: "#555", fontWeight: "bold" }}>
-          Products {'>'} {productData.name}
+          Products {">"} {productData.name}
         </Typography>
       </Box>
 
@@ -85,24 +134,67 @@ export default function ProductPage() {
         {/* Product Image and Detailed Description (Left) */}
         <Box sx={{ flex: 1, display: "flex", flexDirection: "column", gap: 4 }}>
           {/* Main Image */}
-          <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
             <Image
               src={selectedImage}
               alt={productData.name}
               width={665}
               height={401}
-              style={{ borderRadius: "8px", boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)" }}
+              style={{
+                borderRadius: "8px",
+                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+              }}
             />
           </Box>
 
           {/* Detailed Description */}
-          <Box>
-            <Typography variant="h6" sx={{ fontWeight: "bold", mb: 2 }}>
-              Product Description
-            </Typography>
-            <Typography variant="body1" sx={{ color: "#555" }}>
-              {productData.detailedDescription}
-            </Typography>
+          <Box
+            sx={{
+              padding: "16px",
+              border: "1px solid #ccc",
+              borderRadius: "8px",
+              backgroundColor: "#f9f9f9",
+            }}
+          >
+            <Typography
+              variant="body1"
+              sx={{ color: "#555", whiteSpace: "pre-line" }}
+              dangerouslySetInnerHTML={{
+                __html: `
+                  Meet UnelmaMail — the world’s first AI-powered, all-in-one email marketing automation platform designed to simplify how you reach and engage your audience. Built by Unelma Platforms, it blends powerful features, automation, and intelligent analytics into a user-friendly SaaS solution for businesses of any size.
+
+                  <strong>What UnelmaMail offers</strong>
+
+                  - <strong>Comprehensive mailing list & contact management</strong> — handle single or double opt-in flows, import/export contacts, segment lists, manage subscriptions, and blacklist unwanted addresses to keep your lists clean.
+                  - <strong>Flexible Email Builder & Templates</strong> — use the responsive editor and choose from dozens of pre-built layouts, or import your own email designs, to create attractive campaigns without coding.
+                  - <strong>Automation & Autoresponders</strong> — trigger campaigns or follow-up emails based on subscriber behavior (opens, clicks), subscription events, or recurring schedules. Great for drip sequences, newsletters, or engagement follow-ups.
+                  - <strong>Full delivery tracking & analytics</strong> — monitor opens, clicks, bounces, complaints; get real-time reports and insights on performance, list growth, and campaign effectiveness right from the dashboard.
+                  - <strong>API & third-party integrations</strong> — integrate UnelmaMail with your websites or applications via RESTful API; works with major sending services such as Amazon SES, SendGrid, SparkPost, and Elastic Email — giving you flexibility and scalability. 
+                  - <strong>Easy start & affordable pricing</strong> — try the platform with a free plan supporting up to 2,500 contacts. Paid plans start affordably (e.g. a standard plan at $7.99 per month), with higher tiers and enterprise-ready options available for growing businesses.
+                  - <strong>Open-source foundation</strong> — built using open-source technologies under a flexible framework, making maintenance easier and allowing for custom developments as business needs evolve.
+                  - <strong>Support & long-term reliability</strong> — backed by Unelma Platforms’ commitment to support, maintenance, security updates and bug fixes — giving you peace of mind as your campaigns scale. 
+
+                  <strong>Who is UnelmaMail for?</strong>
+
+                  Whether you’re a solo entrepreneur, a marketing professional, or an enterprise-level company, UnelmaMail is built to scale with your needs. It’s ideal if you want:
+
+                  - A unified platform for managing your email marketing from list building to campaign analytics.
+                  - Easy-to-use tools without needing deep technical skills — but with power available when you need it.
+                  - Flexible integration with existing systems, thanks to API support and compatibility with major email sending services.
+                  - Cost-effective email marketing without compromising on automation or analytics.
+
+                  With UnelmaMail, you do more than send emails — you build dynamic, data-driven campaigns that engage, convert, and grow with your business.
+
+                  UnelmaMail SoftwareLive consumer software version is publicly available at: <strong>https://unelmamail.com/</strong>
+                `,
+              }}
+            />
           </Box>
 
           {/* Gallery Section */}
@@ -136,42 +228,40 @@ export default function ProductPage() {
         {/* Product Logo, Short Description, and Pricing (Right) */}
         <Box sx={{ flex: 1, display: "flex", flexDirection: "column", gap: 2 }}>
           {/* Product Logo */}
-          <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", mb: 2 }}>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              mb: 2,
+            }}
+          >
             <Image
               src={productData.logo}
               alt={`${productData.name} Logo`}
               width={301}
               height={47}
             />
-          </Box>
-
-          {/* Short Description */}
-          <Typography variant="body1" sx={{ color: "#555", mb: 2 }}>
-            {productData.shortDescription}
-          </Typography>
-
-          {/* Category Box */}
-          <Box
-            sx={{
-              display: "inline-flex",
-              alignItems: "center",
-              justifyContent: "center",
-              border: "2px solid #000",
-              borderRadius: "30px",
-              padding: "4px 16px",
-              fontWeight: "bold",
-              textAlign: "center",
-              color: "#000",
-              backgroundColor: "#fff",
-              boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-              mb: 2,
-            }}
-          >
-            {productData.category}
+            {/* Product Type */}
+            <Typography
+              variant="body1"
+              sx={{
+                color: "#555",
+                fontWeight: "bold",
+                textAlign: "center",
+                mt: 1, // Add spacing between logo and product type
+              }}
+            >
+              {productData.product_type}
+            </Typography>
           </Box>
 
           {/* Product Name */}
-          <Typography variant="h5" sx={{ fontWeight: "bold", textAlign: "center", mb: 1 }}>
+          <Typography
+            variant="h5"
+            sx={{ fontWeight: "bold", textAlign: "center", mb: 1 }}
+          >
             {productData.name}
           </Typography>
 
@@ -188,23 +278,48 @@ export default function ProductPage() {
           </Box>
 
           {/* Price */}
-          <Typography variant="h4" sx={{ color: "black", fontWeight: "bold", textAlign: "center", mb: 2 }}>
+          <Typography
+            variant="h4"
+            sx={{
+              color: "black",
+              fontWeight: "bold",
+              textAlign: "center",
+              mb: 2,
+            }}
+          >
             {productData.price}
           </Typography>
 
           {/* Quantity Controller, Add to Cart, and Favorite Button */}
-          <Box sx={{ display: "flex", gap: 2, justifyContent: "center", alignItems: "center", mt: 2 }}>
+          <Box
+            sx={{
+              display: "flex",
+              gap: 2,
+              justifyContent: "center",
+              alignItems: "center",
+              mt: 2,
+            }}
+          >
             <TextField
               type="number"
               value={quantity}
-              onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
+              onChange={(e) =>
+                setQuantity(Math.max(1, parseInt(e.target.value) || 1))
+              }
               sx={{ width: "60px" }}
               inputProps={{ min: 1 }}
             />
-            <Button variant="contained" color="primary" onClick={() => console.log(`Added ${quantity} to cart`)}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => console.log(`Added ${quantity} to cart`)}
+            >
               Add to Cart
             </Button>
-            <IconButton onClick={() => setIsFavorite(!isFavorite)} color="secondary">
+            <IconButton
+              onClick={() => setIsFavorite(!isFavorite)}
+              color="secondary"
+            >
               {isFavorite ? <FavoriteIcon /> : <FavoriteBorderIcon />}
             </IconButton>
           </Box>
@@ -223,33 +338,13 @@ export default function ProductPage() {
         <Typography variant="h6" sx={{ fontWeight: "bold", mb: 2 }}>
           Related Items
         </Typography>
-        <Box sx={{ display: "flex", gap: 2, justifyContent: "center" }}>
+        <Grid container spacing={4}>
           {relatedItems.map((item) => (
-            <Box
-              key={item.id}
-              sx={{
-                border: "1px solid #ccc",
-                borderRadius: "8px",
-                padding: 2,
-                textAlign: "center",
-                width: "150px",
-                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-                cursor: "pointer",
-              }}
-            >
-              <Image
-                src={item.image}
-                alt={item.name}
-                width={100}
-                height={100}
-                style={{ objectFit: "cover", borderRadius: "50%" }}
-              />
-              <Typography variant="body1" sx={{ fontWeight: "bold", mt: 1 }}>
-                {item.name}
-              </Typography>
-            </Box>
+            <Grid item xs={12} sm={6} md={4} key={item.id}>
+              <ProductCard product={item} apiUrl={API_URL} />
+            </Grid>
           ))}
-        </Box>
+        </Grid>
       </Box>
     </Container>
   );
