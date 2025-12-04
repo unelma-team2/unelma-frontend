@@ -32,7 +32,7 @@ export default function ContactPage() {
   const [feedbackForm, setFeedbackForm] = useState(null);
 
   const [formData, setFormData] = useState({
-    contactType: "",
+    contactType: "Message/question",
   });
 
   const countryCodes = [
