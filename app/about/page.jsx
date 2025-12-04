@@ -18,7 +18,8 @@ export default function AboutPage() {
    const [philosophySection, setPhilosophySection] = useState(null);
    const [networkSection, setNetworkSection] = useState(null);
    const [innovationSection, setInnovationSection] = useState(null);
-   const [PromiseSection, setPromiseSection] = useState(null);
+   const [promiseSection, setPromiseSection] = useState(null);
+   const [imageList, setImageList] = useState(null);
    const [loading, setLoading] = useState(true);
    const [error, setError] = useState(null);
 
@@ -26,7 +27,7 @@ export default function AboutPage() {
     setLoading(true);
     axios
       .get(
-        `${API_URL}/api/about?populate[AboutBannerSection][populate]=*&populate[WelcomeSection]=*&populate[BulletPoints]=*&populate[PhilosophySection]=*&populate[NetworkSection][populate]=*&populate[InnovationSection]=*&populate[PromiseSection][populate]=*`
+        `${API_URL}/api/about?populate[AboutBannerSection][populate]=*&populate[WelcomeSection]=*&populate[BulletPoints]=*&populate[PhilosophySection]=*&populate[NetworkSection][populate]=*&populate[InnovationSection]=*&populate[PromiseSection][populate]=*&populate[AboutImageList][populate]=*`
       )
       .then((res) => {
         const data = res.data?.data || {};
@@ -37,6 +38,7 @@ export default function AboutPage() {
         setNetworkSection(data.NetworkSection || null);
         setInnovationSection(data.InnovationSection || null);
         setPromiseSection(data.PromiseSection || null);
+        setImageList(data.AboutImageList || null);
         setLoading(false);
       })
       .catch((err) => {
@@ -47,7 +49,7 @@ export default function AboutPage() {
   }, [API_URL]);
 
   if (loading)
-    return <Container sx={{ py: 8 }}>Loading contact page...</Container>;
+    return <Container sx={{ py: 8 }}>Loading about page...</Container>;
   if (error)
     return (
       <Container sx={{ py: 8 }}>
@@ -63,27 +65,31 @@ export default function AboutPage() {
 
   const {philosophy_title, philosophy_description1, philosophy_description2}= philosophySection;
 
-  const {network_title, network_description1, network_description2, network_image}= networkSection;
+  const {network_title, network_description1, network_description2, video_image, network_image}= networkSection;
 
   const {innovation_title1, innovation_title2, innovation_description1, innovation_description2,innovation_description3 }= innovationSection;
 
-  const {promise_title, promise_description1, promise_description2, promise_description3, promise_image}= PromiseSection;
+  const {promise_title, promise_description1, promise_description2, promise_description3, promise_image}= promiseSection;
 
 
   const imageUrl = (image) => {
+
     if (!image) return null;
   
-    if (image?.data?.attributes?.url) {
-      const url = image.data.attributes.url;
+    const img = Array.isArray(image) ? image[0] : image;
+  
+    if (img?.data?.attributes?.url) {
+      const url = img.data.attributes.url;
       return url.startsWith("http") ? url : `${API_URL}${url}`;
     }
   
-    if (image?.url) {
-      return image.url.startsWith("http") ? image.url : `${API_URL}${image.url}`;
+    if (img?.url) {
+      return img.url.startsWith("http") ? img.url : `${API_URL}${img.url}`;
     }
   
     return null;
   };
+  
   
 
   return (
@@ -182,7 +188,7 @@ export default function AboutPage() {
           <Box sx={{ position: "absolute", top: 2000, width: "100%" }}>
             <Box
               component="img"
-              src="/images/about/video-image.png"
+              src={imageUrl(video_image)}
               alt="Team"
               sx={{ width: "100%", borderRadius: "10px" }}
             />
@@ -196,7 +202,7 @@ export default function AboutPage() {
             alt="Images of Team and Workspaces"
             sx={{ position: "absolute", top: 0, display: "flex", justifyContent: "flex-end", right: 0, width: "100%", borderRadius: "10px" }}
           >
-            <AboutImageList />
+            <AboutImageList imageUrl={imageUrl} imageList={imageList}/>
           </Box>
 
           {/* Products */}
@@ -229,7 +235,7 @@ export default function AboutPage() {
           {/* Map Image */}
           <Box
             component="img"
-            src="/images/about/map.png"
+            src={imageUrl(network_image)}
             alt="Global Map"
             sx={{
               position: "absolute",
@@ -267,7 +273,7 @@ export default function AboutPage() {
             </Box>
          <Box
             component="img"
-            src={"/images/about/signature.png"}
+            src={imageUrl(promise_image)}
             alt="Signature"
             sx={{
               position: "absolute",

@@ -1,84 +1,147 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import ProductsPageHero from "@/components/products/ProductsPageHero";
-import { Box, Container, Tabs, Tab, useTheme, Select, MenuItem, FormControl, InputLabel, Menu } from "@mui/material";
-
-const data = [
-  // Your data here
-];
-
+import {
+  Box,
+  Tabs,
+  Tab,
+  useTheme,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Grid,
+  Typography,
+  TextField,
+} from "@mui/material";
+import ProductCard from "@/components/ProductCards";
+import ServiceCards from "@/components/ServiceCards"; 
 
 export default function ProductsPage() {
   const theme = useTheme();
-  const [tab, setTab] = useState(0);
-  const [subTab, setSubTab] = useState(0);
+  const [tab, setTab] = useState(0); // Main tabs: Products, Services
+  const [subTab, setSubTab] = useState(0); // Subtabs for categories
   const [searchQuery, setSearchQuery] = useState("");
-  const [sortBy, setSortBy] = useState("");
-  
-  const handleTabChange = (event, newValue) => {setTab(newValue);
-    setSubTab(0);
+  const [sortBy, setSortBy] = useState(""); // State for sorting option
+  const [products, setProducts] = useState([]);
+  const [services, setServices] = useState([]); // State for services data
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const API_URL =
+    process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
+
+  useEffect(() => {
+    // Fetch products data
+    axios
+      .get(`${API_URL}/api/home?populate[Products][populate]=*`)
+      .then((res) => {
+        console.log("Products API Response:", res.data.data?.Products); // Debug the API response
+        setProducts(res.data.data?.Products || []);
+      })
+      .catch((err) => setError(err))
+      .finally(() => setLoading(false));
+  }, [API_URL]);
+
+  useEffect(() => {
+    // Fetch services data
+    axios
+      .get(`${API_URL}/api/home?populate[Services][populate]=*`)
+      .then((res) => {
+        console.log("Services API Response:", res.data.data?.Services); // Debug the API response
+        setServices(res.data.data?.Services || []);
+      })
+      .catch((err) => setError(err))
+      .finally(() => setLoading(false));
+  }, [API_URL]);
+
+  const handleTabChange = (event, newValue) => {
+    setTab(newValue);
+    setSubTab(0); // Reset subtabs when switching main tabs
   };
-  
+
   const handleSubTabChange = (event, newValue) => {
     setSubTab(newValue);
   };
-  
+
   const handleSortChange = (event) => {
     setSortBy(event.target.value);
   };
-  
-  const sortedData = [...data].sort((a, b) => {
-    if (sortBy === "newest") return new Date(b.date) - new Date(a.date);
-    if (sortBy === "oldest") return new Date(a.date) - new Date(b.date);
+
+  // Subtabs for Products and Services
+  const productsSubTabs = [
+    "All",
+    "Enterprise Software",
+    "Open Source",
+    "E-Commerce",
+    "Accessories",
+  ];
+  const servicesSubTabs = [
+    "All",
+    "Web Development",
+    "Website Design",
+    "Mobile Development",
+    "Cyber Support",
+  ];
+
+  // Filter products based on searchQuery
+  const filteredProducts = searchQuery
+    ? products.filter((product) =>
+        product.title?.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : products; // Show all products if searchQuery is empty
+
+  // Filter services based on searchQuery
+  const filteredServices = searchQuery
+    ? services.filter((service) =>
+        service.title?.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : services; // Show all services if searchQuery is empty
+
+  // Sort products or services based on sortBy
+  const sortedProducts = [...filteredProducts].sort((a, b) => {
+    if (sortBy === "newest") return new Date(b.createdAt) - new Date(a.createdAt);
+    if (sortBy === "oldest") return new Date(a.createdAt) - new Date(b.createdAt);
     if (sortBy === "low-to-high") return a.price - b.price;
     if (sortBy === "high-to-low") return b.price - a.price;
-    return 0;
+    return 0; // Default: no sorting
   });
 
+  const sortedServices = [...filteredServices].sort((a, b) => {
+    if (sortBy === "newest") return new Date(b.createdAt) - new Date(a.createdAt);
+    if (sortBy === "oldest") return new Date(a.createdAt) - new Date(b.createdAt);
+    if (sortBy === "low-to-high") return a.price - b.price;
+    if (sortBy === "high-to-low") return b.price - a.price;
+    return 0; // Default: no sorting
+  });
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error.message}</p>;
+
   return (
-    <Container maxWidth="lg" sx={{ py: 4 }}>
+    <Box sx={{ py: 4, px: 2 }}>
       <ProductsPageHero />
-      <Box
-        sx={{ flex: 1, display: "flex", flexDirection: "column", gap: "2rem" }}
-      >
-        <Tabs
-          value={tab}
-          onChange={handleTabChange}
-          sx={{ mb: 2 }}
-        >
+
+      {/* Tabs Section */}
+      <Box sx={{ mb: 4 }}>
+        <Tabs value={tab} onChange={handleTabChange}>
           <Tab label="Products" />
           <Tab label="Services" />
         </Tabs>
 
-        {tab === 0 && (
-          <Tabs
-          value={subTab}
-          onChange={handleSubTabChange}
-          sx={{ mb: 2 }}
-        >
-          <Tab label="All" />
-          <Tab label="Enterprise Software" />
-          <Tab label="Open Source" />
-          <Tab label="E-Commerce" />
-          <Tab label="Accessories" />
-        </Tabs>
-        )}
-        {tab === 1 && (
-          <Tabs
-          value={subTab}
-          onChange={handleSubTabChange}
-          sx={{ mb: 2 }}
-          >
-          <Tab label="All" />
-          <Tab label="Web Development" />
-          <Tab label="Website Design" />
-          <Tab label="Mobile Development" />
-          <Tab label="Cyber Support" />
+        {/* Subtabs Section */}
+        <Box sx={{ mt: 2, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <Tabs value={subTab} onChange={handleSubTabChange}>
+            {(tab === 0 ? productsSubTabs : servicesSubTabs).map(
+              (label, index) => (
+                <Tab key={index} label={label} />
+              )
+            )}
           </Tabs>
-        )}
 
-        <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 2 }}>
+          {/* Sort Dropdown */}
           <FormControl sx={{ minWidth: 200 }}>
             <InputLabel id="sort-by-label">Sort by</InputLabel>
             <Select
@@ -90,36 +153,59 @@ export default function ProductsPage() {
               <MenuItem value="">None</MenuItem>
               <MenuItem value="newest">Newest</MenuItem>
               <MenuItem value="oldest">Oldest</MenuItem>
-              <MenuItem value="low-to-high">High Price</MenuItem>
-              <MenuItem value="high-to-low">Low Price</MenuItem>
+              <MenuItem value="low-to-high">Low Price</MenuItem>
+              <MenuItem value="high-to-low">High Price</MenuItem>
             </Select>
           </FormControl>
         </Box>
-
-        <Box
-          sx={{
-            border: `2px solid ${theme.palette.primary.main}`,
-            borderRadius: "8px",
-            padding: "1rem",
-            background: "#fff",
-          }}
-        >
-          <h3 style={{ marginBottom: "1rem", fontWeight: 700 }}>Search</h3>
-          <input
-            type="text"
-            placeholder="Search"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            style={{
-              width: "100%",
-              padding: "0.5rem",
-              borderRadius: "6px",
-              border: `2px solid ${theme.palette.primary.main}`,
-            }}
-          />
-        </Box>
-        
       </Box>
-    </Container>
+
+      {/* Main Content Section */}
+      <Grid container spacing={3}>
+        {/* Left Column: Search Box */}
+        <Grid item xs={12} md={3}>
+          <Box
+            sx={{
+              border: `2px solid ${theme.palette.primary.main}`,
+              borderRadius: "8px",
+              padding: "1rem",
+              background: "#fff",
+            }}
+          >
+            <Typography variant="h3" sx={{ marginBottom: "1rem" }}>
+              Search
+            </Typography>
+            <TextField
+              fullWidth
+              placeholder={`Search ${tab === 0 ? "products" : "services"}`}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              sx={{
+                borderRadius: "6px",
+                "& .MuiOutlinedInput-root": {
+                  border: `2px solid ${theme.palette.primary.main}`,
+                  boxShadow: "0px 2px 4px rgba(0,0,0,0.1)",
+                },
+              }}
+            />
+          </Box>
+        </Grid>
+
+        {/* Right Column: Cards */}
+        <Grid item xs={12} md={9}>
+          {tab === 0 ? (
+            <Grid container spacing={4}>
+              {sortedProducts.map((product) => (
+                <Grid item xs={12} sm={4} md={4} lg={4} key={product.id}>
+                  <ProductCard product={product} apiUrl={API_URL} />
+                </Grid>
+              ))}
+            </Grid>
+          ) : (
+            <ServiceCards services={sortedServices} apiUrl={API_URL} />
+          )}
+        </Grid>
+      </Grid>
+    </Box>
   );
 }
