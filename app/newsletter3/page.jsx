@@ -37,7 +37,7 @@ export default function SubscriptionBox() {
                 EMAIL: {
                   required: true,
                   email: true,
-                  remote: "https://core.unelmamail.com/lists/691d96ff827d9/check-email"
+                  remote: "${process.env.NEXT_PUBLIC_VALIDATE_EMAIL_URL}"
                 },
               }
             });
@@ -77,7 +77,7 @@ export default function SubscriptionBox() {
       </Typography>
 
       <form
-        action="https://core.unelmamail.com/lists/691d96ff827d9/691d89899267f/embedded-form-subscribe-captcha"
+        action={process.env.NEXT_PUBLIC_EMBEDDED_FORM_URL}
         method="POST"
         className="form-validate-jqueryz"
       >
@@ -85,7 +85,7 @@ export default function SubscriptionBox() {
         <input
           type="hidden"
           name="redirect_url"
-          value="http://localhost:3000/newsletter3/thankyou-page"
+          value={process.env.NEXT_PUBLIC_REDIRECT_URL}
         />
         <Box sx={{ mb: 2 }}>
           <Typography
