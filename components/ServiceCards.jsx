@@ -28,12 +28,14 @@ export default function ServiceCards({ services = [], apiUrl = "" }) {
           >
             <Card
             sx={{
-                width: 345,
-                height: 450,
+                width: 300,
+                height: 500,
                 p: 2,
                 textAlign: "center",
                 display: "flex",
                 flexDirection: "column",
+                boxShadow: `-10px -8px 0px ${theme.palette.primary.blue}`,
+                mt: 2,
             }}
             >
             <CardContent

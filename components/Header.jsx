@@ -40,7 +40,10 @@ export default function Header() {
         backgroundColor: (theme) => theme.palette.background.default,
         color: (theme) => theme.palette.text.primary,
         boxShadow: "none",
-        padding: { xs: 1, md: 4 }
+        padding: { xs: 1, md: 4 },
+        //mt: 6,
+        //mb: 6
+        mt: 12,
       }}
     >
       <Toolbar

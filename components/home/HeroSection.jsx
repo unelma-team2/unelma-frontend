@@ -34,8 +34,8 @@ export default function HeroSection({ heroSection }) {
           position: "relative",
           width: "100%",
           zIndex: 1,
-          WebkitMaskImage: "linear-gradient(to bottom, black 30%, transparent 100%)",
-            maskImage: "linear-gradient(to bottom, black 30%, transparent 100%)",
+          WebkitMaskImage: "linear-gradient(to bottom, black 20%, transparent 100%)",
+            maskImage: "linear-gradient(to bottom, black 20%, transparent 100%)",
           
         }}
       >

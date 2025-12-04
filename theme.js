@@ -7,13 +7,27 @@ const bodyFont = "var(--font-outfit), sans-serif";
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#2F2E2E", 
-      mint: "#90F0FF",
-    //  blue: "#6756E3",
-      blue: "#5662e3ff",
-      violet: "#7E3398",
-      pink: "#C55FCB",
-      redOrange: "#ED608A"
+      //main: "#2F2E2E", 
+      //mint: "#90F0FF",
+      //  blue: "#6756E3",
+      // blue: "#5662e3ff",
+      // violet: "#7E3398",
+      // pink: "#C55FCB",
+      // redOrange: "#ED608A"
+      main: "#1D2340",
+      yellow: "#FFC100",
+      orange: "#FF700B",
+      red: "#FF1F4B",
+      pink: "#FF3DA4",
+      violet: "#8D45B4",
+      purple: "#4940CE",
+      blue1: "#0061D2",
+      blue2: "#0089D2",
+      green1: "#77C64B",
+      green2: "#038B61",
+
+
+
     },
     text: {
       primary: "#2F2E2E",
@@ -23,8 +37,11 @@ const theme = createTheme({
     background: {
       default: "#FFFFFF",
       paper: "#FFFFFF",
-      lightMint: "#DDFAFF", 
-      lightBlue: "#E0E7FF",
+      //lightMint: "#DDFAFF", 
+      //lightBlue: "#E0E7FF",
+      lightBlue: "#C9DCFF",
+      lightOrange: "#FEE7C1",
+      lightYellow: "#FFF1C5",
     },
   },
 
@@ -190,7 +207,7 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           border:"2px solid #2F2E2E",
-          borderRadius: 8,
+          borderRadius: 4,
           boxShadow: "0px 2px 4px rgba(0,0,0,0.1)",
         },
       },

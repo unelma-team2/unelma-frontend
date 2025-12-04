@@ -50,16 +50,18 @@ export default function RecentBlogPosts() {
       <Card
         key={id}
         sx={{
-          width: "100%",
+          width: 300,
           minWidth: 300,
-          height: 650,
+          height: 700,
           borderRadius: "10px",
           border: `2px solid ${theme.palette.primary.main}`,
-          boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
+          //boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
+          boxShadow: `-10px -8px 0px ${theme.palette.primary.green}`,
           overflow: "hidden",
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
+          mt: 2,
         }}
       > 
         {/* Image */}
@@ -101,11 +103,11 @@ export default function RecentBlogPosts() {
           <Stack direction="row" spacing={2} mb={4}>
             <Stack direction="row" spacing={0.5} alignItems="center">
               <Image src="/images/icons/icons8-writing-64.png" alt="Author" width={24} height={24} />
-              <Typography variant="bodyreg12" color="#6079F1">Author</Typography>
+              <Typography variant="bodyreg12" color={theme.palette.primary.blue1}>Author</Typography>
             </Stack>
             <Stack direction="row" spacing={0.5} alignItems="center">
-              <Image src="/images/icons/icons8-opened-folder-64.png" alt="Category" width={24} height={24} />
-              <Typography variant="bodyreg12" color="#6079F1">Category</Typography>
+              <Image src="/images/icons/icons8-opened-folder-26.png" alt="Category" width={24} height={24} />
+              <Typography variant="bodyreg12" color={theme.palette.primary.blue1}>Category</Typography>
             </Stack>
           </Stack>
 

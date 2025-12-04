@@ -7,7 +7,7 @@ export default function ProductCard({ product, apiUrl = "" }) {
   const theme = useTheme();
 
   const cardSx = {
-    height: 450,
+    height: 470,
     width: 300,
     display: "flex",
     flexDirection: "column",
@@ -17,6 +17,8 @@ export default function ProductCard({ product, apiUrl = "" }) {
     paddingBottom: 4,
     paddingX: 6,
     overflow: "hidden",
+    boxShadow: `-10px -8px 0px ${theme.palette.primary.blue}`,
+    mt: 2,
   };
 
   const imageContainerSx = {
