@@ -2,6 +2,7 @@
 
 import { Box, Button, Grid, Card, CardContent, Typography, useTheme } from "@mui/material";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function ServiceCards({ services = [], apiUrl = "" }) {
   const theme = useTheme();
@@ -84,16 +85,23 @@ export default function ServiceCards({ services = [], apiUrl = "" }) {
                 </Typography>
 
                 <Button
-                href="/services"
-                sx={{
-                    mt: "auto",     
+                  component={Link}
+                  href={
+                    service.slug
+                      ? `/services/${service.slug}`
+                      : service.title
+                      ? `/services/${service.title.toLowerCase().replace(/\s+/g, "-")}`
+                      : "/services"
+                  }
+                  sx={{
+                    mt: "auto",
                     alignSelf: "center",
                     px: 1.5,
                     py: 0.5,
                     fontSize: 14,
-                }}
+                  }}
                 >
-                Request a Quote
+                  View Service
                 </Button>
             </CardContent>
             </Card>
