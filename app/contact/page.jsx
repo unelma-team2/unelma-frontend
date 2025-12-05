@@ -18,7 +18,9 @@ import MapLocation from "@/components/contact/MapLocation";
 import SocialAndSupport from "@/components/contact/SocialAndSupport";
 
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+// const API_URL = process.env.NEXT_PUBLIC_API_URL;
+const API_URL = "http://localhost:1337";
+
 
 export default function ContactPage() {
 

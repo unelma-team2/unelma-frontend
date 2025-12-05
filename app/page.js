@@ -27,7 +27,8 @@ export default function HomePage() {
   const [error, setError] = useState(null);
 
   const API_URL =
-    process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
+    // process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
+    "http://localhost:1337";
 
   useEffect(() => {
     axios
