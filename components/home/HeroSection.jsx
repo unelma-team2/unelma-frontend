@@ -23,8 +23,8 @@ export default function HeroSection({ heroSection }) {
         position: "relative",
         left: "50%",
         ml: "-50vw",
-        minHeight: 600,
-        overflow: "hidden",
+        minHeight: 600, 
+        //overflow: "hidden",
         bgcolor: theme.palette.background.default,
       }}
     >
@@ -34,8 +34,8 @@ export default function HeroSection({ heroSection }) {
           position: "relative",
           width: "100%",
           zIndex: 1,
-          WebkitMaskImage: "linear-gradient(to bottom, black 20%, transparent 100%)",
-            maskImage: "linear-gradient(to bottom, black 20%, transparent 100%)",
+          WebkitMaskImage: "linear-gradient(to bottom, black 43%, transparent 68%)",
+            maskImage: "linear-gradient(to bottom, black 43%, transparent 68%)",
           
         }}
       >
@@ -70,17 +70,16 @@ export default function HeroSection({ heroSection }) {
 
       {/** ---------------- TITLE ---------------- */}
       <Typography
-        variant="h1"
+        variant="hero"
         sx={{
           position: "absolute",
-          top: "65%",
+          top: "55%",
           right: { xs: 16, md: 0 },
           zIndex: 4,
           width: { xs: "90%", md: "60%" },
           textAlign: "right",
-          //color: theme.palette.text.primary,
-          color: "orange",
-          fontSize: 122,
+          color: theme.palette.primary.violet,
+          //fontSize: 122,
           pr: { xs: 0, md: 4 },
           mr: { xs: 0, md: 17 },
         }}
@@ -92,7 +91,7 @@ export default function HeroSection({ heroSection }) {
       <Box
         sx={{
           position: "absolute",
-          top: "85%",
+          top: "82%",
           right: { xs: 16, md: 0 },
           width: { xs: "90%", md: "30%" },
           zIndex: 4,
@@ -132,12 +131,18 @@ export default function HeroSection({ heroSection }) {
           href={hero_link || "#"}
           underline="none"
           sx={{
-            color: theme.palette.primary.blue || theme.palette.primary.main,
+            mt: 1,
+            color: theme.palette.primary.blue1 || theme.palette.primary.main,
             fontSize: 18,
             fontWeight: 700,
             display: "inline-flex",
             alignItems: "center",
             gap: 0.5,
+              transition: "transform 0.25s ease",
+                            "&:hover": {
+                              transform: "scale(1.1)",
+                              cursor: "pointer",
+                            }
           }}
         >
           {hero_link_description} →

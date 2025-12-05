@@ -37,8 +37,8 @@ export default function Header() {
       position="static"
       elevation={0}
       sx={{
-        backgroundColor: (theme) => theme.palette.background.default,
-        color: (theme) => theme.palette.text.primary,
+        color: theme.palette.primary.main,
+        backgroundColor: theme.palette.background.default,
         boxShadow: "none",
         padding: { xs: 1, md: 4 },
         //mt: 6,
@@ -106,7 +106,6 @@ export default function Header() {
               sx={{
                 display: "flex",
                 alignItems: "center",
-                backgroundColor: theme.palette.background.paper,
                 px: 1.5,
                 gap: 3
               }}
@@ -128,15 +127,14 @@ export default function Header() {
                     maxWidth: 200,
                     "& .MuiOutlinedInput-root": {
                       borderRadius: "6px",
-                      backgroundColor: theme.palette.background.paper,
                       border: "2px solid" + theme.palette.primary.main,
                       "& .MuiOutlinedInput-notchedOutline": { border: "none" },
                       "&:hover .MuiOutlinedInput-notchedOutline": {
-                        border: "2px solid" + theme.palette.primary.blue,
+                        border: "2px solid" + theme.palette.primary.blue1,
                         borderRadius: "4px"
                       },
                       "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                        border: "2px solid" + theme.palette.primary.blue,
+                        border: "2px solid" + theme.palette.primary.blue1,
                         borderRadius: "4px"
                       }
                     },
@@ -156,7 +154,7 @@ export default function Header() {
                             transition: "transform 0.25s ease",
                             "&:hover": {
                               border:
-                                "2px solid" + theme.palette.primary.blue,
+                                "2px solid" + theme.palette.primary.blue1,
                               backgroundColor:
                                 theme.palette.background.lightBlue,
                               transform: "scale(1.1)"
@@ -181,7 +179,7 @@ export default function Header() {
                   onClick={() => signOut()}
                   sx={{
                     backgroundColor: "transparent",
-                    color: theme.palette.text.primary,
+                    color: theme.palette.primary.main,
                     fontSize: "14pt",
                     fontWeight: 600,
                     border: "none",
@@ -200,7 +198,7 @@ export default function Header() {
                   onClick={() => router.push("/login")}
                   sx={{
                     backgroundColor: "transparent",
-                    color: theme.palette.text.primary,
+                    color: theme.palette.primary.main,
                     fontSize: "12pt",
                     fontWeight: 600,
                     border: "none",
@@ -271,7 +269,7 @@ export default function Header() {
                   transition: "transform 0.25s ease, color 0.25s ease",
                   "&:hover": {
                     transform: "scale(1.1)",
-                    color: theme.palette.primary.blue
+                    color: theme.palette.primary.blue1
                   }
                 }}
               >
