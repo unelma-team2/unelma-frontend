@@ -29,7 +29,7 @@ export default function FeedbackCard({ name, message, avatar }) {
         // border: `2px solid ${theme.palette.primary.main}`,
         //borderRadius: 2,
         //0backgroundColor: theme.palette.background.paper,
-        boxShadow: `-10px -8px 0px ${theme.palette.primary.blue}`,
+        boxShadow: `-10px -8px 0px ${theme.palette.primary.blue1}`,
         mt: 2,
       }}
     >

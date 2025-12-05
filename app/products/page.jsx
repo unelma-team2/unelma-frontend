@@ -16,8 +16,8 @@ import {
   Typography,
   TextField,
 } from "@mui/material";
-import ProductCard from "@/components/ProductCards";
-import ServiceCards from "@/components/ServiceCards"; 
+import ProductCard from "@/components/ProductCard";
+import ServiceCards from "@/components/ServiceCard"; 
 
 export default function ProductsPage() {
   const theme = useTheme();

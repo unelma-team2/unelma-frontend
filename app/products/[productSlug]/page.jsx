@@ -16,7 +16,7 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import ProductsSinglePageHero from "@/components/products/ProductsSinglePageHero";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import ProductCard from "@/components/ProductCards";
+import ProductCard from "@/components/ProductCard";
 import axios from "axios";
 
 export default function ProductPage() {

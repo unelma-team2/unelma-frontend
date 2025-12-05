@@ -1,18 +1,21 @@
 "use client";
 
 import React from 'react';
-import { Box, Container, Typography, Stepper, Step, StepLabel } from "@mui/material";
+import { Box, Container, Typography, Stepper, Step, StepLabel, useTheme } from "@mui/material";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import theme from '@/theme';
+
 
 function CustomStepIcon(props) {
+    const theme = useTheme();
+
   return (
     <Box
       sx={{
         backgroundColor: theme.palette.background.default,
         border: `2px solid ${theme.palette.primary.main}`,
         color: theme.palette.primary.main,
+        boxShadow: `-8px -6px 0px ${theme.palette.primary.red}`,
         width: 60,
         height: 60,
         borderRadius: '50%',
@@ -32,6 +35,7 @@ function CustomStepIcon(props) {
 const NullStepConnector = () => <Box sx={{ display: 'none' }} />;
 
 export default function OrderingProcess({orderProcess}) {
+    const theme = useTheme();
 
 //     const [orderProcess, setOrderProcess] = useState([]);
 //     const [error, setError] = useState(null);
@@ -57,9 +61,11 @@ export default function OrderingProcess({orderProcess}) {
         sx={{ 
             paddingTop: { xs: 8, md: 10 }, 
             paddingBottom: { xs: 8, md: 12 },
-            backgroundColor: theme.palette.background.lightBlue,
+            //backgroundColor: theme.palette.background.lightRed,
             textAlign: 'center',
-            border: `2px solid ${theme.palette.primary.main}`,
+            borderTop: `2px solid ${theme.palette.primary.main}`,
+            marginTop: { xs: 6, md: 12 },
+            boxShadow: `-10px -8px 0px ${theme.palette.background.lightRed}`,
         }}
     >
         <Container maxWidth="lg">
@@ -94,8 +100,8 @@ export default function OrderingProcess({orderProcess}) {
                             sx={{ 
                                 '& .MuiStepLabel-label': {
                                     marginTop: 3,
-                                    fontSize: '1rem',
-                                    fontWeight: 800,
+                                    fontSize: 18,
+                                    fontWeight: 700,
                                     color: theme.palette.primary.main,
                                 },
                             }}

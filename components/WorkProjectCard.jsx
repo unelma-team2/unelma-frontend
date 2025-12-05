@@ -22,7 +22,7 @@ export default function WorkProjectCard({ work, API_URL }) {
         //borderRadius: "10px",
         width: 300,
         //boxShadow: 3,
-        boxShadow: `-10px -8px 0px ${theme.palette.primary.blue}`,
+        boxShadow: `-10px -8px 0px ${theme.palette.primary.violet}`,
         transition: "0.3s",
         "&:hover": {
           transform: "translateY(-6px)",
@@ -31,8 +31,8 @@ export default function WorkProjectCard({ work, API_URL }) {
       }}
     >
       <CardMedia component="img" height="335px" image={imageUrl} />
-      <CardContent sx={{ background: theme.palette.background.lightMint }}>
-        <Typography fontWeight={700} align="center">
+      <CardContent sx={{ background: theme.palette.background.lightViolet }}>
+        <Typography fontSize={18} fontWeight={700} align="center">
           {work.title}
         </Typography>
       </CardContent>
