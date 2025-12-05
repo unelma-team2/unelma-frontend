@@ -21,6 +21,7 @@ const navLinks = [
   { label: "Home", href: "/" },
   { label: "About Us", href: "/about" },
   { label: "Products & Services", href: "/products", multiline: true },
+  { label: "Services", href: "/services" },
   { label: "Our Work", href: "/case-studies" },
   { label: "Blog", href: "/blog" },
   { label: "Careers", href: "/careers" },
