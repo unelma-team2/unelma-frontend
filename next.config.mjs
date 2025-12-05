@@ -8,10 +8,16 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: backendUrl.protocol.replace(":", ""), // http or https
-        hostname: backendUrl.hostname, // localhost or domain
-        port: backendUrl.port, // 1337 / 1338 / etc.
-        pathname: "/uploads/**", // path for Strapi uploads
+        protocol: backendUrl.protocol.replace(":", ""), 
+        hostname: backendUrl.hostname,
+        port: backendUrl.port,
+        pathname: "/uploads/**",
+      },
+      {
+        protocol: backendUrl.protocol.replace(":", ""),
+        hostname: backendUrl.hostname,
+        port: backendUrl.port,
+        pathname: "/images/**",
       },
       {
         protocol: "https",
