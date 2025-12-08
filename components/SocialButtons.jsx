@@ -26,15 +26,19 @@ export default function SocialButtons() {
             height: 70,
             borderRadius: "50%",
             border: `2px solid ${theme.palette.primary.main}`,
-            backgroundColor: theme.palette.primary.mint,
+            backgroundColor: theme.palette.background.lightRed,
             overflow: "hidden",
             padding: 0,
-            transition: "0.25s ease",
-            "&:hover": {
-              transform: "scale(1.1)",
-              bgcolor: theme.palette.primary.blue,
-              color: "#fff"
-            },
+           boxShadow: "0px 4px 4px rgba(0,0,0,0.15)",
+          transition: "box-shadow 0.3s ease",
+          transition: "0.25s ease",
+
+          "&:hover": {
+            boxShadow: "0px 6px 6px rgba(0,0,0,0.20)",
+            backgroundColor: theme.palette.primary.red,
+            transform: "scale(1.1)",
+             cursor: "pointer",
+          },
           }}
         >
           <Image

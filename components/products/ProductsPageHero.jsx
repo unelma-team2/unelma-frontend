@@ -21,24 +21,19 @@ export default function ProductsPageHero() {
                     fontWeight: 700,
                     fontSize: "72px",
                     flexGrow: 1, 
+                    //marginLeft: "170px"
                 }}
             >
                 Products &<br />Services
             </Typography>
             <Box sx={{flexGrow: 1}}>
                 <Image
-                    src="/blog/blog-hero-1.png"
+                    src="/images/shop2.png"
                     alt="Blog Hero 1"
-                    width={244}
-                    height={261}
+                    width={500}
+                    height={500}
                 />
-                <Image
-                    src="/blog/blog-hero-2.png"
-                    alt="Blog Hero 2"
-                    width={272}
-                    height={309}
-                    loading="eager"
-                />
+                
             </Box>
         </Box>
     )

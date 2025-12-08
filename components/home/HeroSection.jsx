@@ -60,7 +60,7 @@ export default function HeroSection({ heroSection }) {
         }}
       >
         <Image
-          src="/images/home/hero/cloud_mod.png" 
+          src="/images/home/hero/cloud_mod1.png" 
           alt="Overlay graphic"
           width={500}
           height={500}
@@ -78,7 +78,7 @@ export default function HeroSection({ heroSection }) {
           zIndex: 4,
           width: { xs: "90%", md: "60%" },
           textAlign: "right",
-          color: theme.palette.primary.violet,
+          color: theme.palette.primary.darkViolet,
           //fontSize: 122,
           pr: { xs: 0, md: 4 },
           mr: { xs: 0, md: 17 },

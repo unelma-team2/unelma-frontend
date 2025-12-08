@@ -10,7 +10,7 @@ export default function BackToTopButton() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setVisible(window.scrollY > 300); // Show after 300px scroll
+      setVisible(window.scrollY > 300); 
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -38,9 +38,16 @@ export default function BackToTopButton() {
             color: "white",
             width: 55,
             height: 55,
-            boxShadow: "0 4px 15px rgba(0,0,0,0.25)",
-            "&:hover": { bgcolor: "#520553" },
-            borderRadius: "50%",
+            boxShadow: "0px 4px 4px rgba(0,0,0,0.15)",
+          transition: "box-shadow 0.3s ease",
+          transition: "0.25s ease",
+
+          "&:hover": {
+            boxShadow: "0px 6px 6px rgba(0,0,0,0.20)",
+            backgroundColor: theme.palette.primary.darkViolet,
+            transform: "scale(1.1)",
+            cursor: "pointer",
+          }
           }}
         >
           <KeyboardArrowUpIcon sx={{ fontSize: 32 }} />

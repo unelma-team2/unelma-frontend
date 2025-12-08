@@ -109,7 +109,7 @@ export default function Metrics() {
     >
       {/* Background Image */}
       <Image
-        src="/images/home/hero/green.png"
+        src="/images/home/hero/green1.png"
 
         alt="Background"
         fill

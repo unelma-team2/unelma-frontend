@@ -153,7 +153,7 @@ return (
       >
       <Box
         sx={{
-          bgcolor: theme.palette.background.lightViolet,
+          bgcolor: theme.palette.background.lightBlue2,
           borderTop: `2px solid ${theme.palette.primary.main}`,
           borderRight: `2px solid ${theme.palette.primary.main}`,
           borderTopRightRadius: "120px",
@@ -204,6 +204,7 @@ return (
               fontFamily: theme.typography.fontFamily.bodyFont,
               //fontFamily: "Outfit, sans-serif",
               fontSize: 18,
+              fontWeight: 500,
               lineHeight: 1.6,
               mb: 3,
               color: theme.palette.primary.main,

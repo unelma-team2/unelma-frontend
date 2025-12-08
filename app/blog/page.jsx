@@ -144,8 +144,9 @@ export default function BlogPage() {
                   }}
                 >
                   <Image
-                    src={featured.blog_image.url.startsWith("http") ? featured.blog_image.url : `${API_URL}${featured.blog_image.url}`}
+                   // src={featured.blog_image.url.startsWith("http") ? featured.blog_image.url : `${API_URL}${featured.blog_image.url}`}
                     alt={featured.Title || "Featured Blog Image"}
+                    src="/images/blog/pngwing.com - 2025-11-17T021857.109 copy.png"
                     fill
                     style={{ objectFit: "cover" }}
                     priority
@@ -177,10 +178,10 @@ export default function BlogPage() {
                     </Box>
                   </Link>
                 </Box>
-                <Typography variant="h3" sx={{ fontWeight: 700, fontSize: "1.5rem", marginBottom: "1rem" }}>
+                <Typography variant="h3" sx={{ fontWeight: 700, fontSize: "2rem", marginBottom: "1rem" }}>
                   {featured.Title || "Featured Blog Title"}
                 </Typography>
-                <Typography sx={{ color: theme.palette.text.secondary, marginBottom: "1rem" }}>
+                <Typography sx={{ color: theme.palette.text.secondary, marginBottom: "1rem", fontSize: "1.1rem" }}>
                   {featured.Description || ""}
                 </Typography>
                 <Box sx={{ display: "flex", gap: "1rem", marginTop: "auto", color: theme.palette.primary.violet }}>
@@ -206,9 +207,9 @@ export default function BlogPage() {
                 border: `2px solid ${theme.palette.primary.main}`,
                 borderRadius: "8px",
                 textAlign: "center",
-                fontSize: "1.2rem",
+                fontSize: "1.5rem",
                 fontWeight: 600,
-                color: theme.palette.primary.violet,
+                //color: theme.palette.primary.violet,
               }}
             >
               No blog posts found.
@@ -234,7 +235,7 @@ export default function BlogPage() {
               {blog.blog_image?.url && (
                 <Box sx={{ minWidth: "220px", height: "220px", position: "relative", flexShrink: 0 }}>
                   <Image
-                    src={blog.blog_image.url.startsWith("http") ? blog.blog_image.url : `${API_URL}${blog.blog_image.url}`}
+                   src="/images/blog/pngwing.com - 2025-11-17T021857.109 copy.png"
                     alt={blog.Title || "Blog Image"}
                     fill
                     style={{ objectFit: "cover" }}
@@ -318,7 +319,7 @@ export default function BlogPage() {
         <Box sx={{ flex: 1, display: "flex", flexDirection: "column", gap: "2rem" }}>
           {/* Search */}
           <Box sx={{ border: `2px solid ${theme.palette.primary.main}`, borderRadius: "8px", padding: "1rem" }}>
-            <h3 style={{ marginBottom: "1rem", fontWeight: 700 }}>Search</h3>
+            <h3 style={{ marginBottom: "1rem", fontWeight: 700, fontSize: "1.5rem" }}>Search</h3>
             <input
               type="text"
               placeholder="Search blogs"
@@ -330,13 +331,13 @@ export default function BlogPage() {
 
           {/* Categories */}
           <Box sx={{ border: `2px solid ${theme.palette.primary.main}`, borderRadius: "8px", padding: "1rem" }}>
-            <h3 style={{ marginBottom: "1rem", fontWeight: 700 }}>Blog Categories</h3>
+            <h3 style={{ marginBottom: "1rem", fontWeight: 700, fontSize: "1.5rem" }}>Blog Categories</h3>
             <ul style={{ listStyle: "none", padding: 0 }}>
               {["Digital Marketing","E-Commerce","API","Events & Conferences","Startup Business","Internships","Other"].map((category, index) => {
                 const count = categories[category] || 0;
                 return (
                   <li key={index} style={{ marginBottom: "0.5rem" }}>
-                    <Link href={`/category/${category}`} style={{ color: theme.palette.primary.blue1 }}>
+                    <Link href={`/category/${category}`} style={{ color: theme.palette.primary.blue1, fontSize: "1.1rem", fontWeight: 500, textDecoration: "none" }}>
                       {category} ({count})
                     </Link>
                   </li>
@@ -347,7 +348,7 @@ export default function BlogPage() {
 
           {/* Archive */}
           <Box sx={{ border: `2px solid ${theme.palette.primary.main}`, borderRadius: "8px", padding: "1rem" }}>
-            <h3 style={{ marginBottom: "1rem", fontWeight: 700 }}>Blog Archive</h3>
+            <h3 style={{ marginBottom: "1rem", fontWeight: 700, fontSize: "1.5rem" }}>Blog Archive</h3>
             {selectedArchive.year && selectedArchive.month && (
               <button onClick={() => setSelectedArchive({ year: null, month: null })} style={{ marginBottom: "1rem", color: theme.palette.primary.violet, cursor: "pointer", border: "none", background: "none" }}>
                 ← Clear Filter ({selectedArchive.month} {selectedArchive.year})
