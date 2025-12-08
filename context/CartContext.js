@@ -2,26 +2,22 @@
 
 import { createContext, useContext, useState } from "react";
 
-// Create Cart Context
 const CartContext = createContext();
 
-// Cart Provider Component
 export function CartProvider({ children }) {
   const [cartItems, setCartItems] = useState([]);
 
-  // Add item to cart
   const addToCart = (product) => {
     setCartItems((prevItems) => {
       const existingItem = prevItems.find((item) => item.id === product.id);
       if (existingItem) {
-        // Update quantity if item already exists
         return prevItems.map((item) =>
           item.id === product.id
             ? { ...item, quantity: item.quantity + 1 }
             : item
         );
       }
-      // Add new item to cart with all required properties
+
       return [
         ...prevItems,
         { ...product, quantity: 1, unitPrice: Number(product.unitPrice) },
@@ -29,13 +25,24 @@ export function CartProvider({ children }) {
     });
   };
 
-  // Remove item from cart
+  const updateQuantity = (id, amount) => {
+    setCartItems((prev) =>
+      prev.map((item) =>
+        item.id === id
+          ? { ...item, quantity: Math.max(1, item.quantity + amount) }
+          : item
+      )
+    );
+  };
+
   const removeFromCart = (id) => {
     setCartItems((prevItems) => prevItems.filter((item) => item.id !== id));
   };
 
   return (
-    <CartContext.Provider value={{ cartItems, addToCart, removeFromCart }}>
+    <CartContext.Provider
+      value={{ cartItems, addToCart, removeFromCart, updateQuantity }}
+    >
       {children}
     </CartContext.Provider>
   );

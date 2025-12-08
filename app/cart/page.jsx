@@ -1,16 +1,25 @@
 "use client";
 
 import { useCart } from "@/context/CartContext";
-import { Box, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Button,
+  TextField,
+} from "@mui/material";
 import CartPageHero from "./components/HeroPage";
 
 export default function CartPage() {
-  const { cartItems, removeFromCart } = useCart();
-
-  console.log(cartItems); // Debug cartItems to ensure unitPrice is present
+  const { cartItems, removeFromCart, updateQuantity } = useCart();
 
   const totalPrice = cartItems.reduce(
-    (total, item) => total + (item.quantity * (Number(item.unitPrice) || 0)),
+    (total, item) => total + item.quantity * (Number(item.unitPrice) || 0),
     0
   );
 
@@ -33,17 +42,42 @@ export default function CartPage() {
                 <TableCell align="center">Actions</TableCell>
               </TableRow>
             </TableHead>
+
             <TableBody>
               {cartItems.map((item) => (
                 <TableRow key={item.id}>
                   <TableCell>{item.name}</TableCell>
-                  <TableCell align="center">{item.quantity}</TableCell>
+
                   <TableCell align="center">
-                    ${item.unitPrice ? Number(item.unitPrice).toFixed(2) : "0.00"}
+                    <TextField
+                      type="number"
+                      value={item.quantity}
+                      onChange={(e) =>
+                        updateQuantity(
+                          item.id,
+                          Number(e.target.value) - item.quantity
+                        )
+                      }
+                      inputProps={{
+                        min: 1,
+                        style: { textAlign: "center", width: 60 },
+                      }}
+                      size="small"
+                    />
                   </TableCell>
+
                   <TableCell align="center">
-                    ${(item.quantity * (Number(item.unitPrice) || 0)).toFixed(2)}
+                    $
+                    {item.unitPrice
+                      ? Number(item.unitPrice).toFixed(2)
+                      : "0.00"}
                   </TableCell>
+
+                  <TableCell align="center">
+                    $
+                    {(item.quantity * (Number(item.unitPrice) || 0)).toFixed(2)}
+                  </TableCell>
+
                   <TableCell align="center">
                     <Button
                       variant="outlined"
