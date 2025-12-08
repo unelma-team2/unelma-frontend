@@ -15,6 +15,7 @@ import {
   Typography,
 } from "@mui/material";
 import Link from "next/link";
+import ServicesSinglePageHero from "@/components/services/ServicesSinglePageHero";
 
 const toSlug = (value = "") =>
   value
@@ -108,12 +109,14 @@ export default function ServicePage() {
   }
 
   return (
-    <Container maxWidth="lg" sx={{ py: 4 }}>
-      <Typography variant="h3" sx={{ fontWeight: 700, mb: 8 }}>
-        Services &gt; {service.title}
-      </Typography>
+    <>
+      <ServicesSinglePageHero />
+      <Container maxWidth="lg" sx={{ py: 4 }}>
+        <Typography variant="h3" sx={{ fontWeight: 700, mb: 8 }}>
+          Services &gt; {service.title}
+        </Typography>
 
-      <Grid
+        <Grid
         container
         spacing={3}
         sx={{ display: "grid", gridTemplateColumns: "4fr 1fr" }}
@@ -550,5 +553,6 @@ export default function ServicePage() {
         </Grid>
       </Box>
     </Container>
+    </>
   );
 }
