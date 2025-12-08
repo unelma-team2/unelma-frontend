@@ -328,6 +328,127 @@ export default function ServicePage() {
         </Grid>
       </Grid>
 
+      {(service.title === "Cyber Security" ||
+        toSlug(service.title) === "cyber-security" ||
+        service.title === "Ai & Machine Learning" ||
+        toSlug(service.title) === "ai-machine-learning") && (
+        <Box sx={{ mt: 8 }}>
+          <Typography variant="h4" sx={{ fontWeight: 700, mb: 6,  }}>
+            Pricing Plans
+          </Typography>
+
+          <Grid container spacing={4} justifyContent="center">
+            <Grid item xs={12} sm={6} md={5}>
+              <Box
+                sx={{
+                  border: "2px solid #000000ff",
+                  width: 300,
+                  borderRadius: "8px",
+                  p: 4,
+                  textAlign: "center",
+                  display: "flex",
+                  flexDirection: "column",
+                  height: "100%",
+                  backgroundColor: "#fff",
+                }}
+              >
+                <Typography variant="h5" sx={{ fontWeight: 700, mb: 2 }}>
+                  Business
+                </Typography>
+                <Typography variant="h5" sx={{ fontWeight: 700, mb: 1 }}>
+                  49<span style={{ fontSize: "0.9em" }}>$</span>
+                </Typography>
+                <Typography
+                  variant="h6"
+                  sx={{ fontWeight: 600, mb: 6, color: "#666" }}
+                >
+                  /year
+                </Typography>
+
+                <Stack spacing={1.5} sx={{ mb: 3, flexGrow: 1 }}>
+                  <Typography variant="body2">Unlimited Pages</Typography>
+                  <Typography variant="body2">All Team Members</Typography>
+                  <Typography variant="body2">Unlimited Leads</Typography>
+                  <Typography variant="body2">Unlimited Page Views</Typography>
+                  <Typography variant="body2">Export in HTML/CSS</Typography>
+                </Stack>
+
+                <Button
+                  fullWidth
+                  variant="contained"
+                  sx={{
+                    borderRadius: "999px",
+                    bgcolor: "#90F0FF",
+                    color: "#000000ff",
+                    fontWeight: 700,
+                    textTransform: "none",
+                    "&:hover": {
+                      bgcolor: "#5662e3ff",
+                    },
+                  }}
+                >
+                  Order Now
+                </Button>
+              </Box>
+            </Grid>
+
+            <Grid item xs={12} sm={6} md={5}>
+              <Box
+                sx={{
+                  border: "2px solid #000000ff",
+                  width: 300,
+                  borderRadius: "8px",
+                  p: 4,
+                  textAlign: "center",
+                  display: "flex",
+                  flexDirection: "column",
+                  height: "100%",
+                  backgroundColor: "#fff",
+                }}
+              >
+                <Typography variant="h5" sx={{ fontWeight: 700, mb: 2 }}>
+                  Professional
+                </Typography>
+                <Typography variant="h5" sx={{ fontWeight: 700, mb: 1 }}>
+                  19<span style={{ fontSize: "0.9em" }}>$</span>
+                </Typography>
+                <Typography
+                  variant="h6"
+                  sx={{ fontWeight: 600, mb: 6, color: "#666" }}
+                >
+                  /month
+                </Typography>
+
+                <Stack spacing={1.5} sx={{ mb: 3, flexGrow: 1 }}>
+                  <Typography variant="body2">Unlimited Pages</Typography>
+                  <Typography variant="body2">All Team Members</Typography>
+                  <Typography variant="body2">Unlimited Leads</Typography>
+                  <Typography variant="body2">Unlimited Page Views</Typography>
+                  <Typography variant="body2">Export in HTML/CSS</Typography>
+                </Stack>
+
+                <Button
+                  fullWidth
+                  variant="contained"
+                  sx={{
+                    borderRadius: "999px",
+                    bgcolor: "#90F0FF",
+                    color: "#000000ff",
+                    fontWeight: 700,
+                    textTransform: "none",
+                    "&:hover": {
+                      bgcolor: "#5662e3ff",
+                    },
+                  }}
+                >
+                  Order Now
+                </Button>
+              </Box>
+            </Grid>
+          </Grid>
+        </Box>
+      )}
+
       <Box sx={{ mt: 8 }}>
         <Typography variant="h6" sx={{ fontWeight: 700, mb: 3 }}>
           Related Items
