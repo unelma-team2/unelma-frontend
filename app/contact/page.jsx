@@ -16,6 +16,7 @@ import PriceQuoteSection from "@/components/contact/PriceQuoteSection";
 import FeedbackReviewSection from "@/components/contact/FeedbackReviewSection";
 import MapLocation from "@/components/contact/MapLocation";
 import SocialAndSupport from "@/components/contact/SocialAndSupport";
+import ContactPageHero from "@/components/contact/ContactPageHero";
 
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -95,31 +96,23 @@ export default function ContactPage() {
   };
 
   return (
-    <Container maxWidth="md" sx={{ py: 6, px: { xs: 2, sm: 4 } }}>
-      <Box sx={{ maxWidth: 900, mx: "auto" }}>
+    <>
+      <ContactPageHero />
+      <Container maxWidth="md" sx={{ py: 6, px: { xs: 2, sm: 4 } }}>
+        <Box sx={{ maxWidth: 900, mx: "auto" }}>
+
         <Typography
           variant="h1"
           sx={{
-            fontSize: { xs: "28px", md: "44px" },
+            fontSize: { xs: "18px", md: "33px" },
             fontWeight: 700,
-            mb: 2,
-          }}
-        >
-          {title}
-        </Typography>
-
-        <Typography
-          variant="h2"
-          sx={{
-            fontSize: { xs: "18px", md: "24px" },
-            fontWeight: 600,
             mb: 2,
           }}
         >
           {sub_title}
         </Typography>
 
-        <Typography variant="body1" sx={{ mb: 4 }}>
+        <Typography variant="h6" sx={{ mb: 4 }}>
           {description}
         </Typography>
 
@@ -171,5 +164,6 @@ export default function ContactPage() {
         <SocialAndSupport />
       </Box>
     </Container>
+    </>
   );
 }
