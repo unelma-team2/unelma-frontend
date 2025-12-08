@@ -2,11 +2,18 @@
 
 import { Box, Button, Grid, Card, CardContent, Typography, useTheme } from "@mui/material";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function ServiceCards({ services = [], apiUrl = "" }) {
   const theme = useTheme();
 
-  const { image, title, description} = services;
+  const toSlug = (value = "") =>
+    value
+      .toString()
+      .toLowerCase()
+      .trim()
+      .replace(/[^\w\s-]/g, "")
+      .replace(/\s+/g, "-");
 
   return (
     <Grid container spacing={8} justifyContent="center">
@@ -16,6 +23,8 @@ export default function ServiceCards({ services = [], apiUrl = "" }) {
             ? service.image.url
             : `${apiUrl}${service.image.url}`
           : null;
+
+        const slug = service.slug || toSlug(service.title);
 
         return (
           <Grid
@@ -27,28 +36,34 @@ export default function ServiceCards({ services = [], apiUrl = "" }) {
             sx={{ display: "flex", justifyContent: "center" }}
           >
             <Card
-            sx={{
+              component={Link}
+              href={`/services/${slug}`}
+              sx={{
                 width: 345,
                 height: 450,
                 p: 2,
                 textAlign: "center",
                 display: "flex",
                 flexDirection: "column",
-            }}
+                textDecoration: "none",
+                "&:hover": {
+                  boxShadow: "0 8px 16px rgba(0,0,0,0.12)",
+                  transform: "translateY(-4px)",
+                  transition: "all 0.2s ease",
+                },
+              }}
             >
-            <CardContent
+              <CardContent
                 sx={{
-                display: "flex",
-                flexDirection: "column",
-                height: "100%",
+                  display: "flex",
+                  flexDirection: "column",
+                  height: "100%",
                 }}
-            >
+              >
                 <Box
-                sx={{
+                  sx={{
                     width: 100,
                     height: 100,
-                    minWidth: 100,
-                    minHeight: 100,
                     borderRadius: "50%",
                     backgroundColor: theme.palette.background.lightMint,
                     display: "flex",
@@ -58,46 +73,50 @@ export default function ServiceCards({ services = [], apiUrl = "" }) {
                     mb: 2,
                     border: "2px solid #2F2E2E",
                     overflow: "hidden",
-                }}
+                  }}
                 >
-                <Image
-                    src={imageUrl}
-                    alt={service.title}
-                    width={70}
-                    height={70}
-                    style={{ objectFit: "contain" }}
-                />
+                  {imageUrl ? (
+                    <Image
+                      src={imageUrl}
+                      alt={service.title}
+                      width={70}
+                      height={70}
+                      style={{ objectFit: "contain" }}
+                    />
+                  ) : (
+                    <Typography variant="caption" color="text.secondary">
+                      No image
+                    </Typography>
+                  )}
                 </Box>
 
                 <Typography variant="h4" sx={{ my: 2.5 }}>
-                {service.title}
+                  {service.title}
                 </Typography>
 
                 <Typography
-                variant="body14reg"
-                sx={{
+                  variant="body14reg"
+                  sx={{
                     textAlign: "justify",
                     mb: 3,
-                }}
+                  }}
                 >
-                {service.description}
+                  {service.description}
                 </Typography>
 
                 <Button
-                href="/services"
-                sx={{
-                    mt: "auto",     
+                  sx={{
+                    mt: "auto",
                     alignSelf: "center",
                     px: 1.5,
                     py: 0.5,
                     fontSize: 14,
-                }}
+                  }}
                 >
-                Request a Quote
+                  Request a Quote
                 </Button>
-            </CardContent>
+              </CardContent>
             </Card>
-
           </Grid>
         );
       })}
