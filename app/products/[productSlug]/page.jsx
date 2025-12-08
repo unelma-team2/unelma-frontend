@@ -318,7 +318,7 @@ UnelmaMail SoftwareLive consumer software version is available at https://unelma
               variant="contained"
               color="primary"
               onClick={() => {
-                addToCart(productData);
+                addToCart({ ...productData, quantity });
                 router.push("/cart");
               }}
             >

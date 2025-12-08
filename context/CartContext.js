@@ -13,14 +13,18 @@ export function CartProvider({ children }) {
       if (existingItem) {
         return prevItems.map((item) =>
           item.id === product.id
-            ? { ...item, quantity: item.quantity + 1 }
+            ? { ...item, quantity: item.quantity + (product.quantity || 1) }
             : item
         );
       }
 
       return [
         ...prevItems,
-        { ...product, quantity: 1, unitPrice: Number(product.unitPrice) },
+        {
+          ...product,
+          quantity: product.quantity || 1,
+          unitPrice: Number(product.unitPrice),
+        },
       ];
     });
   };
