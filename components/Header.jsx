@@ -226,6 +226,7 @@ export default function Header() {
                     transform: "scale(1.2)"
                   }
                 }}
+                onClick={() => router.push("/cart")}
               >
                 <Image
                   src="/images/icons/icons8-shopping-cart-64.png"
