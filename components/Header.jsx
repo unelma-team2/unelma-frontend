@@ -1,5 +1,7 @@
 "use client";
 
+import Badge from "@mui/material/Badge";
+import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/app/context/AuthContext";
 import Image from "next/image";
 import Link from "next/link";
@@ -13,9 +15,8 @@ import {
   IconButton,
   InputAdornment,
   Button,
-  useTheme
+  useTheme,
 } from "@mui/material";
-
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -24,13 +25,17 @@ const navLinks = [
   { label: "Our Work", href: "/case-studies" },
   { label: "Blog", href: "/blog" },
   { label: "Careers", href: "/careers" },
-  { label: "Contact Us", href: "/contact" }
+  { label: "Contact Us", href: "/contact" },
 ];
 
 export default function Header() {
   const { user, signOut } = useAuth();
+  const { cartItems } = useCart();
   const router = useRouter();
   const theme = useTheme();
+
+  const totalQuantity = cartItems.reduce(
+    (sum, item) => sum + item.quantity, 0);
 
   return (
     <AppBar
@@ -40,7 +45,7 @@ export default function Header() {
         backgroundColor: (theme) => theme.palette.background.default,
         color: (theme) => theme.palette.text.primary,
         boxShadow: "none",
-        padding: { xs: 1, md: 4 }
+        padding: { xs: 1, md: 4 },
       }}
     >
       <Toolbar
@@ -49,7 +54,7 @@ export default function Header() {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          gap: 2
+          gap: 2,
         }}
       >
         <Box
@@ -58,7 +63,7 @@ export default function Header() {
             justifyContent: "space-between",
             alignItems: "center",
             width: "100%",
-            flexWrap: "wrap"
+            flexWrap: "wrap",
           }}
         >
           <Box
@@ -66,7 +71,7 @@ export default function Header() {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              mt: 2.5
+              mt: 2.5,
             }}
           >
             <Link href="/" style={{ display: "flex", alignItems: "center" }}>
@@ -78,7 +83,7 @@ export default function Header() {
                 priority
                 style={{
                   cursor: "pointer",
-                  transition: "transform 0.25s ease"
+                  transition: "transform 0.25s ease",
                 }}
                 onMouseEnter={(e) =>
                   (e.currentTarget.style.transform = "scale(1.05)")
@@ -96,7 +101,7 @@ export default function Header() {
               alignItems: "center",
               gap: 3,
               mr: { xs: 3, md: 10 },
-              mt: { xs: -1, md: -2 }
+              mt: { xs: -1, md: -2 },
             }}
           >
             <Box
@@ -105,7 +110,7 @@ export default function Header() {
                 alignItems: "center",
                 backgroundColor: theme.palette.background.paper,
                 px: 1.5,
-                gap: 3
+                gap: 3,
               }}
             >
               <Box
@@ -114,7 +119,7 @@ export default function Header() {
                   alignItems: "center",
                   gap: 1,
                   maxWidth: 400,
-                  width: "100%"
+                  width: "100%",
                 }}
               >
                 <TextField
@@ -130,16 +135,16 @@ export default function Header() {
                       "& .MuiOutlinedInput-notchedOutline": { border: "none" },
                       "&:hover .MuiOutlinedInput-notchedOutline": {
                         border: "2px solid" + theme.palette.primary.blue,
-                        borderRadius: "4px"
+                        borderRadius: "4px",
                       },
                       "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
                         border: "2px solid" + theme.palette.primary.blue,
-                        borderRadius: "4px"
-                      }
+                        borderRadius: "4px",
+                      },
                     },
                     "& .MuiInputBase-input": {
-                      padding: "8px 12px"
-                    }
+                      padding: "8px 12px",
+                    },
                   }}
                   InputProps={{
                     endAdornment: (
@@ -152,12 +157,11 @@ export default function Header() {
                             borderRadius: "6px",
                             transition: "transform 0.25s ease",
                             "&:hover": {
-                              border:
-                                "2px solid" + theme.palette.primary.blue,
+                              border: "2px solid" + theme.palette.primary.blue,
                               backgroundColor:
                                 theme.palette.background.lightBlue,
-                              transform: "scale(1.1)"
-                            }
+                              transform: "scale(1.1)",
+                            },
                           }}
                         >
                           <Image
@@ -168,7 +172,7 @@ export default function Header() {
                           />
                         </IconButton>
                       </InputAdornment>
-                    )
+                    ),
                   }}
                 />
               </Box>
@@ -186,8 +190,8 @@ export default function Header() {
                     textTransform: "uppercase",
                     "&:hover": {
                       backgroundColor: "transparent",
-                      opacity: 0.7
-                    }
+                      opacity: 0.7,
+                    },
                   }}
                 >
                   Logout
@@ -207,8 +211,8 @@ export default function Header() {
                       color: theme.palette.primary.blue,
                       backgroundColor: "transparent",
                       boxShadow: "none",
-                      transition: "0.25s ease"
-                    }
+                      transition: "0.25s ease",
+                    },
                   }}
                 >
                   Login/Register
@@ -223,11 +227,17 @@ export default function Header() {
                   transition: "transform 0.25s ease",
                   "&:hover": {
                     backgroundColor: theme.palette.background.lightBlue,
-                    transform: "scale(1.2)"
-                  }
+                    transform: "scale(1.2)",
+                  },
                 }}
                 onClick={() => router.push("/cart")}
               >
+                <Badge
+                  badgeContent={totalQuantity}
+                  color="error"
+                  overlap="circular"
+                  invisible={totalQuantity === 0}
+                >
                 <Image
                   src="/images/icons/icons8-shopping-cart-64.png"
                   alt="Shopping cart icon"
@@ -236,6 +246,7 @@ export default function Header() {
                   priority
                   style={{ cursor: "pointer" }}
                 />
+                </Badge>
               </IconButton>
             </Box>
           </Box>
@@ -248,7 +259,7 @@ export default function Header() {
             gap: { xs: 3.5, md: 6 },
             mt: 2.5,
             width: { xs: "100%", md: "88%" },
-            mx: "auto"
+            mx: "auto",
           }}
         >
           {navLinks.map((link) => (
@@ -269,8 +280,8 @@ export default function Header() {
                   transition: "transform 0.25s ease, color 0.25s ease",
                   "&:hover": {
                     transform: "scale(1.1)",
-                    color: theme.palette.primary.blue
-                  }
+                    color: theme.palette.primary.blue,
+                  },
                 }}
               >
                 {link.multiline ? (
