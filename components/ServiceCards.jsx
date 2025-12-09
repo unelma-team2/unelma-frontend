@@ -36,15 +36,22 @@ export default function ServiceCards({ services = [], apiUrl = "" }) {
             sx={{ display: "flex", justifyContent: "center" }}
           >
             <Card
+<<<<<<< HEAD
               component={Link}
               href={`/services/${slug}`}
               sx={{
                 width: 345,
                 height: 450,
+=======
+            sx={{
+                width: 300,
+                height: 500,
+>>>>>>> 3647858 (fix colors)
                 p: 2,
                 textAlign: "center",
                 display: "flex",
                 flexDirection: "column",
+<<<<<<< HEAD
                 textDecoration: "none",
                 "&:hover": {
                   boxShadow: "0 8px 16px rgba(0,0,0,0.12)",
@@ -52,6 +59,11 @@ export default function ServiceCards({ services = [], apiUrl = "" }) {
                   transition: "all 0.2s ease",
                 },
               }}
+=======
+                boxShadow: `-10px -8px 0px ${theme.palette.primary.blue}`,
+                mt: 2,
+            }}
+>>>>>>> 3647858 (fix colors)
             >
               <CardContent
                 sx={{

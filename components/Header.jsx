@@ -46,6 +46,12 @@ export default function Header() {
         color: (theme) => theme.palette.text.primary,
         boxShadow: "none",
         padding: { xs: 1, md: 4 },
+<<<<<<< HEAD
+=======
+        //mt: 6,
+        //mb: 6
+        mt: 12,
+>>>>>>> 3647858 (fix colors)
       }}
     >
       <Toolbar

@@ -6,6 +6,7 @@ import AboutImageList from "@/components/about/AboutImageList";
 import { Box, Container, Typography, useTheme } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 export default function AboutPage() {
   const theme = useTheme();
@@ -49,7 +50,7 @@ export default function AboutPage() {
   }, [API_URL]);
 
   if (loading)
-    return <Container sx={{ py: 8 }}>Loading about page...</Container>;
+    return <LoadingSpinner />;
   if (error)
     return (
       <Container sx={{ py: 8 }}>

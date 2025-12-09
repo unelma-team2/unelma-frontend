@@ -129,7 +129,6 @@ export default function BlogPage() {
                 borderRadius: "8px",
                 overflow: "hidden",
                 boxShadow: "0 4px 16px rgba(0,0,0,0.1)",
-                background: "#fff",
                 padding: "2rem",
               }}
             >
@@ -154,13 +153,13 @@ export default function BlogPage() {
                 </Box>
               )}
               <Box sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
-                <Box sx={{ display: "flex", gap: "1.5rem", alignItems: "center", marginBottom: "0.5rem", fontSize: "0.95rem", color: "#6079F1" }}>
+                <Box sx={{ display: "flex", gap: "1.5rem", alignItems: "center", marginBottom: "0.5rem", fontSize: "0.95rem", color: theme.palette.primary.blue1 }}>
                   <Box sx={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                    <Image src="/images/icons/icons8-calendar-32_1.png" alt="Date" width={22} height={22} />
+                    <Image src="/images/icons/icons8-calendar-66.png" alt="Date" width={22} height={22} />
                     {formatBlogDate(featured.date || featured.publishedAt)}
                   </Box>
                   <Box sx={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                    <Image src="/images/icons/icons8-writing-64_1.png" alt="Author" width={24} height={24} />
+                    <Image src="/images/icons/icons8-writing-64.png" alt="Author" width={24} height={24} />
                     {featured.author_name || "Author's Name"}
                   </Box>
                   <Link
@@ -169,7 +168,7 @@ export default function BlogPage() {
                   >
                     <Box sx={{ display: "flex", alignItems: "center", gap: "0.5rem", cursor: "pointer" }}>
                       <Image
-                        src="/images/icons/icons8-opened-folder-64.png"
+                        src="/images/icons/icons8-opened-folder-26.png"
                         alt="Category"
                         width={24}
                         height={24}
@@ -181,16 +180,16 @@ export default function BlogPage() {
                 <Typography variant="h3" sx={{ fontWeight: 700, fontSize: "1.5rem", marginBottom: "1rem" }}>
                   {featured.Title || "Featured Blog Title"}
                 </Typography>
-                <Typography sx={{ color: "#555", marginBottom: "1rem" }}>
+                <Typography sx={{ color: theme.palette.text.secondary, marginBottom: "1rem" }}>
                   {featured.Description || ""}
                 </Typography>
-                <Box sx={{ display: "flex", gap: "1rem", marginTop: "auto", color: "#9D00A0" }}>
+                <Box sx={{ display: "flex", gap: "1rem", marginTop: "auto", color: theme.palette.primary.violet }}>
                   <Box sx={{ display: "flex", gap: "0.5rem", alignItems: "center" }}><ShareIcon /> Share</Box>
                   <Box sx={{ display: "flex", gap: "0.5rem", alignItems: "center" }}><CommentIcon /> Comment</Box>
                 </Box>
                 <Box sx={{ marginTop: "auto", textAlign: "right" }}>
                   <Link href={`/blog/${featured.slug}`} style={{ textDecoration: "none" }}>
-                    <Typography sx={{ color: "#9D00A0", fontWeight: 700, textTransform: "uppercase", display: "inline-flex", alignItems: "center", gap: "0.3rem" }}>
+                    <Typography sx={{ color: theme.palette.primary.violet, fontWeight: 700, textTransform: "uppercase", display: "inline-flex", alignItems: "center", gap: "0.3rem" }}>
                       Read more <ArrowForward sx={{ fontSize: "1rem" }} />
                     </Typography>
                   </Link>
@@ -206,11 +205,10 @@ export default function BlogPage() {
                 padding: "2rem",
                 border: `2px solid ${theme.palette.primary.main}`,
                 borderRadius: "8px",
-                background: "#fff",
                 textAlign: "center",
                 fontSize: "1.2rem",
                 fontWeight: 600,
-                color: "#9D00A0",
+                color: theme.palette.primary.violet,
               }}
             >
               No blog posts found.
@@ -245,13 +243,13 @@ export default function BlogPage() {
                 </Box>
               )}
               <Box sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
-                <Box sx={{ display: "flex", gap: "1.5rem", alignItems: "center", marginBottom: "0.5rem", fontSize: "0.9rem", color: "#6079F1" }}>
+                <Box sx={{ display: "flex", gap: "1.5rem", alignItems: "center", marginBottom: "0.5rem", fontSize: "0.9rem", color: theme.palette.primary.blue1 }}>
                   <Box sx={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                    <Image src="/images/icons/icons8-calendar-32_1.png" alt="Date" width={22} height={22} />
+                    <Image src="/images/icons/icons8-calendar-66.png" alt="Date" width={22} height={22} />
                     {formatBlogDate(blog.date || blog.publishedAt)}
                   </Box>
                   <Box sx={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                    <Image src="/images/icons/icons8-writing-64_1.png" alt="Author" width={24} height={24} />
+                    <Image src="/images/icons/icons8-writing-64.png" alt="Author" width={24} height={24} />
                     {blog.author_name || "Author's Name"}
                   </Box>
                  <Link
@@ -260,7 +258,7 @@ export default function BlogPage() {
                   >
                     <Box sx={{ display: "flex", alignItems: "center", gap: "0.5rem", cursor: "pointer" }}>
                       <Image
-                        src="/images/icons/icons8-opened-folder-64.png"
+                        src="/images/icons/icons8-opened-folder-26.png"
                         alt="Category"
                         width={24}
                         height={24}
@@ -272,12 +270,12 @@ export default function BlogPage() {
                 <Typography variant="h4" sx={{ fontWeight: 700, marginBottom: "0.5rem" }}>
                   {blog.Title}
                 </Typography>
-                <Typography sx={{ color: "#555", marginBottom: "1rem" }}>
+                <Typography sx={{ color: theme.palette.text.secondary, marginBottom: "1rem" }}>
                   {blog.Description ? blog.Description.slice(0, 300) + "..." : ""}
                 </Typography>
                 <Box sx={{ marginTop: "auto", textAlign: "right" }}>
                   <Link href={`/blog/${blog.slug}`} style={{ textDecoration: "none" }}>
-                    <Typography sx={{ color: "#9D00A0", fontWeight: 700, textTransform: "uppercase", display: "inline-flex", alignItems: "center", gap: "0.3rem" }}>
+                    <Typography sx={{ color: theme.palette.primary.violet, fontWeight: 700, textTransform: "uppercase", display: "inline-flex", alignItems: "center", gap: "0.3rem" }}>
                       Read more <ArrowForward sx={{ fontSize: "1rem" }} />
                     </Typography>
                   </Link>
@@ -302,14 +300,14 @@ export default function BlogPage() {
               siblingCount={1}
               boundaryCount={1}
               sx={{
-                "& .MuiPaginationItem-root": { borderRadius: "50%", width: "36px", height: "36px", fontSize: "1rem", color: "#000" },
-                "& .MuiPaginationItem-root.Mui-selected": { backgroundColor: "#C1FCFF", borderColor: "#000", color: "#0288d1", fontWeight: "bold" },
+                "& .MuiPaginationItem-root": { borderRadius: "50%", width: "36px", height: "36px", fontSize: "1rem", color: theme.palette.primary.main },
+                "& .MuiPaginationItem-root.Mui-selected": { borderColor: theme.palette.primary.main, color: theme.palette.primary.blue1, fontWeight: "bold" },
               }}
             />
             <button
               disabled={currentPage === totalPages}
               onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-              style={{ cursor: currentPage === totalPages ? "not-allowed" : "pointer", padding: "0.5rem 1rem", border: "none", background: "none", color: "#000" }}
+              style={{ cursor: currentPage === totalPages ? "not-allowed" : "pointer", padding: "0.5rem 1rem", border: "none", background: "none", color: theme.palette.primary.main }}
             >
               Next →
             </button>
@@ -319,7 +317,7 @@ export default function BlogPage() {
         {/* Sidebar */}
         <Box sx={{ flex: 1, display: "flex", flexDirection: "column", gap: "2rem" }}>
           {/* Search */}
-          <Box sx={{ border: `2px solid ${theme.palette.primary.main}`, borderRadius: "8px", padding: "1rem", background: "#fff" }}>
+          <Box sx={{ border: `2px solid ${theme.palette.primary.main}`, borderRadius: "8px", padding: "1rem" }}>
             <h3 style={{ marginBottom: "1rem", fontWeight: 700 }}>Search</h3>
             <input
               type="text"
@@ -331,14 +329,14 @@ export default function BlogPage() {
           </Box>
 
           {/* Categories */}
-          <Box sx={{ border: `2px solid ${theme.palette.primary.main}`, borderRadius: "8px", padding: "1rem", background: "#fff" }}>
+          <Box sx={{ border: `2px solid ${theme.palette.primary.main}`, borderRadius: "8px", padding: "1rem" }}>
             <h3 style={{ marginBottom: "1rem", fontWeight: 700 }}>Blog Categories</h3>
             <ul style={{ listStyle: "none", padding: 0 }}>
               {["Digital Marketing","E-Commerce","API","Events & Conferences","Startup Business","Internships","Other"].map((category, index) => {
                 const count = categories[category] || 0;
                 return (
                   <li key={index} style={{ marginBottom: "0.5rem" }}>
-                    <Link href={`/category/${category}`} style={{ color: "#6079F1" }}>
+                    <Link href={`/category/${category}`} style={{ color: theme.palette.primary.blue1 }}>
                       {category} ({count})
                     </Link>
                   </li>
@@ -348,10 +346,10 @@ export default function BlogPage() {
           </Box>
 
           {/* Archive */}
-          <Box sx={{ border: `2px solid ${theme.palette.primary.main}`, borderRadius: "8px", padding: "1rem", background: "#fff" }}>
+          <Box sx={{ border: `2px solid ${theme.palette.primary.main}`, borderRadius: "8px", padding: "1rem" }}>
             <h3 style={{ marginBottom: "1rem", fontWeight: 700 }}>Blog Archive</h3>
             {selectedArchive.year && selectedArchive.month && (
-              <button onClick={() => setSelectedArchive({ year: null, month: null })} style={{ marginBottom: "1rem", color: "#9D00A0", cursor: "pointer", border: "none", background: "none" }}>
+              <button onClick={() => setSelectedArchive({ year: null, month: null })} style={{ marginBottom: "1rem", color: theme.palette.primary.violet, cursor: "pointer", border: "none", background: "none" }}>
                 ← Clear Filter ({selectedArchive.month} {selectedArchive.year})
               </button>
             )}
@@ -361,14 +359,14 @@ export default function BlogPage() {
                 const totalPosts = Object.values(months).reduce((a,b)=>a+b,0);
                 return (
                   <li key={year} style={{ marginBottom: "1rem" }}>
-                    <div onClick={()=>toggleYear(year)} style={{ cursor:"pointer", color:"#6079F1", fontWeight:600, display:"flex", justifyContent:"space-between", alignItems:"center" }}>
+                    <div onClick={()=>toggleYear(year)} style={{ cursor:"pointer", color:theme.palette.primary.blue1, fontWeight:600, display:"flex", justifyContent:"space-between", alignItems:"center" }}>
                       <span>{year} ({totalPosts})</span>
                       <span>{openYears[year]?"▲":"▼"}</span>
                     </div>
                     {openYears[year] && <ul style={{ listStyle:"none", paddingLeft:"1rem", marginTop:"0.5rem" }}>
                       {Object.keys(months).sort((a,b)=>new Date(`${b} 1`)-new Date(`${a} 1`)).map(month=>(
                         <li key={month} style={{ marginBottom:"0.4rem" }}>
-                          <span onClick={()=>setSelectedArchive({year, month})} style={{ color:selectedArchive.year===Number(year)&&selectedArchive.month===month?"#0288d1":"#9D00A0", fontWeight:selectedArchive.year===Number(year)&&selectedArchive.month===month?700:500, cursor:"pointer" }}>
+                          <span onClick={()=>setSelectedArchive({year, month})} style={{ color:selectedArchive.year===Number(year)&&selectedArchive.month===month?theme.palette.primary.blue1:theme.palette.primary.violet, fontWeight:selectedArchive.year===Number(year)&&selectedArchive.month===month?700:500, cursor:"pointer" }}>
                             {month} ({months[month]})
                           </span>
                         </li>

@@ -33,7 +33,7 @@ export default function Services() {
     //px: 4
      }}>
       <Box sx={{ 
-        //maxWidth: "1200px", 
+      maxWidth: "1200px", 
        // mx: "auto" 
         }}>
         <Typography
