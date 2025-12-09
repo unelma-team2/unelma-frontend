@@ -13,9 +13,10 @@ export default function InquiryAndMetrics({metrics,projectInquiry}) {
         flexDirection: { xs: "column", md: "row" },
         justifyContent: "space-between",
         alignItems: "flex-start",
-        borderLeft: "2px solid #2F2E2E",
-        borderBottom: "2px solid #2F2E2E",
+        //borderLeft: "2px solid #1D2340",
+        //borderBottom: "2px solid #1D2340",
         borderRight: "none",
+        mt: 8,
       }}
     >
       <Box

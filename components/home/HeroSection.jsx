@@ -3,103 +3,101 @@
 import { Box, Typography, useTheme, Link as MUILink } from "@mui/material";
 import NextLink from "next/link";
 import Image from "next/image";
-import { useEffect, useState } from "react";
-import axios from "axios";
-import LoadingSpinner from "../LoadingSpinner";
 
-export default function HeroSection({heroSection}) {
+export default function HeroSection({ heroSection }) {
   const theme = useTheme();
-
-  // const [heroSection, setHeroSection] = useState([]);
-  // const [loading, setLoading] = useState(true);
-  // const [error, setError] = useState(null);
-
-  // const API_URL =
-  //   process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
-
-  // useEffect(() => {
-  //   axios
-  //     .get(`${API_URL}/api/home?populate[HeroSection][populate]=*`)
-  //     .then((res) => setHeroSection(res.data.data?.HeroSection || null))
-  //     .catch((err) => setError(err))
-  //     .finally(() => setLoading(false));
-  // }, [API_URL]);
-
-  // if (loading) return <LoadingSpinner />;
-  // if (error) return <p>Error: {error.message}</p>;
-  // if (!heroSection) return <p>No hero section found.</p>;
 
   const {
     hero_title,
     hero_description1,
     hero_description2,
-    hero_image,
     hero_link,
     hero_link_description,
-  } = heroSection;
-
-  const imageUrl = hero_image?.url
-    ? hero_image.url.startsWith("http")
-      ? hero_image.url
-      : `${API_URL}${hero_image.url}`
-    : "";
+  } = heroSection || {};
 
   return (
     <Box
+      component="section"
       sx={{
-        width: "100%",
+        width: "100vw",
         position: "relative",
-        minHeight: 1400,
-        overflow: "hidden",
+        left: "50%",
+        ml: "-50vw",
+        minHeight: 600, 
+        //overflow: "hidden",
         bgcolor: theme.palette.background.default,
       }}
     >
-      {/* -------------------- HERO IMAGE -------------------- */}
+      {/** ---------------- FULL-WIDTH BACKGROUND IMAGE (RELATIVE) ---------------- */}
       <Box
         sx={{
-          position: "absolute",
-          top: 0,           // MOVE FREELY
-          left: 0,           // MOVE FREELY
-          width: "50%",
+          position: "relative",
+          width: "100%",
           zIndex: 1,
+          WebkitMaskImage: "linear-gradient(to bottom, black 43%, transparent 68%)",
+            maskImage: "linear-gradient(to bottom, black 43%, transparent 68%)",
+          
         }}
       >
         <Image
-          src={"/images/home/hero/home-hero.png"}
-          alt={hero_title || "Hero Image"}
-          width={950}
-          height={1174}
-          //style={{ width: "100%", height: "auto" }}
+          src="/images/home/hero/spot-valley.png"
+          alt="Hero background"
+          width={1600}
+          height={900}
+          style={{ width: "100%", height: "auto", display: "block" }}
           priority
         />
       </Box>
 
-      {/* -------------------- TITLE -------------------- */}
-      <Typography
-        variant="h1"
+      {/** ---------------- TOP IMAGE (ABSOLUTE, ON TOP OF BACKGROUND) ---------------- */}
+      <Box
         sx={{
           position: "absolute",
-          top: "45%",          
-          right: 0,         
-          zIndex: 2,
-         // fontSize: { xs: "2.5rem", md: "4rem", lg: "4.8rem" },
-          width: "40%",
+          top: "2%",     
+          left: "36%",    
+          width: { xs: "40%", md: "30%" }, // size of the floating image
+          zIndex: 3,
+        }}
+      >
+        <Image
+          src="/images/home/hero/cloud_mod1.png" 
+          alt="Overlay graphic"
+          width={500}
+          height={500}
+          style={{ width: "100%", height: "auto" }}
+        />
+      </Box>
+
+      {/** ---------------- TITLE ---------------- */}
+      <Typography
+        variant="hero"
+        sx={{
+          position: "absolute",
+          top: "55%",
+          right: { xs: 16, md: 0 },
+          zIndex: 4,
+          width: { xs: "90%", md: "60%" },
           textAlign: "right",
-          color: theme.palette.text.primary,
+          color: theme.palette.primary.darkViolet,
+          //fontSize: 122,
+          pr: { xs: 0, md: 4 },
+          mr: { xs: 0, md: 17 },
         }}
       >
         {hero_title}
       </Typography>
 
-      {/* -------------------- DESCRIPTION BLOCK -------------------- */}
+      {/** ---------------- DESCRIPTION ---------------- */}
       <Box
         sx={{
           position: "absolute",
-          top: "65%",          // MOVE FREELY
-          right: 0,       // MOVE FREELY
-          width: "30%",
-          zIndex: 2,
+          top: "82%",
+          right: { xs: 16, md: 0 },
+          width: { xs: "90%", md: "30%" },
+          zIndex: 4,
           textAlign: "right",
+          pr: { xs: 0, md: 4 },
+          mr: { xs: 0, md: 17 },
         }}
       >
         <Typography
@@ -107,7 +105,7 @@ export default function HeroSection({heroSection}) {
             mb: 2,
             fontSize: 18,
             fontWeight: 500,
-            lineHeight: 1.30,
+            lineHeight: 1.3,
             color: theme.palette.text.primary,
             textAlign: "justify",
           }}
@@ -120,7 +118,7 @@ export default function HeroSection({heroSection}) {
             mb: 2,
             fontSize: 18,
             fontWeight: 500,
-            lineHeight: 1.30,
+            lineHeight: 1.3,
             color: theme.palette.text.primary,
             textAlign: "justify",
           }}
@@ -130,17 +128,21 @@ export default function HeroSection({heroSection}) {
 
         <MUILink
           component={NextLink}
-          href={hero_link}
+          href={hero_link || "#"}
           underline="none"
           sx={{
-            color: theme.palette.primary.blue,
+            mt: 1,
+            color: theme.palette.primary.blue1 || theme.palette.primary.main,
             fontSize: 18,
             fontWeight: 700,
-            //color: theme.palette.primary.main,
             display: "inline-flex",
             alignItems: "center",
             gap: 0.5,
-            cursor: "pointer",
+              transition: "transform 0.25s ease",
+                            "&:hover": {
+                              transform: "scale(1.1)",
+                              cursor: "pointer",
+                            }
           }}
         >
           {hero_link_description} →

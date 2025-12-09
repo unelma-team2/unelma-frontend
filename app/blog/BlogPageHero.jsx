@@ -4,8 +4,8 @@ import Image from "next/image";
 import { Box, Typography } from "@mui/material";
 import { use } from "react";
 
-export default function AboutPageHero({bannerSection, imageUrl}) {
-    const { banner_title, banner_image } = bannerSection;
+export default function BlogPageHero({bannerSection, imageUrl}) {
+    //const { banner_title, banner_image } = bannerSection;
     return (
         <Box sx={{
             display: "flex",
@@ -27,14 +27,14 @@ export default function AboutPageHero({bannerSection, imageUrl}) {
                     flexGrow: 1,
                 }}
                 >
-                    {banner_title}
+                    Blog
                 </Typography>
             <Box sx={{  
 
                  flexGrow: 1 }}>
                 <Image
-                    src="/images/about2.png"
-                    alt="About Hero"
+                    src="/images/blog2.png"
+                    alt="Blog Hero"
                     width={640}
                     height={457}
                     

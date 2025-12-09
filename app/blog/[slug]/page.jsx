@@ -95,12 +95,7 @@ export default function SingleBlogPage() {
   if (!blog) return <p style={{ padding: "2rem" }}>Blog not found.</p>;
 
   const { Title, Description, blog_image, date, author_name, category } = blog;
-  const imageUrl = blog_image?.url
-    ? blog_image.url.startsWith("http")
-      ? blog_image.url
-      : `${API_URL}${blog_image.url}`
-    : "";
-
+  const imageUrl = "/images/blog/pngwing.com - 2025-11-17T021857.109 copy.png";
   return (
     <main>
       <BlogPageHero />
@@ -171,7 +166,7 @@ export default function SingleBlogPage() {
                   sx={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
                 >
                   <Image
-                    src="/images/icons/calendar.svg"
+                    src="/images/icons/icons8-calendar-32_1.png"
                     alt="Date"
                     width={20}
                     height={20}
@@ -182,7 +177,7 @@ export default function SingleBlogPage() {
                   sx={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
                 >
                   <Image
-                    src="/images/icons/author.svg"
+                    src="/images/icons/icons8-writing-64_1.png"
                     alt="Author"
                     width={20}
                     height={20}
@@ -193,7 +188,7 @@ export default function SingleBlogPage() {
                   sx={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
                 >
                   <Image
-                    src="/images/icons/category.svg"
+                    src="/images/icons/icons8-opened-folder-64.png"
                     alt="Category"
                     width={20}
                     height={20}

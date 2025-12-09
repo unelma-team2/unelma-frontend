@@ -16,8 +16,9 @@ import {
   Typography,
   TextField,
 } from "@mui/material";
-import ProductCard from "@/components/ProductCards";
-import ServiceCards from "@/components/ServiceCards"; 
+import ProductCard from "@/components/ProductCard";
+import ServiceCards from "@/components/ServiceCard"; 
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 export default function ProductsPage() {
   const theme = useTheme();
@@ -117,11 +118,11 @@ export default function ProductsPage() {
     return 0; // Default: no sorting
   });
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <LoadingSpinner />;
   if (error) return <p>Error: {error.message}</p>;
 
   return (
-    <Box sx={{ py: 4, px: 2 }}>
+    <Box sx={{ py: 4, px: 2, marginLeft: "170px" }}>
       <ProductsPageHero />
 
       {/* Tabs Section */}

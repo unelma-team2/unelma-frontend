@@ -1,7 +1,11 @@
+"use client";
+
 import Image from "next/image";
 import { Box, Typography } from "@mui/material";
+import { use } from "react";
 
-export default function BlogPageHero() {
+export default function BlogPageHero({bannerSection, imageUrl}) {
+    //const { banner_title, banner_image } = bannerSection;
     return (
         <Box sx={{
             display: "flex",
@@ -12,34 +16,33 @@ export default function BlogPageHero() {
             py: 8,
             width: "1440px",
             height: "550px",
-            mb: 4,
+            mb: 12,
         }}
         >
             <Typography
                 variant="h1"
                 sx={{
                     fontWeight: 700,
-                    fontSize: "72px",
+                    fontSize: "72pt",
+                    flexGrow: 1,
+                    marginLeft: "170px"
                 }}
                 >
                     Blog
                 </Typography>
-                <Box sx={{display: "flex", gap: 4}}>
-                    <Image
-                        src="/blog/blog-hero-1.png"
-                        alt="Blog Hero 1"
-                        width={244}
-                        height={261}
-                        />
-                    <Image
-                        src="/blog/blog-hero-2.png"
-                        alt="Blog Hero 2"
-                        width={272}
-                        height={309}
-                        loading="eager"
-                        />
+            <Box sx={{  
+                  scale: 0.7,
+                 flexGrow: 1 }}>
+                <Image
+                    src="/images/blog2.png"
+                    alt="Blog Hero"
+                    width={592}
+                    height={640}
                     
-                </Box>
+                    
+                    scale= {0.7}
+                    />
+            </Box>
         </Box>
     )
 }

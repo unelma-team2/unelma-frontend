@@ -29,19 +29,31 @@ export default function ProjectInquiry({projectInquiry}) {
 
 const { title1, title2, description1, description2, link, link_description } = projectInquiry;
 
-  return (
+return (
     <Box
       sx={{
-        width: "100%",
-        py: { xs: 6, md: 10 },
+       //width: "100vw",
+        //py: { xs: 6, md: 10 },
         bgcolor: theme.palette.background.default,
       }}
     >
-      <Box
+      < Box
         sx={{
-          maxWidth: 1650,
+          maxWidth: 1400,
           mx: "auto",
           px: { xs: 2, md: 4 },
+        }}
+      >
+      <Box
+        sx={{
+          bgcolor: theme.palette.background.lightBlue2,
+          borderTop: `2px solid ${theme.palette.primary.main}`,
+          borderRight: `2px solid ${theme.palette.primary.main}`,
+          borderTopRightRadius: "120px",
+          width: "100%",
+          height: "600px",
+       //   mx: "auto",
+         // px: { xs: 2, md: 4 },
           display: "flex",
           flexDirection: { xs: "column", md: "row" },
           alignItems: "flex-start",
@@ -50,23 +62,31 @@ const { title1, title2, description1, description2, link, link_description } = p
       >
         <Box
           sx={{
-            bgcolor: "#C1FCFF",
-            border: "2px solid #2F2E2E",
-            borderTopRightRadius: "120px",
-            borderBottom: "none",
-            p: { xs: 3, md: 6 },
-            maxWidth: { xs: "100%", md: "650px" },
-            mt: { md: -4 },
-            marginLeft: {md: "10%"},
+              width: "100%",
+               ml: "170px",
+               mt: "120px" ,
+            //bgcolor: "#C1FCFF",
+            //borderTop: "2px solid #2F2E2E",
+            //borderRight: "2px solid #2F2E2E",
+            //borderTopRightRadius: "120px",
+        
+            //p: { xs: 3, md: 6 },
+            //maxWidth: { xs: "100%", md: "100%" },
+            //mt: { md: -4 },
+            //marginLeft: {md: "10%"},
           }}
         >
           <Typography
             sx={{
-              fontFamily: "StackSansNotch, sans-serif",
+              fontFamily: theme.typography.fontFamily.bodyFont,
+              fontSize: { xs: 26, md: 46 },
+//               fontWeight: 700,
+//               mb: 3,
+              //fontFamily: "StackSansNotch, sans-serif",
               fontSize: { xs: 26, md: 32 },
               fontWeight: 700,
               mb: 3,
-              color: "#2F2E2E",
+              color: theme.palette.primary.main,
             }}
           >
             {title1} <br /> {title2}
@@ -74,11 +94,13 @@ const { title1, title2, description1, description2, link, link_description } = p
 
           <Typography
             sx={{
-              fontFamily: "Quicksand, sans-serif",
-              fontSize: 16,
+              fontFamily: theme.typography.fontFamily.bodyFont,
+              //fontFamily: "Outfit, sans-serif",
+              fontSize: 18,
+              fontWeight: 500,
               lineHeight: 1.6,
               mb: 3,
-              color: "#2F2E2E",
+              color: theme.palette.primary.main,
               maxWidth: 420,
             }}
           >
@@ -89,22 +111,17 @@ const { title1, title2, description1, description2, link, link_description } = p
           </Typography>
 
           <Button href={link}
-            variant="contained"
+            //variant="contained"
             sx={{
-              bgcolor: "#2F2E2E",
-              color: "#fff",
               px: 3,
               py: 1,
-              borderRadius: 1,
-              textTransform: "none",
-              fontWeight: 600,
-              fontFamily: "Quicksand, sans-serif",
-              ":hover": { bgcolor: "#444" },
+              mt: 2,
             }}
           >
             {link_description}
           </Button>
         </Box>
+      </Box>
       </Box>
     </Box>
   );
