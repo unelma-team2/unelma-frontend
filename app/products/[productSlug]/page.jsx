@@ -1,6 +1,8 @@
 "use client";
 
 import { useParams } from "next/navigation";
+import { useCart } from "@/context/CartContext";
+import { useRouter } from "next/navigation";
 import {
   Box,
   Container,
@@ -20,6 +22,8 @@ import ProductCard from "@/components/ProductCards";
 import axios from "axios";
 
 export default function ProductPage() {
+  const { addToCart } = useCart();
+  const router = useRouter();
   const { productSlug } = useParams();
   const [productData, setProductData] = useState(null);
   const [rating, setRating] = useState(0);
@@ -28,7 +32,7 @@ export default function ProductPage() {
   const [selectedImage, setSelectedImage] = useState("");
   const [relatedItems, setRelatedItems] = useState([]); 
 
-   const API_URL =
+  const API_URL =
     process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
 
      // Fetch product data by slug
@@ -368,7 +372,7 @@ useEffect(() => {
               mb: 2,
             }}
           >
-            {product_price}
+            ${product_price.toFixed(2)}
           </Typography>
 
           {/* Quantity Controller, Add to Cart, and Favorite Button */}
