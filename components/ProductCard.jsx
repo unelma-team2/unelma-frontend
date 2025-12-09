@@ -64,7 +64,7 @@ export default function ProductCard({ product, imageUrl , apiUrl}) {
       >
         {/* Centered Title */}
         <Typography variant="h4" align="center" sx={{ textAlign: "center" }}>
-          {product.title}
+          {product.title || product.product_name}
         </Typography>
 
         {/* Centered Description */}
