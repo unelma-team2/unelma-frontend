@@ -26,6 +26,7 @@ export default function Products() {
       .catch((err) => setError(err))
       .finally(() => setLoading(false));
   }, [API_URL]);
+  
 
   if (loading) return <LoadingSpinner />;
   if (error) return <p>Error: {error.message}</p>;
