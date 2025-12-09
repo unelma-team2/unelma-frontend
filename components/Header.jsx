@@ -28,7 +28,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 const navLinks = [
   { label: "Home", href: "/" },
   { label: "About Us", href: "/about" },
-  { label: "Products & Services", href: "/products", multiline: true },
+  { label: "Products & Services", href: "/products" },
   { label: "Our Work", href: "/case-studies" },
   { label: "Blog", href: "/blog" },
   { label: "Careers", href: "/careers" },
@@ -42,19 +42,24 @@ export default function Header() {
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const toggleDrawer = () => {
-    setMobileOpen(!mobileOpen);
-  };
+  const toggleDrawer = () => setMobileOpen(!mobileOpen);
 
   const drawer = (
     <Box sx={{ width: 260, p: 2 }}>
       <List>
         {navLinks.map((link) => (
           <ListItem key={link.href} disablePadding>
-            <ListItemButton component={Link} href={link.href} onClick={() => setMobileOpen(false)}>
+            <ListItemButton
+              component={Link}
+              href={link.href}
+              onClick={() => setMobileOpen(false)}
+            >
               <ListItemText
                 primary={link.label}
-                primaryTypographyProps={{ textTransform: "uppercase", fontWeight: 600 }}
+                primaryTypographyProps={{
+                  textTransform: "uppercase",
+                  fontWeight: 600,
+                }}
               />
             </ListItemButton>
           </ListItem>
@@ -64,10 +69,9 @@ export default function Header() {
   );
 
   const totalQuantity = cartItems.reduce(
-    (sum, item) => sum + item.quantity, 0);
-
-  const totalQuantity = cartItems.reduce(
-    (sum, item) => sum + item.quantity, 0);
+    (sum, item) => sum + item.quantity,
+    0
+  );
 
   return (
     <AppBar
@@ -78,7 +82,7 @@ export default function Header() {
         backgroundColor: theme.palette.background.default,
         boxShadow: "none",
         padding: { xs: 1, md: 4 },
-        mt: 12
+        mt: 12,
       }}
     >
       <Toolbar
@@ -88,10 +92,18 @@ export default function Header() {
           alignItems: "center",
           justifyContent: "space-between",
           gap: 2,
-          width: "100%"
+          width: "100%",
         }}
       >
-        <Box sx={{ display: "flex", alignItems: "center", width: "100%", justifyContent: "space-between" }}>
+        {/* LOGO + MOBILE MENU */}
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            width: "100%",
+            justifyContent: "space-between",
+          }}
+        >
           <Link href="/" style={{ display: "flex", alignItems: "center" }}>
             <Image
               src="/images/logos/logo-unelma.png"
@@ -111,12 +123,13 @@ export default function Header() {
           </IconButton>
         </Box>
 
+        {/* SEARCH + LOGIN + CART DESKTOP */}
         <Box
           sx={{
             display: { xs: "none", md: "flex" },
             alignItems: "center",
             gap: 3,
-            mt: -2
+            mt: -2,
           }}
         >
           <Box sx={{ display: "flex", alignItems: "center", gap: 3 }}>
@@ -137,85 +150,72 @@ export default function Header() {
                       />
                     </IconButton>
                   </InputAdornment>
-                )
+                ),
               }}
             />
 
-              {user ? (
-                <Button
-                  onClick={() => signOut()}
-                  sx={{
-                    backgroundColor: "transparent",
-                    color: theme.palette.text.primary,
-                    fontSize: "14pt",
-                    fontWeight: 600,
-                    border: "none",
-                    boxShadow: "none",
-                    textTransform: "uppercase",
-                    "&:hover": {
-                      backgroundColor: "transparent",
-                      opacity: 0.7,
-                    },
-                  }}
-                >
-                  Logout
-                </Button>
-              ) : (
-                <Button
-                  onClick={() => router.push("/login")}
-                  sx={{
-                    backgroundColor: "transparent",
-                    color: theme.palette.text.primary,
-                    fontSize: "12pt",
-                    fontWeight: 600,
-                    border: "none",
-                    boxShadow: "none",
-                    textTransform: "uppercase",
-                    "&:hover": {
-                      color: theme.palette.primary.blue,
-                      backgroundColor: "transparent",
-                      boxShadow: "none",
-                      transition: "0.25s ease",
-                    },
-                  }}
-                >
-                  Login/Register
-                </Button>
-              )}
-
-              <IconButton
-                aria-label="shopping cart"
+            {user ? (
+              <Button
+                onClick={() => signOut()}
                 sx={{
-                  height: 45,
-                  width: 45,
-                  transition: "transform 0.25s ease",
-                  "&:hover": {
-                    backgroundColor: theme.palette.background.lightBlue,
-                    transform: "scale(1.2)",
-                  },
+                  backgroundColor: "transparent",
+                  color: theme.palette.text.primary,
+                  fontSize: "14pt",
+                  fontWeight: 600,
+                  textTransform: "uppercase",
+                  "&:hover": { opacity: 0.7 },
                 }}
-                onClick={() => router.push("/cart")}
               >
-                <Badge
-                  badgeContent={totalQuantity}
-                  color="error"
-                  overlap="circular"
-                  invisible={totalQuantity === 0}
-                >
+                Logout
+              </Button>
+            ) : (
+              <Button
+                onClick={() => router.push("/login")}
+                sx={{
+                  backgroundColor: "transparent",
+                  color: theme.palette.text.primary,
+                  fontSize: "12pt",
+                  fontWeight: 600,
+                  textTransform: "uppercase",
+                  "&:hover": { opacity: 0.7 },
+                }}
+              >
+                Login/Register
+              </Button>
+            )}
+
+            <IconButton
+              aria-label="shopping cart"
+              sx={{
+                height: 45,
+                width: 45,
+                transition: "transform 0.25s ease",
+                "&:hover": {
+                  backgroundColor: theme.palette.background.lightBlue,
+                  transform: "scale(1.2)",
+                },
+              }}
+              onClick={() => router.push("/cart")}
+            >
+              <Badge
+                badgeContent={totalQuantity}
+                color="error"
+                overlap="circular"
+                invisible={totalQuantity === 0}
+              >
                 <Image
                   src="/images/icons/icons8-shopping-cart-64.png"
                   alt="Shopping cart icon"
                   width={30}
                   height={30}
                   priority
-                  style={{ cursor: "pointer" }}
                 />
-                </Badge>
-              </IconButton>
-            </Box>
+              </Badge>
+            </IconButton>
           </Box>
         </Box>
 
+        {/* DESKTOP NAVIGATION */}
         <Box
           sx={{
             display: { xs: "none", md: "flex" },
@@ -227,7 +227,11 @@ export default function Header() {
           }}
         >
           {navLinks.map((link) => (
-            <Link key={link.href} href={link.href} style={{ textDecoration: "none", color: "inherit" }}>
+            <Link
+              key={link.href}
+              href={link.href}
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
               <Typography sx={{ textTransform: "uppercase", fontWeight: 600 }}>
                 {link.label}
               </Typography>

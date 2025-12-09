@@ -95,7 +95,7 @@ export default function SingleBlogPage() {
   if (!blog) return <p style={{ padding: "2rem" }}>Blog not found.</p>;
 
   const { Title, Description, blog_image, date, author_name, category } = blog;
-  const imageUrl = "/images/blog/pngwing.com - 2025-11-17T021857.109 copy.png"
+  const imageUrl = "/images/blog/pngwing.com - 2025-11-17T021857.109 copy.png";
   return (
     <main>
       <BlogPageHero />
