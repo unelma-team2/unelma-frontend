@@ -33,7 +33,8 @@ export default function ProductsPage() {
   const [bannerSection, setBannerSection] = useState(null);
 
   const API_URL =
-    process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
+    // process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
+    "http://localhost:1337";
 
   // Fetch product page data
   useEffect(() => {
