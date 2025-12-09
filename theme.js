@@ -26,16 +26,17 @@ const theme = createTheme({
       // green1: "#77C64B",
       // green2: "#038B61",
       main: "#1D2340",
-      yellow: "#ffe100ff",
-      orange: "#ff950bff",
-      red: "#FF1F4B",
+      yellow: "#ffde7dff",
+      orange: "#ffb34fff",
+      red: "#ff5678ff",
       pink: "#FF3DA4",
-      violet: "#8D45B4",
+      violet: "#a454cfff",
+      darkViolet: "#7012a2ff",
       purple: "#4940CE",
-      blue1: "#3364bfff",
-      blue2: "#0089D2",
+      blue1: "#0462d5ff",
+      blue2: "#00b6d6ff",
       green1: "#77C64B",
-      green2: "#09ad79ff",
+      green2: "#16bb86ff",
 
 
 
@@ -54,10 +55,11 @@ const theme = createTheme({
       // lightViolet: "#E5DDF8",
       // //lightOrange: "#FEE7C1",
       // lightOrange: "#fad69bff",
-      // lightYellow: "#FFF1C5",
+      // lightYellow: "#fffbbfff",
       // lightGreen: "#caecc9ff",
       // lightRed: "#FFBCC9",
        lightBlue: "#C9DCFF",
+      lightBlue2: "#adf3ffff",
       lightViolet: "#dbcef7ff",
       lightOrange: "#ffd48eff",
       lightYellow: "#ffefb4ff",
@@ -102,6 +104,24 @@ const theme = createTheme({
       fontWeight: 700,
       fontSize: "16pt",
     },
+      body18bold: {
+      fontFamily: bodyFont,
+      fontSize: "18pt",
+      fontWeight: 700,
+      lineHeight: 1.3,
+    },
+    body18med: {
+      fontFamily: bodyFont,
+      fontSize: "18pt",
+      fontWeight: 500,
+      lineHeight: 1.3,
+    },
+    body18reg: {
+      fontFamily: bodyFont,
+      fontSize: "18pt",
+      fontWeight: 400,
+      lineHeight: 1.3,
+    },
       body16bold: {
       fontFamily: bodyFont,
       fontSize: "16pt",
@@ -135,6 +155,12 @@ const theme = createTheme({
     body14reg: {
       fontFamily: bodyFont,
       fontSize: "14pt",
+      fontWeight: 400,
+      lineHeight: 1.1,
+    },
+     body12reg: {
+      fontFamily: bodyFont,
+      fontSize: "12pt",
       fontWeight: 400,
       lineHeight: 1.1,
     },
@@ -288,6 +314,7 @@ const theme = createTheme({
             boxShadow: "0px 6px 6px rgba(0,0,0,0.20)",
             backgroundColor: "##0061D2",
             transform: "scale(1.1)",
+             cursor: "pointer",
           },
         },
       },
@@ -296,7 +323,7 @@ const theme = createTheme({
     MuiCard: {
       styleOverrides: {
         root: {
-          border:"2px solid #2F2E2E",
+          border:"2px solid #1D2340",
           borderRadius: 4,
           boxShadow: "0px 2px 4px rgba(0,0,0,0.1)",
         },

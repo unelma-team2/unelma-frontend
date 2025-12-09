@@ -16,8 +16,9 @@ import {
   Typography,
   TextField,
 } from "@mui/material";
-import ProductCard from "@/components/ProductCards";
-import ServiceCards from "@/components/ServiceCards";
+import ProductCard from "@/components/ProductCard";
+import ServiceCards from "@/components/ServiceCard"; 
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 export default function ProductsPage() {
   const theme = useTheme();
@@ -135,7 +136,7 @@ export default function ProductsPage() {
     return 0;
   });
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <LoadingSpinner />;
   if (error) return <p>Error: {error.message}</p>;
 
   return (

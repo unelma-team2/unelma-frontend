@@ -2,14 +2,14 @@
 
 import { Box, Typography } from "@mui/material";
 
-export default function BulletPoints({ text, gradient }) {
+export default function BulletPoints({ text, backgroundColor }) {
   return (
     <Box
       sx={{
         width: 70,
         height: 70,
         borderRadius: "50%",
-        background: gradient,
+      bgcolor: backgroundColor, // <-- important
         //position: "relative",
         display: "flex",
         flexDirection: "column",

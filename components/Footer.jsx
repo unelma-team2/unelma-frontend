@@ -28,17 +28,18 @@ export default function Footer() {
     <Box
       component="footer"
       sx={{
-        bgcolor: theme.palette.background.lightMint,
+        bgcolor: theme.palette.background.lightBlue2,
         color: theme.palette.primary.main,
         borderTop: 2,
         borderColor: theme.palette.primary.main,
-        mt: 4,
+         boxShadow: `-10px -8px 0px ${theme.palette.primary.blue2}`,
+        mt: 18,
       }}
     >
-      <Box sx={{ maxWidth: 1500, mx: "auto", px: { xs: 2, md: 6 }, py: 6 }}>
-        <Grid container spacing={{ xs: 2, md: 4 }} justifyContent="space-between">
+      <Box sx={{ maxWidth: 1500, mx: "auto", px: { xs: 2, md: 6 }, py: 10 }}>
+        <Grid container spacing={{ xs: 2, md: 3 }} justifyContent="space-between">
           {/* Column 1 */}
-          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+          <Grid size={{ xs: 12, sm: 6, md: 2 }}>
             <Box sx={{ mb: 2 }}>
               <Image
                 src="/images/logos/logo-unelma.png"
@@ -63,7 +64,7 @@ export default function Footer() {
           </Grid>
 
           {/* Column 2 */}
-          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+          <Grid size={{ xs: 12, sm: 6, md: 2 }}>
             <Typography variant="h4" sx={{ mb: 2 }}>
               Resources
             </Typography>
@@ -120,7 +121,7 @@ export default function Footer() {
           </Grid>
 
           {/* Column 3 */}
-          <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+          <Grid size={{ xs: 12, sm: 6, md: 4 }}>
             <Typography variant="h4" sx={{ mb: 2 }}>
               Contact Us
             </Typography>
@@ -192,7 +193,8 @@ export default function Footer() {
             sx={{
               display: "flex",
               justifyContent: { xs: "center", md: "flex-end" },
-              alignItems: "center",
+              alignItems: "flex-start",
+              
             }}
           >
             <NewsletterSubscription />
