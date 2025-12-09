@@ -163,6 +163,7 @@ export default function ProductPage() {
           >
             <Image
               src={imageUrl(product_image)}
+            //   src={selectedImage ? imageUrl(selectedImage) : imageUrl(product_image)}
               alt={product_name}
               width={665}
               height={401}
@@ -408,13 +409,11 @@ export default function ProductPage() {
           </Box>
 
           {/* Leave a Review Button */}
-          <Box sx={{ textAlign: "center", mt: 2 }}>
-            <Button variant="outlined" color="secondary" >
-              {reviewButton_description}
-            <Button variant="outlined" color="secondary" >
-              {reviewButton_description}
-            </Button>
-          </Box>
+<Box sx={{ textAlign: "center", mt: 2 }}>
+  <Button variant="outlined" color="secondary">
+    {reviewButton_description}
+  </Button>
+</Box>
         </Box>
       </Box>
 
