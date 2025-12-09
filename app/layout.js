@@ -41,18 +41,6 @@ export default function RootLayout({ children }) {
       <body>
         <EmotionRegistry>
           <ThemeRegistry>
-<<<<<<< HEAD
-            <ClientLayoutWrapper>
-              <Box
-                sx={{
-                  //mx: { xs: 2, md: "170px" },
-                  //my: "2rem",
-                }}
-              >
-                {children}
-              </Box>
-            </ClientLayoutWrapper>
-=======
             <CartProvider>
               {" "}
               {/* Wrap the app with CartProvider */}
@@ -67,7 +55,6 @@ export default function RootLayout({ children }) {
                 </Box>
               </ClientLayoutWrapper>
             </CartProvider>
->>>>>>> 2532dc8705052fc391365efc06483cd8480458f0
           </ThemeRegistry>
         </EmotionRegistry>
       </body>
