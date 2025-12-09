@@ -30,8 +30,8 @@ const theme = createTheme({
 
     },
     text: {
-      primary: "#2F2E2E",
-      secondary: "#6A6A6A",
+      primary: "#1D2340",
+      secondary: "#64687E",
       contrastText: "#FFFFFF",
     },
     background: {
@@ -40,8 +40,10 @@ const theme = createTheme({
       //lightMint: "#DDFAFF", 
       //lightBlue: "#E0E7FF",
       lightBlue: "#C9DCFF",
+      lightViolet: "#E5DDF8",
       lightOrange: "#FEE7C1",
       lightYellow: "#FFF1C5",
+      lightGreen: "#daecc9",
     },
   },
 
@@ -50,8 +52,8 @@ const theme = createTheme({
     hero: {
       fontFamily: headingFont,
       fontWeight: 700,
-      fontSize: "92pt",
-      lineHeight: 1.1,
+      fontSize: "76pt",
+      lineHeight: 1.2,
     },
     h1: {
       fontFamily: headingFont,
@@ -127,12 +129,12 @@ const theme = createTheme({
 
   mixins: {
     sectionBox: {
-      border:"2px solid #2F2E2E",
+      border:"2px solid #1D2340",
       borderRadius: "10px",
       boxShadow: "0px 2px 4px rgba(0,0,0,0.1)",
     },
     homeBoxLeft: {
-      borderBottom: "2px solid #2F2E2E",
+      borderBottom: "2px solid #1D2340",
       position: "absolute",
       top: 0,
       left: 0,
@@ -141,8 +143,8 @@ const theme = createTheme({
       zIndex: 3,
     },
     homeTitleRight: {
-      borderTop: "2px solid #2F2E2E",
-      borderLeft: "2px solid #2F2E2E",
+      borderTop: "2px solid #1D2340",
+      borderLeft: "2px solid #1D2340",
       borderTopLeftRadius: "120px",
       position: "absolute",
       top: 0,
@@ -152,7 +154,7 @@ const theme = createTheme({
       zIndex: 3,
     },
     homeBoxRight: {
-      borderBottom: "2px solid #2F2E2E",
+      borderBottom: "2px solid #1D2340",
       position: "absolute",
       top: 0,
       right: 0,
@@ -161,8 +163,8 @@ const theme = createTheme({
       zIndex: 3,
     },
     homeTitleLeft: {
-      borderTop: "2px solid #2F2E2E",
-      borderRight: "2px solid #2F2E2E",
+      borderTop: "2px solid #1D2340",
+      borderRight: "2px solid #1D2340",
       borderTopRightRadius: "120px",
       position: "absolute",
       top: 0,
@@ -176,7 +178,7 @@ const theme = createTheme({
 
   shape: {
     borderRadius: 10,
-    border: "2px solid #2F2E2E",
+    border: "2px solid #1D2340",
 
   },
 
@@ -188,7 +190,7 @@ const theme = createTheme({
           px: 4,
           py: 1,
           color: "#FFFFFF",
-          backgroundColor: "#2F2E2E",
+          backgroundColor: "#1D2340",
           borderRadius: "8px",
           boxShadow: "0px 4px 4px rgba(0,0,0,0.15)",
           transition: "box-shadow 0.3s ease",
@@ -196,7 +198,7 @@ const theme = createTheme({
 
           "&:hover": {
             boxShadow: "0px 6px 6px rgba(0,0,0,0.20)",
-            backgroundColor: "#5662e3ff",
+            backgroundColor: "##0061D2",
             transform: "scale(1.1)",
           },
         },

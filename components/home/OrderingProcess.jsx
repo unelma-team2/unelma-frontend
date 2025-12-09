@@ -4,14 +4,15 @@ import React from 'react';
 import { Box, Container, Typography, Stepper, Step, StepLabel } from "@mui/material";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import theme from '@/theme';
 
 function CustomStepIcon(props) {
   return (
     <Box
       sx={{
-        backgroundColor: '#C1FCFF',
-        border: '2px solid #000000',
-        color: '#000',
+        backgroundColor: theme.palette.background.default,
+        border: `2px solid ${theme.palette.primary.main}`,
+        color: theme.palette.primary.main,
         width: 60,
         height: 60,
         borderRadius: '50%',
@@ -56,9 +57,9 @@ export default function OrderingProcess({orderProcess}) {
         sx={{ 
             paddingTop: { xs: 8, md: 10 }, 
             paddingBottom: { xs: 8, md: 12 },
-            backgroundColor: '#EDFCFF',
+            backgroundColor: theme.palette.background.lightBlue,
             textAlign: 'center',
-            border: '1px solid black',
+            border: `2px solid ${theme.palette.primary.main}`,
         }}
     >
         <Container maxWidth="lg">
@@ -95,7 +96,7 @@ export default function OrderingProcess({orderProcess}) {
                                     marginTop: 3,
                                     fontSize: '1rem',
                                     fontWeight: 800,
-                                    color: '#000',
+                                    color: theme.palette.primary.main,
                                 },
                             }}
                         >

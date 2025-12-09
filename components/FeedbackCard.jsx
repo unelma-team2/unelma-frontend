@@ -56,7 +56,7 @@ export default function FeedbackCard({ name, message, avatar }) {
           }}
         >
           <Image
-            src="/images/icons/icons8-quote-100.png"
+            src="/images/icons/icons8-quote-100_1.png"
             alt="quote"
             width={70}
             height={70}
