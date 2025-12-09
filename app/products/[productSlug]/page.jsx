@@ -370,7 +370,7 @@ export default function ProductPage() {
               mb: 2,
             }}
           >
-            {product_price.toFixed(2)}
+            ${Number(product_price).toFixed(2)}
           </Typography>
 
           {/* Quantity Controller, Add to Cart, and Favorite Button */}
