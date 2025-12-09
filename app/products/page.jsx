@@ -17,7 +17,7 @@ import {
   TextField,
 } from "@mui/material";
 import ProductCard from "@/components/ProductCard";
-import ServiceCards from "@/components/ServiceCard"; 
+import ServiceCard from "@/components/ServiceCard"; 
 import LoadingSpinner from "@/components/LoadingSpinner";
 
 export default function ProductsPage() {
@@ -203,7 +203,13 @@ export default function ProductsPage() {
               ))}
             </Grid>
           ) : (
-            <ServiceCards services={sortedServices} apiUrl={API_URL} />
+            <Grid container spacing={4}>
+              {sortedServices.map((service) => (
+                <Grid item xs={12} sm={4} md={4} lg={4} key={service.id}>
+                  <ServiceCard service={service} apiUrl={API_URL} />
+                </Grid>
+              ))}
+            </Grid>
           )}
         </Grid>
       </Grid>
