@@ -102,7 +102,15 @@
 
 "use client";
 
-import { Box, Paper, Typography, TextField, Button, InputAdornment, useTheme } from "@mui/material";
+import {
+  Box,
+  Typography,
+  TextField,
+  Button,
+  Paper,
+  InputAdornment,
+  useTheme,
+} from "@mui/material";
 import EmailIcon from "@mui/icons-material/Email";
 import Image from "next/image";
 
@@ -162,11 +170,18 @@ export default function SubscriptionBox() {
           Sign up for email updates!
         </Typography>
 
-        <Box component="form" sx={{ display: "flex", mb: 2, alignItems: "center" }}>
+        <Box
+        component="form"
+        action="https://core.unelmamail.com/lists/691d96ff827d9/691d89899267f/embedded-form-subscribe-captcha"
+        method="POST"
+        sx={{ display: "flex", mb: 2, alignItems: "center" }}
+      >
+        {/* Email Input */}
           <TextField
             size="small"
             variant="outlined"
             placeholder="Email"
+          name="EMAIL"
             fullWidth
             sx={{
               bgcolor: "#fff",
@@ -196,6 +211,7 @@ export default function SubscriptionBox() {
             }}
           />
 
+        {/* Submit Button */}
           <Button
             type="submit"
             variant="contained"
@@ -219,8 +235,13 @@ export default function SubscriptionBox() {
           </Button>
         </Box>
 
-        <Typography component="p" variant="body2" sx={{ color: "primary.main", fontSize: 15, mt: 1 }}>
-          In accordance with GDPR, we will contact you only when necessary, and all personal data collected will be anonymized.
+        <Typography
+        component="p"
+        variant="body2"
+        sx={{ color: "primary.main", fontSize: 15, mt: 1 }}
+      >
+          In accordance with GDPR, we will contact you only when necessary, and
+        all personal data collected will be anonymized.
         </Typography>
       </Box>
     </Paper>

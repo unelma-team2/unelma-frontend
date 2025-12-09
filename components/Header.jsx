@@ -1,5 +1,7 @@
 "use client";
 
+import Badge from "@mui/material/Badge";
+import { useCart } from "@/context/CartContext";
 import { useState } from "react";
 import { useAuth } from "@/app/context/AuthContext";
 import Image from "next/image";
@@ -19,7 +21,7 @@ import {
   ListItem,
   ListItemButton,
   ListItemText,
-  useTheme
+  useTheme,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 
@@ -30,11 +32,12 @@ const navLinks = [
   { label: "Our Work", href: "/case-studies" },
   { label: "Blog", href: "/blog" },
   { label: "Careers", href: "/careers" },
-  { label: "Contact Us", href: "/contact" }
+  { label: "Contact Us", href: "/contact" },
 ];
 
 export default function Header() {
   const { user, signOut } = useAuth();
+  const { cartItems } = useCart();
   const router = useRouter();
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -59,6 +62,12 @@ export default function Header() {
       </List>
     </Box>
   );
+
+  const totalQuantity = cartItems.reduce(
+    (sum, item) => sum + item.quantity, 0);
+
+  const totalQuantity = cartItems.reduce(
+    (sum, item) => sum + item.quantity, 0);
 
   return (
     <AppBar
@@ -132,20 +141,78 @@ export default function Header() {
               }}
             />
 
-            {user ? (
-              <Button onClick={() => signOut()}>Logout</Button>
-            ) : (
-              <Button onClick={() => router.push("/login")}>Login/Register</Button>
-            )}
+              {user ? (
+                <Button
+                  onClick={() => signOut()}
+                  sx={{
+                    backgroundColor: "transparent",
+                    color: theme.palette.text.primary,
+                    fontSize: "14pt",
+                    fontWeight: 600,
+                    border: "none",
+                    boxShadow: "none",
+                    textTransform: "uppercase",
+                    "&:hover": {
+                      backgroundColor: "transparent",
+                      opacity: 0.7,
+                    },
+                  }}
+                >
+                  Logout
+                </Button>
+              ) : (
+                <Button
+                  onClick={() => router.push("/login")}
+                  sx={{
+                    backgroundColor: "transparent",
+                    color: theme.palette.text.primary,
+                    fontSize: "12pt",
+                    fontWeight: 600,
+                    border: "none",
+                    boxShadow: "none",
+                    textTransform: "uppercase",
+                    "&:hover": {
+                      color: theme.palette.primary.blue,
+                      backgroundColor: "transparent",
+                      boxShadow: "none",
+                      transition: "0.25s ease",
+                    },
+                  }}
+                >
+                  Login/Register
+                </Button>
+              )}
 
-            <IconButton aria-label="shopping cart">
-              <Image
-                src="/images/icons/icons8-shopping-cart-64.png"
-                alt="Shopping cart icon"
-                width={30}
-                height={30}
-              />
-            </IconButton>
+              <IconButton
+                aria-label="shopping cart"
+                sx={{
+                  height: 45,
+                  width: 45,
+                  transition: "transform 0.25s ease",
+                  "&:hover": {
+                    backgroundColor: theme.palette.background.lightBlue,
+                    transform: "scale(1.2)",
+                  },
+                }}
+                onClick={() => router.push("/cart")}
+              >
+                <Badge
+                  badgeContent={totalQuantity}
+                  color="error"
+                  overlap="circular"
+                  invisible={totalQuantity === 0}
+                >
+                <Image
+                  src="/images/icons/icons8-shopping-cart-64.png"
+                  alt="Shopping cart icon"
+                  width={30}
+                  height={30}
+                  priority
+                  style={{ cursor: "pointer" }}
+                />
+                </Badge>
+              </IconButton>
+            </Box>
           </Box>
         </Box>
 
@@ -155,8 +222,8 @@ export default function Header() {
             justifyContent: "flex-end",
             gap: 6,
             mt: 2.5,
-            width: "88%",
-            mx: "auto"
+            width: { xs: "100%", md: "88%" },
+            mx: "auto",
           }}
         >
           {navLinks.map((link) => (

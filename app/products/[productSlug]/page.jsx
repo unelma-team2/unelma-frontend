@@ -1,6 +1,8 @@
 "use client";
 
 import { useParams } from "next/navigation";
+import { useCart } from "@/context/CartContext";
+import { useRouter } from "next/navigation";
 import {
   Box,
   Container,
@@ -20,9 +22,12 @@ import ProductCard from "@/components/ProductCard";
 import axios from "axios";
 
 export default function ProductPage() {
+  const { addToCart } = useCart();
+  const router = useRouter();
   const { productSlug } = useParams();
 
   const productData = {
+    id: 1,
     name: "UnelmaMail",
     product_type: "Email Marketing Software",
     detailedDescription: `
@@ -47,7 +52,7 @@ Whether you’re a solo entrepreneur, a marketing professional, or an enterprise
 
 UnelmaMail SoftwareLive consumer software version is available at https://unelmamail.com.
 `,
-    price: "$49.90",
+    unitPrice: 49.90,
     image: "/images/products/unelmamail-image.png",
     logo: "/images/products/unelmamail-logo.png",
     category: "Enterprise Software",
@@ -68,7 +73,7 @@ UnelmaMail SoftwareLive consumer software version is available at https://unelma
 
   const [relatedItems, setRelatedItems] = useState([]); // State for related items
 
-   const API_URL =
+  const API_URL =
     process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
 
   useEffect(() => {
@@ -287,7 +292,7 @@ UnelmaMail SoftwareLive consumer software version is available at https://unelma
               mb: 2,
             }}
           >
-            {productData.price}
+            ${productData.unitPrice.toFixed(2)}
           </Typography>
 
           {/* Quantity Controller, Add to Cart, and Favorite Button */}
@@ -312,7 +317,10 @@ UnelmaMail SoftwareLive consumer software version is available at https://unelma
             <Button
               variant="contained"
               color="primary"
-              onClick={() => console.log(`Added ${quantity} to cart`)}
+              onClick={() => {
+                addToCart({ ...productData, quantity });
+                router.push("/cart");
+              }}
             >
               Add to Cart
             </Button>
