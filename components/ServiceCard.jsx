@@ -4,6 +4,7 @@
 
 import { Box, Button, Card, CardContent, Typography, useTheme } from "@mui/material";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function ServiceCard({ service, apiUrl }) {
   const theme = useTheme();
@@ -58,9 +59,23 @@ export default function ServiceCard({ service, apiUrl }) {
         </Box>
 
         {/* Title */}
-        <Typography variant="h4" sx={{ my: 2 }}>
-          {service.title}
-        </Typography>
+        <Link href={`/services/${service.slug}`} style={{ textDecoration: "none" }}>
+  <Typography
+    variant="h4"
+    sx={{
+      my: 2,
+      color: "inherit",
+      transition: "transform 0.3s ease, color 0.3s ease",
+      "&:hover": {
+        transform: "scale(1.05)",
+        color: theme.palette.primary.main,
+      },
+      cursor: "pointer",
+    }}
+  >
+    {service.title}
+  </Typography>
+</Link>
 
         {/* Description */}
         <Typography variant="body14reg" sx={{ textAlign: "justify", mb: 3 }}>
