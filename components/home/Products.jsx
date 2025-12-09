@@ -1,22 +1,91 @@
+// "use client";
+
+// import axios from "axios";
+// import { useState, useEffect } from "react";
+// import ProductCards from "../ProductCard.jsx";
+// import ArrowButtons from "../ArrowButtons.jsx";
+// import { Box, Typography } from "@mui/material";
+// import LoadingSpinner from "../LoadingSpinner";
+// import Carousel from "../Carousel.jsx";
+
+// export default function Products() {
+//   const [products, setProducts] = useState([]);
+//   const [error, setError] = useState(null);
+//   const [loading, setLoading] = useState(true);
+//   const [index, setIndex] = useState(0);
+
+//   const API_URL =
+//     process.env.NEXT_PUBLIC_API_URL ||
+//     "https://unelma-backend.onrender.com";
+
+//   useEffect(() => {
+//     axios
+//       .get(`${API_URL}/api/home?populate[Products][populate]=*`)
+//       .then((res) => setProducts(res.data.data?.Products || []))
+//       .catch((err) => setError(err))
+//       .finally(() => setLoading(false));
+//   }, [API_URL]);
+
+//   if (loading) return <LoadingSpinner />;
+//   if (error) return <p>Error: {error.message}</p>;
+//   if (!products?.length) return <p>No products found.</p>;
+
+//   const visibleCount = 3;
+
+//   const next = () => {
+//     setIndex((prev) => (prev + 1) % products.length);
+//   };
+
+//   const prev = () => {
+//     setIndex((prev) => (prev - 1 + products.length) % products.length);
+//   };
+
+//   const visibleProducts = Array.from({ length: visibleCount }).map(
+//     (_, i) => products[(index + i) % products.length]
+//   );
+
+//   return (
+//     <Box sx={{ py: 8, px: 4 }}>
+//       <Box sx={{ maxWidth: "1200px", mx: "auto" }}>
+//         <Typography
+//           variant="h2"
+//           align="left"
+//           sx={{ fontWeight: 700, mb: 6 }}
+//         >
+//           Our Products
+//         </Typography>
+
+
+// <Carousel
+//   items={products}
+//   renderItem={(product) => <ProductCards product={product} apiUrl={API_URL} />}
+// />
+
+//       </Box>
+//     </Box>
+//   );
+// }
+
 "use client";
 
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useState, useEffect } from "react";
-import ProductCards from "../ProductCards.jsx";
-import ArrowButtons from "../ArrowButtons.jsx";
-import { Box, Typography } from "@mui/material";
+import { Box, Grid, Typography, useTheme, useMediaQuery } from "@mui/material";
+
 import LoadingSpinner from "../LoadingSpinner";
 import Carousel from "../Carousel.jsx";
+import ProductCards from "../ProductCard.jsx";
 
 export default function Products() {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
   const [products, setProducts] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [index, setIndex] = useState(0);
 
   const API_URL =
-    process.env.NEXT_PUBLIC_API_URL ||
-    "https://unelma-backend.onrender.com";
+    process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
 
   useEffect(() => {
     axios
@@ -28,39 +97,75 @@ export default function Products() {
 
   if (loading) return <LoadingSpinner />;
   if (error) return <p>Error: {error.message}</p>;
-  if (!products?.length) return <p>No products found.</p>;
+  if (!products.length) return <p>No products found.</p>;
 
-  const visibleCount = 3;
-
-  const next = () => {
-    setIndex((prev) => (prev + 1) % products.length);
-  };
-
-  const prev = () => {
-    setIndex((prev) => (prev - 1 + products.length) % products.length);
-  };
-
-  const visibleProducts = Array.from({ length: visibleCount }).map(
-    (_, i) => products[(index + i) % products.length]
-  );
+  // Header settings
+  const headerHeight = 180;
 
   return (
-    <Box sx={{ py: 8, px: 4 }}>
-      <Box sx={{ maxWidth: "1200px", mx: "auto" }}>
-        <Typography
-          variant="h2"
-          align="left"
-          sx={{ fontWeight: 700, mb: 6 }}
+    <Box sx={{ width: "100%", mt: 16 }}>
+      {/* HEADER */}
+      <Box
+        sx={{
+          width: "100%",
+          position: "relative",
+          height: { xs: Math.max(120, Math.round(headerHeight * 0.75)), md: headerHeight },
+          overflow: "visible",
+        }}
+      >
+        {/* LEFT WHITE CURVED PANEL WITH TITLE */}
+        <Box
+          sx={{
+            ...theme.mixins.homeTitleLeft,
+              boxShadow: `-10px -8px 0px ${theme.palette.background.lightOrange}`,
+          }}
         >
-          Our Products
-        </Typography>
+          <Typography
+            variant="h2"
+            sx={{
+              fontWeight: 700,
+              fontSize: { xs: "24px", sm: "28px", md: theme.typography.h2?.fontSize || "38pt" },
+              textAlign: { xs: "center", md: "left" },
+              color: theme.palette.text.primary,
+              marginLeft: { md: "170px" }, // optional padding from left edge
+            }}
+          >
+            Our Products
+          </Typography>
+        </Box>
 
+        {/* RIGHT DARK BLOCK */}
+        <Box
+          sx={{
+            ...theme.mixins.homeBoxRight,
+              boxShadow: `inset 0px -8px 0px ${theme.palette.background.lightOrange}`,
+          }}
+        />
 
-<Carousel
-  items={products}
-  renderItem={(product) => <ProductCards product={product} apiUrl={API_URL} />}
-/>
+        {/* OPTIONAL BOTTOM LINE */}
+        <Box
+          sx={{
+            ...theme.mixins.bottomLineRight,
+          }}
+        />
+      </Box>
 
+      {/* CONTENT BELOW HEADER */}
+      <Box
+        sx={{
+          px: { xs: 2, md: 4 },
+          maxWidth: "1200px",
+          mx: "auto",
+          mt: 18,
+        }}
+      >
+     
+          <Carousel
+            items={products}
+            renderItem={(product) => <ProductCards product={product} apiUrl={API_URL} />}
+          />
+        
+        
       </Box>
     </Box>
   );

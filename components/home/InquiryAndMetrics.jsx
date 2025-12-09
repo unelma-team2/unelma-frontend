@@ -14,7 +14,7 @@ export default function InquiryAndMetrics({metrics,projectInquiry}) {
         justifyContent: "space-between",
         alignItems: "flex-start",
         //borderLeft: "2px solid #1D2340",
-        borderBottom: "2px solid #1D2340",
+        //borderBottom: "2px solid #1D2340",
         borderRight: "none",
         mt: 8,
       }}

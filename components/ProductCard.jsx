@@ -17,7 +17,7 @@ export default function ProductCard({ product, apiUrl = "" }) {
     paddingBottom: 4,
     paddingX: 6,
     overflow: "hidden",
-    boxShadow: `-10px -8px 0px ${theme.palette.primary.blue}`,
+    boxShadow: `-10px -8px 0px ${theme.palette.primary.orange}`,
     mt: 2,
   };
 
