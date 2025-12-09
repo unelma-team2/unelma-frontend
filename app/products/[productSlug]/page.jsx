@@ -25,7 +25,48 @@ export default function ProductPage() {
   const { addToCart } = useCart();
   const router = useRouter();
   const { productSlug } = useParams();
+<<<<<<< HEAD
   const [productData, setProductData] = useState(null);
+=======
+
+  const productData = {
+    id: 1,
+    name: "UnelmaMail",
+    product_type: "Email Marketing Software",
+    detailedDescription: `
+Meet UnelmaMail — the world’s first AI-powered, all-in-one email marketing automation platform designed to simplify how you reach and engage your audience. Built by Unelma Platforms, it blends powerful features, automation, and intelligent analytics into a user-friendly SaaS solution for businesses of any size.
+
+What UnelmaMail offers:
+- Comprehensive mailing list & contact management — handle single or double opt-in flows, import/export contacts, segment lists, manage subscriptions, and blacklist unwanted addresses to keep your lists clean.
+- Flexible Email Builder & Templates — use the responsive editor and choose from dozens of pre-built layouts, or import your own email designs, to create attractive campaigns without coding.
+- Automation & Autoresponders — trigger campaigns or follow-up emails based on subscriber behavior (opens, clicks), subscription events, or recurring schedules. Great for drip sequences, newsletters, or engagement follow-ups.
+- Full delivery tracking & analytics — monitor opens, clicks, bounces, complaints; get real-time reports and insights on performance, list growth, and campaign effectiveness right from the dashboard.
+- API & third-party integrations — integrate UnelmaMail with your websites or applications via RESTful API; works with major sending services such as Amazon SES, SendGrid, SparkPost, and Elastic Email — giving you flexibility and scalability.
+- Easy start & affordable pricing — try the platform with a free plan supporting up to 2,500 contacts. Paid plans start affordably (e.g., a standard plan at $7.99 per month), with higher tiers and enterprise-ready options available for growing businesses.
+- Open-source foundation — built using open-source technologies under a flexible framework, making maintenance easier and allowing for custom developments as business needs evolve.
+- Support & long-term reliability — backed by Unelma Platforms’ commitment to support, maintenance, security updates, and bug fixes — giving you peace of mind as your campaigns scale.
+
+Who is UnelmaMail for?
+Whether you’re a solo entrepreneur, a marketing professional, or an enterprise-level company, UnelmaMail is built to suit your needs. It’s ideal if you want:
+- A unified platform for managing your email marketing from list building to campaign analytics.
+- Easy-to-use tools without needing deep technical skills — but with power available when you need it.
+- Reliable software with active updates, technical support, and scalability for growing businesses.
+- A cost-effective solution that works with composing an ROI-driven campaign strategy.
+
+UnelmaMail SoftwareLive consumer software version is available at https://unelmamail.com.
+`,
+    unitPrice: 49.90,
+    image: "/images/products/unelmamail-image.png",
+    logo: "/images/products/unelmamail-logo.png",
+    category: "Enterprise Software",
+    gallery: [
+      "/images/products/unelmamail-image.png",
+      "/images/products/unelmamail-image2.png",
+    ],
+  };
+
+//   const [productData, setProductData] = useState(null);
+>>>>>>> 9a613d6 (rsolve the merge conflict)
   const [rating, setRating] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [isFavorite, setIsFavorite] = useState(false);
@@ -372,7 +413,12 @@ useEffect(() => {
               mb: 2,
             }}
           >
+<<<<<<< HEAD
             ${product_price.toFixed(2)}
+=======
+            ${productData.unitPrice.toFixed(2)}
+            {product_price}
+>>>>>>> 9a613d6 (rsolve the merge conflict)
           </Typography>
 
           {/* Quantity Controller, Add to Cart, and Favorite Button */}
@@ -397,7 +443,15 @@ useEffect(() => {
             <Button
               variant="contained"
               color="primary"
+<<<<<<< HEAD
               onClick={() => handleAddToCart()}
+=======
+              onClick={() => {
+                addToCart({ ...productData, quantity });
+                router.push("/cart");
+              }}
+            //   onClick={() => handleAddToCart()}
+>>>>>>> 9a613d6 (rsolve the merge conflict)
             >
               {cartButton_description}
             </Button>
