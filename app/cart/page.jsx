@@ -2,6 +2,8 @@
 
 import React, { useState } from "react";
 import { useCart } from "@/context/CartContext";
+import {useRouter} from "next/navigation";
+import {useAuth} from "@/app/context/AuthContext";
 import {
   Box,
   Typography,
@@ -27,6 +29,8 @@ const shippingOptions = [
 
 export default function CartPage() {
   const { cartItems, removeFromCart, updateQuantity } = useCart();
+  const router = useRouter();
+  const { user } = useAuth();
 
   const [selectedShipping, setSelectedShipping] = useState(shippingOptions[0]);
   const [shippingCost, setShippingCost] = useState(shippingOptions[0].cost);
@@ -48,12 +52,15 @@ export default function CartPage() {
   return (
     <>
       <CartPageHero />
-      <Box sx={{ p: 4 }}>
-        <Typography variant="h4" sx={{ mb: 3 }}>
+      <Box sx={{ p: { xs: 1, sm: 2, md: 4 } }}>
+        <Typography
+          variant="h4"
+          sx={{ mb: 3, fontSize: { xs: "1.5rem", sm: "2rem", md: "2.5rem" } }}
+        >
           Your Cart
         </Typography>
 
-        <TableContainer>
+        <TableContainer sx={{ overflowX: "auto" }}>
           <Table>
             <TableHead>
               <TableRow>
@@ -132,7 +139,15 @@ export default function CartPage() {
           Total: ${totalPrice.toFixed(2)}
         </Typography>
 
-         <Box sx={{ mt: 5, mb: 5, p: 2, backgroundColor: "#fafafa", borderRadius: 2 }}>
+         <Box
+          sx={{
+            mt: { xs: 3, md: 5 },
+            mb: { xs: 3, md: 5 },
+            p: { xs: 1, sm: 2 },
+            backgroundColor: "#fafafa",
+            borderRadius: 2,
+          }}
+        >
           <Typography variant="h6" sx={{ mb: 2 }}>
             Shipping
           </Typography>
@@ -199,9 +214,13 @@ export default function CartPage() {
           <Button
             variant="contained"
             color="primary"
-            sx={{ mt: 3, minWidth: 200 }}
+            sx={{ mt: 3, minWidth: 200, width: { xs: "100%", sm: "auto" } }}
             onClick={() => {
-              /* Add your checkout logic here */
+              if (!user) {
+                router.push("/login");
+              } else {
+                router.push("/checkout");
+              }
             }}
           >
             Process To Checkout
