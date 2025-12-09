@@ -6,6 +6,7 @@ import ThemeRegistry from "@/providers/ThemeRegistry";
 import ClientLayoutWrapper from "@/components/ClientLayoutWrapper";
 import { Box } from "@mui/material";
 import { CartProvider } from "@/context/CartContext"; // Import CartProvider
+import { AuthProvider } from "./context/AuthContext";
 
 const stackSansNotch = localFont({
   src: "../public/fonts/stack-sans-notch/StackSansNotch-VariableFont_wght.ttf",
@@ -41,23 +42,25 @@ export default function RootLayout({ children }) {
       <body>
         <EmotionRegistry>
           <ThemeRegistry>
-            <CartProvider>
-              {" "}
-              {/* Wrap the app with CartProvider */}
-              <ClientLayoutWrapper>
-                <Box
-                  sx={{
-                    mx: { xs: 2, md: "170px" },
-                    my: "2rem",
-                  }}
-                >
-                  {children}
-                </Box>
-              </ClientLayoutWrapper>
-            </CartProvider>
+            <AuthProvider>
+              <CartProvider>
+                {" "}
+                {/* Wrap the app with CartProvider */}
+                <ClientLayoutWrapper>
+                  <Box
+                    sx={{
+                      mx: { xs: 2, md: "170px" },
+                      my: "2rem",
+                    }}
+                  >
+                    {children}
+                  </Box>
+                </ClientLayoutWrapper>
+              </CartProvider>
+            </AuthProvider>
           </ThemeRegistry>
         </EmotionRegistry>
       </body>
-    </html>
+    </html >
   );
 }
