@@ -17,42 +17,52 @@ import {
   TextField,
 } from "@mui/material";
 import ProductCard from "@/components/ProductCards";
-import ServiceCards from "@/components/ServiceCards"; 
+import ServiceCards from "@/components/ServiceCards";
 
 export default function ProductsPage() {
   const theme = useTheme();
-  const [tab, setTab] = useState(0); // Main tabs: Products, Services
-  const [subTab, setSubTab] = useState(0); // Subtabs for categories
+  const [tab, setTab] = useState(0);
+  const [subTab, setSubTab] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
-  const [sortBy, setSortBy] = useState(""); // State for sorting option
-  const [products, setProducts] = useState([]);
-  const [services, setServices] = useState([]); // State for services data
+  const [sortBy, setSortBy] = useState("");
+  const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [products, setProducts] = useState([]);
+  const [bannerSection, setBannerSection] = useState(null);
 
   const API_URL =
-    // process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
-    "http://localhost:1337";
+    process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
 
+  // Fetch product page data
   useEffect(() => {
-    // Fetch products data
     axios
-      .get(`${API_URL}/api/home?populate[Products][populate]=*`)
+      .get(
+        `${API_URL}/api/product?populate[ProductBannerSection][populate]=*&populate[all_products][populate]=*`
+      )
       .then((res) => {
-        console.log("Products API Response:", res.data.data?.Products); // Debug the API response
-        setProducts(res.data.data?.Products || []);
+        const productPage = res.data?.data; // SINGLE TYPE → not array
+  
+        setBannerSection(productPage?.ProductBannerSection || null);
+  
+        const allProducts = productPage?.all_products || [];
+  
+        console.log("Fetched Products:", allProducts);
+  
+        setProducts(allProducts);
       })
       .catch((err) => setError(err))
       .finally(() => setLoading(false));
   }, [API_URL]);
+  
 
+  // Fetch services data
   useEffect(() => {
-    // Fetch services data
     axios
       .get(`${API_URL}/api/home?populate[Services][populate]=*`)
       .then((res) => {
-        console.log("Services API Response:", res.data.data?.Services); // Debug the API response
-        setServices(res.data.data?.Services || []);
+        const homeData = res.data?.data?.attributes;
+        setServices(homeData?.Services?.data || []);
       })
       .catch((err) => setError(err))
       .finally(() => setLoading(false));
@@ -60,7 +70,7 @@ export default function ProductsPage() {
 
   const handleTabChange = (event, newValue) => {
     setTab(newValue);
-    setSubTab(0); // Reset subtabs when switching main tabs
+    setSubTab(0);
   };
 
   const handleSubTabChange = (event, newValue) => {
@@ -71,7 +81,7 @@ export default function ProductsPage() {
     setSortBy(event.target.value);
   };
 
-  // Subtabs for Products and Services
+  // Subtabs
   const productsSubTabs = [
     "All",
     "Enterprise Software",
@@ -87,35 +97,42 @@ export default function ProductsPage() {
     "Cyber Support",
   ];
 
-  // Filter products based on searchQuery
+  // Filter products by search
   const filteredProducts = searchQuery
     ? products.filter((product) =>
-        product.title?.toLowerCase().includes(searchQuery.toLowerCase())
+        product?.title?.toLowerCase().includes(searchQuery.toLowerCase())
       )
-    : products; // Show all products if searchQuery is empty
+    : products;
 
-  // Filter services based on searchQuery
+  // Filter services by search
   const filteredServices = searchQuery
     ? services.filter((service) =>
-        service.title?.toLowerCase().includes(searchQuery.toLowerCase())
+        service?.attributes?.title
+          ?.toLowerCase()
+          .includes(searchQuery.toLowerCase())
       )
-    : services; // Show all services if searchQuery is empty
+    : services;
 
-  // Sort products or services based on sortBy
+  // Sorting logic
   const sortedProducts = [...filteredProducts].sort((a, b) => {
     if (sortBy === "newest") return new Date(b.createdAt) - new Date(a.createdAt);
     if (sortBy === "oldest") return new Date(a.createdAt) - new Date(b.createdAt);
     if (sortBy === "low-to-high") return a.price - b.price;
     if (sortBy === "high-to-low") return b.price - a.price;
-    return 0; // Default: no sorting
+    return 0;
   });
 
   const sortedServices = [...filteredServices].sort((a, b) => {
-    if (sortBy === "newest") return new Date(b.createdAt) - new Date(a.createdAt);
-    if (sortBy === "oldest") return new Date(a.createdAt) - new Date(b.createdAt);
-    if (sortBy === "low-to-high") return a.price - b.price;
-    if (sortBy === "high-to-low") return b.price - a.price;
-    return 0; // Default: no sorting
+    const aAttr = a.attributes;
+    const bAttr = b.attributes;
+
+    if (sortBy === "newest")
+      return new Date(bAttr.createdAt) - new Date(aAttr.createdAt);
+    if (sortBy === "oldest")
+      return new Date(aAttr.createdAt) - new Date(bAttr.createdAt);
+    if (sortBy === "low-to-high") return aAttr.price - bAttr.price;
+    if (sortBy === "high-to-low") return bAttr.price - aAttr.price;
+    return 0;
   });
 
   if (loading) return <p>Loading...</p>;
@@ -123,17 +140,24 @@ export default function ProductsPage() {
 
   return (
     <Box sx={{ py: 4, px: 2 }}>
-      <ProductsPageHero />
+      <ProductsPageHero bannerSection={bannerSection} apiUrl={API_URL}/>
 
-      {/* Tabs Section */}
+      {/* Tabs */}
       <Box sx={{ mb: 4 }}>
         <Tabs value={tab} onChange={handleTabChange}>
           <Tab label="Products" />
           <Tab label="Services" />
         </Tabs>
 
-        {/* Subtabs Section */}
-        <Box sx={{ mt: 2, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <Box
+          sx={{
+            mt: 2,
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          {/* Sub Tabs */}
           <Tabs value={subTab} onChange={handleSubTabChange}>
             {(tab === 0 ? productsSubTabs : servicesSubTabs).map(
               (label, index) => (
@@ -142,7 +166,7 @@ export default function ProductsPage() {
             )}
           </Tabs>
 
-          {/* Sort Dropdown */}
+          {/* Sorting */}
           <FormControl sx={{ minWidth: 200 }}>
             <InputLabel id="sort-by-label">Sort by</InputLabel>
             <Select
@@ -161,9 +185,9 @@ export default function ProductsPage() {
         </Box>
       </Box>
 
-      {/* Main Content Section */}
+      {/* Main Content */}
       <Grid container spacing={3}>
-        {/* Left Column: Search Box */}
+        {/* Search */}
         <Grid item xs={12} md={3}>
           <Box
             sx={{
@@ -192,12 +216,12 @@ export default function ProductsPage() {
           </Box>
         </Grid>
 
-        {/* Right Column: Cards */}
+        {/* Cards */}
         <Grid item xs={12} md={9}>
           {tab === 0 ? (
             <Grid container spacing={4}>
               {sortedProducts.map((product) => (
-                <Grid item xs={12} sm={4} md={4} lg={4} key={product.id}>
+                <Grid item xs={12} sm={6} md={4} key={product.id}>
                   <ProductCard product={product} apiUrl={API_URL} />
                 </Grid>
               ))}

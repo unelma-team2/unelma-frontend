@@ -1,7 +1,9 @@
 import Image from "next/image";
 import { Box, Typography } from "@mui/material";
 
-export default function ProductsPageHero() {
+export default function ProductsPageHero({bannerSection}) {
+    const{ productBanner_title, productBanner_image } = bannerSection || {};
+
     return (
         <Box sx={{
             display: "flex",
@@ -23,7 +25,7 @@ export default function ProductsPageHero() {
                     flexGrow: 1, 
                 }}
             >
-                Products &<br />Services
+                {productBanner_title} & <br />Services
             </Typography>
             <Box sx={{flexGrow: 1}}>
                 <Image

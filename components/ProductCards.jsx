@@ -45,10 +45,16 @@ export default function ProductCard({ product, apiUrl = "" }) {
     boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
   };
 
-  const imageUrl = product.image?.url
-    ? product.image.url.startsWith("http")
-      ? product.image.url
-      : `${apiUrl}${product.image.url}`
+  // const imageUrl = product.product_image?.url
+  //   ? product.product_image.url.startsWith("http")
+  //     ? product.product_image.url
+  //     : `${apiUrl}${product.product_image.url}`
+  //   : null;
+
+  const imageUrl = product.product_logo?.url
+    ? product.product_logo.url.startsWith("http")
+      ? product.product_logo.url
+      : `${apiUrl}${product.product_logo.url}`
     : null;
 
   return (
@@ -62,7 +68,7 @@ export default function ProductCard({ product, apiUrl = "" }) {
       >
         {/* Centered Title */}
         <Typography variant="h4" align="center" sx={{ textAlign: "center" }}>
-          {product.title}
+          {product.product_name}
         </Typography>
 
         {/* Centered Description */}
