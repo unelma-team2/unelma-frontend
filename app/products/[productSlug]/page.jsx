@@ -111,9 +111,6 @@ export default function ProductPage() {
       };
   
 
-
-
-
   const handleRatingChange = (newValue) => {
     setRating(newValue);
     console.log("Rating submitted:", newValue);
