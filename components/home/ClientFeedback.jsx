@@ -2,10 +2,105 @@
 
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Box, Typography, useTheme, useMediaQuery } from "@mui/material";
-import Carousel from "../Carousel.jsx";
-import FeedbackCard from "../FeedbackCard.jsx";
-import LoadingSpinner from "../LoadingSpinner";
+import { useEffect, useState } from "react";
+
+import Carousel from "../Carousel.jsx"; // your reusable carousel
+import ArrowButtons from "../ArrowButtons.jsx";
+
+const API_URL =
+  process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
+
+function FeedbackCard({ name, message, avatar }) {
+  const theme = useTheme();
+
+  const avatarUrl = avatar?.url
+    ? avatar.url.startsWith("http")
+        ? avatar.url
+            : `${API_URL}${avatar.url}`
+    : "/images/avatars/avatar4.png"; 
+
+  
+  return (
+    <Box
+      sx={{
+        p: 4,
+        width: 300,
+        height: 400,
+        flex: "0 0 auto",
+        textAlign: "center",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+        border: `2px solid ${theme.palette.primary.main}`,
+        borderRadius: 2,
+        backgroundColor: theme.palette.background.paper,
+      }}
+    >
+      <Box
+        sx={{
+          mx: "auto",
+          mb: 2,
+          width: 70,
+          height: 70,
+          borderRadius: "50%",
+          border: `2px solid ${theme.palette.primary.main}`,
+          backgroundColor: theme.palette.background.darkMint,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          overflow: "hidden",
+        }}
+      >
+        <Image
+          src="/images/icons/icons8-quote-96.png"
+          alt="quote"
+          width={40}
+          height={40}
+          style={{ objectFit: "contain" }}
+        />
+      </Box>
+
+      <Typography
+        variant="body1"
+        sx={{
+          mb: 2,
+          fontSize: 14,
+          textAlign: "justify",
+          flexGrow: 1,
+        }}
+      >
+        {message}
+      </Typography>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "flex-start",
+          mt: 2,
+          ml: 1,
+          height: 50,
+        }}
+      >
+        <Avatar
+          src={avatarUrl }
+          sx={{
+            width: 50,
+            height: 50,
+            mr: 2,
+          }}
+        />
+        <Typography
+          variant="subtitle1"
+          sx={{
+            fontWeight: 600,
+          }}
+        >
+          {name}
+        </Typography>
+      </Box>
+    </Box>
+  );
+}
 
 export default function ClientFeedback() {
   const theme = useTheme();
