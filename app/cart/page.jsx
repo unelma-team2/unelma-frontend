@@ -217,7 +217,7 @@ export default function CartPage() {
             sx={{ mt: 3, minWidth: 200, width: { xs: "100%", sm: "auto" } }}
             onClick={() => {
               if (!user) {
-                router.push("/login");
+                router.push("/login?redirect=/checkout");
               } else {
                 router.push("/checkout");
               }
