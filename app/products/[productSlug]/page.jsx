@@ -30,12 +30,12 @@ export default function ProductPage() {
   const [quantity, setQuantity] = useState(1);
   const [isFavorite, setIsFavorite] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
-  const [relatedItems, setRelatedItems] = useState([]); 
+  const [relatedItems, setRelatedItems] = useState([]);
 
-   const API_URL =
+  const API_URL =
     process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
 
-     // Fetch product data by slug
+  // Fetch product data by slug
   useEffect(() => {
     if (!productSlug) return;
 
@@ -47,19 +47,20 @@ export default function ProductPage() {
         if (product) setProductData(product);
 
         // Filter related products (exclude current product)
-      const relatedProducts = allProducts.filter((item) => item.slug !== productSlug);
+        const relatedProducts = allProducts.filter(
+          (item) => item.slug !== productSlug
+        );
 
-      // Pick 3 random related items
-      const getRandomItems = (items, count) => {
-        const shuffled = [...items].sort(() => 0.5 - Math.random());
-        return shuffled.slice(0, count);
-      };
+        // Pick 3 random related items
+        const getRandomItems = (items, count) => {
+          const shuffled = [...items].sort(() => 0.5 - Math.random());
+          return shuffled.slice(0, count);
+        };
 
-      setRelatedItems(getRandomItems(relatedProducts, 3));
-    })
-    .catch((err) => console.error("Error fetching product:", err));
-}, [productSlug, API_URL]);
-
+        setRelatedItems(getRandomItems(relatedProducts, 3));
+      })
+      .catch((err) => console.error("Error fetching product:", err));
+  }, [productSlug, API_URL]);
 
   // Guard against undefined productData
   if (!productData) {
@@ -90,26 +91,25 @@ export default function ProductPage() {
     productRelated_images,
   } = productData;
 
-  const { product_price, cartButton_description, reviewButton_description } = ProductDetails || {};
+  const { product_price, cartButton_description, reviewButton_description } =
+    ProductDetails || {};
 
-      const imageUrl = (image) => {
+  const imageUrl = (image) => {
+    if (!image) return null;
 
-        if (!image) return null;
-      
-        const img = Array.isArray(image) ? image[0] : image;
-      
-        if (img?.data?.attributes?.url) {
-          const url = img.data.attributes.url;
-          return url.startsWith("http") ? url : `${API_URL}${url}`;
-        }
-      
-        if (img?.url) {
-          return img.url.startsWith("http") ? img.url : `${API_URL}${img.url}`;
-        }
-      
-        return null;
-      };
-  
+    const img = Array.isArray(image) ? image[0] : image;
+
+    if (img?.data?.attributes?.url) {
+      const url = img.data.attributes.url;
+      return url.startsWith("http") ? url : `${API_URL}${url}`;
+    }
+
+    if (img?.url) {
+      return img.url.startsWith("http") ? img.url : `${API_URL}${img.url}`;
+    }
+
+    return null;
+  };
 
   const handleRatingChange = (newValue) => {
     setRating(newValue);
@@ -117,7 +117,12 @@ export default function ProductPage() {
   };
 
   const handleAddToCart = () => {
-    addToCart({ ...productData, quantity });
+    addToCart({
+      ...productData,
+      name: product_name, // add this line
+      unitPrice: getPriceNumber(product_price), // add this line
+      quantity,
+    });
     router.push("/cart");
   };
 
@@ -132,6 +137,12 @@ export default function ProductPage() {
 
   const handleImageClick = (image) => {
     setSelectedImage(image);
+  };
+
+  const getPriceNumber = (price) => {
+    if (!price) return 0;
+    const num = parseFloat(price.replace(/[^0-9.]/g, ""));
+    return isNaN(num) ? 0 : num;
   };
 
   return (
@@ -153,24 +164,29 @@ export default function ProductPage() {
           {/* Main Image */}
           <Box
             sx={{
+              width: "100%",
+              maxWidth: 665,
+              height: 401,
+              aspectRatio: "16/9",
+              position: "relative",
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
+              background: "#fff",
+              borderRadius: "8px",
+              overflow: "hidden",
+              boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
             }}
           >
             <Image
               src={imageUrl(product_image)}
-            //   src={selectedImage ? imageUrl(selectedImage) : imageUrl(product_image)}
               alt={product_name}
-              width={665}
-              height={401}
+              fill
               style={{
-                borderRadius: "8px",
-                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+                objectFit: "contain",
               }}
             />
           </Box>
-
           {/* Detailed Description */}
           <Box
             sx={{
@@ -181,129 +197,139 @@ export default function ProductPage() {
             }}
           >
             {/* LONG DESCRIPTION */}
-         {long_description && (
-            <Typography
-              variant="body1"
-              sx={{ color: "#555", whiteSpace: "pre-line" }}
-            >
-            {long_description}
-            </Typography>
-          )}
+            {long_description && (
+              <Typography
+                variant="body1"
+                sx={{ color: "#555", whiteSpace: "pre-line" }}
+              >
+                {long_description}
+              </Typography>
+            )}
 
+            {/* WHAT PRODUCT OFFERS */}
+            {productOffer_title && (
+              <Typography variant="h4" sx={{ fontWeight: 700, mt: 4, mb: 2 }}>
+                {productOffer_title}
+              </Typography>
+            )}
 
-      {/* WHAT PRODUCT OFFERS */}
-      {productOffer_title && (
-        <Typography variant="h4" sx={{ fontWeight: 700, mt: 4, mb: 2 }}>
-          {productOffer_title}
-        </Typography>
-      )}
+            {WhatProductOffer_Points?.map((item) => (
+              <Box key={item.id} sx={{ mb: 2 }}>
+                <Typography variant="body1" sx={{ color: "#555" }}>
+                  <Box component="span" sx={{ fontWeight: "bold", mr: 1 }}>
+                    •
+                  </Box>
+                  <Box component="span" sx={{ fontWeight: "bold", mr: 1 }}>
+                    {item.productOfferPoints_title}:
+                  </Box>
+                  <Box component="span">
+                    {item.productOfferPoints_description}
+                  </Box>
+                </Typography>
+              </Box>
+            ))}
 
-{WhatProductOffer_Points?.map((item) => (
-        <Box key={item.id} sx={{ mb: 2 }}>
-          <Typography variant="body1" sx={{ color: "#555" }}>
-          <Box component= "span" sx={{ fontWeight: "bold",mr: 1}}>•</Box>
-    <Box component="span" sx={{ fontWeight: "bold", mr: 1 }}>
-      {item.productOfferPoints_title}:
-    </Box>
-    <Box component="span">
-      {item.productOfferPoints_description}
-    </Box>
-  </Typography>
-        </Box>
-      ))}
+            {/* WHY CHOOSE PRODUCT */}
+            {WhyChooseProduct?.chooseProduct_title && (
+              <Typography variant="h4" sx={{ fontWeight: 700, mt: 4, mb: 2 }}>
+                {WhyChooseProduct.chooseProduct_title}
+              </Typography>
+            )}
 
-      {/* WHY CHOOSE PRODUCT */}
-      {WhyChooseProduct?.chooseProduct_title && (
-        <Typography variant="h4" sx={{ fontWeight: 700, mt: 4, mb: 2 }}>
-          {WhyChooseProduct.chooseProduct_title}
-        </Typography>
-      )}
-      
-      {WhyChooseProduct_Points?.map((item) => (
-        <Box key={item.id} sx={{ mb: 2 }}>
-            
-<Typography variant="body1" sx={{ color: "#555" }}>
-<Box component= "span" sx={{ fontWeight: "bold",mr: 1}}>•</Box>
-    <Box component="span" sx={{ fontWeight: "bold", mr: 1 }}>
-    {item.productChoosePoints_title}
-    </Box>
-    <Box component="span">
-    {item.productChoosePoint_description}
-    </Box>
-  </Typography>
-  
-        </Box>
-      ))}
+            {WhyChooseProduct_Points?.map((item) => (
+              <Box key={item.id} sx={{ mb: 2 }}>
+                <Typography variant="body1" sx={{ color: "#555" }}>
+                  <Box component="span" sx={{ fontWeight: "bold", mr: 1 }}>
+                    •
+                  </Box>
+                  <Box component="span" sx={{ fontWeight: "bold", mr: 1 }}>
+                    {item.productChoosePoints_title}
+                  </Box>
+                  <Box component="span">
+                    {item.productChoosePoint_description}
+                  </Box>
+                </Typography>
+              </Box>
+            ))}
 
-      {/* WHO PRODUCT IS FOR */}
-      {WhoProductFor?.productFor_title && (
-        <Typography variant="h4" sx={{ fontWeight: 700, mt: 4, mb: 2 }}>
-          {WhoProductFor.productFor_title}
-        </Typography>
-      )}
+            {/* WHO PRODUCT IS FOR */}
+            {WhoProductFor?.productFor_title && (
+              <Typography variant="h4" sx={{ fontWeight: 700, mt: 4, mb: 2 }}>
+                {WhoProductFor.productFor_title}
+              </Typography>
+            )}
 
-      {WhoProductFor?.productFor_description1 && (
-        <Typography variant="body1" sx={{ color: "#555", whiteSpace: "pre-line", mb: 2 }}>
-          {WhoProductFor.productFor_description1}
-        </Typography>
-      )}
+            {WhoProductFor?.productFor_description1 && (
+              <Typography
+                variant="body1"
+                sx={{ color: "#555", whiteSpace: "pre-line", mb: 2 }}
+              >
+                {WhoProductFor.productFor_description1}
+              </Typography>
+            )}
 
-      {WhoProductFor_Points?.map((item) => (
-        <Box key={item.id} sx={{ mb: 1 }}>
-          <Typography variant="body1" sx={{ color: "#555" }}>
-            • {item.productForPoints_description}
-          </Typography>
-        </Box>
-      ))}
+            {WhoProductFor_Points?.map((item) => (
+              <Box key={item.id} sx={{ mb: 1 }}>
+                <Typography variant="body1" sx={{ color: "#555" }}>
+                  • {item.productForPoints_description}
+                </Typography>
+              </Box>
+            ))}
 
-{WhoProductFor?.productFor_description2 && (
-        <Typography variant="body1" sx={{ color: "#555", whiteSpace: "pre-line", mb: 2 }}>
-          {WhoProductFor.productFor_description2}
-        </Typography>
-      )}
+            {WhoProductFor?.productFor_description2 && (
+              <Typography
+                variant="body1"
+                sx={{ color: "#555", whiteSpace: "pre-line", mb: 2 }}
+              >
+                {WhoProductFor.productFor_description2}
+              </Typography>
+            )}
 
-{ProductLink?.link_description && (
-        <Typography variant="body1" sx={{ color: "#555", whiteSpace: "pre-line", mb: 2 }}>
-          {ProductLink.link_description}
-        </Typography>
-      )}
-
+            {ProductLink?.link_description && (
+              <Typography
+                variant="body1"
+                sx={{ color: "#555", whiteSpace: "pre-line", mb: 2 }}
+              >
+                {ProductLink.link_description}
+              </Typography>
+            )}
           </Box>
 
-          {Array.isArray(productRelated_images) && productRelated_images.length > 0 && (
-  <Box sx={{ display: "flex", gap: 2, mt: 2 }}>
-    {productRelated_images.slice(0, 2).map((imgObj, index) => {
-      const url = imageUrl(imgObj); // pass single image object here
+          {Array.isArray(productRelated_images) &&
+            productRelated_images.length > 0 && (
+              <Box sx={{ display: "flex", gap: 2, mt: 2 }}>
+                {productRelated_images.slice(0, 2).map((imgObj, index) => {
+                  const url = imageUrl(imgObj); // pass single image object here
 
-      if (!url) return null; // skip empty images
+                  if (!url) return null; // skip empty images
 
-      return (
-        <Box
-          key={index}
-          sx={{
-            border: "2px solid #ccc",
-            borderRadius: "8px",
-            overflow: "hidden",
-            cursor: "pointer",
-            width: "100px",
-            height: "100px",
-            boxShadow: selectedImage === imgObj ? "0 0 10px #000" : "none",
-          }}
-          onClick={() => handleImageClick(imgObj)}
-        >
-          <Image
-            src={url}
-            alt={`Gallery Image ${index + 1}`}
-            width={100}
-            height={100}
-            style={{ objectFit: "cover" }}
-          />
-        </Box>
-      );
-    })}
-  </Box>
-)}
-
+                  return (
+                    <Box
+                      key={index}
+                      sx={{
+                        border: "2px solid #ccc",
+                        borderRadius: "8px",
+                        overflow: "hidden",
+                        cursor: "pointer",
+                        width: "100px",
+                        height: "100px",
+                        boxShadow:
+                          selectedImage === imgObj ? "0 0 10px #000" : "none",
+                      }}
+                      onClick={() => handleImageClick(imgObj)}
+                    >
+                      <Image
+                        src={url}
+                        alt={`Gallery Image ${index + 1}`}
+                        width={100}
+                        height={100}
+                        style={{ objectFit: "cover" }}
+                      />
+                    </Box>
+                  );
+                })}
+              </Box>
+            )}
         </Box>
 
         {/* Product Logo, Short Description, and Pricing (Right) */}
@@ -318,12 +344,30 @@ export default function ProductPage() {
               mb: 2,
             }}
           >
-            <Image
-              src={imageUrl(product_logo)}
-              alt={`${product_name} Logo`}
-              width={301}
-              height={47}
-            />
+            {/* Logo Container */}
+            <Box
+              sx={{
+                width: 160, 
+                height: 120,
+                position: "relative",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                background: "#fff",
+                borderRadius: "8px",
+                overflow: "hidden",
+                mb: 1,
+              }}
+            >
+              <Image
+                src={imageUrl(product_logo)}
+                alt={`${product_name} Logo`}
+                fill
+                style={{
+                  objectFit: "contain",
+                }}
+              />
+            </Box>
             {/* Product Type */}
             <Typography
               variant="body1"
@@ -331,7 +375,6 @@ export default function ProductPage() {
                 color: "#555",
                 fontWeight: "bold",
                 textAlign: "center",
-                mt: 1, // Add spacing between logo and product type
               }}
             >
               {product_type}
@@ -368,7 +411,7 @@ export default function ProductPage() {
               mb: 2,
             }}
           >
-            ${Number(product_price).toFixed(2)}
+            ${getPriceNumber(product_price).toFixed(2)}
           </Typography>
 
           {/* Quantity Controller, Add to Cart, and Favorite Button */}
@@ -406,11 +449,11 @@ export default function ProductPage() {
           </Box>
 
           {/* Leave a Review Button */}
-<Box sx={{ textAlign: "center", mt: 2 }}>
-  <Button variant="outlined" color="secondary">
-    {reviewButton_description}
-  </Button>
-</Box>
+          <Box sx={{ textAlign: "center", mt: 2 }}>
+            <Button variant="outlined" color="secondary">
+              {reviewButton_description}
+            </Button>
+          </Box>
         </Box>
       </Box>
 
@@ -422,17 +465,17 @@ export default function ProductPage() {
         <Grid container spacing={4}>
           {relatedItems.map((item) => {
             const imageUrl = item.product_logo?.url
-            ? item.product_logo.url.startsWith("http")
-              ? item.product_logo.url
-              : `${API_URL}${item.product_logo.url}`
-            : null;
+              ? item.product_logo.url.startsWith("http")
+                ? item.product_logo.url
+                : `${API_URL}${item.product_logo.url}`
+              : null;
             return (
-  
-            <Grid item xs={12} sm={6} md={4} key={item.id}>
-              <ProductCard product={item} imageUrl={imageUrl} />
-            </Grid>
-)})}
-  </Grid>
+              <Grid item xs={12} sm={6} md={4} key={item.id}>
+                <ProductCard product={item} imageUrl={imageUrl} />
+              </Grid>
+            );
+          })}
+        </Grid>
       </Box>
     </Container>
   );
