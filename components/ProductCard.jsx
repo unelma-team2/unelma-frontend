@@ -3,7 +3,7 @@
 import { Card, Box, Typography, Button, useTheme } from "@mui/material";
 import Link from "next/link";
 
-export default function ProductCard({ product, apiUrl = "" }) {
+export default function ProductCard({ product, imageUrl , apiUrl}) {
   const theme = useTheme();
 
   const cardSx = {
@@ -47,16 +47,16 @@ export default function ProductCard({ product, apiUrl = "" }) {
     boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
   };
 
-  const imageUrl = product.image?.url
-    ? product.image.url.startsWith("http")
-      ? product.image.url
-      : `${apiUrl}${product.image.url}`
-    : null;
+  const image = product.image?.url
+  ? product.image.url.startsWith("http")
+    ? product.image.url
+    : `${apiUrl}${product.image.url}`
+  : null;
 
   return (
     <Card sx={cardSx}>
       <Box sx={imageContainerSx}>
-        <Box component="img" src={imageUrl} alt={product.title} sx={imageSx} />
+        <Box component="img" src={imageUrl ? imageUrl : image} alt={product.title} sx={imageSx} />
       </Box>
 
       <Box
@@ -64,7 +64,7 @@ export default function ProductCard({ product, apiUrl = "" }) {
       >
         {/* Centered Title */}
         <Typography variant="h4" align="center" sx={{ textAlign: "center" }}>
-          {product.title}
+          {product.title || product.product_name}
         </Typography>
 
         {/* Centered Description */}

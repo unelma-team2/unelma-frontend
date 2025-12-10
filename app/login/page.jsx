@@ -5,15 +5,25 @@ import { Box, Paper, Typography } from "@mui/material";
 import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { useAuth } from "../context/AuthContext";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+
 
 
 const Login = () => {
 
-    const {user} = useAuth();
-
-    if(user){
-        console.log("User is already logged in:", user);
-    } else {
+    const { user } = useAuth();
+    const router = useRouter();
+  
+    useEffect(() => {
+      if (user) {
+        router.push("/"); // Redirect 
+      }
+    }, [user, router]);
+  
+    if (user) {
+      return null; // brief empty render before redirect
+    }
 
         
         return (
@@ -57,8 +67,8 @@ const Login = () => {
             </Paper>
             </Box>
         );
-    }
-};
+}
+
 
 export default Login;
  
