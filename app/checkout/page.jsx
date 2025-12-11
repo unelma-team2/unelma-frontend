@@ -45,7 +45,7 @@ const paymentOptions = [
       <Image
         src="/images/payment/paypal.png"
         alt="PayPal"
-        width={100} // 더 크게!
+        width={100}
         height={100}
         style={{ objectFit: "contain" }}
       />
@@ -58,8 +58,8 @@ const paymentOptions = [
       <Image
         src="/images/payment/unelmapay.png"
         alt="UnelmaPay"
-        width={100}
-        height={100}
+        width={60}
+        height={60}
         style={{ objectFit: "contain" }}
       />
     ),
@@ -231,20 +231,37 @@ export default function CheckoutPage() {
                   boxShadow:
                     selectedPayment === option.value ? "0 0 8px #1976d2" : "none",
                   position: "relative",
-                  minWidth: 80,
-                  minHeight: 60,
+                  minWidth: 100,
+                  minHeight: 120,
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "center",
-                  justifyContent: "center",
+                  justifyContent: "flex-start",
                   background: "#fff",
-                  mb: { xs: 2, md: 0 }, // 모바일에서 아래 간격
+                  mb: { xs: 2, md: 0 },
                 }}
               >
-                {option.icon}
+                <Box
+                  sx={{
+                    height: 80, // fixed icon area height
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    mb: 1,
+                  }}
+                >
+                  {option.icon}
+                </Box>
                 <Typography
                   variant="body2"
-                  sx={{ mt: 1, textAlign: "center", color: "#333" }}
+                  sx={{
+                    textAlign: "center",
+                    color: "#333",
+                    minHeight: 24, // ensures consistent label height
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
                 >
                   {option.label}
                 </Typography>
