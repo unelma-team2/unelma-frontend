@@ -24,6 +24,7 @@ import { useRouter } from "next/navigation";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
 import Image from "next/image";
+import Alert from "@mui/material/Alert";
 
 const countries = countryList().getData();
 
@@ -92,6 +93,7 @@ export default function CheckoutPage() {
   const [billingCountry, setBillingCountry] = useState("");
   const [shippingCountry, setShippingCountry] = useState("");
   const [selectedPayment, setSelectedPayment] = useState(paymentOptions[0].value);
+  const [orderSuccess, setOrderSuccess] = useState(false);
 
   // Calculate order summary values
   const totalPrice = cartItems.reduce(
@@ -293,12 +295,16 @@ export default function CheckoutPage() {
             color="primary"
             sx={{ mt: 3, minWidth: 200, width: { xs: "100%", sm: "auto" } }}
             onClick={() => {
-              // Place your checkout logic here
-              // e.g., router.push("/order-confirmation");
+              setOrderSuccess(true);
             }}
           >
             Confirm Order
           </Button>
+          {orderSuccess && (
+            <Alert severity="success" sx={{ mt: 3 }}>
+              Your order has been successfully placed!
+            </Alert>
+          )}
         </Box>
       </Grid>
     </Grid>
