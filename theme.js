@@ -5,6 +5,15 @@ const headingFont = "var(--font-stack-sans-notch), sans-serif";
 const bodyFont = "var(--font-outfit), sans-serif";
 
 const theme = createTheme({
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 600,
+      md: 1100, // Increased from default 900px to 1100px so iPad Pro (1024px) falls under sm
+      lg: 1200,
+      xl: 1536,
+    },
+  },
   palette: {
     primary: {
       //main: "#2F2E2E", 
@@ -73,7 +82,7 @@ const theme = createTheme({
     hero: {
       fontFamily: headingFont,
       fontWeight: 700,
-      fontSize: "76pt",
+      fontSize: "72pt",
       lineHeight: 1.2,
     },
     h1: {
@@ -160,7 +169,7 @@ const theme = createTheme({
     },
      body12reg: {
       fontFamily: bodyFont,
-      fontSize: "12pt",
+      fontSize: "14pt",
       fontWeight: 400,
       lineHeight: 1.1,
     },

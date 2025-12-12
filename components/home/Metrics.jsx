@@ -24,7 +24,7 @@ export default function Metrics() {
     >
       {/* Background Image */}
       <Image
-        src="/images/home/hero/green1.png"
+        src="/images/11.png"
 
         alt="Background"
         fill
