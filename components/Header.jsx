@@ -31,6 +31,7 @@ const navLinks = [
   { label: "Products & Services", href: "/products" },
   { label: "Our Work", href: "/case-studies" },
   { label: "Blog", href: "/blog" },
+  { label: "Appointments", href: "/appointments" },
   { label: "Careers", href: "/careers" },
   { label: "Contact Us", href: "/contact" },
 ];
