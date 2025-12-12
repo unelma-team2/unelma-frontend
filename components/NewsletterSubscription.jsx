@@ -1,56 +1,49 @@
-"use client";
+"use client"
 
-import {
-  Box,
-  Typography,
-  TextField,
-  Button,
-  Paper,
-  InputAdornment,
-  useTheme,
-} from "@mui/material";
-import EmailIcon from "@mui/icons-material/Email";
-import Image from "next/image";
+import { Box, Typography, TextField, Button, Paper, InputAdornment, useTheme } from "@mui/material"
+import EmailIcon from "@mui/icons-material/Email"
+import Image from "next/image"
 
 export default function SubscriptionBox() {
-  const theme = useTheme();
+  const theme = useTheme()
 
   return (
     <Paper
       elevation={5}
       sx={{
-        minWidth: 550,
+        minWidth: { xs: "100%", sm: 500, md: 550 },
         display: "flex",
-        flexDirection: { xs: "row", md: "row" }, 
+        flexDirection: "row",
         alignItems: "center",
         justifyContent: "center",
-        p: 0,
+        p: { xs: 0.5, sm: 1, md: 1 },
         border: "2px solid #1D2340",
         borderRadius: "4px",
         overflow: "hidden",
-        maxWidth: 700,
+        maxWidth: 550,
         width: "100%",
         mx: "auto",
         color: "primary.main",
       }}
     >
       {/* Left Image */}
-      <Box sx={{ flex: 0.5, position: "relative", minHeight: 200 }}>
-        <Image
-          src="/images/cat.png" // replace with your image path
-          alt="Subscribe Cat Image"
-          fill
-          style={{ objectFit: "contain" }}
-        />
+      <Box
+        sx={{
+          flex: { xs: 0.3, sm: 0.5 },
+          position: "relative",
+          minHeight: { xs: 150, sm: 180, md: 200 },
+          width: "auto",
+        }}
+      >
+        <Image src="/images/cat.png" alt="Subscribe Cat Image" fill style={{ objectFit: "contain" }} />
       </Box>
 
       {/* Right Form Content */}
       <Box
         sx={{
           flex: 1,
-          p: 4,
-          paddingLeft: 0,
-        
+          p: { xs: 1.5, sm: 3, md: 4 },
+          paddingLeft: { xs: 1, sm: 0 },
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
@@ -59,8 +52,8 @@ export default function SubscriptionBox() {
         <Typography
           fontWeight={700}
           sx={{
-            mb: 3,
-            fontSize: 26,
+            mb: { xs: 1.5, sm: 2.5, md: 3 },
+            fontSize: { xs: 16, sm: 24, md: 26 },
             color: "primary.main",
             letterSpacing: 0.8,
           }}
@@ -69,17 +62,22 @@ export default function SubscriptionBox() {
         </Typography>
 
         <Box
-        component="form"
-        action="https://core.unelmamail.com/lists/691d96ff827d9/691d89899267f/embedded-form-subscribe-captcha"
-        method="POST"
-        sx={{ display: "flex", mb: 2, alignItems: "center" }}
-      >
-        {/* Email Input */}
+          component="form"
+          action="https://core.unelmamail.com/lists/691d96ff827d9/691d89899267f/embedded-form-subscribe-captcha"
+          method="POST"
+          sx={{
+            display: "flex",
+            flexDirection: { xs: "column", sm: "row" },
+            mb: 2,
+            alignItems: { xs: "stretch", sm: "center" },
+          }}
+        >
+          {/* Email Input */}
           <TextField
             size="small"
             variant="outlined"
             placeholder="Email"
-          name="EMAIL"
+            name="EMAIL"
             fullWidth
             sx={{
               bgcolor: "#fff",
@@ -97,29 +95,31 @@ export default function SubscriptionBox() {
                 },
               },
               "& .MuiInputBase-input": {
-                padding: "8px 12px",
+                padding: { xs: "6px 8px", sm: "8px 12px" },
+                fontSize: { xs: 13, sm: 14 },
               },
             }}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <EmailIcon sx={{ color: "primary.main" }} />
+                  <EmailIcon sx={{ color: "primary.main", fontSize: { xs: 18, sm: 24 } }} />
                 </InputAdornment>
               ),
             }}
           />
 
-        {/* Submit Button */}
+          {/* Submit Button */}
           <Button
             type="submit"
             variant="contained"
             sx={{
-              ml: 2,
+              ml: { xs: 0, sm: 2 },
+              mt: { xs: 2, sm: 0 },
               fontWeight: 700,
-              px: 3,
+              px: { xs: 1.5, sm: 2.5, md: 3 },
               py: 0.5,
               textTransform: "uppercase",
-              fontSize: 18,
+              fontSize: { xs: 13, sm: 17, md: 18 },
               transition: "0.25s ease",
               "&:hover": {
                 boxShadow: "0px 6px 6px rgba(0,0,0,0.20)",
@@ -134,14 +134,18 @@ export default function SubscriptionBox() {
         </Box>
 
         <Typography
-        component="p"
-        variant="body2"
-        sx={{ color: "primary.main", fontSize: 15, mt: 1 }}
-      >
-          In accordance with GDPR, we will contact you only when necessary, and
-        all personal data collected will be anonymized.
+          component="p"
+          variant="body2"
+          sx={{
+            color: "primary.main",
+            fontSize: { xs: 11, sm: 14, md: 15 },
+            mt: 1,
+          }}
+        >
+          In accordance with GDPR, we will contact you only when necessary, and all personal data collected will be
+          anonymized.
         </Typography>
       </Box>
     </Paper>
-  );
+  )
 }
