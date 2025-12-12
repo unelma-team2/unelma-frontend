@@ -21,7 +21,7 @@ import {
 import countryList from "react-select-country-list";
 import { useCart } from "@/context/CartContext";
 import { useRouter } from "next/navigation";
-import LocalShippingIcon from "@mui/icons-material/LocalShipping";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
 import Image from "next/image";
 import Alert from "@mui/material/Alert";
@@ -30,9 +30,9 @@ const countries = countryList().getData();
 
 const paymentOptions = [
   {
-    label: "Cash on Delivery",
+    label: "Pay After Delivery",
     value: "cod",
-    icon: <LocalShippingIcon fontSize="large" />,
+    icon: <AccessTimeIcon fontSize="large" />,
   },
   {
     label: "Bank Transfer",
@@ -146,26 +146,22 @@ export default function CheckoutPage() {
                 color="primary"
               />
             }
-            label="Ship to a different location?"
+            label="Deliver to a different recipient?"
             sx={{ mt: 2 }}
           />
 
           {showShipping && (
             <Box sx={{ mt: 4 }}>
               <Typography variant="h5" sx={{ mb: 2 }}>
-                Shipping Information
+                Recipient Information
               </Typography>
               <TextField fullWidth label="Name" sx={{ mb: 2 }} />
-              <TextField fullWidth label="Phone" sx={{ mb: 2 }} />
+              <TextField fullWidth label="Email" sx={{ mb: 2 }} />
               <CountrySelect
                 value={shippingCountry}
                 onChange={(e) => setShippingCountry(e.target.value)}
-                label="Shipping Country"
+                label="Recipient Country"
               />
-              <TextField fullWidth label="Street Address" sx={{ mb: 2 }} />
-              <TextField fullWidth label="City/Town" sx={{ mb: 2 }} />
-              <TextField fullWidth label="State/Province/Region" sx={{ mb: 2 }} />
-              <TextField fullWidth label="Postal Code" sx={{ mb: 2 }} />
             </Box>
           )}
         </Box>
@@ -194,7 +190,7 @@ export default function CheckoutPage() {
                   <TableCell align="right">+ ${taxAmount.toFixed(2)}</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell>Shipping Cost</TableCell>
+                  <TableCell>Delivery Cost</TableCell>
                   <TableCell align="right">
                     + ${shippingCost.toFixed(2)}
                   </TableCell>

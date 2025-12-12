@@ -152,8 +152,14 @@ export default function ProductPage() {
 
       {/* Breadcrumb */}
       <Box sx={{ mt: 4, mb: 2 }}>
-        <Typography variant="h6" sx={{ color: "#555", fontWeight: "bold" }}>
-          Products {">"} {product_name}
+        <Typography variant="h3" sx={{ fontWeight: 700, mb: 8 }}>
+          <Link
+            href="/products"
+            style={{ color: "#1976d2", textDecoration: "none" }}
+          >
+            Products
+          </Link>
+          {" > "} {product_name}
         </Typography>
       </Box>
 
