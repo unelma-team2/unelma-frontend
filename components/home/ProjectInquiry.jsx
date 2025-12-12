@@ -1,91 +1,54 @@
-"use client";
+"use client"
 
-import { Box, Typography, Button, useTheme } from "@mui/material";
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { Box, Typography, Button, useTheme } from "@mui/material"
 
-export default function ProjectInquiry({projectInquiry}) {
-  const theme = useTheme();
+export default function ProjectInquiry({ projectInquiry }) {
+  const theme = useTheme()
 
-//   const [projectInquiry, setProjectInquiry] = useState([]);
-//   const [loading, setLoading] = useState(true);
-//   const [error, setError] = useState(null);
+  const { title1, title2, description1, description2, link, link_description } = projectInquiry
 
-//   const API_URL =
-//   process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
-  
-
-// useEffect(() => {
-//   axios
-//     .get(`${API_URL}/api/home?populate[ProjectInquiry][populate]=*`)
-//     .then((res) => setProjectInquiry(res.data.data?.ProjectInquiry || null))
-//     .catch((err) => setError(err))
-//     .finally(() => setLoading(false));
-// }, [API_URL]);
-
-// if (loading) return <p>Loading hero section...</p>;
-// if (error) return <p>Error: {error.message}</p>;
-// if (!projectInquiry) return <p>No ProjectInquiry section found.</p>;
-
-const { title1, title2, description1, description2, link, link_description } = projectInquiry;
-
-return (
+  return (
     <Box
       sx={{
-       //width: "100vw",
-        //py: { xs: 6, md: 10 },
-        bgcolor: theme.palette.background.default,
+        position: "relative",
+        width: "100%",
+        height: "100%",
+        minHeight: { xs: "600px", sm: "700px", md: "750px" },
+        mt: { xs: 4, sm: 6, md: 8 },
       }}
     >
-      < Box
-        sx={{
-          maxWidth: 1400,
-          mx: "auto",
-          px: { xs: 2, md: 4 },
-        }}
-      >
       <Box
         sx={{
           bgcolor: theme.palette.background.lightBlue2,
           borderTop: `2px solid ${theme.palette.primary.main}`,
           borderRight: `2px solid ${theme.palette.primary.main}`,
-          borderTopRightRadius: "120px",
+          borderTopRightRadius: { xs: "60px", sm: "90px", md: "120px" },
+          position: "absolute",
+          left: 0,
+          top: 0,
+          right: 0,
+          bottom: 0,
           width: "100%",
-          height: "600px",
-       //   mx: "auto",
-         // px: { xs: 2, md: 4 },
+          height: "100%",
           display: "flex",
-          flexDirection: { xs: "column", md: "row" },
-          alignItems: "flex-start",
-          justifyContent: "center",  
+          alignItems: "center",
+          justifyContent: "flex-start",
+          px: { xs: 3, sm: 4, md: 6 },
+          py: { xs: 4, sm: 6, md: 8 },
         }}
       >
         <Box
           sx={{
-              width: "100%",
-               ml: "170px",
-               mt: "120px" ,
-            //bgcolor: "#C1FCFF",
-            //borderTop: "2px solid #2F2E2E",
-            //borderRight: "2px solid #2F2E2E",
-            //borderTopRightRadius: "120px",
-        
-            //p: { xs: 3, md: 6 },
-            //maxWidth: { xs: "100%", md: "100%" },
-            //mt: { md: -4 },
-            //marginLeft: {md: "10%"},
+            ml: { xs: 0, sm: "80px", md: "170px" },
+            maxWidth: { xs: "100%", sm: 420, md: 500 },
           }}
         >
           <Typography
             sx={{
               fontFamily: theme.typography.fontFamily.bodyFont,
-              fontSize: { xs: 26, md: 46 },
-//               fontWeight: 700,
-//               mb: 3,
-              //fontFamily: "StackSansNotch, sans-serif",
-              fontSize: { xs: 26, md: 32 },
+              fontSize: { xs: 24, sm: 28, md: 32 },
               fontWeight: 700,
-              mb: 3,
+              mb: { xs: 2, sm: 3 },
               color: theme.palette.primary.main,
             }}
           >
@@ -95,13 +58,11 @@ return (
           <Typography
             sx={{
               fontFamily: theme.typography.fontFamily.bodyFont,
-              //fontFamily: "Outfit, sans-serif",
-              fontSize: 18,
+              fontSize: { xs: 16, sm: 17, md: 18 },
               fontWeight: 500,
               lineHeight: 1.6,
-              mb: 3,
+              mb: { xs: 2, sm: 3 },
               color: theme.palette.primary.main,
-              maxWidth: 420,
             }}
           >
             {description1}
@@ -110,8 +71,8 @@ return (
             {description2}
           </Typography>
 
-          <Button href={link}
-            //variant="contained"
+          <Button
+            href={link}
             sx={{
               px: 3,
               py: 1,
@@ -122,7 +83,6 @@ return (
           </Button>
         </Box>
       </Box>
-      </Box>
     </Box>
-  );
+  )
 }
