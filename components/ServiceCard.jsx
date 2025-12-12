@@ -4,13 +4,14 @@
 
 import { Box, Button, Card, CardContent, Typography, useTheme } from "@mui/material";
 import Image from "next/image";
+import Link from "next/link";
 
-export default function ServiceCard({ service, apiUrl }) {
+export default function ServiceCard({ service, apiUrl, imageUrl }) {
   const theme = useTheme();
 
   if (!service) return null;
 
-  const imageUrl = service.image?.url
+  const image = service.image?.url
     ? service.image.url.startsWith("http")
       ? service.image.url
       : `${apiUrl}${service.image.url}`
@@ -46,30 +47,44 @@ export default function ServiceCard({ service, apiUrl }) {
             overflow: "hidden"
           }}
         >
-          {imageUrl && (
+          
             <Image
-              src={imageUrl}
-              alt={service.title}
+              src={imageUrl ? imageUrl : image}
+              alt={service.service_name || service.title}
               width={70}
               height={70}
               style={{ objectFit: "contain" }}
             />
-          )}
+         
         </Box>
 
         {/* Title */}
-        <Typography variant="h4" sx={{ my: 2 }}>
-          {service.title}
-        </Typography>
+        <Link href={`/services/${service.slug}`} style={{ textDecoration: "none" }}>
+  <Typography
+    variant="h4"
+    sx={{
+      my: 2,
+      color: "inherit",
+      transition: "transform 0.3s ease, color 0.3s ease",
+      "&:hover": {
+        transform: "scale(1.05)",
+        color: theme.palette.primary.main,
+      },
+      cursor: "pointer",
+    }}
+  >
+    {service.service_name || service.title}
+  </Typography>
+</Link>
 
         {/* Description */}
         <Typography variant="body14reg" sx={{ textAlign: "justify", mb: 3 }}>
-          {service.description}
+          {service.short_description || service.description}
         </Typography>
 
         {/* Button */}
         <Button
-          href="/services"
+          href={`/contact?contactType=Price%20quote%20request&service=${encodeURIComponent(service.service_name)}`}
           sx={{ mt: "auto", alignSelf: "center", px: 1.5, py: 0.5, fontSize: 14 }}
         >
           Request a Quote

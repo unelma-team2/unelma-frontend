@@ -11,11 +11,11 @@ import {
   FormControlLabel,
   Button,
 } from "@mui/material";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { AttachFile } from "@mui/icons-material";
 
-export default function PriceQuoteSection({ requestQuote, countryCodes }) {
+export default function PriceQuoteSection({ requestQuote, countryCodes, preselectedService }) {
   // const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
 
   const API_URL = "http://localhost:1337";
@@ -35,6 +35,16 @@ export default function PriceQuoteSection({ requestQuote, countryCodes }) {
     message: "",
     error: false,
   });
+
+  useEffect(() => {
+    if (preselectedService) {
+      setFormData((prev) => ({
+        ...prev,
+        selectedServices: [preselectedService],
+      }));
+    }
+  }, [preselectedService]);
+  
 
   const selectedCountry = countryCodes.find(
     (cc) => cc.code === formData.countryCode
