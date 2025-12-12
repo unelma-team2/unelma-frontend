@@ -21,10 +21,10 @@ import CartPageHero from "./components/HeroPage";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 const shippingOptions = [
-  { label: "Free Shipping", description: "Shipment will be within 10-15 Days", cost: 0 },
-  { label: "Standard Shipping", description: "Shipment will be within 5-10 Day.", cost: 5 },
-  { label: "2-Day Shipping", description: "Shipment will be within 2 Days.", cost: 10 },
-  { label: "Same day delivery", description: "Shipment will be within 1 Day.", cost: 20 },
+  { label: "Free Delivery", description: "Delivery will be within 10-15 Days", cost: 0 },
+  { label: "Standard Delivery", description: "Delivery will be within 5-10 Days.", cost: 5 },
+  { label: "2-Day Delivery", description: "Delivery will be within 2 Days.", cost: 10 },
+  { label: "Same Day Delivery", description: "Delivery will be within 1 Day.", cost: 20 },
 ];
 
 export default function CartPage() {
@@ -149,7 +149,7 @@ export default function CartPage() {
           }}
         >
           <Typography variant="h6" sx={{ mb: 2 }}>
-            Shipping
+            Service Delivery
           </Typography>
           <TableContainer>
             <Table>
@@ -197,7 +197,7 @@ export default function CartPage() {
                   <TableCell align="right">+ ${taxAmount.toFixed(2)}</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell>Shipping Cost</TableCell>
+                  <TableCell>Delivery Cost</TableCell>
                   <TableCell align="right">
                     + ${shippingCost.toFixed(2)}
                   </TableCell>
