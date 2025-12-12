@@ -12,7 +12,6 @@ import {
 } from "@mui/material";
 import { useState, useMemo } from "react";
 import axios from "axios";
-import EventAvailableIcon from "@mui/icons-material/EventAvailable";
 
 
 const OPEN_START_HOUR = 10;
@@ -21,81 +20,74 @@ const SLOT_INTERVAL_MINUTES = 30;
 
 function getLocalIsoDate(date = new Date()) {
   const year = date.getFullYear();
-  const month = `${date.getMonth() + 1}`.padStart(2, "0");
-  const day = `${date.getDate()}`.padStart(2, "0");
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
   return `${year}-${month}-${day}`;
 }
 
-function getAvailableSlots(dateValue) {
-  if (!dateValue || isWeekend(dateValue)) return [];
-  const start = new Date(`${dateValue}T00:00:00`);
-  const end = new Date(`${dateValue}T00:00:00`);
-  start.setHours(OPEN_START_HOUR, 0, 0, 0);
-  end.setHours(OPEN_END_HOUR, 0, 0, 0);
-
-  const slots = [];
-  let cursor = new Date(start);
-
-  if (isToday(dateValue)) {
-    const now = new Date();
-    const nextSlotMs =
-      Math.ceil(now.getTime() / (SLOT_INTERVAL_MINUTES * 60 * 1000)) *
-      SLOT_INTERVAL_MINUTES *
-      60 *
-      1000;
-    const nextSlot = new Date(nextSlotMs);
-    if (nextSlot > cursor) cursor = nextSlot;
-  }
-
-  while (cursor < end) {
-    slots.push({
-      value: toTimeValue(cursor),
-      label: cursor.toLocaleTimeString([], {
-        hour: "numeric",
-        minute: "2-digit",
-      }),
-    });
-    cursor = new Date(cursor.getTime() + SLOT_INTERVAL_MINUTES * 60 * 1000);
-  }
-
-  return slots;
-}
-
-function isWeekend(dateValue) {
-  const day = new Date(`${dateValue}T00:00:00`).getDay();
-  return day === 0 || day === 6;
-}
-
-function isToday(dateValue) {
-  return dateValue === getLocalIsoDate();
-}
-
-function toTimeValue(dateObj) {
-  const hours = `${dateObj.getHours()}`.padStart(2, "0");
-  const minutes = `${dateObj.getMinutes()}`.padStart(2, "0");
+function formatTime(dateObj) {
+  const hours = String(dateObj.getHours()).padStart(2, "0");
+  const minutes = String(dateObj.getMinutes()).padStart(2, "0");
   return `${hours}:${minutes}`;
 }
 
-function isPastDateTime(dateValue, timeValue) {
-  const selected = new Date(`${dateValue}T${timeValue}:00`);
-  return selected < new Date();
+function isWeekend(dateString) {
+  const day = new Date(`${dateString}T00:00:00`).getDay();
+  return day === 0 || day === 6;
 }
 
-function isOutsideOpenHours(timeValue) {
-  const [hStr, mStr] = timeValue.split(":");
-  const hours = Number(hStr);
-  const minutes = Number(mStr);
-  if (Number.isNaN(hours) || Number.isNaN(minutes)) return true;
-  if (hours < OPEN_START_HOUR) return true;
-  if (hours > OPEN_END_HOUR) return true;
-  return hours === OPEN_END_HOUR && minutes > 0;
+function isOutsideOpenHours(timeString) {
+  const [hourStr, minStr] = timeString.split(":");
+  const hour = Number(hourStr);
+  const minute = Number(minStr);
+  
+  if (isNaN(hour) || isNaN(minute)) return true;
+  if (hour < OPEN_START_HOUR || hour > OPEN_END_HOUR) return true;
+  if (hour === OPEN_END_HOUR && minute > 0) return true;
+  return false;
+}
+
+function isPastDateTime(dateString, timeString) {
+  const selectedDateTime = new Date(`${dateString}T${timeString}:00`);
+  return selectedDateTime < new Date();
+}
+
+
+function getAvailableSlots(dateString) {
+  if (!dateString || isWeekend(dateString)) return [];
+  
+  const dayStart = new Date(`${dateString}T${OPEN_START_HOUR}:00:00`);
+  const dayEnd = new Date(`${dateString}T${OPEN_END_HOUR}:00:00`);
+  
+  let currentTime = new Date(dayStart);
+  if (dateString === getLocalIsoDate()) {
+    const now = new Date();
+
+    const millisecondsInSlot = SLOT_INTERVAL_MINUTES * 60 * 1000;
+    const nextSlotTime = Math.ceil(now.getTime() / millisecondsInSlot) * millisecondsInSlot;
+    currentTime = new Date(nextSlotTime);
+    
+    if (currentTime < dayStart) {
+      currentTime = new Date(dayStart);
+    }
+  }
+  
+  const slots = [];
+  while (currentTime < dayEnd) {
+    slots.push({
+      value: formatTime(currentTime),
+      label: currentTime.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }),
+    });
+    currentTime = new Date(currentTime.getTime() + SLOT_INTERVAL_MINUTES * 60 * 1000);
+  }
+  
+  return slots;
 }
 
 const todayIso = getLocalIsoDate();
 
 export default function AppointmentBookingSection({ countryCodes }) {
   const API_URL = "http://localhost:1337";
-  // const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
 
   const [formData, setFormData] = useState({
     name: "",
@@ -108,6 +100,7 @@ export default function AppointmentBookingSection({ countryCodes }) {
   });
 
   const [errors, setErrors] = useState({});
+  
   const [status, setStatus] = useState({
     loading: false,
     message: "",
@@ -125,53 +118,65 @@ export default function AppointmentBookingSection({ countryCodes }) {
 
   const handleChange = (field) => (e) => {
     const value = e.target.value;
+    
     setFormData((prev) => ({
       ...prev,
       [field]: value,
       ...(field === "date" ? { time: "" } : {}),
     }));
+    
     if (errors[field]) {
       setErrors((prev) => ({ ...prev, [field]: undefined }));
     }
   };
 
   const validateForm = () => {
-    const validationErrors = {};
-    const selectedDate = formData.date ? new Date(`${formData.date}T00:00:00`) : null;
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    if (!formData.name.trim()) validationErrors.name = "Name is required";
-    if (!formData.email.trim()) validationErrors.email = "Email is required";
-    if (!formData.message.trim()) validationErrors.message = "Message is required";
+    const newErrors = {};
+    
+    if (!formData.name.trim()) {
+      newErrors.name = "Name is required";
+    }
+    
+    if (!formData.email.trim()) {
+      newErrors.email = "Email is required";
+    }
+    
+    if (!formData.message.trim()) {
+      newErrors.message = "Message is required";
+    }
+    
     if (!formData.date) {
-      validationErrors.date = "Date is required";
+      newErrors.date = "Date is required";
     } else {
+      const selectedDate = new Date(`${formData.date}T00:00:00`);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      
       if (selectedDate < today) {
-        validationErrors.date = "You cannot book in the past";
-      }
-      if (isWeekend(formData.date)) {
-        validationErrors.date = "Bookings run Monday to Friday only";
+        newErrors.date = "You cannot book in the past";
+      } else if (isWeekend(formData.date)) {
+        newErrors.date = "Bookings run Monday to Friday only";
       }
     }
-
+    
     if (!formData.time) {
-      validationErrors.time = "Select a time slot";
+      newErrors.time = "Select a time slot";
     } else if (formData.date) {
       if (isOutsideOpenHours(formData.time)) {
-        validationErrors.time = "Please pick a time between 10:00 and 17:00";
+        newErrors.time = "Please pick a time between 10:00 and 17:00";
       }
       if (isPastDateTime(formData.date, formData.time)) {
-        validationErrors.time = "The selected time has already passed";
+        newErrors.time = "The selected time has already passed";
       }
     }
-
-    setErrors(validationErrors);
-    return Object.keys(validationErrors).length === 0;
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
     if (!validateForm()) return;
 
     setStatus({ loading: true, message: "Booking appointment...", error: false });
@@ -212,7 +217,7 @@ export default function AppointmentBookingSection({ countryCodes }) {
         time: "",
       });
     } catch (error) {
-      console.error("Strapi error:", error.response?.data || error.message);
+      console.error("Error:", error.response?.data || error.message);
       setStatus({
         loading: false,
         message: "Failed to book appointment. Please try again.",
@@ -221,18 +226,15 @@ export default function AppointmentBookingSection({ countryCodes }) {
     }
   };
 
-  const slotsUnavailable =
-    formData.date && (isWeekend(formData.date) || availableSlots.length === 0);
+  const slotsUnavailable = formData.date && (isWeekend(formData.date) || availableSlots.length === 0);
+
+  const labelStyle = { mb: 1, fontSize: "14px", fontWeight: 500, color: "#000" };
 
   return (
     <form onSubmit={handleSubmit}>
-      <Typography
-        variant="body2"
-        sx={{ mb: 1, fontSize: "14px", fontWeight: 500, color: "#000" }}
-      >
+      <Typography variant="body2" sx={labelStyle}>
         Name
       </Typography>
-
       <TextField
         fullWidth
         placeholder="Name"
@@ -244,13 +246,9 @@ export default function AppointmentBookingSection({ countryCodes }) {
         sx={{ mb: 3 }}
       />
 
-      <Typography
-        variant="body2"
-        sx={{ mb: 1, fontSize: "14px", fontWeight: 500, color: "#000" }}
-      >
+      <Typography variant="body2" sx={labelStyle}>
         Email
       </Typography>
-
       <TextField
         fullWidth
         type="email"
@@ -263,44 +261,33 @@ export default function AppointmentBookingSection({ countryCodes }) {
         sx={{ mb: 3 }}
       />
 
-      <Box sx={{ mb: 3 }}>
-        <Typography
-          variant="body2"
-          sx={{ mb: 1, fontSize: "14px", fontWeight: 500, color: "#000" }}
-        >
-          Phone Number
-        </Typography>
-
-        <Box sx={{ display: "flex", gap: 1 }}>
-          <FormControl sx={{ minWidth: 120 }}>
-            <Select
-              value={formData.countryCode}
-              onChange={handleChange("countryCode")}
-            >
-              {countryCodes.map((cc) => (
-                <MenuItem key={cc.code} value={cc.code}>
-                  {cc.country}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-
-          <TextField
-            fullWidth
-            placeholder={selectedCountry?.format}
-            value={formData.phone}
-            onChange={handleChange("phone")}
-          />
-        </Box>
+      <Typography variant="body2" sx={labelStyle}>
+        Phone Number
+      </Typography>
+      <Box sx={{ display: "flex", gap: 1, mb: 3 }}>
+        <FormControl sx={{ minWidth: 120 }}>
+          <Select
+            value={formData.countryCode}
+            onChange={handleChange("countryCode")}
+          >
+            {countryCodes.map((cc) => (
+              <MenuItem key={cc.code} value={cc.code}>
+                {cc.country}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <TextField
+          fullWidth
+          placeholder={selectedCountry?.format}
+          value={formData.phone}
+          onChange={handleChange("phone")}
+        />
       </Box>
 
-      <Typography
-        variant="body2"
-        sx={{ mb: 1, fontSize: "14px", fontWeight: 500, color: "#000" }}
-      >
+      <Typography variant="body2" sx={labelStyle}>
         Message / Agenda
       </Typography>
-
       <TextField
         fullWidth
         multiline
@@ -314,13 +301,9 @@ export default function AppointmentBookingSection({ countryCodes }) {
         sx={{ mb: 3 }}
       />
 
-      <Typography
-        variant="body2"
-        sx={{ mb: 1, fontSize: "14px", fontWeight: 500, color: "#000" }}
-      >
+      <Typography variant="body2" sx={labelStyle}>
         Date
       </Typography>
-
       <TextField
         fullWidth
         type="date"
@@ -333,13 +316,9 @@ export default function AppointmentBookingSection({ countryCodes }) {
         sx={{ mb: 3 }}
       />
 
-      <Typography
-        variant="body2"
-        sx={{ mb: 1, fontSize: "14px", fontWeight: 500, color: "#000" }}
-      >
+      <Typography variant="body2" sx={labelStyle}>
         Time
       </Typography>
-
       <FormControl fullWidth error={Boolean(errors.time)} sx={{ mb: 3 }}>
         <Select
           value={formData.time}
@@ -358,20 +337,15 @@ export default function AppointmentBookingSection({ countryCodes }) {
             </MenuItem>
           ))}
         </Select>
-        {errors.time && <FormHelperText>{errors.time}</FormHelperText>}
-        {!errors.time && (
-          <FormHelperText>
-            {slotsUnavailable
+        <FormHelperText>
+          {errors.time ||
+            (slotsUnavailable
               ? "No slots: choose a weekday between 10:00 and 17:00"
-              : "Available times between 10:00 and 17:00"}
-          </FormHelperText>
-        )}
+              : "Available times between 10:00 and 17:00")}
+        </FormHelperText>
       </FormControl>
 
-      <Typography
-        variant="body2"
-        sx={{ mt: 2, mb: 4, fontSize: "14px", color: "#666" }}
-      >
+      <Typography variant="body2" sx={{ mt: 2, mb: 4, fontSize: "14px", color: "#666" }}>
         This is a remote, free consultation. We will send a reminder to your email.
       </Typography>
 
@@ -379,7 +353,6 @@ export default function AppointmentBookingSection({ countryCodes }) {
         variant="contained"
         type="submit"
         disabled={status.loading}
-        startIcon={<EventAvailableIcon />}
         sx={{ mt: 2 }}
       >
         {status.loading ? "Booking..." : "Confirm Booking"}
