@@ -18,6 +18,8 @@ import MapLocation from "@/components/contact/MapLocation";
 import SocialAndSupport from "@/components/contact/SocialAndSupport";
 import ContactPageHero from "@/components/contact/ContactPageHero";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import { useSearchParams } from "next/navigation";
+
 
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -33,9 +35,20 @@ export default function ContactPage() {
   const [requestQuote, setRequestQuote] = useState(null);
   const [feedbackForm, setFeedbackForm] = useState(null);
 
+  const searchParams = useSearchParams();
+  const preselectedContactType = searchParams.get("contactType"); 
+  const preselectedService = searchParams.get("service") 
+  const preselectedProduct = searchParams.get("product"); 
+
   const [formData, setFormData] = useState({
-    contactType: "Message/question",
+    contactType: preselectedContactType || "Message/question",
   });
+
+  useEffect(() => {
+    if (preselectedContactType) {
+      setFormData((prev) => ({ ...prev, contactType: preselectedContactType }));
+    }
+  }, [preselectedContactType]);
 
   const countryCodes = [
     { code: "+358", country: "FIN", format: "+358 (0) 00-0000000" },
@@ -163,6 +176,7 @@ export default function ContactPage() {
             <PriceQuoteSection
               countryCodes={countryCodes}
               requestQuote={requestQuote}
+              preselectedService={preselectedService} 
             />
           )}
 
@@ -170,6 +184,8 @@ export default function ContactPage() {
             <FeedbackReviewSection
               countryCodes={countryCodes}
               feedbackForm={feedbackForm}
+              preselectedService={preselectedService}
+              preselectedProduct={preselectedProduct}
             />
           )}
         </Box>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import Image from "next/image";
@@ -16,6 +16,7 @@ import {
 } from "@mui/material";
 import Link from "next/link";
 import ServicesSinglePageHero from "@/components/services/ServicesSinglePageHero";
+import ServiceCard from "@/components/ServiceCard";
 
 const toSlug = (value = "") =>
   value
@@ -27,57 +28,97 @@ const toSlug = (value = "") =>
 
 export default function ServicePage() {
   const { serviceSlug } = useParams();
-  const [service, setService] = useState(null);
+  const [serviceData, setServiceData] = useState(null);
   const [relatedServices, setRelatedServices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [rating, setRating] = useState(0);
+  const router = useRouter();
 
   const API_URL =
     process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
 
   useEffect(() => {
+    if (!serviceSlug) return;
     setLoading(true);
     axios
-      .get(`${API_URL}/api/home?populate[Services][populate]=*`)
+      .get(`${API_URL}/api/service-page?populate[ServiceBannerDection][populate]=*&populate[all_services][populate]=*`)
+     
       .then((res) => {
-        const services = res.data?.data?.Services || [];
-        const found = services.find(
+        const allServices = res.data?.data?.all_services || [];
+
+        const service = allServices.find(
           (item) =>
-            item.slug === serviceSlug || toSlug(item.title) === serviceSlug
+            item.slug === serviceSlug );
+        setServiceData(service || null);
+
+         // Filter related products (exclude current product)
+         const relatedSrvices = allServices.filter(
+          (item) => item.slug !== serviceSlug
         );
-        setService(found || null);
-        setRelatedServices(
-          services
-            .filter(
-              (item) =>
-                item !== found &&
-                (item.slug || toSlug(item.title)) !== serviceSlug
-            )
-            .slice(0, 3)
-        );
+
+        const getRandomItems = (items, count) => {
+          const shuffled = [...items].sort(() => 0.5 - Math.random());
+          return shuffled.slice(0, count);
+        };
+
+        setRelatedServices(getRandomItems(relatedSrvices,3));
       })
       .catch((err) => setError(err))
       .finally(() => setLoading(false));
   }, [API_URL, serviceSlug]);
 
-  const imageUrl = useMemo(() => {
-    if (!service?.image?.url) return null;
-    return service.image.url.startsWith("http")
-      ? service.image.url
-      : `${API_URL}${service.image.url}`;
-  }, [API_URL, service]);
+  const {
+    service_name,
+    service_category,
+    slug,
+    short_description,
+    long_description,
+    service_logo,
+    service_image,
+    PricingPlan,
+    WhatServiceOffer,
+    WhatServiceOffer_Points,
+    WhyChooseService,
+    WhyChooseService_Points,
+    WhoServiceFor,
+    WhoServiceFor_Points,
+    GetStarted,
+    ServiceLink,
+  } = serviceData || {};
 
-  const shortText =
-    service?.shortDescription ||
-    service?.description ||
-    "short service text here";
+  const {
+    quoteButton_link,
+    quoteButton_description,
+    messageButton_link,
+    messageButton_description,
+    feedbackButton_link,
+    feedbackButton_description,
+  } = ServiceLink || {};
 
-  const category = service?.category || "category";
+  // const imageUrl = useMemo(() => {
+  //   if (!service?.image?.url) return null;
+  //   return service.image.url.startsWith("http")
+  //     ? service.image.url
+  //     : `${API_URL}${service.image.url}`;
+  // }, [API_URL, service]);
 
-  const description =
-    service?.description ||
-    "UnelmaCloud — a secure, intuitive cloud-storage & file-sharing platform by Unelma Platforms. Easily store, manage and share files from anywhere — with generous free space, reliable security, and professional support included.";
+  const imageUrl = (image) => {
+    if (!image) return null;
+
+    const img = Array.isArray(image) ? image[0] : image;
+
+    if (img?.data?.attributes?.url) {
+      const url = img.data.attributes.url;
+      return url.startsWith("http") ? url : `${API_URL}${url}`;
+    }
+
+    if (img?.url) {
+      return img.url.startsWith("http") ? img.url : `${API_URL}${img.url}`;
+    }
+
+    return null;
+  };
 
   if (loading) {
     return (
@@ -97,11 +138,11 @@ export default function ServicePage() {
     );
   }
 
-  if (!service) {
+  if (!serviceData) {
     return (
       <Container maxWidth="lg" sx={{ py: 6 }}>
         <Typography variant="h6">We could not find this service.</Typography>
-        <Button component={Link} href="/services" sx={{ mt: 2 }}>
+        <Button component={Link} href="/products" sx={{ mt: 2 }}>
           Back to Services
         </Button>
       </Container>
@@ -113,7 +154,7 @@ export default function ServicePage() {
       <ServicesSinglePageHero />
       <Container maxWidth="lg" sx={{ py: 4 }}>
         <Typography variant="h3" sx={{ fontWeight: 700, mb: 8 }}>
-          Services &gt; {service.title}
+          Services &gt; {service_name}
         </Typography>
 
         <Grid
@@ -134,8 +175,8 @@ export default function ServicePage() {
             }}
           >
             <Image
-              src="/images/products/unelmamail-image.png"
-              alt={service.title}
+              src={imageUrl(service_image)}
+              alt={service_name}
               width={300}
               height={200}
               style={{ width: "60%", height: "100%", objectFit: "cover" }}
@@ -156,11 +197,11 @@ export default function ServicePage() {
             }}
           >
             <Typography variant="body1" sx={{ mb: 2 }}>
-              {shortText}
+              {short_description}
             </Typography>
 
             <Chip
-              label={category}
+              label={service_category ? service_category : service_name}
               sx={{
                 borderRadius: "999px",
                 border: "2px solid #000",
@@ -183,42 +224,120 @@ export default function ServicePage() {
               flexDirection: "column",
             }}
           >
-            <Typography variant="body1" sx={{ whiteSpace: "pre-line" }}>
-              This is the all-in-one cloud storage and file-sharing solution
-              from Unelma Platforms that gives you a flexible, secure home for
-              all your files. Whether for personal use, team collaboration or
-              business workflows, UnelmaCloud makes file management simple,
-              safe, and scalable. What UnelmaCloud offers Universal file storage
-              & sharing — upload virtually any file type (documents, images,
-              videos, archives, etc.), organize in folders, drag-and-drop for
-              ease, and share with colleagues or friends via secure links.
-              Built-in file preview & management tools — preview files without
-              needing to download; mark favorites, move or delete items, and
-              search across the entire storage through an intuitive dashboard.
-              Flexible access from anywhere — access your files from any device
-              with internet connection; ideal for remote teams, multi-device
-              users, or people on the go. Free storage tier available —
-              registered users get free storage space (historically 5 GB at
-              launch) to get started, making it a risk-free option to test or
-              use for casual needs. Scalable plans for businesses — for heavy or
-              enterprise usage, UnelmaCloud provides paid tiers under a SaaS
-              model, offering expanded storage and business-grade reliability.
-              Professional support, maintenance & security included — with each
-              subscription you get one year of full support, maintenance,
-              security updates and bug fixes from Unelma Platforms’ experienced
-              developer team. Who is UnelmaCloud for? UnelmaCloud is perfect
-              for: Individuals wanting secure, easy-to-use cloud storage for
-              personal documents, photos, media or backups. Teams or small
-              businesses needing shared storage and file-sharing for
-              collaboration, document storage, or project management.
-              Enterprises seeking a SaaS-based cloud storage solution with
-              professional support, scalability, and data security. With
-              UnelmaCloud, you get more than just “somewhere to store files.”
-              You get a full-featured, secure, and user-friendly cloud platform
-              — backed by professional maintenance and support — designed to
-              grow with you, whether you're managing personal files or business
-              data.
-            </Typography>
+            {/* LONG DESCRIPTION */}
+            {long_description && (
+              <Typography
+                variant="body1"
+                sx={{ color: "#555", whiteSpace: "pre-line" }}
+              >
+                {long_description}
+              </Typography>
+            )}
+
+            {/* WHAT SERVICE OFFERS */}
+            {WhatServiceOffer?.serviceOffer_title && (
+              <Typography variant="h4" sx={{ fontWeight: 700, mt: 4, mb: 2 }}>
+                {WhatServiceOffer?.serviceOffer_title}
+              </Typography>
+            )}
+
+          {WhatServiceOffer?.serviceOffer_description && (
+              <Typography
+                variant="body1"
+                sx={{ color: "#555", whiteSpace: "pre-line", mb: 2 }}
+              >
+                {WhatServiceOffer.serviceOffer_description}
+              </Typography>
+            )}
+
+            {WhatServiceOffer_Points?.map((item) => (
+              <Box key={item.id} sx={{ mb: 2 }}>
+                <Typography variant="body1" sx={{ color: "#555" }}>
+                  <Box component="span" sx={{ fontWeight: "bold", mr: 1 }}>
+                    •
+                  </Box>
+                  <Box component="span" sx={{ fontWeight: "bold", mr: 1 }}>
+                    {item.serviceOfferPoints_title}:
+                  </Box>
+                  <Box component="span">
+                    {item.serviceOfferPoints_description}
+                  </Box>
+                </Typography>
+              </Box>
+            ))}
+
+            {/* WHY CHOOSE SERVICE */}
+            {WhyChooseService?.chooseService_title && (
+              <Typography variant="h4" sx={{ fontWeight: 700, mt: 4, mb: 2 }}>
+                {WhyChooseService?.chooseService_title}
+              </Typography>
+            )}
+
+            {WhyChooseService_Points?.map((item) => (
+              <Box key={item.id} sx={{ mb: 2 }}>
+                <Typography variant="body1" sx={{ color: "#555" }}>
+                  <Box component="span" sx={{ fontWeight: "bold", mr: 1 }}>
+                    •
+                  </Box>
+                  <Box component="span" sx={{ fontWeight: "bold", mr: 1 }}>
+                    {item.serviceChoosePoints_title}
+                  </Box>
+                  <Box component="span">
+                    {item.chooseServicePoints_description}
+                  </Box>
+                </Typography>
+              </Box>
+            ))}
+
+            {/* WHO SERVICE IS FOR */}
+            {WhoServiceFor?.serviceFor_title && (
+              <Typography variant="h4" sx={{ fontWeight: 700, mt: 4, mb: 2 }}>
+                {WhoServiceFor.serviceFor_title}
+              </Typography>
+            )}
+
+            {WhoServiceFor?.serviceFor_description && (
+              <Typography
+                variant="body1"
+                sx={{ color: "#555", whiteSpace: "pre-line", mb: 2 }}
+              >
+                {WhoServiceFor.serviceFor_description}
+              </Typography>
+            )}
+
+            {WhoServiceFor_Points?.map((item) => (
+              <Box key={item.id} sx={{ mb: 1 }}>
+                <Typography variant="body1" sx={{ color: "#555" }}>
+                  • {item.serviceForPoints_description}
+                </Typography>
+              </Box>
+            ))}
+
+            {GetStarted?.getStarted_title && (
+              <Typography variant="h4" sx={{ fontWeight: 700, mt: 4, mb: 2 }}
+              >
+                {GetStarted.getStarted_title}
+              </Typography>
+            )}
+
+
+          {GetStarted?.getStarted_description && (
+              <Typography
+                variant="body1"
+                sx={{ color: "#555", whiteSpace: "pre-line", mb: 2 }}
+              >
+                {GetStarted.getStarted_description}
+              </Typography>
+            )}
+{/* 
+            {ServiceLink?.link_description && (
+              <Typography
+                variant="body1"
+                sx={{ color: "#555", whiteSpace: "pre-line", mb: 2 }}
+              >
+                {ServiceLink.link_description}
+              </Typography>
+            )} */}
           </Box>
         </Grid>
 
@@ -239,7 +358,7 @@ export default function ServicePage() {
               variant="h6"
               sx={{ fontWeight: 700, alignSelf: "flex-start" }}
             >
-              {service.title}
+              {service_name}
             </Typography>
 
             <Typography
@@ -254,7 +373,7 @@ export default function ServicePage() {
                 fullWidth
                 variant="contained"
                 component={Link}
-                href="/contact"
+                href={`/contact?contactType=Price%20quote%20request&service=${encodeURIComponent(service_name)}`}
                 sx={{
                   borderRadius: "999px",
                   bgcolor: "#000",
@@ -266,7 +385,7 @@ export default function ServicePage() {
                   },
                 }}
               >
-                Request A Quote
+                {quoteButton_description || "Request a Quote"}
               </Button>
 
               <Typography variant="body2" sx={{ fontWeight: 700 }}>
@@ -289,7 +408,7 @@ export default function ServicePage() {
                   },
                 }}
               >
-                Ask Us Anything
+                {messageButton_description || "Ask a Question"}
               </Button>
             </Stack>
 
@@ -311,6 +430,8 @@ export default function ServicePage() {
 
             <Button
               variant="contained"
+              component={Link}
+  href={`/contact?contactType=Feedback%2Freview&service=${encodeURIComponent(service_name)}`}
               sx={{
                 width: "100%",
                 maxWidth: 300,
@@ -325,233 +446,138 @@ export default function ServicePage() {
                 },
               }}
             >
-              Leave a Review
+              {feedbackButton_description || "Leave a Review"}
             </Button>
           </Box>
         </Grid>
       </Grid>
 
-      {(service.title === "Cyber Security" ||
-        toSlug(service.title) === "cyber-security" ||
-        service.title === "Ai & Machine Learning" ||
-        toSlug(service.title) === "ai-machine-learning") && (
-        <Box sx={{ mt: 8 }}>
-          <Typography variant="h4" sx={{ fontWeight: 700, mb: 6,  }}>
-            Pricing Plans
+{PricingPlan && (
+  <Box sx={{ mt: 8 }}>
+    <Typography variant="h4" sx={{ fontWeight: 700, mb: 6 }}>
+      Pricing Plans
+    </Typography>
+
+    <Grid container spacing={4} justifyContent="center">
+      {/* Business Plan */}
+      <Grid item xs={12} sm={6} md={5}>
+        <Box
+          sx={{
+            border: "2px solid #000000ff",
+            width: 400, // increased width
+            maxWidth: "100%", // responsive for smaller screens
+            borderRadius: "8px",
+            p: 4,
+            textAlign: "center",
+            display: "flex",
+            flexDirection: "column",
+            height: "100%",
+            backgroundColor: "#fff",
+          }}
+        >
+          <Typography variant="h5" sx={{ fontWeight: 700, mb: 2 }}>
+            {PricingPlan.businessPlan_name}
           </Typography>
 
-          <Grid container spacing={4} justifyContent="center">
-            <Grid item xs={12} sm={6} md={5}>
-              <Box
-                sx={{
-                  border: "2px solid #000000ff",
-                  width: 300,
-                  borderRadius: "8px",
-                  p: 4,
-                  textAlign: "center",
-                  display: "flex",
-                  flexDirection: "column",
-                  height: "100%",
-                  backgroundColor: "#fff",
-                }}
-              >
-                <Typography variant="h5" sx={{ fontWeight: 700, mb: 2 }}>
-                  Business
-                </Typography>
-                <Typography variant="h5" sx={{ fontWeight: 700, mb: 1 }}>
-                  49<span style={{ fontSize: "0.9em" }}>$</span>
-                </Typography>
-                <Typography
-                  variant="h6"
-                  sx={{ fontWeight: 600, mb: 6, color: "#666" }}
-                >
-                  /year
-                </Typography>
+          <Stack spacing={1.5} sx={{ mb: 3, flexGrow: 1 }}>
+            {PricingPlan.businessPlan_details.map((detail, index) => (
+              <Typography variant="body2" key={index}>
+                {detail}
+              </Typography>
+            ))}
+          </Stack>
 
-                <Stack spacing={1.5} sx={{ mb: 3, flexGrow: 1 }}>
-                  <Typography variant="body2">Unlimited Pages</Typography>
-                  <Typography variant="body2">All Team Members</Typography>
-                  <Typography variant="body2">Unlimited Leads</Typography>
-                  <Typography variant="body2">Unlimited Page Views</Typography>
-                  <Typography variant="body2">Export in HTML/CSS</Typography>
-                </Stack>
-
-                <Button
-                  fullWidth
-                  variant="contained"
-                  sx={{
-                    borderRadius: "999px",
-                    bgcolor: "#90F0FF",
-                    color: "#000000ff",
-                    fontWeight: 700,
-                    textTransform: "none",
-                    "&:hover": {
-                      bgcolor: "#5662e3ff",
-                    },
-                  }}
-                >
-                  Order Now
-                </Button>
-              </Box>
-            </Grid>
-
-            <Grid item xs={12} sm={6} md={5}>
-              <Box
-                sx={{
-                  border: "2px solid #000000ff",
-                  width: 300,
-                  borderRadius: "8px",
-                  p: 4,
-                  textAlign: "center",
-                  display: "flex",
-                  flexDirection: "column",
-                  height: "100%",
-                  backgroundColor: "#fff",
-                }}
-              >
-                <Typography variant="h5" sx={{ fontWeight: 700, mb: 2 }}>
-                  Professional
-                </Typography>
-                <Typography variant="h5" sx={{ fontWeight: 700, mb: 1 }}>
-                  19<span style={{ fontSize: "0.9em" }}>$</span>
-                </Typography>
-                <Typography
-                  variant="h6"
-                  sx={{ fontWeight: 600, mb: 6, color: "#666" }}
-                >
-                  /month
-                </Typography>
-
-                <Stack spacing={1.5} sx={{ mb: 3, flexGrow: 1 }}>
-                  <Typography variant="body2">Unlimited Pages</Typography>
-                  <Typography variant="body2">All Team Members</Typography>
-                  <Typography variant="body2">Unlimited Leads</Typography>
-                  <Typography variant="body2">Unlimited Page Views</Typography>
-                  <Typography variant="body2">Export in HTML/CSS</Typography>
-                </Stack>
-
-                <Button
-                  fullWidth
-                  variant="contained"
-                  sx={{
-                    borderRadius: "999px",
-                    bgcolor: "#90F0FF",
-                    color: "#000000ff",
-                    fontWeight: 700,
-                    textTransform: "none",
-                    "&:hover": {
-                      bgcolor: "#5662e3ff",
-                    },
-                  }}
-                >
-                  Order Now
-                </Button>
-              </Box>
-            </Grid>
-          </Grid>
+          <Button
+            fullWidth
+            variant="contained"
+            sx={{
+              borderRadius: "999px",
+              bgcolor: "#90F0FF",
+              color: "#000000ff",
+              fontWeight: 700,
+              textTransform: "none",
+              "&:hover": {
+                bgcolor: "#5662e3ff",
+              },
+            }}
+          >
+            Order Now
+          </Button>
         </Box>
-      )}
+      </Grid>
 
-      <Box sx={{ mt: 8 }}>
-        <Typography variant="h6" sx={{ fontWeight: 700, mb: 3 }}>
-          Related Items
-        </Typography>
+      {/* Professional Plan */}
+      <Grid item xs={12} sm={6} md={5}>
+        <Box
+          sx={{
+            border: "2px solid #000000ff",
+            width: 400, // increased width
+            maxWidth: "100%", // responsive
+            borderRadius: "8px",
+            p: 4,
+            textAlign: "center",
+            display: "flex",
+            flexDirection: "column",
+            height: "100%",
+            backgroundColor: "#fff",
+          }}
+        >
+          <Typography variant="h5" sx={{ fontWeight: 700, mb: 2 }}>
+            {PricingPlan.professionalPlan_name}
+          </Typography>
 
-        <Grid container spacing={3} justifyContent="center">
-          {relatedServices.map((service, index) => {
-            const imageUrl = service.image?.url
-              ? service.image.url.startsWith("http")
-                ? service.image.url
-                : `${API_URL}${service.image.url}`
-              : null;
+          <Stack spacing={1.5} sx={{ mb: 3, flexGrow: 1 }}>
+            {PricingPlan.professionalPlan_description.map((detail, index) => (
+              <Typography variant="body2" key={index}>
+                {detail}
+              </Typography>
+            ))}
+          </Stack>
 
-            const slug = service.slug || toSlug(service.title);
+          <Button
+            fullWidth
+            variant="contained"
+            sx={{
+              borderRadius: "999px",
+              bgcolor: "#90F0FF",
+              color: "#000000ff",
+              fontWeight: 700,
+              textTransform: "none",
+              "&:hover": {
+                bgcolor: "#5662e3ff",
+              },
+            }}
+          >
+            Order Now
+          </Button>
+        </Box>
+      </Grid>
+    </Grid>
+  </Box>
+)}
 
-            return (
-              <Grid item xs={12} sm={6} md={4} key={index} sx={{ display: "flex", justifyContent: "center" }}>
-                <Box
-                  component={Link}
-                  href={`/services/${slug}`}
-                  sx={{
-                    width: 345,
-                    height: 450,
-                    p: 2,
-                    textAlign: "center",
-                    display: "flex",
-                    flexDirection: "column",
-                    border: "2px solid #000",
-                    borderRadius: "8px",
-                    textDecoration: "none",
-                    color: "inherit",
-                    "&:hover": {
-                      boxShadow: "0 8px 16px rgba(0,0,0,0.12)",
-                      transform: "translateY(-4px)",
-                      transition: "all 0.2s ease",
-                    },
-                  }}
-                >
-                  <Box
-                    sx={{
-                      width: 100,
-                      height: 100,
-                      borderRadius: "50%",
-                      backgroundColor: "#f5f5f5",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      mx: "auto",
-                      mb: 2,
-                      border: "2px solid #2F2E2E",
-                      overflow: "hidden",
-                    }}
-                  >
-                    {imageUrl ? (
-                      <Image
-                        src={imageUrl}
-                        alt={service.title}
-                        width={70}
-                        height={70}
-                        style={{ objectFit: "contain" }}
-                      />
-                    ) : (
-                      <Typography variant="caption" color="text.secondary">
-                        No image
-                      </Typography>
-                    )}
-                  </Box>
-
-                  <Typography variant="h4" sx={{ my: 2.5 }}>
-                    {service.title}
-                  </Typography>
-
-                  <Typography
-                    variant="body2"
-                    sx={{
-                      textAlign: "justify",
-                      mb: 3,
-                    }}
-                  >
-                    {service.description}
-                  </Typography>
-
-                  <Button
-                    sx={{
-                      mt: "auto",
-                      alignSelf: "center",
-                      px: 1.5,
-                      py: 0.5,
-                      fontSize: 14,
-                      borderRadius: "999px",
-                    }}
-                  >
-                    Request a Quote
-                  </Button>
-                </Box>
+      {/* Related Items Section */}
+            <Box sx={{ mt: 4 }}>
+              <Typography variant="h6" sx={{ fontWeight: "bold", mb: 2 }}>
+                Related Items
+              </Typography>
+              <Grid container spacing={4}>
+                {relatedServices.map((item) => {
+                  const imageUrl = item.service_logo?.url
+                    ? item.service_logo.url.startsWith("http")
+                      ? item.service_logo.url
+                      : `${API_URL}${item.service_logo.url}`
+                    : null;
+                  return (
+                    <Grid item xs={12} sm={6} md={4} key={item.id}>
+                      <ServiceCard service={item} imageUrl={imageUrl} />
+                    </Grid>
+                  );
+                })}
               </Grid>
-            );
-          })}
-        </Grid>
-      </Box>
+            </Box>
+
+
     </Container>
     </>
   );

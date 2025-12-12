@@ -14,10 +14,10 @@ import {
   FormControlLabel,
   Button,
 } from "@mui/material";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 
-export default function FeedbackReviewSection({ feedbackForm, countryCodes }) {
+export default function FeedbackReviewSection({ feedbackForm, countryCodes, preselectedService, preselectedProduct }) {
   const API_URL = "http://localhost:1337";
 
   //   const API_URL =
@@ -41,6 +41,23 @@ export default function FeedbackReviewSection({ feedbackForm, countryCodes }) {
     message: "",
     error: false,
   });
+
+  useEffect(() => {
+    if (preselectedService) {
+      setFormData((prev) => ({
+        ...prev,
+        feedbackType: "Service",                    
+        selectedServiceOrProduct: preselectedService 
+      }));
+    }
+    if (preselectedProduct) {
+      setFormData((prev) => ({
+        ...prev,
+        feedbackType: "Product",                    
+        selectedServiceOrProduct: preselectedProduct
+      }));
+    }
+  }, [preselectedProduct]);
 
   const selectedCountry = countryCodes.find(
     (cc) => cc.code === formData.countryCode

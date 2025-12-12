@@ -19,9 +19,11 @@ import {
 import ProductCard from "@/components/ProductCard";
 import ServiceCard from "@/components/ServiceCard"; 
 import LoadingSpinner from "@/components/LoadingSpinner";
+import { useRouter } from "next/navigation";
 
 export default function ProductsPage() {
   const theme = useTheme();
+  const router = useRouter();
   const [tab, setTab] = useState(0);
   const [subTab, setSubTab] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
@@ -60,10 +62,15 @@ export default function ProductsPage() {
   useEffect(() => {
     // Fetch services data
     axios
-      .get(`${API_URL}/api/home?populate[Services][populate]=*`)
+      .get(`${API_URL}/api/service-page?populate[ServiceBannerDection][populate]=*&populate[all_services][populate]=*`)
       .then((res) => {
-        console.log("Services API Response:", res.data.data?.Services); // Debug the API response
-        setServices(res.data.data?.Services || []);
+        const servicePage = res.data?.data;
+        console.log("Service Page Data:", servicePage);
+        const allServices = servicePage?.all_services || [];
+
+        console.log("Fetched Services:", allServices);
+  
+        setServices(allServices);
       })
       .catch((err) => setError(err))
       .finally(() => setLoading(false));
@@ -72,6 +79,11 @@ export default function ProductsPage() {
   const handleTabChange = (event, newValue) => {
     setTab(newValue);
     setSubTab(0);
+    if (newValue === 0) {
+    router.push("/products?tab=products");
+  } else {
+    router.push("/products?tab=services");
+  }
   };
 
   const handleSubTabChange = (event, newValue) => {
@@ -241,11 +253,19 @@ export default function ProductsPage() {
     </Grid>
           ) : (
             <Grid container spacing={4}>
-              {sortedServices.map((service) => (
+              {sortedServices.map((service) => {
+
+              const imageUrl = service.service_logo?.url
+              ? service.service_logo.url.startsWith("http")
+                ? service.service_logo.url
+                : `${API_URL}${service.service_logo.url}`
+              : null;
+
+return (
                 <Grid item xs={12} sm={4} md={4} lg={4} key={service.id}>
-                  <ServiceCard service={service} apiUrl={API_URL} />
+                  <ServiceCard service={service} imageUrl={imageUrl} />
                 </Grid>
-              ))}
+)})}
             </Grid>
           )}
         </Grid>

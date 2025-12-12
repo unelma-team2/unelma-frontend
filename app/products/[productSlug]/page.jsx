@@ -1,8 +1,7 @@
 "use client";
 
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useCart } from "@/context/CartContext";
-import { useRouter } from "next/navigation";
 import {
   Box,
   Container,
@@ -20,6 +19,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import ProductCard from "@/components/ProductCard";
 import axios from "axios";
+import Link from "next/link";
 
 export default function ProductPage() {
   const { productSlug } = useParams();
@@ -450,7 +450,12 @@ export default function ProductPage() {
 
           {/* Leave a Review Button */}
           <Box sx={{ textAlign: "center", mt: 2 }}>
-            <Button variant="outlined" color="secondary">
+            <Button 
+                variant="outlined" 
+                color="secondary"
+                component={Link}
+                href={`/contact?contactType=Feedback%2Freview&product=${encodeURIComponent(product_name)}`} 
+            >
               {reviewButton_description}
             </Button>
           </Box>
