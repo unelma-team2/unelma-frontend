@@ -1,11 +1,11 @@
-"use client";
+"use client"
 
-import { Box, Typography, useTheme, Link as MUILink } from "@mui/material";
-import NextLink from "next/link";
-import Image from "next/image";
+import { Box, Typography, useTheme, Link as MUILink } from "@mui/material"
+import NextLink from "next/link"
+import Image from "next/image"
 
 export default function HeroSection({ heroSection }) {
-  const theme = useTheme();
+  const theme = useTheme()
 
   const {
     hero_title,
@@ -13,7 +13,9 @@ export default function HeroSection({ heroSection }) {
     hero_description2,
     hero_link,
     hero_link_description,
-  } = heroSection || {};
+    hero_image_top,
+    hero_image_bottom,
+  } = heroSection || {}
 
   return (
     <Box
@@ -23,8 +25,9 @@ export default function HeroSection({ heroSection }) {
         position: "relative",
         left: "50%",
         ml: "-50vw",
-        minHeight: 600, 
-        //overflow: "hidden",
+        paddingTop: { xs: 8 },
+        paddingBottom: { xs: 2, sm: 6, md: 6 },
+        minHeight: { xs: 850, sm: 1200, md: 1400, lg: 1400 },
         bgcolor: theme.palette.background.default,
       }}
     >
@@ -35,12 +38,11 @@ export default function HeroSection({ heroSection }) {
           width: "100%",
           zIndex: 1,
           WebkitMaskImage: "linear-gradient(to bottom, black 43%, transparent 68%)",
-            maskImage: "linear-gradient(to bottom, black 43%, transparent 68%)",
-          
+          maskImage: "linear-gradient(to bottom, black 43%, transparent 68%)",
         }}
       >
         <Image
-          src="/images/home/hero/spot-valley.png"
+          src={hero_image_bottom || "/images/home/hero/hero_background.png"}
           alt="Hero background"
           width={1600}
           height={900}
@@ -53,57 +55,59 @@ export default function HeroSection({ heroSection }) {
       <Box
         sx={{
           position: "absolute",
-          top: "2%",     
-          left: "36%",    
-          width: { xs: "40%", md: "30%" }, // size of the floating image
+          top: { xs: "-1%", sm: "2.5%", md: "2%" },
+          left: { xs: "23%", sm: "30%", md: "36%" },
+          width: { xs: "55%", sm: "40%", md: "30%" },
           zIndex: 3,
         }}
       >
         <Image
-          src="/images/home/hero/cloud_mod1.png" 
+          src={hero_image_top || "/images/home/hero/hero_top_smaller.png"}
           alt="Overlay graphic"
-          width={500}
+          width={500} 
           height={500}
           style={{ width: "100%", height: "auto" }}
         />
       </Box>
 
-      {/** ---------------- TITLE ---------------- */}
+      {/** ---------------- TITLE (LEFT SIDE ON DESKTOP, CENTERED ON MOBILE) ---------------- */}
       <Typography
         variant="hero"
         sx={{
           position: "absolute",
-          top: "55%",
-          right: { xs: 16, md: 0 },
+          top: { xs: "42%", sm: "65%", md: "71%" },
+          left: { xs: "50%", md: "5%" },
+          transform: { xs: "translateX(-50%)", md: "none" },
           zIndex: 4,
-          width: { xs: "90%", md: "60%" },
-          textAlign: "right",
+          width: { xs: "90%", sm: "65%", md: "60%" },
+          textAlign: { xs: "center", md: "left" },
           color: theme.palette.primary.darkViolet,
-          //fontSize: 122,
-          pr: { xs: 0, md: 4 },
-          mr: { xs: 0, md: 17 },
+          fontSize: { xs: "3rem", sm: "4rem", md: "5rem", lg: "6rem" },
+          pl: { xs: 0, md: 8 },
+          ml: { xs: 0, md: 4 },
         }}
       >
         {hero_title}
       </Typography>
 
-      {/** ---------------- DESCRIPTION ---------------- */}
+      {/** ---------------- DESCRIPTIONS (RIGHT SIDE ON DESKTOP AT SAME HEIGHT, BELOW TITLE ON MOBILE) ---------------- */}
       <Box
         sx={{
           position: "absolute",
-          top: "82%",
-          right: { xs: 16, md: 0 },
-          width: { xs: "90%", md: "30%" },
+          top: { xs: "67%", sm: "87%", md: "80%" },
+          right: { xs: "50%", md: "5%" },
+          transform: { xs: "translateX(50%)", md: "none" },
+          width: { xs: "90%", sm: "85%", md: "32%" },
           zIndex: 4,
-          textAlign: "right",
-          pr: { xs: 0, md: 4 },
-          mr: { xs: 0, md: 17 },
+          textAlign: { xs: "center", md: "left" },
+          pr: { xs: 0, md: 8 },
+          mr: { xs: 0, md: 4 },
         }}
       >
         <Typography
           sx={{
             mb: 2,
-            fontSize: 18,
+            fontSize: { xs: 14, sm: 16, md: 18 },
             fontWeight: 500,
             lineHeight: 1.3,
             color: theme.palette.text.primary,
@@ -116,7 +120,7 @@ export default function HeroSection({ heroSection }) {
         <Typography
           sx={{
             mb: 2,
-            fontSize: 18,
+            fontSize: { xs: 14, sm: 16, md: 18 },
             fontWeight: 500,
             lineHeight: 1.3,
             color: theme.palette.text.primary,
@@ -133,21 +137,22 @@ export default function HeroSection({ heroSection }) {
           sx={{
             mt: 1,
             color: theme.palette.primary.blue1 || theme.palette.primary.main,
-            fontSize: 18,
+            fontSize: { xs: 16, sm: 18, md: 20 },
             fontWeight: 700,
             display: "inline-flex",
-            alignItems: "center",
+            alignItems: { xs: "flex-start", sm: "flex-start", md: "center" },
+            textAlign: { xs: "left", sm: "left", md: "center"},
             gap: 0.5,
-              transition: "transform 0.25s ease",
-                            "&:hover": {
-                              transform: "scale(1.1)",
-                              cursor: "pointer",
-                            }
+            transition: "transform 0.25s ease",
+            "&:hover": {
+              transform: "scale(1.1)",
+              cursor: "pointer",
+            },
           }}
         >
           {hero_link_description} →
         </MUILink>
       </Box>
     </Box>
-  );
+  )
 }
