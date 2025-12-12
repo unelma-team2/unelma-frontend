@@ -40,10 +40,8 @@ export default function ServicePage() {
 
   useEffect(() => {
     if (!serviceSlug) return;
-    setLoading(true);
     axios
       .get(`${API_URL}/api/service-page?populate[ServiceBannerDection][populate]=*&populate[all_services][populate]=*`)
-     
       .then((res) => {
         const allServices = res.data?.data?.all_services || [];
 
@@ -154,7 +152,13 @@ export default function ServicePage() {
       <ServicesSinglePageHero />
       <Container maxWidth="lg" sx={{ py: 4 }}>
         <Typography variant="h3" sx={{ fontWeight: 700, mb: 8 }}>
-          Services &gt; {service_name}
+          <Link
+            href="/products?tab=services"
+            style={{ color: "#1976d2", textDecoration: "none" }}
+          >
+            Services
+          </Link>
+          {" > "} {service_name}
         </Typography>
 
         <Grid
