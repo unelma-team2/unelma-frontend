@@ -192,7 +192,10 @@ export default function Header() {
                 <Button
                   variant="text"
                   disableRipple
-                  onClick={() => router.push("/login")}
+                  onClick={() => {
+                    signOut();
+                    setMobileMenuOpen(false);
+                  }}
                   sx={{
                     textTransform: "uppercase",
                     fontSize: { sm: "0.65rem", md: "1rem" },
@@ -221,7 +224,10 @@ export default function Header() {
                 <Button
                   variant="text"
                   disableRipple
-                  onClick={() => router.push("/login")}
+                  onClick={() => {
+                    router.push("/login");
+                    setMobileMenuOpen(false);
+                  }}
                   sx={{
                     textTransform: "uppercase",
                     fontSize: { sm: "0.65rem", md: "1rem" },
