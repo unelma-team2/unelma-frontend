@@ -86,7 +86,7 @@ function CountrySelect({ value, onChange, label = "Country" }) {
 }
 
 export default function CheckoutPage() {
-  const { cartItems } = useCart();
+  const { cartItems, clearCart } = useCart();
   const router = useRouter();
 
   const [showShipping, setShowShipping] = useState(false);
@@ -291,16 +291,12 @@ export default function CheckoutPage() {
             color="primary"
             sx={{ mt: 3, minWidth: 200, width: { xs: "100%", sm: "auto" } }}
             onClick={() => {
-              setOrderSuccess(true);
+              clearCart();
+              router.push("/order-success");
             }}
           >
             Confirm Order
           </Button>
-          {orderSuccess && (
-            <Alert severity="success" sx={{ mt: 3 }}>
-              Your order has been successfully placed!
-            </Alert>
-          )}
         </Box>
       </Grid>
     </Grid>
