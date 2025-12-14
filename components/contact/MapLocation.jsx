@@ -1,53 +1,48 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Box, Typography, Stack } from "@mui/material";
 import LocationPinIcon from '@mui/icons-material/LocationPin';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
+import axios from "axios";
 
-const officesLeft = [
-  {
-    title: "USA",
-    company: "Unelma Platforms Inc.",
-    phone: "+1 (302) 703 7543",
-    email: "info@unelmaplatforms.com",
-    extra: "Incorporation states: Delaware, Florida, Alabama & Montana, USA",
-    mapQuery: "Delaware USA",
-  },
-  {
-    title: "Canada",
-    company: "Unelma Pay Ltd",
-    incorporation: "Incorporation number: 1000986742",
-    phone: "+1 (705) 709 8047",
-    email: "unelmapayca@gmail.com",
-    extra: "215 Anne Street N, Barrie, Ontario, Canada",
-    mapQuery: "Barrie Ontario Canada",
-  },
-];
-
-const officesRight = [
-  {
-    title: "Northern Europe",
-    company: "Unelma Platforms OÜ",
-    phone: "+358 (0) 44 988 9771",
-    email: "info@unelmaplatforms.com",
-    extra: "Tallinn, Estonia region 10111, Estonia",
-    mapQuery: "Tallinn Estonia",
-  },
-  {
-    title: "South Asia",
-    company: "Unelma Platforms Pvt. Ltd",
-    id: `Business ID / VAT / PAN: 606863094`,
-    phone: "+977 56 562 130",
-    email: "hello@unelma.com.np",
-    extra: "Ratnanagar, Chitwan 4 44204, Nepal",
-    mapQuery: "Ratnanagar Chitwan Nepal",
-  },
-];
 
 export default function MapLocation() {
+  const [offices, setOffices] = useState([]);
+  const [title,setTitle] = useState("");
+  const [subtitle,setSubtitle] = useState("");
   const [selectedLocation, setSelectedLocation] = useState("Tallinn Estonia");
+
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
+  useEffect(() => {
+
+    axios
+      .get(
+        `${API_URL}/api/contact?populate[OfficeAddress][populate]=*`
+      )
+      .then((res) => {
+        const data = res.data?.data || {};
+        const addresses = data?.OfficeAddress || [];
+        setOffices(addresses);
+
+        if (addresses.length) {
+          setSelectedLocation(addresses[0].mapQuery);
+        }
+
+        setTitle(data.map_title || "");
+        setSubtitle(data.map_subtitle || "");
+
+      })
+      .catch((err) => {
+        console.error(err);
+      
+      });
+  }, [API_URL]);
+
+  const officesLeft = offices.filter(o => o.column === "left");
+  const officesRight = offices.filter(o => o.column === "right");
 
   return (
     <Box sx={{ mt: 22, mb: 8 }}>
@@ -55,10 +50,10 @@ export default function MapLocation() {
         variant="h2"
         sx={{ fontWeight: 700, textAlign: "center", mb: 4 }}
       >
-        Contact Our Offices Worldwide
+        {title}
       </Typography>
       <Typography variant="h6" sx={{ textAlign: "center", mb: 4 }}>
-        Opening hours Mon-Fri 10AM-5PM
+        {subtitle}
       </Typography>
 
       <Box
@@ -103,7 +98,7 @@ function OfficeColumn({ offices, setSelectedLocation, selectedLocation }) {
     >
       {offices.map((office) => (
         <OfficeInfo
-          key={office.title}
+          key={office.country_name}
           {...office}
           isActive={selectedLocation === office.mapQuery}
           onClick={() => setSelectedLocation(office.mapQuery)}
@@ -114,7 +109,7 @@ function OfficeColumn({ offices, setSelectedLocation, selectedLocation }) {
 }
 
 function OfficeInfo({ 
-  title, company, phone, email, extra, incorporation, id, 
+  country_name, company_name, phone_number, email, mapQuery, address, column,
   onClick, isActive 
 }) {
   return (
@@ -128,23 +123,13 @@ function OfficeInfo({
       }}
     >
       <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 1 }}>
-        {title}
+        {country_name}
       </Typography>
-      <Typography variant="body2">{company}</Typography>
-      {incorporation && (
-        <Typography variant="body2" sx={{ mt: 0.5 }}>
-          {incorporation}
-        </Typography>
-      )}
-      {id && (
-        <Typography variant="body2" sx={{ mt: 0.5 }}>
-          {id}
-        </Typography>
-      )}
+      <Typography variant="body2">{company_name}</Typography>
 
       <Stack direction="row" alignItems="center" spacing={1} sx={{ mt: 1 }}>
         <LocalPhoneIcon sx={{ color: "#0018a0ff" }} />
-        <Typography variant="body2">{phone}</Typography>
+        <Typography variant="body2">{phone_number}</Typography>
       </Stack>
 
       <Stack direction="row" alignItems="center" spacing={1} sx={{ mt: 1 }}>
@@ -152,14 +137,11 @@ function OfficeInfo({
         <Typography variant="body2">{email}</Typography>
       </Stack>
 
-      {extra && (
-        <Typography
-          variant="caption"
-          sx={{ display: "block", mt: 1, color: "#9D00A0" }}
-        >
+      {address && (
+        <Typography variant="caption" sx={{ display: "block", mt: 1, color: "#9D00A0" }}>
           <Stack direction="row" alignItems="center" spacing={0.5} component="span">
             <LocationPinIcon sx={{ color: "#9D00A0" }} />
-            <span>{extra}</span>
+            <span>{address}</span>
           </Stack>
         </Typography>
       )}

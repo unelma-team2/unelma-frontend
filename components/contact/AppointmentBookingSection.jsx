@@ -86,8 +86,9 @@ function getAvailableSlots(dateString) {
 
 const todayIso = getLocalIsoDate();
 
-export default function AppointmentBookingSection({ countryCodes }) {
-  const API_URL = "http://localhost:1337";
+export default function AppointmentBookingSection({ countryCodes, appointmentBooking }) {
+
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   const [formData, setFormData] = useState({
     name: "",
@@ -115,6 +116,8 @@ export default function AppointmentBookingSection({ countryCodes }) {
   const selectedCountry = countryCodes.find(
     (cc) => cc.code === formData.countryCode
   );
+
+  const {phone_number_title, messaage_title, date_title, time_title, time_available_message, time_noSlot_message, booking_message} = appointmentBooking;
 
   const handleChange = (field) => (e) => {
     const value = e.target.value;
@@ -262,7 +265,7 @@ export default function AppointmentBookingSection({ countryCodes }) {
       />
 
       <Typography variant="body2" sx={labelStyle}>
-        Phone Number
+       {phone_number_title}
       </Typography>
       <Box sx={{ display: "flex", gap: 1, mb: 3 }}>
         <FormControl sx={{ minWidth: 120 }}>
@@ -286,7 +289,7 @@ export default function AppointmentBookingSection({ countryCodes }) {
       </Box>
 
       <Typography variant="body2" sx={labelStyle}>
-        Message / Agenda
+        {messaage_title}
       </Typography>
       <TextField
         fullWidth
@@ -302,7 +305,7 @@ export default function AppointmentBookingSection({ countryCodes }) {
       />
 
       <Typography variant="body2" sx={labelStyle}>
-        Date
+        {date_title}
       </Typography>
       <TextField
         fullWidth
@@ -317,7 +320,7 @@ export default function AppointmentBookingSection({ countryCodes }) {
       />
 
       <Typography variant="body2" sx={labelStyle}>
-        Time
+        {time_title}
       </Typography>
       <FormControl fullWidth error={Boolean(errors.time)} sx={{ mb: 3 }}>
         <Select
@@ -340,13 +343,13 @@ export default function AppointmentBookingSection({ countryCodes }) {
         <FormHelperText>
           {errors.time ||
             (slotsUnavailable
-              ? "No slots: choose a weekday between 10:00 and 17:00"
-              : "Available times between 10:00 and 17:00")}
+              ? time_noSlot_message
+              : {time_available_message})}
         </FormHelperText>
       </FormControl>
 
       <Typography variant="body2" sx={{ mt: 2, mb: 4, fontSize: "14px", color: "#666" }}>
-        This is a remote, free consultation. We will send a reminder to your email.
+       {booking_message}
       </Typography>
 
       <Button
