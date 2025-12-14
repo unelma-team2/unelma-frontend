@@ -198,7 +198,10 @@ export default function ContactPage() {
           )}
 
           {formData.contactType === "Book appointment" && (
-            <AppointmentBookingSection countryCodes={countryCodes} appointmentBooking = {appointmentBooking} />
+            <AppointmentBookingSection 
+              countryCodes={countryCodes} 
+              appointmentBooking = {appointmentBooking} 
+            />
           )}
         </Box>
 
