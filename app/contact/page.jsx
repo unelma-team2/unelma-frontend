@@ -35,6 +35,7 @@ export default function ContactPage() {
   const [contactForm, setContactForm] = useState(null);
   const [requestQuote, setRequestQuote] = useState(null);
   const [feedbackForm, setFeedbackForm] = useState(null);
+  const [appointmentBooking, setAppointmentBooking] = useState(null);
 
   const searchParams = useSearchParams();
   const preselectedContactType = searchParams.get("contactType"); 
@@ -63,16 +64,17 @@ export default function ContactPage() {
 
     axios
       .get(
-        `${API_URL}/api/contact?populate[Banner][populate]=*&populate[ContactType]=*&populate[ContactForm]=*&populate[RequestQuote]=*&populate[FeedbackForm]=*`
+        `${API_URL}/api/contact?populate[Banner][populate]=*&populate[ContactType]=*&populate[MessageForm]=*&populate[RequestQuote]=*&populate[FeedbackForm]=*&populate[AppointmentBooking]=*`
       )
       .then((res) => {
         const data = res.data?.data || {};
 
         setBanner(data.Banner || null);
         setContactTypeData(data.ContactType || null);
-        setContactForm((data.ContactForm && data.ContactForm[0]) || null);
+        setContactForm((data.MessageForm && data.MessageForm[0]) || null);
         setRequestQuote(data.RequestQuote || null);
         setFeedbackForm(data.FeedbackForm || null);
+        setAppointmentBooking(data.AppointmentBooking || null);
 
         setLoading(false);
       })
@@ -196,7 +198,10 @@ export default function ContactPage() {
           )}
 
           {formData.contactType === "Book appointment" && (
-            <AppointmentBookingSection countryCodes={countryCodes} />
+            <AppointmentBookingSection 
+              countryCodes={countryCodes} 
+              appointmentBooking = {appointmentBooking} 
+            />
           )}
         </Box>
 
