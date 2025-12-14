@@ -2,8 +2,8 @@
 
 import React, { useState } from "react";
 import { useCart } from "@/context/CartContext";
-import {useRouter} from "next/navigation";
-import {useAuth} from "@/app/context/AuthContext";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/app/context/AuthContext";
 import {
   Box,
   Typography,
@@ -17,14 +17,30 @@ import {
   TextField,
   IconButton,
 } from "@mui/material";
-import CartPageHero from "./components/HeroPage";
+import HeroPage from "@/components/common/HeroPage";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 const shippingOptions = [
-  { label: "Free Delivery", description: "Delivery will be within 10-15 Days", cost: 0 },
-  { label: "Standard Delivery", description: "Delivery will be within 5-10 Days.", cost: 5 },
-  { label: "2-Day Delivery", description: "Delivery will be within 2 Days.", cost: 10 },
-  { label: "Same Day Delivery", description: "Delivery will be within 1 Day.", cost: 20 },
+  {
+    label: "Free Delivery",
+    description: "Delivery will be within 10-15 Days",
+    cost: 0,
+  },
+  {
+    label: "Standard Delivery",
+    description: "Delivery will be within 5-10 Days.",
+    cost: 5,
+  },
+  {
+    label: "2-Day Delivery",
+    description: "Delivery will be within 2 Days.",
+    cost: 10,
+  },
+  {
+    label: "Same Day Delivery",
+    description: "Delivery will be within 1 Day.",
+    cost: 20,
+  },
 ];
 
 export default function CartPage() {
@@ -51,7 +67,21 @@ export default function CartPage() {
 
   return (
     <>
-      <CartPageHero />
+      <HeroPage
+        title="Cart"
+        image1={{
+          src: "/blog/blog-hero-1.png",
+          alt: "Order Success Hero 1",
+          width: 244,
+          height: 261,
+        }}
+        image2={{
+          src: "/blog/blog-hero-2.png",
+          alt: "Order Success Hero 2",
+          width: 272,
+          height: 309,
+        }}
+      />
       <Box sx={{ p: { xs: 1, sm: 2, md: 4 } }}>
         <Typography
           variant="h4"
@@ -139,7 +169,7 @@ export default function CartPage() {
           Total: ${totalPrice.toFixed(2)}
         </Typography>
 
-         <Box
+        <Box
           sx={{
             mt: { xs: 3, md: 5 },
             mb: { xs: 3, md: 5 },
@@ -164,23 +194,28 @@ export default function CartPage() {
                       />
                     </TableCell>
                     <TableCell>
-                      <Typography sx={{ fontWeight: selectedShipping.label === option.label ? "bold" : "normal" }}>
+                      <Typography
+                        sx={{
+                          fontWeight:
+                            selectedShipping.label === option.label
+                              ? "bold"
+                              : "normal",
+                        }}
+                      >
                         {option.label}
                       </Typography>
                       <Typography variant="body2" color="text.secondary">
                         {option.description}
                       </Typography>
                     </TableCell>
-                    <TableCell align="right">
-                      ${option.cost} 
-                    </TableCell>
+                    <TableCell align="right">${option.cost}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
             </Table>
           </TableContainer>
         </Box>
-        
+
         <Box sx={{ mt: 5 }}>
           <Typography variant="h5" sx={{ mb: 2 }}>
             Order Summary
