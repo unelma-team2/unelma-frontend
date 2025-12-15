@@ -7,6 +7,7 @@ import ClientLayoutWrapper from "@/components/ClientLayoutWrapper";
 import { Box } from "@mui/material";
 import { CartProvider } from "@/context/CartContext"; // Import CartProvider
 import { AuthProvider } from "./context/AuthContext";
+import { UserProvider } from "./context/UserContext";
 
 const stackSansNotch = localFont({
   src: "../public/fonts/stack-sans-notch/StackSansNotch-VariableFont_wght.ttf",
@@ -43,20 +44,22 @@ export default function RootLayout({ children }) {
         <EmotionRegistry>
           <ThemeRegistry>
             <AuthProvider>
-              <CartProvider>
-                {" "}
-                {/* Wrap the app with CartProvider */}
-                <ClientLayoutWrapper>
-                  <Box
-                    sx={{
-                      mx: { xs: 2, md: "120px" },
-                      my: "2rem",
-                    }}
-                  >
-                    {children}
-                  </Box>
-                </ClientLayoutWrapper>
-              </CartProvider>
+              <UserProvider>
+                <CartProvider>
+                  {" "}
+                  {/* Wrap the app with CartProvider */}
+                  <ClientLayoutWrapper>
+                    <Box
+                      sx={{
+                        mx: { xs: 2, md: "120px" },
+                        my: "2rem",
+                      }}
+                    >
+                      {children}
+                    </Box>
+                  </ClientLayoutWrapper>
+                </CartProvider>
+              </UserProvider>
             </AuthProvider>
           </ThemeRegistry>
         </EmotionRegistry>
