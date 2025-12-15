@@ -23,8 +23,8 @@ export default function HeroSection({ heroSection }) {
       sx={{
         width: "100vw",
         position: "relative",
-        left: "50%",
-        ml: "-50vw",
+       // left: "50%",
+       // ml: "-50vw",
         paddingTop: { xs: 8 },
         paddingBottom: { xs: 2, sm: 6, md: 6 },
         minHeight: { xs: 850, sm: 1200, md: 1400, lg: 1400 },
@@ -56,8 +56,8 @@ export default function HeroSection({ heroSection }) {
         sx={{
           position: "absolute",
           top: { xs: "-1%", sm: "2.5%", md: "2%" },
-          left: { xs: "23%", sm: "30%", md: "36%" },
-          width: { xs: "55%", sm: "40%", md: "30%" },
+          left: { xs: "23%", sm: "35%", md: "36%" },
+          width: { xs: "55%", sm: "30%", md: "30%" },
           zIndex: 3,
         }}
       >

@@ -18,7 +18,6 @@ export default function ClientFeedback() {
   const API_URL =
     process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
 
-  // Fetch feedback
   useEffect(() => {
     axios
       .get(`${API_URL}/api/feedback-forms?populate=*`)
@@ -31,7 +30,6 @@ export default function ClientFeedback() {
   if (error) return <p>Error: {error.message}</p>;
   if (!feedback?.length) return <p>No feedback found.</p>;
 
-  // Header settings
   const headerHeight = 180;
 
   return (
@@ -56,10 +54,10 @@ export default function ClientFeedback() {
             variant="h2"
             sx={{
               fontWeight: 700,
-              fontSize: { xs: "24px", sm: "28px", md: theme.typography.h2?.fontSize || "38pt" },
+              fontSize: { xs: "32pt", sm: "36pt", md: theme.typography.h2?.fontSize || "38pt" },
               textAlign: { xs: "center", md: "left" },
               color: theme.palette.text.primary,
-              marginLeft: { md: "170px" },
+              //marginLeft: { md: "120px" },
             }}
           >
             Feedback From
@@ -80,6 +78,7 @@ export default function ClientFeedback() {
         <Box
           sx={{
             ...theme.mixins.bottomLineRight,
+            xs: { display: isMobile ? "none" : "block" },
           }}
         />
       </Box>

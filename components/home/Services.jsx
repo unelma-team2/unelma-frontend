@@ -7,34 +7,35 @@ import LoadingSpinner from "../LoadingSpinner";
 import Carousel from "../Carousel.jsx";
 import ServiceCard from "@/components/ServiceCard.jsx";
 
-export default function Services() {
+export default function Services({ services, API_URL }) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  //const [services, setServices] = useState([]);
+  //const [error, setError] = useState(null);
+  //const [loading, setLoading] = useState(true);
 
-  const [services, setServices] = useState([]);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true);
+    
+  //const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
 
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
+  // useEffect(() => {
+  //   axios
+  //     .get(`${API_URL}/api/home?populate[Services][populate]=*`)
+  //     .then((res) => setServices(res.data.data?.Services || []))
+  //     .catch((err) => setError(err))
+  //     .finally(() => setLoading(false));
+  // }, [API_URL]);
 
-  useEffect(() => {
-    axios
-      .get(`${API_URL}/api/home?populate[Services][populate]=*`)
-      .then((res) => setServices(res.data.data?.Services || []))
-      .catch((err) => setError(err))
-      .finally(() => setLoading(false));
-  }, [API_URL]);
-
-  if (loading) return <LoadingSpinner />;
-  if (error) return <p>Error: {error.message}</p>;
+  // if (loading) return <LoadingSpinner />;
+  // if (error) return <p>Error: {error.message}</p>;
   if (!services.length) return <p>No services found.</p>;
 
-  // Header settings
   const headerHeight = 180;
   //const headerRadius = 120;
 
   return (
-    <Box sx={{ width: "100%", mt: 8 }}>
+    <Box sx={{ width: "100%",
+    // mt: 8 
+     }}>
       {/* HEADER */}
       <Box
         sx={{
@@ -63,10 +64,10 @@ export default function Services() {
             variant="h2"
             sx={{
               fontWeight: 700,
-              fontSize: { xs: "24px", sm: "28px", md: theme.typography.h2?.fontSize || "38pt" },
+              fontSize: { xs: "32pt", sm: "36pt", md: theme.typography.h2?.fontSize || "38pt" },
               textAlign: { xs: "center", md: "right" },
               color: theme.palette.text.primary,
-              marginRight: { md: "170px"}
+              //marginRight: { md: "120px"}
             }}
           >
             Our Services

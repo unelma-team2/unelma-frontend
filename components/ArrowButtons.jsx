@@ -3,39 +3,30 @@
 import { Box, IconButton } from "@mui/material";
 import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import { useTheme } from "@mui/material/styles";
+import { ArrowCircleLeftRounded } from "@mui/icons-material";
+import ArrowCircleLeftRoundedIcon from '@mui/icons-material/ArrowCircleLeftRounded';
 
 export default function ArrowButtons({ onPrev, onNext }) {
   const theme = useTheme();
 
   return (
-    <Box sx={{ mt: 6, display: "flex", justifyContent: "center", gap: 4 }}>
+    <Box sx={{ my: 12, display: "flex", justifyContent: "center", gap: 24 }}>
       <IconButton
         aria-label="previous"
         onClick={onPrev}
-        sx={{
-          color: theme.palette.primary.main,
-          "&:hover": {
-            color: theme.palette.primary.violet,
-            transform: "scale(1.1)",
-          },
-        }}
+        color="arrowButton"
       >
-        <ArrowCircleLeftIcon sx={{ fontSize: 48 }} />
+        <ArrowCircleLeftRoundedIcon sx={{ fontSize: 72 }} />
       </IconButton>
 
       <IconButton
         aria-label="next"
         onClick={onNext}
-        sx={{
-          color: theme.palette.primary.main,
-          "&:hover": {
-            color: theme.palette.primary.violet,
-            transform: "scale(1.1)",
-          },
-        }}
+        color="arrowButton"
       >
-        <ArrowCircleRightIcon sx={{ fontSize: 48 }} />
+        <ArrowCircleRightIcon sx={{ fontSize: 72 }} />
       </IconButton>
     </Box>
   );

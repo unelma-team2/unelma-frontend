@@ -1,248 +1,147 @@
-"use client";
+"use client"
+import { Box, Container, Typography, Stepper, Step, StepLabel, useTheme } from "@mui/material"
+import { useEffect, useState } from "react"
+import axios from "axios"
+import LoadingSpinner from "../LoadingSpinner"
 
-import Badge from "@mui/material/Badge";
-import { useCart } from "@/context/CartContext";
-import { useState } from "react";
-import { useAuth } from "@/app/context/AuthContext";
-import Image from "next/image";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import {
-  AppBar,
-  Toolbar,
-  Box,
-  Typography,
-  TextField,
-  IconButton,
-  InputAdornment,
-  Button,
-  Drawer,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemText,
-  useTheme,
-} from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
-
-const navLinks = [
-  { label: "Home", href: "/" },
-  { label: "About Us", href: "/about" },
-  { label: "Products & Services", href: "/products" },
-  { label: "Our Work", href: "/case-studies" },
-  { label: "Blog", href: "/blog" },
-  { label: "Careers", href: "/careers" },
-  { label: "Contact Us", href: "/contact" },
-];
-
-export default function Header() {
-  const { user, signOut } = useAuth();
-  const { cartItems } = useCart();
-  const router = useRouter();
-  const theme = useTheme();
-  const [mobileOpen, setMobileOpen] = useState(false);
-
-  const toggleDrawer = () => setMobileOpen(!mobileOpen);
-
-  const drawer = (
-    <Box sx={{ width: 260, p: 2 }}>
-      <List>
-        {navLinks.map((link) => (
-          <ListItem key={link.href} disablePadding>
-            <ListItemButton
-              component={Link}
-              href={link.href}
-              onClick={() => setMobileOpen(false)}
-            >
-              <ListItemText
-                primary={link.label}
-                primaryTypographyProps={{
-                  textTransform: "uppercase",
-                  fontWeight: 600,
-                }}
-              />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-    </Box>
-  );
-
-  const totalQuantity = cartItems.reduce(
-    (sum, item) => sum + item.quantity,
-    0
-  );
+function CustomStepIcon(props) {
+  const theme = useTheme()
 
   return (
-    <AppBar
-      position="static"
-      elevation={0}
+    <Box
       sx={{
-        color: theme.palette.primary.main,
         backgroundColor: theme.palette.background.default,
-        boxShadow: "none",
-        padding: { xs: 1, md: 4 },
-        mt: 12,
+        border: `2px solid ${theme.palette.primary.main}`,
+        color: theme.palette.primary.main,
+        boxShadow: `-8px -6px 0px ${theme.palette.primary.red}`,
+        width: { xs: 50, sm: 55, md: 60 },
+        height: { xs: 50, sm: 55, md: 60 },
+        borderRadius: "50%",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        fontSize: { xs: "1.2rem", sm: "1.35rem", md: "1.5rem" },
+        fontWeight: "bold",
+        zIndex: 1,
       }}
     >
-      <Toolbar
-        sx={{
-          display: "flex",
-          flexDirection: { xs: "row", md: "column" },
-          alignItems: "center",
-          justifyContent: "space-between",
-          gap: 2,
-          width: "100%",
-        }}
-      >
-        {/* LOGO + MOBILE MENU */}
-        <Box
+      {String(props.icon)}
+    </Box>
+  )
+}
+
+const NullStepConnector = () => <Box sx={{ display: "none" }} />
+
+export default function OrderingProcess({ orderProcess }) {
+  const theme = useTheme()
+
+  const [orderingSteps, setOrderingSteps] = useState([])
+  const [error, setError] = useState(null)
+  const [loading, setLoading] = useState(false)
+
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com"
+
+  useEffect(() => {
+    axios
+      .get(`${API_URL}/api/home?populate[OrderingProcess][populate]=*`)
+      .then((res) => setOrderingSteps(res.data.data?.OrderingProcess || null))
+      .catch((err) => setError(err))
+  }, [API_URL])
+
+  if (loading) return <LoadingSpinner />
+  if (error) return <p>Error: {error.message}</p>
+  if (!orderProcess) return <p>No Product section found.</p>
+
+  const { number, title } = orderProcess
+
+  return (
+    <Box
+      component="section"
+      sx={{
+        paddingTop: { xs: 8, md: 10 },
+        paddingBottom: { xs: 8, md: 12 },
+        //backgroundColor: theme.palette.background.lightRed,
+        textAlign: "center",
+        borderTop: `2px solid ${theme.palette.primary.main}`,
+        marginTop: { xs: 6, md: 12 },
+        boxShadow: `0px -8px 0px ${theme.palette.background.lightRed}`,
+      }}
+    >
+      <Container maxWidth="lg">
+        <Typography
+          variant="h2"
+          component="h2"
           sx={{
-            display: "flex",
-            alignItems: "center",
-            width: "100%",
-            justifyContent: "space-between",
+            marginBottom: { xs: 6, md: 8 },
+            fontWeight: "bold",
+            fontSize: { xs: "2rem", md: "2.5rem" },
           }}
         >
-          <Link href="/" style={{ display: "flex", alignItems: "center" }}>
-            <Image
-              src="/images/logos/logo-unelma.png"
-              alt="Unelma Platforms logo"
-              width={180}
-              height={60}
-              priority
-              style={{ cursor: "pointer", transition: "transform 0.25s ease" }}
-            />
-          </Link>
+          Ordering Process
+        </Typography>
 
-          <IconButton
-            sx={{ display: { xs: "flex", md: "none" } }}
-            onClick={toggleDrawer}
-          >
-            <MenuIcon />
-          </IconButton>
-        </Box>
-
-        {/* SEARCH + LOGIN + CART DESKTOP */}
-        <Box
+        <Stepper
+          activeStep={-1}
+          orientation="vertical"
+          connector={<NullStepConnector />}
           sx={{
-            display: { xs: "none", md: "flex" },
-            alignItems: "center",
-            gap: 3,
-            mt: -2,
+            display: { xs: "flex", md: "none" },
+            "& .MuiStep-root": {
+              marginBottom: 4,
+            },
+            "& .MuiStepLabel-root": {
+              flexDirection: "row",
+              alignItems: "flex-start",
+            },
+            "& .MuiStepLabel-iconContainer": {
+              paddingRight: 2,
+            },
+            "& .MuiStepLabel-label": {
+              fontSize: { xs: 16, sm: 17 },
+              fontWeight: 700,
+              color: theme.palette.primary.main,
+            },
           }}
         >
-          <Box sx={{ display: "flex", alignItems: "center", gap: 3 }}>
-            <TextField
-              fullWidth
-              size="small"
-              placeholder="Search…"
-              sx={{ maxWidth: 200 }}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton edge="end">
-                      <Image
-                        src="/images/icons/icons8-search-32.png"
-                        alt="Search Icon"
-                        width={30}
-                        height={30}
-                      />
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-            />
-
-            {user ? (
-              <Button
-                onClick={() => signOut()}
-                sx={{
-                  backgroundColor: "transparent",
-                  color: theme.palette.text.primary,
-                  fontSize: "14pt",
-                  fontWeight: 600,
-                  textTransform: "uppercase",
-                  "&:hover": { opacity: 0.7 },
-                }}
-              >
-                Logout
-              </Button>
-            ) : (
-              <Button
-                onClick={() => router.push("/login")}
-                sx={{
-                  backgroundColor: "transparent",
-                  color: theme.palette.text.primary,
-                  fontSize: "12pt",
-                  fontWeight: 600,
-                  textTransform: "uppercase",
-                  "&:hover": { opacity: 0.7 },
-                }}
-              >
-                Login/Register
-              </Button>
-            )}
-
-            <IconButton
-              aria-label="shopping cart"
-              sx={{
-                height: 45,
-                width: 45,
-                transition: "transform 0.25s ease",
-                "&:hover": {
-                  backgroundColor: theme.palette.background.lightBlue,
-                  transform: "scale(1.2)",
-                },
-              }}
-              onClick={() => router.push("/cart")}
-            >
-              <Badge
-                badgeContent={totalQuantity}
-                color="error"
-                overlap="circular"
-                invisible={totalQuantity === 0}
-              >
-                <Image
-                  src="/images/icons/icons8-shopping-cart-64.png"
-                  alt="Shopping cart icon"
-                  width={30}
-                  height={30}
-                  priority
-                />
-              </Badge>
-            </IconButton>
-          </Box>
-        </Box>
-
-        {/* DESKTOP NAVIGATION */}
-        <Box
-          sx={{
-            display: { xs: "none", md: "flex" },
-            justifyContent: "flex-end",
-            gap: 6,
-            mt: 2.5,
-            width: { xs: "100%", md: "88%" },
-            mx: "auto",
-          }}
-        >
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              style={{ textDecoration: "none", color: "inherit" }}
-            >
-              <Typography sx={{ textTransform: "uppercase", fontWeight: 600 }}>
-                {link.label}
-              </Typography>
-            </Link>
+          {orderingSteps.map((process, i) => (
+            <Step key={process.number || i}>
+              <StepLabel StepIconComponent={CustomStepIcon}>{process.title}</StepLabel>
+            </Step>
           ))}
-        </Box>
-      </Toolbar>
+        </Stepper>
 
-      <Drawer anchor="right" open={mobileOpen} onClose={toggleDrawer}>
-        {drawer}
-      </Drawer>
-    </AppBar>
-  );
+        <Stepper
+          activeStep={-1}
+          orientation="horizontal"
+          alternativeLabel
+          connector={<NullStepConnector />}
+          sx={{
+            display: { xs: "none", md: "flex" },
+            justifyContent: "space-between",
+            "& .MuiStep-root": {
+              flex: 1,
+            },
+            "& .MuiStepLabel-root": {
+              flexDirection: "column",
+              alignItems: "center",
+            },
+            "& .MuiStepLabel-labelContainer": {
+              marginTop: 3,
+            },
+            "& .MuiStepLabel-label": {
+              fontSize: 18,
+              fontWeight: 700,
+              color: theme.palette.primary.main,
+            },
+          }}
+        >
+          {orderingSteps.map((process, i) => (
+            <Step key={process.number || i}>
+              <StepLabel StepIconComponent={CustomStepIcon}>{process.title}</StepLabel>
+            </Step>
+          ))}
+        </Stepper>
+      </Container>
+    </Box>
+  )
 }

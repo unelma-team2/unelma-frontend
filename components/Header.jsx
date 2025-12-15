@@ -1,12 +1,12 @@
-"use client"
+"use client";
 
-import Badge from "@mui/material/Badge"
-import { useCart } from "@/context/CartContext"
-import { useAuth } from "@/app/context/AuthContext"
-import Image from "next/image"
-import Link from "next/link"
-import { useRouter } from "next/navigation"
-import { useState } from "react"
+import Badge from "@mui/material/Badge";
+import { useCart } from "@/context/CartContext";
+import { useAuth } from "@/app/context/AuthContext";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import {
   AppBar,
   Toolbar,
@@ -20,9 +20,9 @@ import {
   useMediaQuery,
   Drawer,
   Divider,
-} from "@mui/material"
-import MenuIcon from "@mui/icons-material/Menu"
-import CloseIcon from "@mui/icons-material/Close"
+} from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
+import CloseIcon from "@mui/icons-material/Close";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -32,20 +32,20 @@ const navLinks = [
   { label: "Blog", href: "/blog" },
   { label: "Careers", href: "/careers" },
   { label: "Contact Us", href: "/contact" },
-]
+];
 
 export default function Header() {
-  const { user, signOut } = useAuth()
-  const { cartItems } = useCart()
-  const router = useRouter()
-  const theme = useTheme()
+  const { user, signOut } = useAuth();
+  const { cartItems } = useCart();
+  const router = useRouter();
+  const theme = useTheme();
 
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
-  const isTablet = useMediaQuery(theme.breakpoints.between("sm", "md"))
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isTablet = useMediaQuery(theme.breakpoints.between("sm", "md"));
 
-  const totalQuantity = cartItems.reduce((sum, item) => sum + item.quantity, 0)
+  const totalQuantity = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
     <AppBar
@@ -96,8 +96,12 @@ export default function Header() {
                   cursor: "pointer",
                   transition: "transform 0.25s ease",
                 }}
-                onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
-                onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1.0)")}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.transform = "scale(1.05)")
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.transform = "scale(1.0)")
+                }
               />
             </Link>
           </Box>
@@ -165,12 +169,18 @@ export default function Header() {
                             transition: "transform 0.25s ease",
                             "&:hover": {
                               border: "2px solid" + theme.palette.primary.blue,
-                              backgroundColor: theme.palette.background.lightBlue,
+                              backgroundColor:
+                                theme.palette.background.lightBlue,
                               transform: "scale(1.1)",
                             },
                           }}
                         >
-                          <Image src="/images/icons/icons8-search-32.png" alt="Search Icon" width={30} height={30} />
+                          <Image
+                            src="/images/icons/icons8-search-32.png"
+                            alt="Search Icon"
+                            width={30}
+                            height={30}
+                          />
                         </IconButton>
                       </InputAdornment>
                     ),
@@ -180,19 +190,31 @@ export default function Header() {
 
               {user ? (
                 <Button
-                  onClick={() => signOut()}
+                  variant="text"
+                  disableRipple
+                  onClick={() => {
+                    signOut();
+                    setMobileMenuOpen(false);
+                  }}
                   sx={{
                     textTransform: "uppercase",
                     fontSize: { sm: "0.65rem", md: "1rem" },
                     fontWeight: 600,
                     padding: { sm: "6px 12px", md: "8px 16px" },
                     color: theme.palette.text.primary,
-                    backgroundColor: "transparent",
+                    backgroundColor: "transparent !important",
                     border: "none",
-                    boxShadow: "none",
-                    "&:hover": {
-                      backgroundColor: "transparent",
+                    boxShadow: "none !important",
+                    transition: "transform 0.25s ease, color 0.25s ease",
+                    "&:hover, &:focus, &:active, &.Mui-focusVisible": {
+                      backgroundColor: "transparent !important",
+                      boxShadow: "none !important",
                       color: theme.palette.primary.blue,
+                      transform: "scale(1.1)",
+                    },
+                    "&.MuiButton-root": {
+                      backgroundColor: "transparent !important",
+                      boxShadow: "none !important",
                     },
                   }}
                 >
@@ -200,19 +222,31 @@ export default function Header() {
                 </Button>
               ) : (
                 <Button
-                  onClick={() => router.push("/login")}
+                  variant="text"
+                  disableRipple
+                  onClick={() => {
+                    router.push("/login");
+                    setMobileMenuOpen(false);
+                  }}
                   sx={{
                     textTransform: "uppercase",
                     fontSize: { sm: "0.65rem", md: "1rem" },
                     fontWeight: 600,
                     padding: { sm: "6px 12px", md: "8px 16px" },
                     color: theme.palette.text.primary,
-                    backgroundColor: "transparent",
+                    backgroundColor: "transparent !important",
                     border: "none",
-                    boxShadow: "none",
-                    "&:hover": {
-                      backgroundColor: "transparent",
+                    boxShadow: "none !important",
+                    transition: "transform 0.25s ease, color 0.25s ease",
+                    "&:hover, &:focus, &:active, &.Mui-focusVisible": {
+                      backgroundColor: "transparent !important",
+                      boxShadow: "none !important",
                       color: theme.palette.primary.blue,
+                      transform: "scale(1.1)",
+                    },
+                    "&.MuiButton-root": {
+                      backgroundColor: "transparent !important",
+                      boxShadow: "none !important",
                     },
                   }}
                 >
@@ -233,7 +267,12 @@ export default function Header() {
                 }}
                 onClick={() => router.push("/cart")}
               >
-                <Badge badgeContent={totalQuantity} color="error" overlap="circular" invisible={totalQuantity === 0}>
+                <Badge
+                  badgeContent={totalQuantity}
+                  color="error"
+                  overlap="circular"
+                  invisible={totalQuantity === 0}
+                >
                   <Image
                     src="/images/icons/icons8-shopping-cart-64.png"
                     alt="Shopping cart icon"
@@ -260,7 +299,12 @@ export default function Header() {
                   }}
                   onClick={() => router.push("/cart")}
                 >
-                  <Badge badgeContent={totalQuantity} color="error" overlap="circular" invisible={totalQuantity === 0}>
+                  <Badge
+                    badgeContent={totalQuantity}
+                    color="error"
+                    overlap="circular"
+                    invisible={totalQuantity === 0}
+                  >
                     <Image
                       src="/images/icons/icons8-shopping-cart-64.png"
                       alt="Shopping cart icon"
@@ -302,7 +346,11 @@ export default function Header() {
         >
           <Box sx={{ display: "flex", gap: { xs: 1.5, sm: 2, md: 4 } }}>
             {navLinks.map((link) => (
-              <Link key={link.href} href={link.href} style={{ textDecoration: "none", color: "inherit" }}>
+              <Link
+                key={link.href}
+                href={link.href}
+                style={{ textDecoration: "none", color: "inherit" }}
+              >
                 <Typography
                   variant="body14bold"
                   sx={{
@@ -406,7 +454,12 @@ export default function Header() {
                       },
                     }}
                   >
-                    <Image src="/images/icons/icons8-search-32.png" alt="Search Icon" width={24} height={24} />
+                    <Image
+                      src="/images/icons/icons8-search-32.png"
+                      alt="Search Icon"
+                      width={24}
+                      height={24}
+                    />
                   </IconButton>
                 </InputAdornment>
               ),
@@ -416,7 +469,14 @@ export default function Header() {
         <Divider />
 
         {/* Mobile nav links */}
-        <Box sx={{ padding: 2, display: "flex", flexDirection: "column", gap: 1.5 }}>
+        <Box
+          sx={{
+            padding: 2,
+            display: "flex",
+            flexDirection: "column",
+            gap: 1.5,
+          }}
+        >
           {navLinks.map((link) => (
             <Link
               key={link.href}
@@ -443,27 +503,32 @@ export default function Header() {
         </Box>
         <Divider />
 
-        <Box sx={{ padding: 2, display: "flex", flexDirection: "column", gap: 1 }}>
+        <Box
+          sx={{ padding: 2, display: "flex", flexDirection: "column", gap: 1 }}
+        >
           {user ? (
             <Button
               onClick={() => {
-                signOut()
-                setMobileMenuOpen(false)
+                signOut();
+                setMobileMenuOpen(false);
               }}
               sx={{
-                backgroundColor: "transparent",
-                color: theme.palette.text.primary,
-                fontSize: "0.875rem",
+                textTransform: "uppercase",
+                fontSize: { sm: "0.65rem", md: "1rem" },
                 fontWeight: 600,
+                padding: { sm: "6px 12px", md: "8px 16px" },
+                color: theme.palette.text.primary,
+                backgroundColor: "transparent",
                 border: "none",
                 boxShadow: "none",
-                textTransform: "uppercase",
-                justifyContent: "flex-start",
-                padding: "8px 0",
+                transition: "transform 0.25s ease, color 0.25s ease",
                 "&:hover": {
-                  backgroundColor: "transparent",
+                  backgroundColor: "transparent !important", // <-- force transparent
                   color: theme.palette.primary.blue,
-                  opacity: 0.9,
+                  transform: "scale(1.1)",
+                },
+                "&:active": {
+                  backgroundColor: "transparent !important", // <-- also for active state
                 },
               }}
             >
@@ -472,23 +537,26 @@ export default function Header() {
           ) : (
             <Button
               onClick={() => {
-                router.push("/login")
-                setMobileMenuOpen(false)
+                router.push("/login");
+                setMobileMenuOpen(false);
               }}
               sx={{
-                backgroundColor: "transparent",
-                color: theme.palette.text.primary,
-                fontSize: "0.875rem",
+                textTransform: "uppercase",
+                fontSize: { sm: "0.65rem", md: "1rem" },
                 fontWeight: 600,
+                padding: { sm: "6px 12px", md: "8px 16px" },
+                color: theme.palette.text.primary,
+                backgroundColor: "transparent",
                 border: "none",
                 boxShadow: "none",
-                textTransform: "uppercase",
-                justifyContent: "flex-start",
-                padding: "8px 0",
+                transition: "transform 0.25s ease, color 0.25s ease",
                 "&:hover": {
-                  backgroundColor: "transparent",
+                  backgroundColor: "transparent !important", // <-- force transparent
                   color: theme.palette.primary.blue,
-                  transition: "0.25s ease",
+                  transform: "scale(1.1)",
+                },
+                "&:active": {
+                  backgroundColor: "transparent !important", // <-- also for active state
                 },
               }}
             >
@@ -498,5 +566,5 @@ export default function Header() {
         </Box>
       </Drawer>
     </AppBar>
-  )
+  );
 }

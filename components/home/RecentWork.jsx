@@ -15,7 +15,6 @@ export default function RecentWorkSection({ works = [], categories = [], API_URL
   const filteredWorks =
     tab === 0 ? works : works.filter((work) => work.type === categories[tab]?.name);
 
-  // Header settings
   const headerHeight = 180;
 
   return (
@@ -49,13 +48,13 @@ export default function RecentWorkSection({ works = [], categories = [], API_URL
             variant="h2"
             sx={{
               fontWeight: 700,
-              fontSize: { xs: "24px", sm: "28px", md: theme.typography.h2?.fontSize || "38pt" },
+              fontSize: { xs: "32pt", sm: "36pt", md: theme.typography.h2?.fontSize || "38pt" },
               textAlign: { xs: "center", md: "right" },
               color: theme.palette.text.primary,
-              marginRight: { md: "170px" }, // optional spacing from right edge
+              //marginRight: { md: "120px" },
             }}
           >
-            Our Recent Works
+            Our Recent Projects
           </Typography>
         </Box>
 
@@ -102,7 +101,7 @@ export default function RecentWorkSection({ works = [], categories = [], API_URL
           ))}
         </Tabs>
 
-      
+
           <Carousel
             items={filteredWorks}
             renderItem={(work) => <WorkProjectCard work={work} API_URL={API_URL} />}

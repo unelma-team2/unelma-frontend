@@ -3,36 +3,31 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Box, Grid, Typography, useTheme, useMediaQuery } from "@mui/material";
-
 import LoadingSpinner from "../LoadingSpinner";
 import Carousel from "../Carousel.jsx";
 import ProductCards from "../ProductCard.jsx";
 
-export default function Products() {
+export default function Products( { products, API_URL }) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  //const [products, setProducts] = useState([]);
+  //const [error, setError] = useState(null);
+  //const [loading, setLoading] = useState(true);
 
-  const [products, setProducts] = useState([]);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true);
+//const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
 
-  const API_URL =
-    process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
+//   useEffect(() => {
+//     axios
+//       .get(`${API_URL}/api/home?populate[Products][populate]=*`)
+//       .then((res) => setProducts(res.data.data?.Products || []))
+//       .catch((err) => setError(err))
+//       .finally(() => setLoading(false));
+//   }, [API_URL]);
 
-  useEffect(() => {
-    axios
-      .get(`${API_URL}/api/home?populate[Products][populate]=*`)
-      .then((res) => setProducts(res.data.data?.Products || []))
-      .catch((err) => setError(err))
-      .finally(() => setLoading(false));
-  }, [API_URL]);
-  
-
-  if (loading) return <LoadingSpinner />;
-  if (error) return <p>Error: {error.message}</p>;
+//   if (loading) return <LoadingSpinner />;
+//   if (error) return <p>Error: {error.message}</p>;
   if (!products.length) return <p>No products found.</p>;
 
-  // Header settings
   const headerHeight = 180;
 
   return (
@@ -57,10 +52,10 @@ export default function Products() {
             variant="h2"
             sx={{
               fontWeight: 700,
-              fontSize: { xs: "24px", sm: "28px", md: theme.typography.h2?.fontSize || "38pt" },
+              fontSize: { xs: "32pt", sm: "36pt", md: theme.typography.h2?.fontSize || "38pt" },
               textAlign: { xs: "center", md: "left" },
               color: theme.palette.text.primary,
-              marginLeft: { md: "170px" }, // optional padding from left edge
+              marginLeft: { md: "150px" },
             }}
           >
             Our Products

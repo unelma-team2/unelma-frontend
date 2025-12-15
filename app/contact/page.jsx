@@ -14,6 +14,7 @@ import axios from "axios";
 import MessageQuestionSection from "@/components/contact/MessageQuestionSection";
 import PriceQuoteSection from "@/components/contact/PriceQuoteSection";
 import FeedbackReviewSection from "@/components/contact/FeedbackReviewSection";
+import AppointmentBookingSection from "@/components/contact/AppointmentBookingSection";
 import MapLocation from "@/components/contact/MapLocation";
 import SocialAndSupport from "@/components/contact/SocialAndSupport";
 import ContactPageHero from "@/components/contact/ContactPageHero";
@@ -34,6 +35,7 @@ export default function ContactPage() {
   const [contactForm, setContactForm] = useState(null);
   const [requestQuote, setRequestQuote] = useState(null);
   const [feedbackForm, setFeedbackForm] = useState(null);
+  const [appointmentBooking, setAppointmentBooking] = useState(null);
 
   const searchParams = useSearchParams();
   const preselectedContactType = searchParams.get("contactType"); 
@@ -62,16 +64,17 @@ export default function ContactPage() {
 
     axios
       .get(
-        `${API_URL}/api/contact?populate[Banner][populate]=*&populate[ContactType]=*&populate[ContactForm]=*&populate[RequestQuote]=*&populate[FeedbackForm]=*`
+        `${API_URL}/api/contact?populate[Banner][populate]=*&populate[ContactType]=*&populate[MessageForm]=*&populate[RequestQuote]=*&populate[FeedbackForm]=*&populate[AppointmentBooking]=*`
       )
       .then((res) => {
         const data = res.data?.data || {};
 
         setBanner(data.Banner || null);
         setContactTypeData(data.ContactType || null);
-        setContactForm((data.ContactForm && data.ContactForm[0]) || null);
+        setContactForm((data.MessageForm && data.MessageForm[0]) || null);
         setRequestQuote(data.RequestQuote || null);
         setFeedbackForm(data.FeedbackForm || null);
+        setAppointmentBooking(data.AppointmentBooking || null);
 
         setLoading(false);
       })
@@ -93,6 +96,11 @@ export default function ContactPage() {
     );
 
   const { contact_type_title, contact_type } = contactTypeData || {};
+
+  const allContactTypes = contact_type ? [...contact_type] : [];
+  if (!allContactTypes.includes("Book appointment")) {
+    allContactTypes.push("Book appointment");
+  }
 
   const { title, sub_title, description, image } = banner || {};
 
@@ -157,7 +165,7 @@ export default function ContactPage() {
               value={formData.contactType}
               onChange={handleChange("contactType")}
             >
-              {contact_type?.map((type, idx) => (
+              {allContactTypes.map((type, idx) => (
                 <MenuItem key={idx} value={type}>
                   {type}
                 </MenuItem>
@@ -186,6 +194,13 @@ export default function ContactPage() {
               feedbackForm={feedbackForm}
               preselectedService={preselectedService}
               preselectedProduct={preselectedProduct}
+            />
+          )}
+
+          {formData.contactType === "Book appointment" && (
+            <AppointmentBookingSection 
+              countryCodes={countryCodes} 
+              appointmentBooking = {appointmentBooking} 
             />
           )}
         </Box>

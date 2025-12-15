@@ -40,8 +40,7 @@ export default function RecentBlogPosts() {
       ? blog_image.data.attributes.url.startsWith("http")
         ? blog_image.data.attributes.url
         : `${API_URL}${blog_image.data.attributes.url}`
-      : "/images/blog/pngwing.com - 2025-11-17T021857.109 copy.png";
-
+      : "/images/blog/blog_single3.png";
     const date = new Date(createdAt);
     const dayMonth = `${date.getDate()} ${date.toLocaleString("en-US", { month: "short" })}`;
     const year = date.getFullYear();
@@ -118,8 +117,8 @@ export default function RecentBlogPosts() {
         {/* Bottom Bar */}
         <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", px: 2, pb: 2, mt: "auto" }}>
           <Stack direction="row" spacing={1.5}>
-            <IconButton size="small"><ShareIcon fontSize="small" sx={{ color: theme.palette.primary.violet }} /></IconButton>
-            <IconButton size="small"><CommentIcon fontSize="small" sx={{ color: theme.palette.primary.violet }} /></IconButton>
+            <IconButton color="blogIcon2" size="small"><ShareIcon fontSize="small" /></IconButton>
+            <IconButton color="blogIcon2" size="small"><CommentIcon fontSize="small" /></IconButton>
           </Stack>
 
           <Link href={`/blog/${slug}`} passHref>
@@ -174,10 +173,10 @@ export default function RecentBlogPosts() {
             variant="h2"
             sx={{
               fontWeight: 700,
-              fontSize: { xs: "24px", sm: "28px", md: theme.typography.h2?.fontSize || "38pt" },
+              fontSize: { xs: "32pt", sm: "36pt", md: theme.typography.h2?.fontSize || "38pt" },
               textAlign: { xs: "center", md: "right" },
               color: theme.palette.text.primary,
-              marginRight: { md: "170px" },
+              //marginRight: { md: "120px" },
             }}
           >
             Recent Blog Posts

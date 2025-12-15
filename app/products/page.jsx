@@ -19,12 +19,15 @@ import {
 import ProductCard from "@/components/ProductCard";
 import ServiceCard from "@/components/ServiceCard"; 
 import LoadingSpinner from "@/components/LoadingSpinner";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function ProductsPage() {
   const theme = useTheme();
   const router = useRouter();
-  const [tab, setTab] = useState(0);
+  const searchParams = useSearchParams();
+  const tabParam = searchParams.get("tab");
+
+  const [tab, setTab] = useState(tabParam === "services" ? 1 : 0); // 0: Products, 1: Services
   const [subTab, setSubTab] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState("");

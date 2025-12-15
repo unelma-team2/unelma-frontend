@@ -128,7 +128,7 @@ export default function Footer() {
             </Typography>
 
             <Box sx={{ mb: 4 }}>
-              <Link href="/about">
+              <Link href="/contact">
                 <Typography sx={{ ...linkSx }}>&#x25B8; Request a Price Quote</Typography>
               </Link>
               <br />
