@@ -1,7 +1,7 @@
 "use client";
 
 import Badge from "@mui/material/Badge";
-import { useCart } from "@/context/CartContext";
+import { useCart } from "@/app/context/CartContext";
 import { useState } from "react";
 import { useAuth } from "@/app/context/AuthContext";
 import Image from "next/image";
