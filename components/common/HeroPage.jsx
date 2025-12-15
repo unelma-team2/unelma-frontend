@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { Box, Typography } from "@mui/material";
 
-export default function HeroPage({ title, image1, image2 }) {
+export default function HeroPage({ title, image1, image2, compact = false }) {
   return (
     <Box
       sx={{
@@ -11,11 +11,11 @@ export default function HeroPage({ title, image1, image2 }) {
         justifyContent: "space-between",
         bgcolor: "#ffffff",
         px: { xs: 3, md: 6 },
-        py: { xs: 6, md: 8 },
+        py: compact ? { xs: 4, md: 6 } : { xs: 6, md: 8 },
         width: "100%",
         maxWidth: "1440px",
-        height: { xs: "auto", md: "550px" },
-        mb: 12,
+        height: compact ? { xs: "auto", md: "220px" } : { xs: "auto", md: "550px" },
+        mb: compact ? 6 : 12,
         mx: "auto",
         gap: { xs: 4, md: 6 },
       }}
@@ -24,7 +24,7 @@ export default function HeroPage({ title, image1, image2 }) {
         variant="h1"
         sx={{
           fontWeight: 700,
-          fontSize: { xs: "32px", sm: "44px", md: "72px" },
+          fontSize: compact ? { xs: "28px", md: "40px" } : { xs: "32px", md: "72px" },
           lineHeight: 1.05,
           flexBasis: { xs: "100%", md: "50%" },
           textAlign: { xs: "center", md: "left" },
@@ -46,7 +46,7 @@ export default function HeroPage({ title, image1, image2 }) {
         {image1 && (
           <Box
             sx={{
-              width: { xs: "60%", sm: "45%", md: image1.width ? `${image1.width}px` : "auto" },
+              width: compact ? { xs: "50%", md: `${image1.width}px` } : { xs: "60%", md: `${image1.width}px` },
               maxWidth: { xs: 180, sm: 320, md: image1.width ? `${image1.width}px` : "100%" },
               flexShrink: 0,
             }}
@@ -61,7 +61,7 @@ export default function HeroPage({ title, image1, image2 }) {
           </Box>
         )}
 
-        {image2 && (
+        {image2 && !compact && (
           <Box
             sx={{
               display: { xs: "none", md: "block" },
