@@ -15,17 +15,40 @@ const Login = () => {
     const { user } = useAuth();
     const router = useRouter();
     const searchParams = useSearchParams();
+
+  const createStrapiProfile = async (user) => {
+    try {
+      const response = await fetch('/api/user-profile', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          supabase_user_id: user.id,
+          username: user.user_metadata.full_name || user.email,
+        }),
+      });
+
+      const data = await response.json();
+      console.log('Strapi profile created:', data);
+    } catch (err) {
+      console.error('Error creating Strapi profile:', err);
+    }
+  };
   
-    useEffect(() => {
+  useEffect(() => {
+    const handleLogin = async () => {
       if (user) {
-        // After login success
+        await createStrapiProfile(user); // wait for profile creation
         const redirect = searchParams.get("redirect");
-        router.push(redirect || "/"); // Redirect 
+        router.push(redirect || "/");
       }
-    }, [user, router, searchParams]);
+    };
+  
+    handleLogin();
+  }, [user, router, searchParams]);
+  
   
     if (user) {
-      return null; // brief empty render before redirect
+      return null; 
     }
 
         
