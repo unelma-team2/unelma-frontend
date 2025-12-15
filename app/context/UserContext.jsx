@@ -1,48 +1,50 @@
 'use client';
 
-import { createContext, useContext, useEffect, useState } from "react";
-import { useAuth } from "./AuthContext";
+import { createContext, useContext, useEffect, useState } from 'react';
+import { useAuth } from './AuthContext';
 
-const UserContext = createContext(undefined);
+const UserContext = createContext();
 
 export function UserProvider({ children }) {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!user) {
-      setProfile(null);
-      setLoading(false);
-      return;
-    }
+    if (authLoading) return; // wait for auth to initialize
+    if (!user) return; 
 
-    const fetchProfile = async () => {
+    const fetchOrCreateProfile = async () => {
       try {
-        const res = await fetch("/api/user-profile", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
+        console.log('Fetching/creating Strapi profile for user:', user);
+
+        const res = await fetch('/api/user-profile', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             supabase_user_id: user.id,
             email: user.email,
+            name: user.user_metadata?.full_name || user.email,
+            phone: user.user_metadata?.phone || null,
           }),
         });
 
-        if (!res.ok) {
-          throw new Error("Failed to load profile");
-        }
+        const text = await res.text();
+        console.log('/api/user-profile raw response:', text);
 
-        const data = await res.json();
+        if (!res.ok) throw new Error(`Failed: ${res.status} ${text}`);
+
+        const data = JSON.parse(text);
         setProfile(data);
-      } catch (error) {
-        console.error("Failed to fetch/create profile:", error);
+      } catch (err) {
+        console.error('Failed to fetch/create profile:', err);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchProfile();
-  }, [user]);
+    fetchOrCreateProfile();
+  }, [user, authLoading]);
 
   return (
     <UserContext.Provider value={{ profile, loading }}>
@@ -51,10 +53,8 @@ export function UserProvider({ children }) {
   );
 }
 
-export function useUserProfile() {
+export const useUserProfile = () => {
   const context = useContext(UserContext);
-  if (!context) {
-    throw new Error("useUserProfile must be used within UserProvider");
-  }
+  if (!context) throw new Error("useUserProfile must be used within UserProvider");
   return context;
-}
+};
