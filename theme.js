@@ -19,163 +19,256 @@ const theme = createTheme({
   palette: {
     primary: { 
       main: "#1D2340",
-      magenta: { main: "#d0478bff" },   // HOME
-      violet: { main: "#8E24AA" },      // ABOUT
-      purple: { main: "#5E35B1" },  // SERVICES
-      blue: { main: "#3949AB" },        // PRODUCTS
-      lightBlue: { main: "#1E88E5" },   // ORDERING/SHOP
-      cyan: { main: "#26C6DA" },        // CASE STUDIES
-      green: { main: "#43A047" },       // FEEDBACK
-      yellow: { main: "#FFEB3B" },      // BLOG
-      orange: { main: "#FB8C00" },      // CAREER/INQUIRY
-      red: { main: "#E53935" },          // CONTACT/FOOTER
+    },  
 
+    section: {
+      home: {
+        main: "#d0478bff",
+        vibrant: "#FF0080",
+        pastel: "#FF88CC",
+        soft: "#FFBBDD",
+        muted: "#AA5577",
+      }, // MAGENTA
 
-      //violet: { main: "#AB47BC" },
-      //deepViolet: { main: "#6A1B9A" },
-      //greenCyan: { main: "#00ACC1" },
-      //yellowGreen: { main: "#C0CA33" },
-      //yellowOrange: { main: "#FDD835" },
-      //redOrange: { main: "#F4511E" },
-      magenta: "#FF0080",   // HOME
-      violet: "#FF00FF",    // ABOUT
-      purple: "#8000FF",    // SERVICES
-      blue: "#0000FF",      // PRODUCTS
-      dodgeBlue: "#0080FF", // ORDERING/SHOP
-      cyan: "#00FFFF",      // CASE STUDIES
-      green: "#00FF00",     // FEEDBACK
-      yellow: "#FFFF00",    // BLOG
-      orange: "#FF8000",    // CAREER/INQUIRY
-      red: "#FF0000",       // CONTACT/FOOTER
-      //limeGreen: "#80FF00",
-      //springGreen: "#00FF80",
+      about: {
+        main: "#8E24AA",
+        vibrant: "#FF00FF",
+        pastel: "#FF88FF",
+        soft: "#FFBBFF",
+        muted: "#AA55AA",
+      }, // VIOLET
+
+      services: {
+        main: "#5E35B1",
+        vibrant: "#8000FF",
+        pastel: "#CC88FF",
+        soft: "#DDBBFF",
+        muted: "#7755AA",
+      }, // PURPLE
+
+      products: {
+        main: "#3949AB",
+        vibrant: "#0000FF",
+        pastel: "#8888FF",
+        soft: "#BBBBFF",
+        muted: "#5555AA",
+      }, // BLUE
+
+      shopOrder: {
+        main: "#1E88E5",
+        vibrant: "#0080FF",
+        pastel: "#88CCFF",
+        soft: "#BBDDFF",
+        muted: "#5577AA",
+      }, // LIGHT BLUE
+
+      caseStudies: {
+        main: "#26C6DA",
+        vibrant: "#00FFFF",
+        pastel: "#88FFFF",
+        soft: "#BBFFFF",
+        muted: "#55AAAA",
+      }, // CYAN
+
+      feedback: {
+        main: "#43A047",
+        vibrant: "#00FF00",
+        pastel: "#88FF88",
+        soft: "#BBFFBB",
+        muted: "#55AA55",
+      }, // GREEN
+
+      blog: {
+        main: "#FFEB3B",
+        vibrant: "#FFFF00",
+        pastel: "#FFFF88",
+        soft: "#FFFFBB",
+        muted: "#AAAA55",
+      }, // YELLOW
+
+      careers: {
+        main: "#FB8C00",
+        vibrant: "#FF8000",
+        pastel: "#FFCC88",
+        soft: "#FFDDBB",
+        muted: "#AA7755",
+      }, // ORANGE
+
+      contact: {
+        main: "#E53935",
+        vibrant: "#FF0000",
+        pastel: "#FF8888",
+        soft: "#FFBBBB",
+        muted: "#AA5555",
+      }, // RED
     },
 
     text: {
       primary: "#1D2340",
       secondary: "#64687E",
       tertiary: "#a0a3b8ff",
-      contrastText: "#FFFFFF",
+      contrast: "#FFFFFF",
     },
 
-    vibrant: {
-      red: "#FF0000",
-      orange: "#FF8000",
-      yellow: "#FFFF00",
-      limeGreen: "#80FF00",
-      green: "#00FF00",
-      springGreen: "#00FF80",
-      cyan: "#00FFFF",
-      dodgeBlue: "#0080FF",
-      blue: "#0000FF",
-      purple: "#8000FF",
-      violet: "#FF00FF",
-      magenta: "#FF0080",
+      background: {
+        default: "#FFFFFF",
+        paper: "#FFFFFF",
+    },
+  
+    // rainbowText: {
+    //   deepViolet: { main: "#6A1B9A" },
+    //   violet: { main: "#AB47BC" },
+    //   purple: { main: "#8E24AA" },
+    //   bluePurple: { main: "#5E35B1" },
+    //   blue: { main: "#3949AB" },
+    //   lightBlue: { main: "#1E88E5" },
+    //   cyan: { main: "#26C6DA" },
+    //   greenCyan: { main: "#00ACC1" },
+    //   green: { main: "#43A047" },
+    //   yellowGreen: { main: "#C0CA33" },
+    //   yellow: { main: "#FFEB3B" },
+    //   yellowOrange: { main: "#FDD835" },
+    //   orange: { main: "#FB8C00" },
+    //   redOrange: { main: "#F4511E" },
+    //   red: { main: "#E53935" },
+    // },
+  
+    //cloud: {
+      //springGreen: "#00FF80",
+      //limeGreen: "#80FF00",
+      //aquamarine: "#88FFCC",
+      //paleGreen: "#CCFF88",
+      //lightSeaGreen: "#BBFFDD",
+      //paleGreenSoft: "#DDFFBB",
+      //cadetBlue: "#55AA77",
+      //darkOliveGreen: "#77AA55",
+      //violet: { main: "#AB47BC" },
+      //deepViolet: { main: "#6A1B9A" },
+      //greenCyan: { main: "#00ACC1" },
+      //yellowGreen: { main: "#C0CA33" },
+      //yellowOrange: { main: "#FDD835" },
+      //redOrange: { main: "#F4511E" },
+
+      //  lightBlue: "#C9DCFF",
+      //   lightBlue2: "#adf3ffff",
+      //   lightViolet: "#dbcef7ff",
+      //   lightOrange: "#ffd48eff",
+      //   lightYellow: "#ffefb4ff",
+      //   lightGreen: "#caecc9ff",
+      //   lightRed: "#FFBCC9",
+      //   lightMint: "#DDFAFF",
+
+      //   yellowLight: "#ffde7dff",
+      //   yellowBright: "#FFC100",
+      //   orangeLight: "#ffb34fff",
+      //   orangeBright: "#FF700B",
+      //   redLight: "#ff5678ff",
+      //   redBright: "#FF1F4B",
+      //   redOrange: "#ED608A",
+      //   pinkBright: "#FF3DA4",
+      //   pinkViolet: "#C55FCB",
+      //   darkViolet: "#7012a2ff",
+      //   violetDark: "#7E3398",
+      //   violet: "#a454cfff",
+      //   violetMedium: "#8D45B4",
+      //   purple: "#4940CE",
+      //   blueSoft: "#6756E3",
+      //   blue: "#5662e3ff",
+      //   blueDark: "#0061D2",
+      //   blueLight: "#0462d5ff",
+      //   blueBright: "#0089D2",
+      //   blueCyan: "#00b6d6ff",
+      //   greenBright: "#77C64B",
+      //   greenSoft: "#16bb86ff",
+      //   greenDark: "#038B61",
+      //   mint: "#90F0FF",
+      // },
     },
 
-    pastel: {
-      coral: "#FF8888",
-      lightSalmon: "#FFCC88",
-      paleYellow: "#FFFF88",
-      paleGreen: "#CCFF88",
-      paleTurquoise: "#88FF88",
-      aquamarine: "#88FFCC",
-      lightCyan: "#88FFFF",
-      skyBlue: "#88CCFF",
-      slateBlue: "#8888FF",
-      mediumPurple: "#CC88FF",
-      orchid: "#FF88FF",
-      lightPink: "#FF88CC",
-    },
+    custom: {
 
-    soft: {
-      lightSalmonPink: "#FFBBBB",
-      peach: "#FFDDBB",
-      paleYellowSoft: "#FFFFBB",
-      paleGreenSoft: "#DDFFBB",
-      paleTurquoiseSoft: "#BBFFBB",
-      lightSeaGreen: "#BBFFDD",
-      lightCyanSoft: "#BBFFFF",
-      lightSkyBlue: "#BBDDFF",
-      lightSteelBlue: "#BBBBFF",
-      lavender: "#DDBBFF",
-      lightPinkSoft: "#FFBBFF",
-      mistyRose: "#FFBBDD",
-    },
+       section: {
+      home: {
+        main: "#d0478bff",
+        vibrant: "#FF0080",
+        pastel: "#FF88CC",
+        soft: "#FFBBDD",
+        muted: "#AA5577",
+      }, // MAGENTA
 
-    muted: {
-      indianRed: "#AA5555",
-      copper: "#AA7755",
-      oliveDrab: "#AAAA55",
-      darkOliveGreen: "#77AA55",
-      forestGreen: "#55AA55",
-      cadetBlue: "#55AA77",
-      mediumAquamarine: "#55AAAA",
-      lightSlateGray: "#5577AA",
-      mediumSlateBlue: "#5555AA",
-      slateBlueMuted: "#7755AA",
-      mediumOrchid: "#AA55AA",
-      rose: "#AA5577",
-    },
+      about: {
+        main: "#8E24AA",
+        vibrant: "#FF00FF",
+        pastel: "#FF88FF",
+        soft: "#FFBBFF",
+        muted: "#AA55AA",
+      }, // VIOLET
 
-    rainbowText: {
-      red: { main: "#E53935" },
-      redOrange: { main: "#F4511E" },
-      orange: { main: "#FB8C00" },
-      yellowOrange: { main: "#FDD835" },
-      yellow: { main: "#FFEB3B" },
-      yellowGreen: { main: "#C0CA33" },
-      green: { main: "#43A047" },
-      greenCyan: { main: "#00ACC1" },
-      cyan: { main: "#26C6DA" },
-      lightBlue: { main: "#1E88E5" },
-      blue: { main: "#3949AB" },
-      bluePurple: { main: "#5E35B1" },
-      purple: { main: "#8E24AA" },
-      violet: { main: "#AB47BC" },
-      deepViolet: { main: "#6A1B9A" },
-    },
+      services: {
+        main: "#5E35B1",
+        vibrant: "#8000FF",
+        pastel: "#CC88FF",
+        soft: "#DDBBFF",
+        muted: "#7755AA",
+      }, // PURPLE
 
-    cloud: {
-      yellowLight: "#ffde7dff",
-      yellowBright: "#FFC100",
-      orangeLight: "#ffb34fff",
-      orangeBright: "#FF700B",
-      redLight: "#ff5678ff",
-      redBright: "#FF1F4B",
-      redOrange: "#ED608A",
-      pinkBright: "#FF3DA4",
-      pinkViolet: "#C55FCB",
-      darkViolet: "#7012a2ff",
-      violetDark: "#7E3398",
-      violet: "#a454cfff",
-      violetMedium: "#8D45B4",
-      purple: "#4940CE",
-      blueSoft: "#6756E3",
-      blue: "#5662e3ff",
-      blueDark: "#0061D2",
-      blueLight: "#0462d5ff",
-      blueBright: "#0089D2",
-      blueCyan: "#00b6d6ff",
-      greenBright: "#77C64B",
-      greenSoft: "#16bb86ff",
-      greenDark: "#038B61",
-      mint: "#90F0FF",
-    },
+      products: {
+        main: "#3949AB",
+        vibrant: "#0000FF",
+        pastel: "#8888FF",
+        soft: "#BBBBFF",
+        muted: "#5555AA",
+      }, // BLUE
 
-    background: {
-      default: "#FFFFFF",
-      paper: "#FFFFFF",
-      lightBlue: "#C9DCFF",
-      lightBlue2: "#adf3ffff",
-      lightViolet: "#dbcef7ff",
-      lightOrange: "#ffd48eff",
-      lightYellow: "#ffefb4ff",
-      lightGreen: "#caecc9ff",
-      lightRed: "#FFBCC9",
-      lightMint: "#DDFAFF",
+      shopOrder: {
+        main: "#1E88E5",
+        vibrant: "#0080FF",
+        pastel: "#88CCFF",
+        soft: "#BBDDFF",
+        muted: "#5577AA",
+      }, // LIGHT BLUE
+
+      caseStudies: {
+        main: "#26C6DA",
+        vibrant: "#00FFFF",
+        pastel: "#88FFFF",
+        soft: "#BBFFFF",
+        muted: "#55AAAA",
+      }, // CYAN
+
+      feedback: {
+        main: "#43A047",
+        vibrant: "#00FF00",
+        pastel: "#88FF88",
+        soft: "#BBFFBB",
+        muted: "#55AA55",
+      }, // GREEN
+
+      blog: {
+        main: "#FFEB3B",
+        vibrant: "#FFFF00",
+        pastel: "#FFFF88",
+        soft: "#FFFFBB",
+        muted: "#AAAA55",
+      }, // YELLOW
+
+      careers: {
+        main: "#FB8C00",
+        vibrant: "#FF8000",
+        pastel: "#FFCC88",
+        soft: "#FFDDBB",
+        muted: "#AA7755",
+      }, // ORANGE
+
+      contact: {
+        main: "#E53935",
+        vibrant: "#FF0000",
+        pastel: "#FF8888",
+        soft: "#FFBBBB",
+        muted: "#AA5555",
+      }, // RED
     },
-  },
+  }, 
 
   typography: {
     fontFamily: bodyFont,
@@ -284,10 +377,6 @@ const theme = createTheme({
     },
   },
 
-
-
-  
-
   components: {
     MuiButton: {
       styleOverrides: {
@@ -296,12 +385,15 @@ const theme = createTheme({
           py: 1,
           color: "#FFFFFF",
           backgroundColor: "#1D2340",
+          border: "2px solid #1D2340",
           borderRadius: 8,
           boxShadow: "0px 4px 4px rgba(0,0,0,0.15)",
           transition: "0.25s ease",
           "&:hover": {
             boxShadow: "0px 6px 6px rgba(0,0,0,0.2)",
-            backgroundColor: "#0061D2",
+            backgroundColor: "#26C6DA",
+            border: "2px solid #1D2340",
+            color: "#1D2340",
             transform: "scale(1.1)",
             cursor: "pointer",
           },
@@ -322,14 +414,14 @@ const theme = createTheme({
         root: ({ theme }) => ({
           borderRadius: 6,
           backgroundColor: theme.palette.background.paper,
-          border: "2px solid " + theme.palette.primary.main,
+          border: "2px solid #1D2340",
           "& .MuiOutlinedInput-notchedOutline": { border: "none" },
           "&:hover .MuiOutlinedInput-notchedOutline": {
-            border: "2px solid " + theme.palette.primary.blue || "#3949AB",
+            border: "2px solid #1E88E5", 
             borderRadius: 4,
           },
           "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-            border: "2px solid " + theme.palette.primary.blue || "#3949AB",
+            border: "2px solid #1E88E5",
             borderRadius: 4,
           },
         }),
@@ -342,7 +434,7 @@ const theme = createTheme({
       styleOverrides: {
         root: ({ theme }) => ({
           marginTop: theme.spacing(1),
-          color: theme.palette.cloud.blueDark || theme.palette.primary.main,
+          color: "#1E88E5",
           fontSize: "18px",
           fontWeight: 700,
           display: "inline-flex",
@@ -370,27 +462,24 @@ const theme = createTheme({
       },
     },
 
-   
 MuiIconButton: {
   styleOverrides: {
     root: ({ theme }) => ({
       //width: 100,
       //height: 100,
       //borderRadius: "50%",
-      //border: `2px solid ${theme.palette.primary.main}`,
-          // border: "2px solid #1D2340",
+      // border: "2px solid #1D2340",
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
       overflow: "hidden",
       cursor: "pointer",
-      //transition: "transform 0.25s ease, box-shadow 0.25s ease",
-      //margin: "0 auto 16px",
-     // backgroundColor: theme.palette.background.lightYellow, // default
-     // "&:hover": {
-       // transform: "scale(1.08)",
-      //  boxShadow: "0px 6px 12px rgba(0,0,0,0.15)",
-    //  },
+      transition: "transform 0.25s ease, box-shadow 0.25s ease",
+      "&:hover": {
+        transform: "scale(1.08)",
+        //boxShadow: "0px 6px 12px rgba(0,0,0,0.15)",
+        cursor: "pointer",
+      },
     }),
   },
   variants: [
@@ -403,9 +492,9 @@ MuiIconButton: {
         width: 60,
         height: 60,
         boxShadow: "0px 4px 4px rgba(0,0,0,0.15)",
-        transition: "transform 0.25s ease, box-shadow 0.25s ease",
+        //transition: "transform 0.25s ease, box-shadow 0.25s ease",
       "&:hover": {
-        transform: "scale(1.1)",
+       // transform: "scale(1.1)",
         boxShadow: "0px 6px 6px rgba(0,0,0,0.2)",
         color: "#26C6DA",
         backgroundColor: "#1D2340",
@@ -414,25 +503,14 @@ MuiIconButton: {
       }),
     },
     {
-      props: { color: "blogIcon1" },
-      style: ({ theme }) => ({
-        backgroundColor: theme.palette.cloud.redBright,
-        border: `2px solid ${theme.palette.primary.main}`,
-        "&:hover": {
-          transform: "scale(1.08)",
-          boxShadow: "0px 6px 12px rgba(0,0,0,0.15)",
-        },
-      }),
-    },
-    {
       props: { color: "blogIcon2" },
       style: ({ theme }) => ({
         color: "#43A047",
         backgroundColor: "none",
         boxShadow: "none",
-        transition: "transform 0.25s ease, box-shadow 0.25s ease",
+        //transition: "transform 0.25s ease, box-shadow 0.25s ease",
       "&:hover": {
-        transform: "scale(1.1)",
+       // transform: "scale(1.1)",
         boxShadow: "0px 6px 6px rgba(0,0,0,0.2)",
         color: "#1D2340",
         backgroundColor: "#26C6DA",
@@ -445,16 +523,16 @@ MuiIconButton: {
       props: { color: "topButton" },
       style: ({ theme }) => ({
         color: "#1D2340",
-        backgroundColor: "#ffffff",
+        backgroundColor: "#26C6DA",
         borderRadius: "50%",
         width: 60,
         height: 60,
         boxShadow: "0px 4px 4px rgba(0,0,0,0.15)",
-        transition: "transform 0.25s ease, box-shadow 0.25s ease",
+        //transition: "transform 0.25s ease, box-shadow 0.25s ease",
       "&:hover": {
-        transform: "scale(1.1)",
+        //transform: "scale(1.1)",
         boxShadow: "0px 6px 6px rgba(0,0,0,0.2)",
-        color: "#26C6DA",
+        color: "#ff5678ff",
         backgroundColor: "#1D2340",
         border: "2px solid #1D2340",
       },

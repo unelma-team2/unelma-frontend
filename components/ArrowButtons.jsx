@@ -1,12 +1,9 @@
 "use client";
 
 import { Box, IconButton } from "@mui/material";
-import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
-import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
-import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import { useTheme } from "@mui/material/styles";
-import { ArrowCircleLeftRounded } from "@mui/icons-material";
 import ArrowCircleLeftRoundedIcon from '@mui/icons-material/ArrowCircleLeftRounded';
+import ArrowCircleRightRoundedIcon from '@mui/icons-material/ArrowCircleRightRounded';
 
 export default function ArrowButtons({ onPrev, onNext }) {
   const theme = useTheme();
@@ -26,7 +23,7 @@ export default function ArrowButtons({ onPrev, onNext }) {
         onClick={onNext}
         color="arrowButton"
       >
-        <ArrowCircleRightIcon sx={{ fontSize: 72 }} />
+        <ArrowCircleRightRoundedIcon sx={{ fontSize: 72 }} />
       </IconButton>
     </Box>
   );

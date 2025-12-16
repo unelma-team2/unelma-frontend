@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { IconButton, Box, Fade, useTheme } from "@mui/material";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import ArrowCircleUpRoundedIcon from '@mui/icons-material/ArrowCircleUpRounded';
 
 export default function BackToTopButton() {
@@ -33,10 +32,8 @@ export default function BackToTopButton() {
         }}
       >
         <IconButton
-           
           color="topButton"
           onClick={scrollToTop}
-        
         >
           <ArrowCircleUpRoundedIcon sx={{ fontSize: 72 }} />
         </IconButton>

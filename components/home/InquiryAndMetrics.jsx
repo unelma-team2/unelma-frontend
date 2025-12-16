@@ -31,15 +31,15 @@ export default function InquiryAndMetrics({ metrics, projectInquiry }) {
       flex: 1,
       minWidth: { xs: "100%", md: "50%" },
 
-      // 👉 spacing ONLY lives here
+      // spacing ONLY lives here
       px: { xs: 2, sm: 3, md: 0 },
-      pt: { xs: 4, sm: 6, md: 20 },
+      pt: { xs: 10, sm: 6, md: 20 },
 
       display: "flex",
       justifyContent: "center",
     }}
   >
-    {/* 👇 centering wrapper (NO padding) */}
+    {/* centering wrapper (NO padding) */}
     <Box
       sx={{
         width: "100%",

@@ -80,8 +80,8 @@ export default function HeroSection({ heroSection }) {
           transform: { xs: "translateX(-50%)", md: "none" },
           zIndex: 4,
           width: { xs: "90%", sm: "65%", md: "60%" },
-          textAlign: { xs: "center", md: "left" },
-          color: theme.palette.primary.darkViolet,
+          textAlign: { xs: "center", sm: "left", md: "left" },
+          color: theme.palette.section.about.main,
           fontSize: { xs: "3rem", sm: "4rem", md: "5rem", lg: "6rem" },
           pl: { xs: 0, md: 8 },
           ml: { xs: 0, md: 4 },
@@ -136,18 +136,20 @@ export default function HeroSection({ heroSection }) {
           underline="none"
           sx={{
             mt: 1,
-            color: theme.palette.primary.blue1 || theme.palette.primary.main,
+          //  color: theme.palette.primary.blue1 || theme.palette.primary.main,
+          color: theme.palette.section.services.main,
             fontSize: { xs: 16, sm: 18, md: 20 },
             fontWeight: 700,
             display: "inline-flex",
             alignItems: { xs: "flex-start", sm: "flex-start", md: "center" },
             textAlign: { xs: "left", sm: "left", md: "center"},
             gap: 0.5,
-            transition: "transform 0.25s ease",
-            "&:hover": {
-              transform: "scale(1.1)",
-              cursor: "pointer",
-            },
+            // transition: "transform 0.25s ease",
+              "&:hover": {
+            //   transform: "scale(1.1)",
+            //   cursor: "pointer",
+            color: theme.palette.section.shopOrder.main,
+             },
           }}
         >
           {hero_link_description} →

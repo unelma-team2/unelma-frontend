@@ -9,22 +9,22 @@ import Image from "next/image"
 
 const DIAGONAL_CONFIG = {
   xs: {
-    angle: 19,
-    density: 0.95,
+    angle: 30,
+    density: 0.80,
     bounds: { start: 5, end: 80 },
-    shift: { x: -6, y: -33 },
+    shift: { x: -12, y: -28 },
   },
   sm: {
-    angle: 27,
-    density: 1.2,
-    bounds: { start: 20, end: 80 },
-    shift: { x: -9, y: -30 },
+    angle: 50,
+    density: 0.9,
+    bounds: { start: 25, end: 70 },
+    shift: { x: -13, y: -35 },
   },
   md: {
-    angle: 20,
-    density: 0.85,
-    bounds: { start: 10, end: 90 },
-    shift: { x: -12, y: -25 },
+    angle: 36,
+    density: 0.7,
+    bounds: { start: 10, end: 87 },
+    shift: { x: -19, y: -25 },
   },
 }
 
@@ -47,28 +47,28 @@ export default function Metrics() {
       number: 2,
       label1: "Awards",
       label2: "Won",
-      bgColor: theme.palette.soft.lightSalmonPink,
+      bgColor: theme.palette.section.contact.soft,
       icon: "/images/icons/icons8-award-64.png",
     },
     {
       number: 17,
       label1: "Total",
       label2: "Agents",
-      bgColor: theme.palette.soft.paleYellowSoft,
+      bgColor: theme.palette.section.blog.soft,
       icon: "/images/icons/icons8-support-64.png",
     },
     {
       number: "1 M+",
       label1: "Happy",
       label2: "Users",
-      bgColor: theme.palette.soft.lightCyanSoft,
+      bgColor: theme.palette.section.feedback.soft,
       icon: "/images/icons/icons8-winner-64.png",
     },
     {
       number: "3 M+",
       label1: "Total",
       label2: "Downloads",
-      bgColor: theme.palette.soft.paleTurquoiseSoft,
+      bgColor: theme.palette.section.caseStudies.soft,
       icon: "/images/icons/icons8-downloads-48.png",
     },
   ]
@@ -130,13 +130,13 @@ export default function Metrics() {
         position: "relative",
         width: "100%",
         maxWidth: 600,  
-        height: { xs: 400, sm: 450, md: 700 },
+        height: { xs: 560, sm: 450, md: 700 },
         mx: "auto",    
       }}
     >
       {/* Background */}
       <Image
-        src="/images/metrics_img.png"
+        src="/images/metrics_arrow_img.png"
         alt="Background"
         fill
         style={{ objectFit: "contain" }}
@@ -190,13 +190,13 @@ export default function Metrics() {
           </Box>
 
           {/* Text */}
-          <Typography sx={{ fontWeight: 700, fontSize: { xs: 16, sm: 18, md: 20 } }}>
+          <Typography sx={{ color: item.bgColor, fontWeight: 700, fontSize: { xs: 16, sm: 18, md: 20 } }}>
             {item.number}
           </Typography>
-          <Typography sx={{ fontSize: { xs: 12, sm: 13, md: 15 }, fontWeight: 500 }}>
+          <Typography sx={{ color: item.bgColor,fontSize: { xs: 12, sm: 13, md: 15 }, fontWeight: 500 }}>
             {item.label1}
           </Typography>
-          <Typography sx={{ fontSize: { xs: 12, sm: 13, md: 15 }, fontWeight: 500 }}>
+          <Typography sx={{ color: item.bgColor, fontSize: { xs: 12, sm: 13, md: 15 }, fontWeight: 500 }}>
             {item.label2}
           </Typography>
         </Box>

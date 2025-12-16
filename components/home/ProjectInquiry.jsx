@@ -20,18 +20,20 @@ export default function ProjectInquiry({ projectInquiry }) {
     >
       <Box
         sx={{
-          bgcolor: theme.palette.background.lightBlue2,
-          borderTop: `2px solid ${theme.palette.primary.main}`,
-          borderRight: `2px solid ${theme.palette.primary.main}`,
+          bgcolor: "#181b2b",
+          borderTop: theme.mixins.borderStyle,
+          borderLeft: theme.mixins.borderStyle,
+          borderRight: theme.mixins.borderStyle,
           borderTopRightRadius: { xs: "60px", sm: "90px", md: "120px" },
           borderBottom: { xs: theme.mixins.borderStyle, sm: theme.mixins.borderStyle, md: "none" },
+          boxShadow: `-10px -8px 0px ${theme.palette.text.secondary}`,
           position: "absolute",
           left: 0,
           top: 0,
           right: 0,
           bottom: 0,
           width: "100%",
-          height: { xs: "100%", sm: "90%", md: "calc(100% + 240px)" },
+          height: { xs: "100%", sm: "90%", md: "calc(100% + 245px)" },
           display: "flex",
           alignItems: { xs: "center", sm: "center", md: "flex-start" },
           justifyContent: { xs: "center", sm: "center", md: "flex-start" },
@@ -50,10 +52,10 @@ export default function ProjectInquiry({ projectInquiry }) {
             <Typography
               sx={{
                 fontFamily: theme.typography.fontFamily.bodyFont,
-                fontSize: { xs: 32, sm: 36, md: 40 },
+                fontSize: { xs: 36, sm: 40, md: 44 },
                 fontWeight: 700,
                 mb: { xs: 3, sm: 4, md: 5 },
-                color: theme.palette.primary.main,
+                color: theme.palette.text.contrast,
               }}
             >
               {title1} <br /> {title2}
@@ -62,11 +64,11 @@ export default function ProjectInquiry({ projectInquiry }) {
             <Typography
               sx={{
                 fontFamily: theme.typography.fontFamily.bodyFont,
-                fontSize: { xs: 16, sm: 17, md: 18 },
+                fontSize: { xs: 16, sm: 18, md: 20 },
                 fontWeight: 500,
                 lineHeight: 1.6,
-                     mb: { xs: 3, sm: 4, md: 5 },
-                color: theme.palette.primary.main,
+                mb: { xs: 3, sm: 4, md: 5 },
+                color: theme.palette.text.contrast,
               }}
             >
               {description1}
@@ -78,10 +80,16 @@ export default function ProjectInquiry({ projectInquiry }) {
             <Button
               href={link}
               sx={{
-                px: 3,
+                px: 4,
                 py: 1,
                 mt: 2,
+                fontSize: { xs: 14, sm: 16, md: 18 },
+                backgroundColor: theme.palette.section.blog.main,
+                color: theme.palette.primary.main,
+                 "&:hover": {
+                  backgroundColor: theme.palette.section.caseStudies.main,
               }}
+            }
             >
               {link_description}
             </Button>
