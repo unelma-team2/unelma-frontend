@@ -137,45 +137,49 @@ export function CartProvider({ children }) {
     }
   };
 
- // Update quantity
-const updateQuantity = async (productId, newQuantity) => {
-  // Find the cart item in frontend state
-  const item = cartItems.find(i => i.id === productId);
-  if (!item) {
-    console.error("Cart item not found for productId:", productId);
-    return;
-  }
-
-  // Ensure quantity is at least 1
-  const updatedQuantity = Math.max(1, newQuantity);
-  const updatedSubTotal = updatedQuantity * item.unitPrice;
-
-  // Optimistically update frontend state
-  setCartItems(prev =>
-    prev.map(i =>
-      i.id === productId ? { ...i, quantity: updatedQuantity, subTotal: updatedSubTotal } : i
-    )
-  );
-
-  try {
-    // Update backend using backendId
-    await axios.put(
-      `${API_URL}/api/cart-items/${item.backendId}`,
-      {
-        data: {
-          quantity: updatedQuantity,
-          subTotal: updatedSubTotal
-        }
-      },
-      { headers: { Authorization: `Bearer ${STRAPI_TOKEN}` } }
+  const updateQuantity = async (productId, newQuantity) => {
+    const item = cartItems.find(i => i.id === productId);
+    if (!item) return;
+  
+    const updatedQuantity = Math.max(1, newQuantity);
+    const updatedSubTotal = updatedQuantity * item.unitPrice;
+  
+    // Optimistic frontend update
+    setCartItems(prev =>
+      prev.map(i =>
+        i.id === productId ? { ...i, quantity: updatedQuantity, subTotal: updatedSubTotal } : i
+      )
     );
-    console.log(`Quantity updated for productId ${productId}`);
-  } catch (err) {
-    console.error("Failed to update quantity in backend, rolling back:", err.response?.data || err);
-    // Rollback by refetching cart items
-    fetchCartItems();
-  }
-};
+  
+    try {
+      // Fetch backend ID dynamically
+      const res = await axios.get(
+        `${API_URL}/api/cart-items?filters[cart][id][$eq]=${userCartId}&filters[product_id][$eq]=${productId}`,
+        { headers: { Authorization: `Bearer ${STRAPI_TOKEN}` } }
+      );
+  
+      if (res.data.data.length === 0) {
+        console.error("Backend cart-item not found for productId:", productId);
+        fetchCartItems();
+        return;
+      }
+  
+      const backendItemId = res.data.data[0].id; // use the correct backend ID
+      console.log("Updating backend itemId:", backendItemId, "newQuantity:", updatedQuantity);
+  
+      await axios.put(
+        `${API_URL}/api/cart-items/${backendItemId}`,
+        { data: { quantity: updatedQuantity, subTotal: updatedSubTotal } },
+        { headers: { Authorization: `Bearer ${STRAPI_TOKEN}` } }
+      );
+  
+      console.log(`Quantity updated successfully for productId ${productId}`);
+    } catch (err) {
+      console.error("Failed to update quantity in backend, rolling back:", err.response?.data || err);
+      fetchCartItems();
+    }
+  };
+  
 
 
 
