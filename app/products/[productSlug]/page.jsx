@@ -1,7 +1,7 @@
 "use client";
 
 import { useParams, useRouter } from "next/navigation";
-import { useCart } from "@/context/CartContext";
+import { useCart } from "@/app/context/CartContext";
 import {
   Box,
   Container,
@@ -117,13 +117,19 @@ export default function ProductPage() {
   };
 
   const handleAddToCart = () => {
-    addToCart({
-      ...productData,
-      name: product_name, // add this line
-      unitPrice: getPriceNumber(product_price), // add this line
-      quantity,
-    });
-    router.push("/cart");
+    if (!productData) return;
+
+  const quantityValue = quantity || 1;
+  const unitPriceValue = getPriceNumber(product_price);
+
+  addToCart({
+    id: productData.id,              // backend product id
+    name: product_name,
+    unitPrice: unitPriceValue,
+    quantity: quantityValue,
+  });
+
+  router.push("/cart");
   };
 
   const toggleFavorite = () => {
