@@ -1,14 +1,21 @@
 "use client";
 
-import { Card, Box, Typography, Button, useTheme } from "@mui/material";
+import { Card, Box, Typography, Button, useTheme, IconButton, Tooltip } from "@mui/material";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 import Link from "next/link";
+import { useFavorites } from "@/app/context/FavoritesContext";
+import { useAuth } from "@/app/context/AuthContext";
 
 export default function ProductCard({ product, imageUrl , apiUrl}) {
   const theme = useTheme();
+  const { isFavorite, toggleFavorite } = useFavorites();
+  const { user } = useAuth();
 
   const cardSx = {
     height: 470,
     width: 300,
+    position: "relative",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -53,8 +60,24 @@ export default function ProductCard({ product, imageUrl , apiUrl}) {
     : `${apiUrl}${product.image.url}`
   : null;
 
+  const isLiked = isFavorite(product?.id, "product");
+
   return (
     <Card sx={cardSx}>
+      {user ? (
+        <Tooltip title={isLiked ? "Remove from favourites" : "Save to favourites"}>
+          <IconButton
+            onClick={() => toggleFavorite(product, "product")}
+            sx={{ position: "absolute", top: 12, right: 12, backgroundColor: "#fff" }}
+          >
+            {isLiked ? (
+              <FavoriteIcon color="error" />
+            ) : (
+              <FavoriteBorderIcon sx={{ color: theme.palette.grey[700] }} />
+            )}
+          </IconButton>
+        </Tooltip>
+      ) : null}
       <Box sx={imageContainerSx}>
         <Box component="img" src={imageUrl ? imageUrl : image} alt={product.title} sx={imageSx} />
       </Box>
