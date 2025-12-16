@@ -2,12 +2,18 @@
 
 "use client";
 
-import { Box, Button, Card, CardContent, Typography, useTheme } from "@mui/material";
+import { Box, Button, Card, CardContent, Typography, useTheme, IconButton, Tooltip } from "@mui/material";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 import Image from "next/image";
 import Link from "next/link";
+import { useFavorites } from "@/app/context/FavoritesContext";
+import { useAuth } from "@/app/context/AuthContext";
 
 export default function ServiceCard({ service, apiUrl, imageUrl }) {
   const theme = useTheme();
+  const { isFavorite, toggleFavorite } = useFavorites();
+  const { user } = useAuth();
 
   if (!service) return null;
 
@@ -17,11 +23,14 @@ export default function ServiceCard({ service, apiUrl, imageUrl }) {
       : `${apiUrl}${service.image.url}`
     : null;
 
+  const isLiked = isFavorite(service?.id, "service");
+
   return (
     <Card
       sx={{
         width: 300,
         height: 500,
+        position: "relative",
         p: 2,
         textAlign: "center",
         display: "flex",
@@ -29,6 +38,20 @@ export default function ServiceCard({ service, apiUrl, imageUrl }) {
         boxShadow: `-10px -8px 0px ${theme.palette.primary.yellow}`,
       }}
     >
+      {user ? (
+        <Tooltip title={isLiked ? "Remove from favourites" : "Save to favourites"}>
+          <IconButton
+            onClick={() => toggleFavorite(service, "service")}
+            sx={{ position: "absolute", top: 12, right: 12, backgroundColor: "#fff" }}
+          >
+            {isLiked ? (
+              <FavoriteIcon color="error" />
+            ) : (
+              <FavoriteBorderIcon sx={{ color: theme.palette.grey[700] }} />
+            )}
+          </IconButton>
+        </Tooltip>
+      ) : null}
       <CardContent sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
         
         {/* Icon circle */}
