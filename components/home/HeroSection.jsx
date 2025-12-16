@@ -23,8 +23,8 @@ export default function HeroSection({ heroSection }) {
       sx={{
         width: "100vw",
         position: "relative",
-       // left: "50%",
-       // ml: "-50vw",
+        // left: "50%",
+        // ml: "-50vw",
         paddingTop: { xs: 8 },
         paddingBottom: { xs: 2, sm: 6, md: 6 },
         minHeight: { xs: 850, sm: 1200, md: 1400, lg: 1400 },
@@ -64,7 +64,7 @@ export default function HeroSection({ heroSection }) {
         <Image
           src={hero_image_top || "/images/home/hero/hero_top_smaller.png"}
           alt="Overlay graphic"
-          width={500} 
+          width={500}
           height={500}
           style={{ width: "100%", height: "auto" }}
         />
@@ -72,8 +72,8 @@ export default function HeroSection({ heroSection }) {
 
       {/** ---------------- TITLE (LEFT SIDE ON DESKTOP, CENTERED ON MOBILE) ---------------- */}
       <Typography
-        variant="hero"
         sx={{
+          ...theme.typography.headingFontHero,
           position: "absolute",
           top: { xs: "42%", sm: "65%", md: "71%" },
           left: { xs: "50%", md: "5%" },
@@ -82,7 +82,7 @@ export default function HeroSection({ heroSection }) {
           width: { xs: "90%", sm: "65%", md: "60%" },
           textAlign: { xs: "center", sm: "left", md: "left" },
           color: theme.palette.section.about.main,
-          fontSize: { xs: "3rem", sm: "4rem", md: "5rem", lg: "6rem" },
+
           pl: { xs: 0, md: 8 },
           ml: { xs: 0, md: 4 },
         }}
@@ -106,10 +106,9 @@ export default function HeroSection({ heroSection }) {
       >
         <Typography
           sx={{
+            ...theme.typography.bodyFontL,
             mb: 2,
-            fontSize: { xs: 14, sm: 16, md: 18 },
             fontWeight: 500,
-            lineHeight: 1.3,
             color: theme.palette.text.primary,
             textAlign: "justify",
           }}
@@ -119,10 +118,9 @@ export default function HeroSection({ heroSection }) {
 
         <Typography
           sx={{
+            ...theme.typography.bodyFontL,
             mb: 2,
-            fontSize: { xs: 14, sm: 16, md: 18 },
             fontWeight: 500,
-            lineHeight: 1.3,
             color: theme.palette.text.primary,
             textAlign: "justify",
           }}
@@ -136,20 +134,20 @@ export default function HeroSection({ heroSection }) {
           underline="none"
           sx={{
             mt: 1,
-          //  color: theme.palette.primary.blue1 || theme.palette.primary.main,
-          color: theme.palette.section.services.main,
+            //  color: theme.palette.primary.blue1 || theme.palette.primary.main,
+            color: theme.palette.section.services.main,
             fontSize: { xs: 16, sm: 18, md: 20 },
             fontWeight: 700,
             display: "inline-flex",
             alignItems: { xs: "flex-start", sm: "flex-start", md: "center" },
-            textAlign: { xs: "left", sm: "left", md: "center"},
+            textAlign: { xs: "left", sm: "left", md: "center" },
             gap: 0.5,
             // transition: "transform 0.25s ease",
-              "&:hover": {
-            //   transform: "scale(1.1)",
-            //   cursor: "pointer",
-            color: theme.palette.section.shopOrder.main,
-             },
+            "&:hover": {
+              //   transform: "scale(1.1)",
+              //   cursor: "pointer",
+              color: theme.palette.section.shopOrder.main,
+            },
           }}
         >
           {hero_link_description} →
