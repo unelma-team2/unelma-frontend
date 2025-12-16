@@ -249,6 +249,7 @@ export default function ProductsPage() {
             <ProductCard 
               product={product} 
               imageUrl={imageUrl}   // ← pass to card if needed
+              apiUrl={API_URL}
             />
           </Grid>
         );
@@ -266,7 +267,7 @@ export default function ProductsPage() {
 
 return (
                 <Grid item xs={12} sm={4} md={4} lg={4} key={service.id}>
-                  <ServiceCard service={service} imageUrl={imageUrl} />
+                  <ServiceCard service={service} imageUrl={imageUrl} apiUrl={API_URL} />
                 </Grid>
 )})}
             </Grid>
