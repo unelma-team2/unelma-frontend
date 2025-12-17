@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 import { useCart } from "@/app/context/CartContext";
-import {useRouter} from "next/navigation";
-import {useAuth} from "@/app/context/AuthContext";
+import { useRouter, usePathname } from "next/navigation";
+import { useAuth } from "@/app/context/AuthContext";
 import {
   Box,
   Typography,
@@ -17,21 +17,22 @@ import {
   TextField,
   IconButton,
 } from "@mui/material";
- import CartPageHero from "@/components/common/HeroPage";
+import CartPageHero from "@/components/common/HeroPage";
 import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
 
 export default function CartPage() {
   const { cartItems, removeFromCart, updateQuantity } = useCart();
   const router = useRouter();
+  const path = usePathname();
   const { user } = useAuth();
 
   const [banner, setBanner] = useState(null);
-const [delivery, setDelivery] = useState([]); // array
-const [orderSummary, setOrderSummary] = useState(null);
+  const [delivery, setDelivery] = useState([]); // array
+  const [orderSummary, setOrderSummary] = useState(null);
 
-const [cartTitle, setCartTitle] = useState("");
-const [serviceDeliveryTitle, setServiceDeliveryTitle] = useState("");
+  const [cartTitle, setCartTitle] = useState("");
+  const [serviceDeliveryTitle, setServiceDeliveryTitle] = useState("");
 
   const [selectedShipping, setSelectedShipping] = useState(null);
   const [shippingCost, setShippingCost] = useState(0);
@@ -39,7 +40,6 @@ const [serviceDeliveryTitle, setServiceDeliveryTitle] = useState("");
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   useEffect(() => {
-
     axios
       .get(
         `${API_URL}/api/cart-page?populate[CartBannerSection][populate]=*&populate[ServiceDelivery]=*&populate[OrderSummary]=*`
@@ -51,13 +51,14 @@ const [serviceDeliveryTitle, setServiceDeliveryTitle] = useState("");
         setDelivery(data.ServiceDelivery || null);
         setOrderSummary(data.OrderSummary || null);
         setCartTitle(data.cart_title || "Your Cart");
-      setServiceDeliveryTitle(data.serviceDelivery_title || "Service Delivery");
+        setServiceDeliveryTitle(
+          data.serviceDelivery_title || "Service Delivery"
+        );
 
-      if (data.ServiceDelivery?.length > 0) {
-        setSelectedShipping(data.ServiceDelivery[0]);
-        setShippingCost(Number(data.ServiceDelivery[0].cost) || 0);
-      }
-
+        if (data.ServiceDelivery?.length > 0) {
+          setSelectedShipping(data.ServiceDelivery[0]);
+          setShippingCost(Number(data.ServiceDelivery[0].cost) || 0);
+        }
       })
       .catch((err) => {
         console.error(err);
@@ -65,8 +66,13 @@ const [serviceDeliveryTitle, setServiceDeliveryTitle] = useState("");
   }, [API_URL]);
 
   const { banner_title, banner_image } = banner || {};
-  const {summary_title, subTotal_title, tax_title, deliveryCost_title, total_title } = orderSummary || {};
-
+  const {
+    summary_title,
+    subTotal_title,
+    tax_title,
+    deliveryCost_title,
+    total_title,
+  } = orderSummary || {};
 
   const totalPrice = cartItems.reduce(
     (total, item) => total + item.quantity * (Number(item.unitPrice) || 0),
@@ -82,9 +88,13 @@ const [serviceDeliveryTitle, setServiceDeliveryTitle] = useState("");
     setShippingCost(Number(option.cost) || 0);
   };
 
+  const handleRequireLogin = () => {
+    router.push(`/login?next=${encodeURIComponent(path)}`);
+  };
+
   return (
     <>
-      <CartPageHero title={banner_title} image={banner_image}/>
+      <CartPageHero title={banner_title} image={banner_image} />
       <Box sx={{ p: { xs: 1, sm: 2, md: 4 } }}>
         <Typography
           variant="h4"
@@ -105,67 +115,70 @@ const [serviceDeliveryTitle, setServiceDeliveryTitle] = useState("");
             </TableHead>
 
             <TableBody>
-  {cartItems.map((item) => {
-    // prefer server documentId when available (stable for logged-in users)
-    const itemKey = item.documentId ?? item.productId ?? item.id;
+              {cartItems.map((item) => {
+                // prefer server documentId when available (stable for logged-in users)
+                const itemKey = item.documentId ?? item.productId ?? item.id;
 
-    return (
-      <TableRow key={itemKey}>
-        <TableCell>{item.name}</TableCell>
+                return (
+                  <TableRow key={itemKey}>
+                    <TableCell>{item.name}</TableCell>
 
-        <TableCell align="center">
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <TextField
-              type="number"
-              value={item.quantity}
-              onChange={(e) => {
-                const val = Math.max(1, Number(e.target.value || 1));
-                updateQuantity(itemKey, val);
-              }}
-              inputProps={{
-                min: 1,
-                style: { textAlign: "center", width: 60 },
-              }}
-              size="small"
-            />
+                    <TableCell align="center">
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <TextField
+                          type="number"
+                          value={item.quantity}
+                          onChange={(e) => {
+                            const val = Math.max(
+                              1,
+                              Number(e.target.value || 1)
+                            );
+                            updateQuantity(itemKey, val);
+                          }}
+                          inputProps={{
+                            min: 1,
+                            style: { textAlign: "center", width: 60 },
+                          }}
+                          size="small"
+                        />
 
-            <IconButton
-              aria-label="delete"
-              size="small"
-              sx={{
-                ml: 1,
-                backgroundColor: "transparent",
-                color: "black",
-                "&:hover": {
-                  backgroundColor: "#f5f5f5",
-                  border: "1.5px solid black",
-                },
-              }}
-              onClick={() => removeFromCart(itemKey)}
-            >
-              <DeleteIcon fontSize="small" />
-            </IconButton>
-          </Box>
-        </TableCell>
+                        <IconButton
+                          aria-label="delete"
+                          size="small"
+                          sx={{
+                            ml: 1,
+                            backgroundColor: "transparent",
+                            color: "black",
+                            "&:hover": {
+                              backgroundColor: "#f5f5f5",
+                              border: "1.5px solid black",
+                            },
+                          }}
+                          onClick={() => removeFromCart(itemKey)}
+                        >
+                          <DeleteIcon fontSize="small" />
+                        </IconButton>
+                      </Box>
+                    </TableCell>
 
-        <TableCell align="center">
-          ${Number(item.unitPrice || 0).toFixed(2)}
-        </TableCell>
+                    <TableCell align="center">
+                      ${Number(item.unitPrice || 0).toFixed(2)}
+                    </TableCell>
 
-        <TableCell align="center">
-          ${(item.quantity * Number(item.unitPrice || 0)).toFixed(2)}
-        </TableCell>
-      </TableRow>
-    );
-  })}
-</TableBody>
-
+                    <TableCell align="center">
+                      $
+                      {(item.quantity * Number(item.unitPrice || 0)).toFixed(2)}
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
           </Table>
         </TableContainer>
 
@@ -173,7 +186,7 @@ const [serviceDeliveryTitle, setServiceDeliveryTitle] = useState("");
           Total: ${totalPrice.toFixed(2)}
         </Typography>
 
-         <Box
+        <Box
           sx={{
             mt: { xs: 3, md: 5 },
             mb: { xs: 3, md: 5 },
@@ -183,7 +196,7 @@ const [serviceDeliveryTitle, setServiceDeliveryTitle] = useState("");
           }}
         >
           <Typography variant="h6" sx={{ mb: 2 }}>
-          {serviceDeliveryTitle}
+            {serviceDeliveryTitle}
           </Typography>
           <TableContainer>
             <Table>
@@ -198,15 +211,22 @@ const [serviceDeliveryTitle, setServiceDeliveryTitle] = useState("");
                       />
                     </TableCell>
                     <TableCell>
-                      <Typography sx={{ fontWeight: selectedShipping.id === option.id ? "bold" : "normal" }}>
-                      {option.delivery_type}
+                      <Typography
+                        sx={{
+                          fontWeight:
+                            selectedShipping.id === option.id
+                              ? "bold"
+                              : "normal",
+                        }}
+                      >
+                        {option.delivery_type}
                       </Typography>
                       <Typography variant="body2" color="text.secondary">
-                      {option.delivery_description}
+                        {option.delivery_description}
                       </Typography>
                     </TableCell>
                     <TableCell align="right">
-                    ${Number(option.cost).toFixed(2)} 
+                      ${Number(option.cost).toFixed(2)}
                     </TableCell>
                   </TableRow>
                 ))}
@@ -214,10 +234,10 @@ const [serviceDeliveryTitle, setServiceDeliveryTitle] = useState("");
             </Table>
           </TableContainer>
         </Box>
-        
+
         <Box sx={{ mt: 5 }}>
           <Typography variant="h5" sx={{ mb: 2 }}>
-          { summary_title }
+            {summary_title}
           </Typography>
           <TableContainer>
             <Table>
@@ -251,7 +271,7 @@ const [serviceDeliveryTitle, setServiceDeliveryTitle] = useState("");
             sx={{ mt: 3, minWidth: 200, width: { xs: "100%", sm: "auto" } }}
             onClick={() => {
               if (!user) {
-                router.push("/login?redirect=/checkout");
+                handleRequireLogin();
               } else {
                 router.push("/checkout");
               }

@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { useUserProfile } from "./UserContext";
 
@@ -25,7 +25,6 @@ const clearGuestCartStorage = () => {
   localStorage.removeItem(GUEST_CART_KEY);
 };
 
-
 export function CartProvider({ children }) {
   const { profile } = useUserProfile();
 
@@ -33,12 +32,100 @@ export function CartProvider({ children }) {
   const [cartDocumentId, setCartDocumentId] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  // Exposed helper: merge guest cart (localStorage) into server cart (Strapi).
+  // Hoisted so it can be called from checkout/login flows and exposed in provider value.
+  const mergeGuestCartToServer = async (serverCartDocumentId) => {
+    try {
+      const guest = getGuestCart();
+      if (!guest || !guest.length) return false;
+
+      const existingRes = await axios.get(
+        `${API_URL}/api/cart-items?filters[cart][documentId][$eq]=${serverCartDocumentId}`,
+        { headers: { Authorization: `Bearer ${STRAPI_TOKEN}` } }
+      );
+      const serverItems = existingRes.data.data || [];
+      const serverMap = new Map(
+        serverItems.map((i) => [String(i.product_id ?? i.productId ?? i.id), i])
+      );
+
+      await Promise.all(
+        guest.map((g) => {
+          const existing = serverMap.get(String(g.productId));
+          const unitPrice = Number(g.unitPrice || 0);
+          if (existing) {
+            const newQty = (existing.quantity || 0) + (g.quantity || 0);
+            return axios.put(
+              `${API_URL}/api/cart-items/${existing.documentId}`,
+              { data: { quantity: newQty, subTotal: newQty * unitPrice } },
+              { headers: { Authorization: `Bearer ${STRAPI_TOKEN}` } }
+            );
+          }
+
+          return axios.post(
+            `${API_URL}/api/cart-items`,
+            {
+              data: {
+                cart: serverCartDocumentId,
+                product_id: g.productId,
+                product_name: g.name,
+                quantity: g.quantity,
+                unitPrice,
+                subTotal: (g.quantity || 0) * unitPrice,
+              },
+            },
+            { headers: { Authorization: `Bearer ${STRAPI_TOKEN}` } }
+          );
+        })
+      );
+
+      clearGuestCartStorage();
+      await fetchCartItems(serverCartDocumentId);
+      return true;
+    } catch (err) {
+      console.error(
+        "Guest -> server cart merge failed:",
+        err?.response?.data || err
+      );
+      return false;
+    }
+  };
+
+  // remember previous profile so we can detect logout transitions
+  const prevProfileRef = useRef(profile);
+
+  // Persist in-memory cart to guest localStorage when user logs out
+  useEffect(() => {
+    const prev = prevProfileRef.current;
+    // if previously logged in (had documentId) and now not, persist cartItems
+    if (prev?.documentId && !profile?.documentId) {
+      try {
+        if (Array.isArray(cartItems) && cartItems.length) {
+          const toSave = cartItems.map((i) => ({
+            productId: i.productId ?? i.product_id ?? i.id,
+            name: i.name ?? i.product_name ?? "",
+            unitPrice: Number(i.unitPrice ?? 0),
+            quantity: i.quantity ?? 1,
+            subTotal: (i.quantity ?? 1) * Number(i.unitPrice ?? 0),
+          }));
+          saveGuestCart(toSave);
+          console.debug(
+            "CartContext: persisted cart to guest localStorage on logout",
+            toSave
+          );
+        }
+      } catch (e) {
+        console.warn("CartContext: failed to persist guest cart on logout", e);
+      }
+    }
+    prevProfileRef.current = profile;
+  }, [profile, cartItems]);
+
   /* -----------------------------------------
      1️⃣ FETCH OR CREATE CART (LOGGED-IN ONLY)
   ----------------------------------------- */
   useEffect(() => {
     if (!profile?.documentId) {
-      // User logged out → clear cart state
+      // load guest cart on initialization for anonymous user
       setCartItems(getGuestCart());
       setCartDocumentId(null);
       return;
@@ -73,7 +160,12 @@ export function CartProvider({ children }) {
         }
 
         setCartDocumentId(cart.documentId);
-        await fetchCartItems(cart.documentId);
+        // DO NOT auto-merge guest cart on login. Defer merging until checkout.
+        // If there are no guest items, fetch server items now so UI shows server cart.
+        const guest = getGuestCart();
+        if (!guest || !guest.length) {
+          await fetchCartItems(cart.documentId);
+        }
       } catch (err) {
         console.error("Cart init failed:", err.response?.data || err);
       } finally {
@@ -97,7 +189,7 @@ export function CartProvider({ children }) {
         { headers: { Authorization: `Bearer ${STRAPI_TOKEN}` } }
       );
 
-      const serverItems = res.data.data.map(item => ({
+      const serverItems = res.data.data.map((item) => ({
         id: item.id,
         documentId: item.documentId,
         productId: item.product_id,
@@ -109,11 +201,17 @@ export function CartProvider({ children }) {
 
       // preserve previous order if available (match by documentId/productId/id)
       if (Array.isArray(prevOrderArray) && prevOrderArray.length) {
-        const prevOrder = prevOrderArray.map(i => String(i.documentId ?? i.productId ?? i.id));
+        const prevOrder = prevOrderArray.map((i) =>
+          String(i.documentId ?? i.productId ?? i.id)
+        );
         const orderIndex = new Map(prevOrder.map((id, idx) => [id, idx]));
         serverItems.sort((a, b) => {
-          const ai = orderIndex.has(String(a.documentId ?? a.productId ?? a.id)) ? orderIndex.get(String(a.documentId ?? a.productId ?? a.id)) : Number.MAX_SAFE_INTEGER;
-          const bi = orderIndex.has(String(b.documentId ?? b.productId ?? b.id)) ? orderIndex.get(String(b.documentId ?? b.productId ?? b.id)) : Number.MAX_SAFE_INTEGER;
+          const ai = orderIndex.has(String(a.documentId ?? a.productId ?? a.id))
+            ? orderIndex.get(String(a.documentId ?? a.productId ?? a.id))
+            : Number.MAX_SAFE_INTEGER;
+          const bi = orderIndex.has(String(b.documentId ?? b.productId ?? b.id))
+            ? orderIndex.get(String(b.documentId ?? b.productId ?? b.id))
+            : Number.MAX_SAFE_INTEGER;
           return ai - bi;
         });
       }
@@ -133,7 +231,7 @@ export function CartProvider({ children }) {
 
     if (!profile?.documentId) {
       const items = getGuestCart();
-      const existing = items.find(i => i.productId === product.id);
+      const existing = items.find((i) => i.productId === product.id);
 
       if (existing) {
         existing.quantity += quantity;
@@ -206,7 +304,7 @@ export function CartProvider({ children }) {
 
     // 🟡 Guest
     if (!profile?.documentId) {
-      const items = getGuestCart().map(item =>
+      const items = getGuestCart().map((item) =>
         item.productId === itemId
           ? { ...item, quantity: newQty, subTotal: newQty * item.unitPrice }
           : item
@@ -218,11 +316,11 @@ export function CartProvider({ children }) {
     }
 
     const prevItems = cartItems.slice(); // snapshot to preserve order
-    const item = prevItems.find(i => String(i.documentId) === String(itemId));
+    const item = prevItems.find((i) => String(i.documentId) === String(itemId));
     if (!item) return;
 
     // optimistic update (preserve array order using map)
-    const updatedOptimistic = prevItems.map(it =>
+    const updatedOptimistic = prevItems.map((it) =>
       String(it.documentId) === String(itemId)
         ? { ...it, quantity: newQty, subTotal: newQty * it.unitPrice }
         : it
@@ -256,16 +354,15 @@ export function CartProvider({ children }) {
   const removeFromCart = async (id) => {
     // 🟡 Guest
     if (!profile?.documentId) {
-      const items = getGuestCart().filter(i => i.productId !== id);
+      const items = getGuestCart().filter((i) => i.productId !== id);
       saveGuestCart(items);
       setCartItems(items);
       return;
     }
 
-    await axios.delete(
-      `${API_URL}/api/cart-items/${id}`,
-      { headers: { Authorization: `Bearer ${STRAPI_TOKEN}` } }
-    );
+    await axios.delete(`${API_URL}/api/cart-items/${id}`, {
+      headers: { Authorization: `Bearer ${STRAPI_TOKEN}` },
+    });
 
     await fetchCartItems(cartDocumentId);
   };
@@ -274,7 +371,6 @@ export function CartProvider({ children }) {
      6️⃣ CLEAR CART
   ----------------------------------------- */
   const clearCart = async () => {
-
     if (!profile?.documentId) {
       clearGuestCartStorage();
       setCartItems([]);
@@ -289,7 +385,7 @@ export function CartProvider({ children }) {
     );
 
     await Promise.all(
-      res.data.data.map(item =>
+      res.data.data.map((item) =>
         axios.delete(`${API_URL}/api/cart-items/${item.documentId}`, {
           headers: { Authorization: `Bearer ${STRAPI_TOKEN}` },
         })
@@ -303,10 +399,12 @@ export function CartProvider({ children }) {
     <CartContext.Provider
       value={{
         cartItems,
+        cartDocumentId,
         addToCart,
         updateQuantity,
         removeFromCart,
         clearCart,
+        mergeGuestCartToServer, // expose merge function to be called at checkout
         loading,
       }}
     >
@@ -320,7 +418,3 @@ export function useCart() {
   if (!context) throw new Error("useCart must be used inside CartProvider");
   return context;
 }
-
-
-
-
