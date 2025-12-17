@@ -391,12 +391,26 @@ export default function ProductPage() {
           </Box>
 
           {/* Product Name */}
-          <Typography
-            variant="h5"
-            sx={{ fontWeight: "bold", textAlign: "center", mb: 1 }}
-          >
-            {product_name}
-          </Typography>
+          <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 1, mb: 1 }}>
+            <Typography
+              variant="h5"
+              sx={{ fontWeight: "bold", textAlign: "center" }}
+            >
+              {product_name}
+            </Typography>
+            <IconButton
+              onClick={() => toggleFavorite(productData, "product")}
+              color="secondary"
+              aria-label="toggle-favourite"
+              sx={{ p: 0 }}
+            >
+              {isFavorite(productData, "product") ? (
+                <FavoriteIcon color="error" />
+              ) : (
+                <FavoriteBorderIcon />
+              )}
+            </IconButton>
+          </Box>
 
           {/* Ratings */}
           <Box sx={{ textAlign: "center", mb: 2 }}>
@@ -423,7 +437,7 @@ export default function ProductPage() {
             ${getPriceNumber(product_price).toFixed(2)}
           </Typography>
 
-          {/* Quantity Controller, Add to Cart, and Favorite Button */}
+          {/* Quantity Controller and Add to Cart */}
           <Box
             sx={{
               display: "flex",
@@ -449,17 +463,6 @@ export default function ProductPage() {
             >
               {cartButton_description}
             </Button>
-            <IconButton
-              onClick={() => toggleFavorite(productData, "product")}
-              color="secondary"
-              aria-label="toggle-favourite"
-            >
-              {isFavorite(productData, "product") ? (
-                <FavoriteIcon color="error" />
-              ) : (
-                <FavoriteBorderIcon />
-              )}
-            </IconButton>
           </Box>
 
           {/* Leave a Review Button */}
