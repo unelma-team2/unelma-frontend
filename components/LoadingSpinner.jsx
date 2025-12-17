@@ -16,8 +16,8 @@ export default function LoadingSpinner() {
         sx={{
           width: 50,
           height: 50,
-          border: "4px solid" + theme.palette.background.lightBlue,
-          borderTop: "4px solid" + theme.palette.primary.blue1,
+          border: "4px solid" + theme.palette.section.careers.pastel,
+          borderTop: "4px solid" + theme.palette.section.shopOrder.pastel,
           borderRadius: "50%",
           animation: "spin 1s linear infinite",
         }}

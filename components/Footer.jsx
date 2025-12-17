@@ -17,7 +17,7 @@ export default function Footer() {
     display: "inline-block",
     transition: "color 0.18s ease",
     "&:hover": {
-      color: theme.palette.primary.blue,
+      color: theme.palette.section.caseStudies.main,
       transform: "scale(1.05)",
     },
   }
@@ -27,12 +27,10 @@ export default function Footer() {
       component="footer"
       sx={{
         background: "linear-gradient(180deg, #FFDDBB 0%, #FFBBBB 100%)",
-        //background: "linear-gradient(180deg, #FFDDBB 0%, #FFE0CC 30%, #FFBBBB 100%)",
-
         color: theme.palette.primary.main,
         borderTop: 2,
         borderColor: theme.palette.primary.main,
-        boxShadow: `-10px -8px 0px ${theme.palette.primary.blue2}`,
+        boxShadow: `inset 0px -8px 0px ${theme.palette.section.careers.pastel}, inset -2px -2px 0px ${theme.palette.section.contact.pastel}`,
         mt: { xs: 8, sm: 12, md: 18 },
       }}
     >

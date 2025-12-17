@@ -5,7 +5,7 @@ import EmotionRegistry from "@/providers/EmotionRegistry";
 import ThemeRegistry from "@/providers/ThemeRegistry";
 import ClientLayoutWrapper from "@/components/ClientLayoutWrapper";
 import { Box } from "@mui/material";
-import { CartProvider } from "@/context/CartContext"; // Import CartProvider
+import { CartProvider } from "./context/CartContext"; // Import CartProvider
 import { AuthProvider } from "./context/AuthContext";
 import { UserProvider } from "./context/UserContext";
 
