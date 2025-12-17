@@ -268,7 +268,7 @@ export default function CartPage() {
             sx={{ mt: 3, minWidth: 200, width: { xs: "100%", sm: "auto" } }}
             onClick={() => {
               if (!user) {
-                handleRequireLogin();
+                handleRequireLogin("/checkout");
               } else {
                 router.push("/checkout");
               }
