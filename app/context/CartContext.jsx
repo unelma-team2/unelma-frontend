@@ -87,7 +87,8 @@ export function CartProvider({ children }) {
   /* -----------------------------------------
      2️⃣ FETCH CART ITEMS
   ----------------------------------------- */
-  const fetchCartItems = async (cartId) => {
+  // optional prevOrderArray: array of items (snapshot) used to preserve order after server refresh
+  const fetchCartItems = async (cartId, prevOrderArray = []) => {
     if (!cartId) return;
 
     try {
@@ -96,17 +97,28 @@ export function CartProvider({ children }) {
         { headers: { Authorization: `Bearer ${STRAPI_TOKEN}` } }
       );
 
-      setCartItems(
-        res.data.data.map(item => ({
-          id: item.id,
-          documentId: item.documentId,
-          productId: item.product_id,
-          name: item.product_name,
-          quantity: item.quantity,
-          unitPrice: item.unitPrice,
-          subTotal: item.subTotal,
-        }))
-      );
+      const serverItems = res.data.data.map(item => ({
+        id: item.id,
+        documentId: item.documentId,
+        productId: item.product_id,
+        name: item.product_name,
+        quantity: item.quantity,
+        unitPrice: item.unitPrice,
+        subTotal: item.subTotal,
+      }));
+
+      // preserve previous order if available (match by documentId/productId/id)
+      if (Array.isArray(prevOrderArray) && prevOrderArray.length) {
+        const prevOrder = prevOrderArray.map(i => String(i.documentId ?? i.productId ?? i.id));
+        const orderIndex = new Map(prevOrder.map((id, idx) => [id, idx]));
+        serverItems.sort((a, b) => {
+          const ai = orderIndex.has(String(a.documentId ?? a.productId ?? a.id)) ? orderIndex.get(String(a.documentId ?? a.productId ?? a.id)) : Number.MAX_SAFE_INTEGER;
+          const bi = orderIndex.has(String(b.documentId ?? b.productId ?? b.id)) ? orderIndex.get(String(b.documentId ?? b.productId ?? b.id)) : Number.MAX_SAFE_INTEGER;
+          return ai - bi;
+        });
+      }
+
+      setCartItems(serverItems);
     } catch (err) {
       console.error("Fetch cart items failed:", err.response?.data || err);
     }
@@ -116,15 +128,13 @@ export function CartProvider({ children }) {
      3️⃣ ADD TO CART
   ----------------------------------------- */
   const addToCart = async (product) => {
-    // if (!cartDocumentId || !profile?.documentId) return;
-
     const quantity = product.quantity || 1;
     const unitPrice = Number(product.unitPrice);
 
     if (!profile?.documentId) {
       const items = getGuestCart();
       const existing = items.find(i => i.productId === product.id);
-  
+
       if (existing) {
         existing.quantity += quantity;
         existing.subTotal = existing.quantity * existing.unitPrice;
@@ -137,7 +147,7 @@ export function CartProvider({ children }) {
           subTotal: quantity * unitPrice,
         });
       }
-  
+
       saveGuestCart(items);
       setCartItems(items);
       return;
@@ -195,22 +205,29 @@ export function CartProvider({ children }) {
     const newQty = Math.max(1, quantity);
 
     // 🟡 Guest
-  if (!profile?.documentId) {
-    const items = getGuestCart().map(item =>
-      item.productId === itemId
-        ? { ...item, quantity: newQty, subTotal: newQty * item.unitPrice }
-        : item
-    );
+    if (!profile?.documentId) {
+      const items = getGuestCart().map(item =>
+        item.productId === itemId
+          ? { ...item, quantity: newQty, subTotal: newQty * item.unitPrice }
+          : item
+      );
 
-    saveGuestCart(items);
-    setCartItems(items);
-    return;
-  }
+      saveGuestCart(items);
+      setCartItems(items);
+      return;
+    }
 
-
-    const item = cartItems.find(i => i.documentId === itemId);
+    const prevItems = cartItems.slice(); // snapshot to preserve order
+    const item = prevItems.find(i => String(i.documentId) === String(itemId));
     if (!item) return;
 
+    // optimistic update (preserve array order using map)
+    const updatedOptimistic = prevItems.map(it =>
+      String(it.documentId) === String(itemId)
+        ? { ...it, quantity: newQty, subTotal: newQty * it.unitPrice }
+        : it
+    );
+    setCartItems(updatedOptimistic);
 
     try {
       await axios.put(
@@ -224,9 +241,12 @@ export function CartProvider({ children }) {
         { headers: { Authorization: `Bearer ${STRAPI_TOKEN}` } }
       );
 
-      await fetchCartItems(cartDocumentId);
+      // re-fetch server state but preserve previous order using prevItems snapshot
+      await fetchCartItems(cartDocumentId, prevItems);
     } catch (err) {
       console.error("Update quantity failed:", err.response?.data || err);
+      // revert optimistic update on failure
+      setCartItems(prevItems);
     }
   };
 
@@ -235,20 +255,19 @@ export function CartProvider({ children }) {
   ----------------------------------------- */
   const removeFromCart = async (id) => {
     // 🟡 Guest
-  if (!profile?.documentId) {
-    const items = getGuestCart().filter(i => i.productId !== id);
-    saveGuestCart(items);
-    setCartItems(items);
-    return;
-  }
-    
-      await axios.delete(
-        `${API_URL}/api/cart-items/${id}`,
-        { headers: { Authorization: `Bearer ${STRAPI_TOKEN}` } }
-      );
+    if (!profile?.documentId) {
+      const items = getGuestCart().filter(i => i.productId !== id);
+      saveGuestCart(items);
+      setCartItems(items);
+      return;
+    }
 
-      await fetchCartItems(cartDocumentId);
-   
+    await axios.delete(
+      `${API_URL}/api/cart-items/${id}`,
+      { headers: { Authorization: `Bearer ${STRAPI_TOKEN}` } }
+    );
+
+    await fetchCartItems(cartDocumentId);
   };
 
   /* -----------------------------------------
@@ -264,22 +283,20 @@ export function CartProvider({ children }) {
 
     if (!cartDocumentId) return;
 
-    
-      const res = await axios.get(
-        `${API_URL}/api/cart-items?filters[cart][documentId][$eq]=${cartDocumentId}`,
-        { headers: { Authorization: `Bearer ${STRAPI_TOKEN}` } }
-      );
+    const res = await axios.get(
+      `${API_URL}/api/cart-items?filters[cart][documentId][$eq]=${cartDocumentId}`,
+      { headers: { Authorization: `Bearer ${STRAPI_TOKEN}` } }
+    );
 
-      await Promise.all(
-        res.data.data.map(item =>
-          axios.delete(`${API_URL}/api/cart-items/${item.documentId}`, {
-            headers: { Authorization: `Bearer ${STRAPI_TOKEN}` },
-          })
-        )
-      );
+    await Promise.all(
+      res.data.data.map(item =>
+        axios.delete(`${API_URL}/api/cart-items/${item.documentId}`, {
+          headers: { Authorization: `Bearer ${STRAPI_TOKEN}` },
+        })
+      )
+    );
 
-      setCartItems([]);
-  
+    setCartItems([]);
   };
 
   return (
