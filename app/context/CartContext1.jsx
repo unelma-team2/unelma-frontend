@@ -1,5 +1,7 @@
 'use client';
 
+// Working correctly for logged in users with Strapi backend
+
 import { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { useUserProfile } from "./UserContext";
@@ -8,23 +10,6 @@ const CartContext = createContext();
 
 const STRAPI_TOKEN = process.env.NEXT_PUBLIC_STRAPI_API_TOKEN;
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:1337";
-
-// Local storage key for guest cart
-const GUEST_CART_KEY = "guest_cart";
-
-const getGuestCart = () => {
-  if (typeof window === "undefined") return [];
-  return JSON.parse(localStorage.getItem(GUEST_CART_KEY) || "[]");
-};
-
-const saveGuestCart = (items) => {
-  localStorage.setItem(GUEST_CART_KEY, JSON.stringify(items));
-};
-
-const clearGuestCartStorage = () => {
-  localStorage.removeItem(GUEST_CART_KEY);
-};
-
 
 export function CartProvider({ children }) {
   const { profile } = useUserProfile();
@@ -39,7 +24,7 @@ export function CartProvider({ children }) {
   useEffect(() => {
     if (!profile?.documentId) {
       // User logged out → clear cart state
-      setCartItems(getGuestCart());
+      setCartItems([]);
       setCartDocumentId(null);
       return;
     }
@@ -116,34 +101,10 @@ export function CartProvider({ children }) {
      3️⃣ ADD TO CART
   ----------------------------------------- */
   const addToCart = async (product) => {
-    // if (!cartDocumentId || !profile?.documentId) return;
+    if (!cartDocumentId || !profile?.documentId) return;
 
     const quantity = product.quantity || 1;
     const unitPrice = Number(product.unitPrice);
-
-    if (!profile?.documentId) {
-      const items = getGuestCart();
-      const existing = items.find(i => i.productId === product.id);
-  
-      if (existing) {
-        existing.quantity += quantity;
-        existing.subTotal = existing.quantity * existing.unitPrice;
-      } else {
-        items.push({
-          productId: product.id,
-          name: product.name,
-          unitPrice,
-          quantity,
-          subTotal: quantity * unitPrice,
-        });
-      }
-  
-      saveGuestCart(items);
-      setCartItems(items);
-      return;
-    }
-
-    if (!cartDocumentId) return;
 
     try {
       const existingRes = await axios.get(
@@ -191,30 +152,15 @@ export function CartProvider({ children }) {
   /* -----------------------------------------
      4️⃣ UPDATE QUANTITY
   ----------------------------------------- */
-  const updateQuantity = async (itemId, quantity) => {
-    const newQty = Math.max(1, quantity);
-
-    // 🟡 Guest
-  if (!profile?.documentId) {
-    const items = getGuestCart().map(item =>
-      item.productId === itemId
-        ? { ...item, quantity: newQty, subTotal: newQty * item.unitPrice }
-        : item
-    );
-
-    saveGuestCart(items);
-    setCartItems(items);
-    return;
-  }
-
-
-    const item = cartItems.find(i => i.documentId === itemId);
+  const updateQuantity = async (itemDocumentId, quantity) => {
+    const item = cartItems.find(i => i.documentId === itemDocumentId);
     if (!item) return;
 
+    const newQty = Math.max(1, quantity);
 
     try {
       await axios.put(
-        `${API_URL}/api/cart-items/${itemId}`,
+        `${API_URL}/api/cart-items/${itemDocumentId}`,
         {
           data: {
             quantity: newQty,
@@ -233,38 +179,26 @@ export function CartProvider({ children }) {
   /* -----------------------------------------
      5️⃣ REMOVE ITEM
   ----------------------------------------- */
-  const removeFromCart = async (id) => {
-    // 🟡 Guest
-  if (!profile?.documentId) {
-    const items = getGuestCart().filter(i => i.productId !== id);
-    saveGuestCart(items);
-    setCartItems(items);
-    return;
-  }
-    
+  const removeFromCart = async (itemDocumentId) => {
+    try {
       await axios.delete(
-        `${API_URL}/api/cart-items/${id}`,
+        `${API_URL}/api/cart-items/${itemDocumentId}`,
         { headers: { Authorization: `Bearer ${STRAPI_TOKEN}` } }
       );
 
       await fetchCartItems(cartDocumentId);
-   
+    } catch (err) {
+      console.error("Remove item failed:", err.response?.data || err);
+    }
   };
 
   /* -----------------------------------------
      6️⃣ CLEAR CART
   ----------------------------------------- */
   const clearCart = async () => {
-
-    if (!profile?.documentId) {
-      clearGuestCartStorage();
-      setCartItems([]);
-      return;
-    }
-
     if (!cartDocumentId) return;
 
-    
+    try {
       const res = await axios.get(
         `${API_URL}/api/cart-items?filters[cart][documentId][$eq]=${cartDocumentId}`,
         { headers: { Authorization: `Bearer ${STRAPI_TOKEN}` } }
@@ -279,7 +213,9 @@ export function CartProvider({ children }) {
       );
 
       setCartItems([]);
-  
+    } catch (err) {
+      console.error("Clear cart failed:", err.response?.data || err);
+    }
   };
 
   return (
@@ -303,7 +239,3 @@ export function useCart() {
   if (!context) throw new Error("useCart must be used inside CartProvider");
   return context;
 }
-
-
-
-

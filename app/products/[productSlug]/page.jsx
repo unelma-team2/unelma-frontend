@@ -116,22 +116,24 @@ export default function ProductPage() {
     console.log("Rating submitted:", newValue);
   };
 
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
     if (!productData) return;
-
-  const quantityValue = quantity || 1;
-  const unitPriceValue = getPriceNumber(product_price);
-
-  addToCart({
-    id: productData.id,              // backend product id
-    name: product_name,
-    unitPrice: unitPriceValue,
-    quantity: quantityValue,
-  });
-
-  router.push("/cart");
+  
+    const quantityValue = quantity || 1;
+    const unitPriceValue = getPriceNumber(product_price);
+  
+    // Wait for addToCart to finish
+    await addToCart({
+      id: productData.id, // backend product id
+      name: product_name,
+      unitPrice: unitPriceValue,
+      quantity: quantityValue,
+    });
+  
+    // Now navigate to cart
+    router.push("/cart");
   };
-
+  
   const toggleFavorite = () => {
     setIsFavorite(!isFavorite);
     console.log(
