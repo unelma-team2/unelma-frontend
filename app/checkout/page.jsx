@@ -26,6 +26,11 @@ import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
 import Image from "next/image";
 import Alert from "@mui/material/Alert";
 import HeroPage from "@/components/common/HeroPage";
+import axios from "axios";
+import { useUserProfile } from "@/app/context/UserContext";
+
+const STRAPI_TOKEN = process.env.NEXT_PUBLIC_STRAPI_API_TOKEN;
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:1337";
 
 const countries = countryList().getData();
 
@@ -95,11 +100,12 @@ function generateOrderId() {
   
     const random = Math.random().toString(36).substring(2, 7).toUpperCase();
   
-    return `ORD-${ymd}-${random}`;
+    return `UNEL${ymd}${random}`;
   }
 
 export default function CheckoutPage() {
     const { cartItems, clearCart, selectedShipping, setSelectedShipping } = useCart();
+    const { profile, loading: profileLoading } = useUserProfile();
     const router = useRouter();
   
     const [showShipping, setShowShipping] = useState(false);
@@ -135,25 +141,83 @@ export default function CheckoutPage() {
     const shippingCost = Number(selectedShipping?.cost || 0);
     const grandTotal = totalPrice + taxAmount + shippingCost;
   
-    const handleConfirmOrder = () => {
-        const orderId = generateOrderId();
 
-      const orderData = {
-        orderId,
-        items: cartItems,
-        shipping: selectedShipping,
-        total: grandTotal,
-        billingAddress,
-        deliveryAddress: showShipping ? deliveryAddress : null,
-        paymentMethod: selectedPayment,
-        createdAt: new Date().toISOString(),
+    const handleConfirmOrder = async () => {
+        if (!profile) {
+          alert("User profile not loaded yet. Please try again.");
+          return;
+        }
+      
+        const orderId = generateOrderId();
+      
+        try {
+          // 1️⃣ Create the Order first
+          const orderPayload = {
+            data: {
+              order_id: orderId,
+              user_profile: profile.id, // Many-to-one relation
+              order_status: "Pending",
+              payment_method: selectedPayment,
+              subTotal: totalPrice,
+              tax: taxAmount,
+              delivery_type: selectedShipping?.delivery_type || "",
+              delivery_cost: shippingCost,
+              total: grandTotal,
+              billing_address: billingAddress,
+              delivery_address: showShipping ? deliveryAddress : null,
+            },
+          };
+      
+          const orderRes = await axios.post(`${API_URL}/api/orders`, orderPayload, {
+            headers: { Authorization: `Bearer ${STRAPI_TOKEN}` },
+          });
+      
+          const createdOrder = orderRes.data.data; // <-- Strapi order ID
+      
+          // 2️⃣ Create Order Items separately and link them to the order
+          await Promise.all(
+            cartItems.map((item) =>
+              axios.post(
+                `${API_URL}/api/order-items`,
+                {
+                  data: {
+                    order: createdOrder.id, // Link to parent order
+                    product_id: item.productId,
+                    product_name: item.name,
+                    unitPrice: item.unitPrice,
+                    quantity: item.quantity,
+                    subTotal: item.unitPrice * item.quantity,
+                  },
+                },
+                { headers: { Authorization: `Bearer ${STRAPI_TOKEN}` } }
+              )
+            )
+          );
+      
+          // 3️⃣ Clear cart & redirect
+          clearCart();
+          localStorage.removeItem("selectedShipping");
+      
+          // Save order info locally for the success page
+          localStorage.setItem(
+            "lastOrder",
+            JSON.stringify({
+              orderId: orderId,
+              total: grandTotal,
+              billingAddress,
+              deliveryAddress: showShipping ? deliveryAddress : null,
+              shipping: selectedShipping,
+              items: cartItems, // optional: for display in success page
+            })
+          );
+      
+          router.push("/order-success");
+        } catch (err) {
+          console.error("Checkout failed:", err.response?.data || err);
+          alert("Something went wrong while placing the order.");
+        }
       };
-  
-      localStorage.setItem("lastOrder", JSON.stringify(orderData));
-      clearCart();
-      localStorage.removeItem("selectedShipping");
-      router.push("/order-success");
-    };
+      
 
   return (
     <>
