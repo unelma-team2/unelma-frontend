@@ -32,6 +32,7 @@ const toSlug = (value = "") =>
 
 export default function ServicePage() {
   const { serviceSlug } = useParams();
+  const { isFavorite, toggleFavorite } = useFavorites();
   const [serviceData, setServiceData] = useState(null);
   const [relatedServices, setRelatedServices] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -150,8 +151,6 @@ export default function ServicePage() {
       </Container>
     );
   }
-
-  const { isFavorite, toggleFavorite } = useFavorites();
 
   return (
     <>
