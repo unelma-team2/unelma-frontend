@@ -1,288 +1,220 @@
 'use client';
 
-import { createContext, useContext, useState, useEffect } from "react";
-import { useUserProfile } from "./UserContext";
+// Working correctly for logged in users with Strapi backend
+
+import { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
+import { useUserProfile } from "./UserContext";
 
 const CartContext = createContext();
+
 const STRAPI_TOKEN = process.env.NEXT_PUBLIC_STRAPI_API_TOKEN;
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:1337";
 
 export function CartProvider({ children }) {
   const { profile } = useUserProfile();
+
   const [cartItems, setCartItems] = useState([]);
-  const [userCartId, setUserCartId] = useState(null);
+  const [cartDocumentId, setCartDocumentId] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  // Debugging: Log cart item IDs whenever cartItems change
+  /* -----------------------------------------
+     1️⃣ FETCH OR CREATE CART (LOGGED-IN ONLY)
+  ----------------------------------------- */
   useEffect(() => {
-    console.log("Cart item IDs:", cartItems.map(i => i.id));
-  }, [cartItems]);
+    if (!profile?.documentId) {
+      // User logged out → clear cart state
+      setCartItems([]);
+      setCartDocumentId(null);
+      return;
+    }
 
-  // Fetch or create a cart for the user
-  useEffect(() => {
-    if (!profile?.id) return;
-
-    const fetchOrCreateCart = async () => {
+    const initCart = async () => {
+      setLoading(true);
       try {
-        // 1️⃣ Fetch user's cart
+        // Fetch ACTIVE cart for this user
         const res = await axios.get(
-          `${API_URL}/api/carts?filters[user_profile][id][$eq]=${profile.id}`,
+          `${API_URL}/api/carts?filters[user_profile][documentId][$eq]=${profile.documentId}&filters[cart_status][$eq]=Active`,
           { headers: { Authorization: `Bearer ${STRAPI_TOKEN}` } }
         );
 
-        let cart;
-        if (res.data.data.length > 0) {
-          cart = res.data.data[0];
-        } else {
-          // 2️⃣ Create cart if not exists
+        let cart = res.data.data[0];
+
+        // Create cart if none exists
+        if (!cart) {
           const createRes = await axios.post(
             `${API_URL}/api/carts`,
-            { data: { user_profile: profile.id, total: 0, status: "Active" } },
+            {
+              data: {
+                user_profile: profile.documentId,
+                cart_status: "Active",
+                currency: "USD",
+                total: 0,
+              },
+            },
             { headers: { Authorization: `Bearer ${STRAPI_TOKEN}` } }
           );
           cart = createRes.data.data;
         }
 
-        setUserCartId(cart.id);
-        console.log("User cart ID:", cart.id);
+        setCartDocumentId(cart.documentId);
+        await fetchCartItems(cart.documentId);
+      } catch (err) {
+        console.error("Cart init failed:", err.response?.data || err);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-        // 3️⃣ Fetch cart items separately
-        const itemsRes = await axios.get(
-          `${API_URL}/api/cart-items?filters[cart][id][$eq]=${cart.id}`,
-          { headers: { Authorization: `Bearer ${STRAPI_TOKEN}` } }
-        );
+    initCart();
+  }, [profile]);
 
-        const items = itemsRes.data.data.map((item) => ({
-          id: item.id,                 // ✅ cart-item ID (PRIMARY)
-          productId: item.product_id,  // ✅ product ID
+  /* -----------------------------------------
+     2️⃣ FETCH CART ITEMS
+  ----------------------------------------- */
+  const fetchCartItems = async (cartId) => {
+    if (!cartId) return;
+
+    try {
+      const res = await axios.get(
+        `${API_URL}/api/cart-items?filters[cart][documentId][$eq]=${cartId}`,
+        { headers: { Authorization: `Bearer ${STRAPI_TOKEN}` } }
+      );
+
+      setCartItems(
+        res.data.data.map(item => ({
+          id: item.id,
+          documentId: item.documentId,
+          productId: item.product_id,
           name: item.product_name,
           quantity: item.quantity,
           unitPrice: item.unitPrice,
           subTotal: item.subTotal,
-        }));
-
-        setCartItems(items);
-      } catch (err) {
-        console.error("Failed to fetch/create cart:", err.response?.data || err);
-      }
-    };
-
-    fetchOrCreateCart();
-  }, [profile]);
-
-  // Refresh cart items
-  const fetchCartItems = async () => {
-    if (!userCartId) return;
-    try {
-      const res = await axios.get(
-        `${API_URL}/api/cart-items?filters[cart][id][$eq]=${userCartId}`,
-        { headers: { Authorization: `Bearer ${STRAPI_TOKEN}` } }
+        }))
       );
-
-      const items = res.data.data.map((item) => ({
-        backendId: item.id,
-        productId: item.product_id,
-        name: item.product_name,
-        quantity: item.quantity,
-        unitPrice: item.unitPrice,
-        subTotal: item.subTotal,
-      }));
-
-      setCartItems(items);
     } catch (err) {
-      console.error("Failed to fetch cart items:", err.response?.data || err);
+      console.error("Fetch cart items failed:", err.response?.data || err);
     }
   };
 
-  // Add or update a cart item
+  /* -----------------------------------------
+     3️⃣ ADD TO CART
+  ----------------------------------------- */
   const addToCart = async (product) => {
-    if (!userCartId) return;
+    if (!cartDocumentId || !profile?.documentId) return;
 
-    const quantityToAdd = product.quantity || 1;
-    const unitPrice = Number(product.unitPrice || 0);
+    const quantity = product.quantity || 1;
+    const unitPrice = Number(product.unitPrice);
 
     try {
-      // Check if product already exists
       const existingRes = await axios.get(
-        `${API_URL}/api/cart-items?filters[cart][id][$eq]=${userCartId}&filters[product_id][$eq]=${product.id}`,
+        `${API_URL}/api/cart-items?filters[cart][documentId][$eq]=${cartDocumentId}&filters[product_id][$eq]=${product.id}`,
         { headers: { Authorization: `Bearer ${STRAPI_TOKEN}` } }
       );
 
       if (existingRes.data.data.length > 0) {
         const item = existingRes.data.data[0];
-        const newQuantity = item.quantity + quantityToAdd;
-        const newSubTotal = newQuantity * unitPrice;
+        const newQty = item.quantity + quantity;
 
-        // ✅ Use put for updating
-      await axios.put(
-        `${API_URL}/api/cart-items/${item.id}`,
-        { data: { quantity: newQuantity, subTotal: newSubTotal } },
-        { headers: { Authorization: `Bearer ${STRAPI_TOKEN}` } }
-      );
+        await axios.put(
+          `${API_URL}/api/cart-items/${item.documentId}`,
+          {
+            data: {
+              quantity: newQty,
+              subTotal: newQty * unitPrice,
+            },
+          },
+          { headers: { Authorization: `Bearer ${STRAPI_TOKEN}` } }
+        );
       } else {
         await axios.post(
           `${API_URL}/api/cart-items`,
           {
             data: {
-              cart: userCartId,
+              cart: cartDocumentId,
               product_id: product.id,
               product_name: product.name,
-              quantity: quantityToAdd,
+              quantity,
               unitPrice,
-              subTotal: quantityToAdd * unitPrice,
+              subTotal: quantity * unitPrice,
             },
           },
           { headers: { Authorization: `Bearer ${STRAPI_TOKEN}` } }
         );
       }
 
-      await fetchCartItems(); // Refresh after add/update
+      await fetchCartItems(cartDocumentId);
     } catch (err) {
-      console.error("Failed to add/update cart item:", err.response?.data || err);
+      console.error("Add to cart failed:", err.response?.data || err);
     }
   };
 
-  const updateQuantity = async (cartItemId, newQuantity) => {
-    const item = cartItems.find(i => i.id === cartItemId);
+  /* -----------------------------------------
+     4️⃣ UPDATE QUANTITY
+  ----------------------------------------- */
+  const updateQuantity = async (itemDocumentId, quantity) => {
+    const item = cartItems.find(i => i.documentId === itemDocumentId);
     if (!item) return;
-  
-    const updatedQuantity = Math.max(1, newQuantity);
-    const updatedSubTotal = updatedQuantity * item.unitPrice;
-  
-    // Optimistic UI update
-    setCartItems(prev =>
-      prev.map(i =>
-        i.id === cartItemId
-          ? { ...i, quantity: updatedQuantity, subTotal: updatedSubTotal }
-          : i
-      )
-    );
-  
+
+    const newQty = Math.max(1, quantity);
+
     try {
       await axios.put(
-        `${API_URL}/api/cart-items/${cartItemId}`,
+        `${API_URL}/api/cart-items/${itemDocumentId}`,
         {
           data: {
-            quantity: updatedQuantity,
-            subTotal: updatedSubTotal,
-          }
+            quantity: newQty,
+            subTotal: newQty * item.unitPrice,
+          },
         },
-        {
-          headers: { Authorization: `Bearer ${STRAPI_TOKEN}` }
-        }
-      );
-    } catch (err) {
-      console.error("Failed to update quantity, rolling back:", err.response?.data || err);
-      fetchCartItems();
-    }
-  };
-  
-  
-
-
-
-  // const updateQuantity = async (productId, amount) => {
-  //   console.log("cart items:",cartItems);
-  //   const item = cartItems.find(i => i.id === productId);
-  //   if (!item) {
-  //     console.error("Item not found in cartItems for productId:", productId);
-  //     return;
-  //   }
-  //   console.log("Updating item backendId:", item.backendId);
-  
-  //   const newQuantity = Math.max(1, item.quantity + amount);
-  //   const newSubTotal = newQuantity * item.unitPrice;
-
-  //   console.log("put request to backendId:", item.backendId, "newQuantity:", newQuantity);
-
-  
-  //   try {
-  //     await axios.put(
-  //       `${API_URL}/api/cart-items/${item.backendId}`,
-  //       {
-  //         data: {
-  //           cart: userCartId,          // cart relation
-  //           product_id: item.id,
-  //           product_name: item.name,
-  //           quantity: newQuantity,
-  //           unitPrice: item.unitPrice,
-  //           subTotal: newSubTotal,
-  //         }
-  //       },
-  //       { headers: { Authorization: `Bearer ${STRAPI_TOKEN}` } }
-  //     );
-
-  //     console.log("after put request to backendId:", item.backendId, "newQuantity:", newQuantity);
-
-
-  
-  //     // Update frontend state
-  //     setCartItems(prev =>
-  //       prev.map(i =>
-  //         i.id === productId ? { ...i, quantity: newQuantity, subTotal: newSubTotal } : i
-  //       )
-  //     );
-  //   } catch (err) {
-  //     console.error("Failed to update quantity:", err.response?.data || err);
-  //   }
-  // };
-
-  // Remove an item
-  // const removeFromCart = async (productId) => {
-  //   try {
-  //     const itemsRes = await axios.get(
-  //       `${API_URL}/api/cart-items?filters[cart][id][$eq]=${userCartId}&filters[product_id][$eq]=${productId}`,
-  //       { headers: { Authorization: `Bearer ${STRAPI_TOKEN}` } }
-  //     );
-
-  //     if (itemsRes.data.data.length > 0) {
-  //       const itemId = itemsRes.data.data[0].id;
-  //       await axios.delete(`${API_URL}/api/cart-items/${itemId}`, {
-  //         headers: { Authorization: `Bearer ${STRAPI_TOKEN}` },
-  //       });
-  //     }
-
-  //     // Remove from frontend state
-  //     setCartItems((prev) => prev.filter((item) => item.id !== productId));
-  //   } catch (err) {
-  //     console.error("Failed to remove cart item:", err.response?.data || err);
-  //   }
-  // };
-
-  // Remove item from cart
-const removeFromCart = async (cartItemId) => {
-  // Optimistic removal
-  setCartItems(prev => prev.filter(i => i.id !== cartItemId));
-
-  try {
-    await axios.delete(
-      `${API_URL}/api/cart-items/${cartItemId}`,
-      { headers: { Authorization: `Bearer ${STRAPI_TOKEN}` } }
-    );
-  } catch (err) {
-    console.error("Failed to remove item, rolling back:", err.response?.data || err);
-    fetchCartItems();
-  }
-};
-
-
-  // Clear all items
-  const clearCart = async () => {
-    try {
-      const itemsRes = await axios.get(
-        `${API_URL}/api/cart-items?filters[cart][id][$eq]=${userCartId}`,
         { headers: { Authorization: `Bearer ${STRAPI_TOKEN}` } }
       );
 
-      for (const item of itemsRes.data.data) {
-        await axios.delete(`${API_URL}/api/cart-items/${item.id}`, {
-          headers: { Authorization: `Bearer ${STRAPI_TOKEN}` },
-        });
-      }
+      await fetchCartItems(cartDocumentId);
+    } catch (err) {
+      console.error("Update quantity failed:", err.response?.data || err);
+    }
+  };
+
+  /* -----------------------------------------
+     5️⃣ REMOVE ITEM
+  ----------------------------------------- */
+  const removeFromCart = async (itemDocumentId) => {
+    try {
+      await axios.delete(
+        `${API_URL}/api/cart-items/${itemDocumentId}`,
+        { headers: { Authorization: `Bearer ${STRAPI_TOKEN}` } }
+      );
+
+      await fetchCartItems(cartDocumentId);
+    } catch (err) {
+      console.error("Remove item failed:", err.response?.data || err);
+    }
+  };
+
+  /* -----------------------------------------
+     6️⃣ CLEAR CART
+  ----------------------------------------- */
+  const clearCart = async () => {
+    if (!cartDocumentId) return;
+
+    try {
+      const res = await axios.get(
+        `${API_URL}/api/cart-items?filters[cart][documentId][$eq]=${cartDocumentId}`,
+        { headers: { Authorization: `Bearer ${STRAPI_TOKEN}` } }
+      );
+
+      await Promise.all(
+        res.data.data.map(item =>
+          axios.delete(`${API_URL}/api/cart-items/${item.documentId}`, {
+            headers: { Authorization: `Bearer ${STRAPI_TOKEN}` },
+          })
+        )
+      );
 
       setCartItems([]);
     } catch (err) {
-      console.error("Failed to clear cart:", err.response?.data || err);
+      console.error("Clear cart failed:", err.response?.data || err);
     }
   };
 
@@ -294,7 +226,7 @@ const removeFromCart = async (cartItemId) => {
         updateQuantity,
         removeFromCart,
         clearCart,
-        userCartId,
+        loading,
       }}
     >
       {children}
@@ -304,6 +236,6 @@ const removeFromCart = async (cartItemId) => {
 
 export function useCart() {
   const context = useContext(CartContext);
-  if (!context) throw new Error("useCart must be used within CartProvider");
+  if (!context) throw new Error("useCart must be used inside CartProvider");
   return context;
 }
