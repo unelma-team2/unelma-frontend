@@ -60,7 +60,7 @@ export default function ProductCard({ product, imageUrl , apiUrl}) {
     : `${apiUrl}${product.image.url}`
   : null;
 
-  const isLiked = isFavorite(product?.id, "product");
+  const isLiked = isFavorite(product, "product");
 
   return (
     <Card sx={cardSx}>
@@ -85,17 +85,15 @@ export default function ProductCard({ product, imageUrl , apiUrl}) {
       <Box
         sx={{ display: "flex", flexDirection: "column", gap: 2.5, flexGrow: 1 }}
       >
-        {/* Centered Title */}
         <Typography variant="h4" align="center" sx={{ textAlign: "center" }}>
           {product.title || product.product_name}
         </Typography>
 
-        {/* Centered Description */}
         <Typography
           variant="body14reg"
           sx={{
             lineHeight: 1.2,
-            textAlign: "center", // Center the description text
+            textAlign: "center",
             pb: 2,
           }}
         >
@@ -103,7 +101,6 @@ export default function ProductCard({ product, imageUrl , apiUrl}) {
         </Typography>
       </Box>
 
-      {/* "Buy Online" Button */}
       <Link href={`/products/${product.slug}`} passHref>
         <Button
           sx={{
