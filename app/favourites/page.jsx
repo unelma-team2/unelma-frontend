@@ -71,9 +71,25 @@ export default function FavouritesPage() {
 
   return (
     <Box sx={{ py: 6 }}>
-      <Typography variant="h2" sx={{ mb: 2 }}>
-        Favourites
-      </Typography>
+      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
+        <Typography variant="h2">
+          Favourites
+        </Typography>
+        <Button 
+          component={Link} 
+          href="/products" 
+          variant="outlined"
+          sx={{ 
+            textTransform: "none",
+            fontWeight: 600,
+            borderRadius: "8px",
+            px: 3,
+            py: 1
+          }}
+        >
+          Back to Products & Services
+        </Button>
+      </Box>
       <Typography variant="body16reg" sx={{ color: "text.secondary", mb: 6 }}>
         Access your favourite services and products below
       </Typography>
