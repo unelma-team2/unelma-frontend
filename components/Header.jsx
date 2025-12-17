@@ -7,7 +7,7 @@ import { useFavorites } from "@/app/context/FavoritesContext";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import {
   AppBar,
   Toolbar,
@@ -52,7 +52,22 @@ export default function Header() {
   const isTablet = useMediaQuery(theme.breakpoints.between("sm", "md"));
 
   const totalQuantity = cartItems.reduce((sum, item) => sum + item.quantity, 0);
-  const favCount = favorites?.length || 0;
+
+  const favCount = useMemo(() => {
+    if (!favorites || !favorites.length) return 0;
+    const seen = new Set();
+    for (const fav of favorites) {
+      if (!fav) continue;
+      // prefer explicit key if present
+      let key = fav.key;
+      const item = fav.item;
+      if (!key && item) {
+        key = item.slug || item.id || item.attributes?.slug || item.attributes?.id || null;
+      }
+      if (key) seen.add(String(key));
+    }
+    return seen.size;
+  }, [favorites]);
 
   return (
     <AppBar
