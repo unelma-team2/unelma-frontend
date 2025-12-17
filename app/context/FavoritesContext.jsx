@@ -32,6 +32,7 @@ export function FavoritesProvider({ children }) {
       const seen = new Set();
       const normalized = [];
       parsed.forEach((fav) => {
+        if (!fav?.item || !fav?.type) return;
         const key = fav?.key || buildKey(fav?.item, fav?.type);
         if (!key || seen.has(key)) return;
         seen.add(key);
@@ -41,6 +42,9 @@ export function FavoritesProvider({ children }) {
       setFavorites(normalized);
     } catch (err) {
       console.error("Failed to load favourites:", err);
+      if (storageKey) {
+        localStorage.removeItem(storageKey);
+      }
       setFavorites([]);
     }
   }, [storageKey, user]);
@@ -87,6 +91,10 @@ export function FavoritesProvider({ children }) {
     [updateAndPersist]
   );
 
+  const clearFavorites = useCallback(() => {
+    updateAndPersist([]);
+  }, [updateAndPersist]);
+
   const isFavorite = useCallback(
     (itemOrId, type) => {
       const key =
@@ -100,8 +108,8 @@ export function FavoritesProvider({ children }) {
   );
 
   const value = useMemo(
-    () => ({ favorites, isFavorite, toggleFavorite, removeFavorite }),
-    [favorites, isFavorite, removeFavorite, toggleFavorite]
+    () => ({ favorites, isFavorite, toggleFavorite, removeFavorite, clearFavorites }),
+    [favorites, isFavorite, removeFavorite, toggleFavorite, clearFavorites]
   );
 
   return <FavoritesContext.Provider value={value}>{children}</FavoritesContext.Provider>;
