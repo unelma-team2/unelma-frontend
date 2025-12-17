@@ -1,24 +1,22 @@
-"use client";
+"use client"
 
-import React, { useState } from "react";
-import { Box, Typography, Tabs, Tab, useTheme, useMediaQuery } from "@mui/material";
-import Carousel from "@/components/Carousel.jsx";
-import WorkProjectCard from "@/components/WorkProjectCard.jsx";
+import { useState } from "react"
+import { Box, Typography, Tabs, Tab, useTheme } from "@mui/material"
+import Carousel from "@/components/Carousel.jsx"
+import WorkProjectCard from "@/components/WorkProjectCard.jsx"
 
 export default function RecentWorkSection({ works = [], categories = [], API_URL }) {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const [tab, setTab] = useState(0);
+  const theme = useTheme()
+  const [tab, setTab] = useState(0)
 
-  const handleChange = (e, newVal) => setTab(newVal);
+  const handleChange = (e, newVal) => setTab(newVal)
 
-  const filteredWorks =
-    tab === 0 ? works : works.filter((work) => work.type === categories[tab]?.name);
+  const filteredWorks = tab === 0 ? works : works.filter((work) => work.type === categories[tab]?.name)
 
-  const headerHeight = 180;
+  const headerHeight = 180
 
   return (
-    <Box sx={{ width: "100%", mt: 8 }}>
+    <Box sx={{ ...theme.mixins.sectionSpacing, width: "100%" }}>
       {/* HEADER */}
       <Box
         sx={{
@@ -32,8 +30,7 @@ export default function RecentWorkSection({ works = [], categories = [], API_URL
         <Box
           sx={{
             ...theme.mixins.homeBoxLeft,
-            boxShadow: `inset 0px -8px 0px ${theme.palette.background.lightViolet}`,
-            
+            boxShadow: `inset 0px -8px 0px ${theme.palette.section.caseStudies.main}, inset -0px -12px 0px ${theme.palette.section.caseStudies.vibrant}`,
           }}
         />
 
@@ -41,17 +38,13 @@ export default function RecentWorkSection({ works = [], categories = [], API_URL
         <Box
           sx={{
             ...theme.mixins.homeTitleRight,
-            boxShadow: `-10px -8px 0px ${theme.palette.background.lightViolet}`,
+            boxShadow: `-10px -8px 0px ${theme.palette.section.caseStudies.main}, -14px -1px 0px ${theme.palette.section.caseStudies.vibrant}`,
           }}
         >
           <Typography
-            variant="h2"
             sx={{
-              fontWeight: 700,
-              fontSize: { xs: "32pt", sm: "36pt", md: theme.typography.h2?.fontSize || "38pt" },
+              ...theme.typography.headingFont_M,
               textAlign: { xs: "center", md: "right" },
-              color: theme.palette.text.primary,
-              //marginRight: { md: "120px" },
             }}
           >
             Our Recent Projects
@@ -59,55 +52,30 @@ export default function RecentWorkSection({ works = [], categories = [], API_URL
         </Box>
 
         {/* OPTIONAL BOTTOM LINE */}
-        <Box
-          sx={{
-            ...theme.mixins.bottomLineLeft,
-          }}
-        />
+        <Box sx={{ ...theme.mixins.bottomLineLeft }} />
       </Box>
 
       {/* CONTENT BELOW HEADER */}
-      <Box
-        sx={{
-          px: { xs: 2, md: 4 },
-          maxWidth: "1200px",
-          mx: "auto",
-          mt: 18,
-        }}
-      >
-        {/* TABS */}
+      <Box sx={{ ...theme.mixins.sectionContentSpacing }}>
         <Tabs
           value={tab}
           onChange={handleChange}
           centered
           sx={{
-            mb: 8,
+            mb: 10,
             "& .MuiTabs-indicator": {
               height: 4,
-              backgroundColor: "primary.violet",
+              backgroundColor: theme.palette.primary.main,
             },
           }}
         >
           {categories.map((category, index) => (
-            <Tab
-              key={index}
-              label={category.name}
-              sx={{
-                fontSize: 18,
-                fontWeight: 700,
-                textTransform: "none",
-              }}
-            />
+            <Tab key={index} label={category.name} sx={{...theme.typography.bodyFontTitle_S, color: theme.palette.primary.main }}></Tab>
           ))}
         </Tabs>
 
-
-          <Carousel
-            items={filteredWorks}
-            renderItem={(work) => <WorkProjectCard work={work} API_URL={API_URL} />}
-          />
-      
+        <Carousel items={filteredWorks} renderItem={(work) => <WorkProjectCard work={work} API_URL={API_URL} />} />
       </Box>
     </Box>
-  );
+  )
 }

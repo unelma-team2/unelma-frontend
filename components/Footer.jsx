@@ -26,7 +26,9 @@ export default function Footer() {
     <Box
       component="footer"
       sx={{
-        bgcolor: theme.palette.background.lightBlue2,
+        background: "linear-gradient(180deg, #FFDDBB 0%, #FFBBBB 100%)",
+        //background: "linear-gradient(180deg, #FFDDBB 0%, #FFE0CC 30%, #FFBBBB 100%)",
+
         color: theme.palette.primary.main,
         borderTop: 2,
         borderColor: theme.palette.primary.main,

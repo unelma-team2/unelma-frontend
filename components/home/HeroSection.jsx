@@ -73,7 +73,7 @@ export default function HeroSection({ heroSection }) {
       {/** ---------------- TITLE (LEFT SIDE ON DESKTOP, CENTERED ON MOBILE) ---------------- */}
       <Typography
         sx={{
-          ...theme.typography.headingFontHero,
+          ...theme.typography.headingFont_XL_Hero,
           position: "absolute",
           top: { xs: "42%", sm: "65%", md: "71%" },
           left: { xs: "50%", md: "5%" },
@@ -81,7 +81,7 @@ export default function HeroSection({ heroSection }) {
           zIndex: 4,
           width: { xs: "90%", sm: "65%", md: "60%" },
           textAlign: { xs: "center", sm: "left", md: "left" },
-          color: theme.palette.section.about.main,
+          color:  "#ef2d53",
 
           pl: { xs: 0, md: 8 },
           ml: { xs: 0, md: 4 },
@@ -106,7 +106,7 @@ export default function HeroSection({ heroSection }) {
       >
         <Typography
           sx={{
-            ...theme.typography.bodyFontL,
+            ...theme.typography.bodyFont_M,
             mb: 2,
             fontWeight: 500,
             color: theme.palette.text.primary,
@@ -118,7 +118,7 @@ export default function HeroSection({ heroSection }) {
 
         <Typography
           sx={{
-            ...theme.typography.bodyFontL,
+            ...theme.typography.bodyFont_M,
             mb: 2,
             fontWeight: 500,
             color: theme.palette.text.primary,

@@ -10,17 +10,18 @@ function CustomStepIcon(props) {
   return (
     <Box
       sx={{
-        backgroundColor: theme.palette.background.default,
-        border: `2px solid ${theme.palette.primary.main}`,
+        backgroundColor: theme.palette.section.shopOrder.soft,
+        border: theme.mixins.borderStyle,
         color: theme.palette.primary.main,
-        boxShadow: `-8px -6px 0px ${theme.palette.primary.red}`,
-        width: { xs: 50, sm: 55, md: 60 },
-        height: { xs: 50, sm: 55, md: 60 },
+         boxShadow: `-4px -2px 0px  ${theme.palette.section.shopOrder.pastel}, 
+                -8px -4px 0px  ${theme.palette.section.shopOrder.vibrant}`,
+        width: { xs: 55, sm: 60, md: 70 },
+        height: { xs: 55, sm: 60, md: 70 },
         borderRadius: "50%",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        fontSize: { xs: "1.2rem", sm: "1.35rem", md: "1.5rem" },
+        fontSize: { xs: "1.4rem", sm: "1.6rem", md: "1.8rem" },
         fontWeight: "bold",
         zIndex: 1,
       }}
@@ -48,33 +49,28 @@ export default function OrderingProcess({ orderProcess }) {
       .catch((err) => setError(err))
   }, [API_URL])
 
-  if (loading) return <LoadingSpinner />
-  if (error) return <p>Error: {error.message}</p>
+  //if (loading) return <LoadingSpinner />
+  //if (error) return <p>Error: {error.message}</p>
   if (!orderProcess) return <p>No Product section found.</p>
 
   const { number, title } = orderProcess
 
   return (
     <Box
-      component="section"
       sx={{
-        paddingTop: { xs: 8, md: 10 },
-        paddingBottom: { xs: 8, md: 12 },
-        //backgroundColor: theme.palette.background.lightRed,
+        py: { xs: 8, md: 12 },
         textAlign: "center",
-        borderTop: `2px solid ${theme.palette.primary.main}`,
-        marginTop: { xs: 6, md: 12 },
-        boxShadow: `0px -8px 0px ${theme.palette.background.lightRed}`,
+        borderTop: theme.mixins.borderStyle,
+        borderBottom: "none",
+        mt: { xs: 6, md: 12 },
+        boxShadow: ` 0px -8px 0px ${theme.palette.section.shopOrder.main},  -0px -12px 0px ${theme.palette.section.shopOrder.vibrant}`,
       }}
     >
       <Container maxWidth="lg">
         <Typography
-          variant="h2"
-          component="h2"
           sx={{
-            marginBottom: { xs: 6, md: 8 },
-            fontWeight: "bold",
-            fontSize: { xs: "2rem", md: "2.5rem" },
+            ...theme.typography.headingFont_S,
+            marginBottom: { xs: 6, md: 12 },
           }}
         >
           Ordering Process
@@ -95,11 +91,11 @@ export default function OrderingProcess({ orderProcess }) {
             },
             "& .MuiStepLabel-iconContainer": {
               paddingRight: 2,
+               
             },
             "& .MuiStepLabel-label": {
-              fontSize: { xs: 16, sm: 17 },
-              fontWeight: 700,
-              color: theme.palette.primary.main,
+              fontSize: theme.typography.bodyFontTitle_L,
+              
             },
           }}
         >
@@ -129,8 +125,7 @@ export default function OrderingProcess({ orderProcess }) {
               marginTop: 3,
             },
             "& .MuiStepLabel-label": {
-              fontSize: 18,
-              fontWeight: 700,
+             ...theme.typography.bodyFontTitle_S,
               color: theme.palette.primary.main,
             },
           }}

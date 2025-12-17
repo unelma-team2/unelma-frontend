@@ -19,27 +19,9 @@ export default function SocialButtons() {
           key={item.alt}
           component="a"
           href={item.href}
+          color="socialButton"
           target="_blank"
           rel="noopener noreferrer"
-          sx={{
-            width: 70,
-            height: 70,
-            borderRadius: "50%",
-            border: `2px solid ${theme.palette.primary.main}`,
-            backgroundColor: theme.palette.background.lightRed,
-            overflow: "hidden",
-            padding: 0,
-           boxShadow: "0px 4px 4px rgba(0,0,0,0.15)",
-          transition: "box-shadow 0.3s ease",
-          transition: "0.25s ease",
-
-          "&:hover": {
-            boxShadow: "0px 6px 6px rgba(0,0,0,0.20)",
-            backgroundColor: theme.palette.primary.red,
-            transform: "scale(1.1)",
-             cursor: "pointer",
-          },
-          }}
         >
           <Image
             src={item.img}

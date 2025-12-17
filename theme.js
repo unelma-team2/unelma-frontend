@@ -29,7 +29,7 @@ const theme = createTheme({
         pastel: "#FF88CC",
         soft: "#FFBBDD",
         muted: "#AA5577",
-      }, // MAGENTA
+      },
 
       about: {
         main: "#8E24AA",
@@ -37,7 +37,7 @@ const theme = createTheme({
         pastel: "#FF88FF",
         soft: "#FFBBFF",
         muted: "#AA55AA",
-      }, // VIOLET
+      },
 
       services: {
         main: "#5E35B1",
@@ -45,7 +45,7 @@ const theme = createTheme({
         pastel: "#CC88FF",
         soft: "#DDBBFF",
         muted: "#7755AA",
-      }, // PURPLE
+      },
 
       products: {
         main: "#3949AB",
@@ -53,7 +53,7 @@ const theme = createTheme({
         pastel: "#8888FF",
         soft: "#BBBBFF",
         muted: "#5555AA",
-      }, // BLUE
+      },
 
       shopOrder: {
         main: "#1E88E5",
@@ -61,7 +61,7 @@ const theme = createTheme({
         pastel: "#88CCFF",
         soft: "#BBDDFF",
         muted: "#5577AA",
-      }, // LIGHT BLUE
+      },
 
       caseStudies: {
         main: "#26C6DA",
@@ -69,7 +69,7 @@ const theme = createTheme({
         pastel: "#88FFFF",
         soft: "#BBFFFF",
         muted: "#55AAAA",
-      }, // CYAN
+      },
 
       feedback: {
         main: "#43A047",
@@ -77,7 +77,7 @@ const theme = createTheme({
         pastel: "#88FF88",
         soft: "#BBFFBB",
         muted: "#55AA55",
-      }, // GREEN
+      },
 
       blog: {
         main: "#FFEB3B",
@@ -85,7 +85,7 @@ const theme = createTheme({
         pastel: "#FFFF88",
         soft: "#FFFFBB",
         muted: "#AAAA55",
-      }, // YELLOW
+      },
 
       careers: {
         main: "#FB8C00",
@@ -93,7 +93,7 @@ const theme = createTheme({
         pastel: "#FFCC88",
         soft: "#FFDDBB",
         muted: "#AA7755",
-      }, // ORANGE
+      },
 
       contact: {
         main: "#E53935",
@@ -101,7 +101,7 @@ const theme = createTheme({
         pastel: "#FF8888",
         soft: "#FFBBBB",
         muted: "#AA5555",
-      }, // RED
+      },
     },
 
     text: {
@@ -114,76 +114,15 @@ const theme = createTheme({
     background: {
       default: "#FFFFFF",
       paper: "#FFFFFF",
+      lightBlue: "#C9DCFF",
+      lightBlue2: "#adf3ffff",
+      lightViolet: "#dbcef7ff",
+      lightOrange: "#ffd48eff",
+      lightYellow: "#ffefb4ff",
+      lightGreen: "#caecc9ff",
+      lightRed: "#FFBCC9",
+      lightMint: "#DDFAFF",
     },
-
-    // rainbowText: {
-    //   deepViolet: { main: "#6A1B9A" },
-    //   violet: { main: "#AB47BC" },
-    //   purple: { main: "#8E24AA" },
-    //   bluePurple: { main: "#5E35B1" },
-    //   blue: { main: "#3949AB" },
-    //   lightBlue: { main: "#1E88E5" },
-    //   cyan: { main: "#26C6DA" },
-    //   greenCyan: { main: "#00ACC1" },
-    //   green: { main: "#43A047" },
-    //   yellowGreen: { main: "#C0CA33" },
-    //   yellow: { main: "#FFEB3B" },
-    //   yellowOrange: { main: "#FDD835" },
-    //   orange: { main: "#FB8C00" },
-    //   redOrange: { main: "#F4511E" },
-    //   red: { main: "#E53935" },
-    // },
-
-    //cloud: {
-    //springGreen: "#00FF80",
-    //limeGreen: "#80FF00",
-    //aquamarine: "#88FFCC",
-    //paleGreen: "#CCFF88",
-    //lightSeaGreen: "#BBFFDD",
-    //paleGreenSoft: "#DDFFBB",
-    //cadetBlue: "#55AA77",
-    //darkOliveGreen: "#77AA55",
-    //violet: { main: "#AB47BC" },
-    //deepViolet: { main: "#6A1B9A" },
-    //greenCyan: { main: "#00ACC1" },
-    //yellowGreen: { main: "#C0CA33" },
-    //yellowOrange: { main: "#FDD835" },
-    //redOrange: { main: "#F4511E" },
-
-    //  lightBlue: "#C9DCFF",
-    //   lightBlue2: "#adf3ffff",
-    //   lightViolet: "#dbcef7ff",
-    //   lightOrange: "#ffd48eff",
-    //   lightYellow: "#ffefb4ff",
-    //   lightGreen: "#caecc9ff",
-    //   lightRed: "#FFBCC9",
-    //   lightMint: "#DDFAFF",
-
-    //   yellowLight: "#ffde7dff",
-    //   yellowBright: "#FFC100",
-    //   orangeLight: "#ffb34fff",
-    //   orangeBright: "#FF700B",
-    //   redLight: "#ff5678ff",
-    //   redBright: "#FF1F4B",
-    //   redOrange: "#ED608A",
-    //   pinkBright: "#FF3DA4",
-    //   pinkViolet: "#C55FCB",
-    //   darkViolet: "#7012a2ff",
-    //   violetDark: "#7E3398",
-    //   violet: "#a454cfff",
-    //   violetMedium: "#8D45B4",
-    //   purple: "#4940CE",
-    //   blueSoft: "#6756E3",
-    //   blue: "#5662e3ff",
-    //   blueDark: "#0061D2",
-    //   blueLight: "#0462d5ff",
-    //   blueBright: "#0089D2",
-    //   blueCyan: "#00b6d6ff",
-    //   greenBright: "#77C64B",
-    //   greenSoft: "#16bb86ff",
-    //   greenDark: "#038B61",
-    //   mint: "#90F0FF",
-    // },
   },
 
   custom: {
@@ -270,14 +209,59 @@ const theme = createTheme({
     },
   },
 
- typography: {
+  typography: {
     fontFamily: bodyFont,
 
-    headingFontHero: {
+  /*  h2: {
       fontFamily: headingFont,
       fontWeight: 700,
       fontSize: {
-        xs: "3.5rem", // ~56px (scaled down from 72pt/96px)
+        xs: "2rem", // 32px
+        sm: "2.25rem", // 36px
+        md: "2.67rem", // ~43px (32pt target)
+      },
+      lineHeight: 1.2,
+      letterSpacing: "-0.005em",
+    },
+
+    h4: {
+      fontFamily: bodyFont,
+      fontWeight: 600,
+      fontSize: {
+        xs: "1.25rem", // 20px
+        sm: "1.5rem", // 24px
+        md: "1.67rem", // ~27px (20pt target)
+      },
+      lineHeight: 1.3,
+    },
+
+    body14reg: {
+      fontFamily: bodyFont,
+      fontWeight: 400,
+      fontSize: {
+        xs: "0.875rem", // 14px
+        sm: "1rem", // 16px
+        md: "1.17rem", // ~19px (14pt target)
+      },
+      lineHeight: 1.5,
+    },
+
+    bodyreg12: {
+      fontFamily: bodyFont,
+      fontWeight: 400,
+      fontSize: {
+        xs: "0.75rem", // 12px
+        sm: "0.875rem", // 14px
+        md: "1rem", // 16px (12pt target)
+      },
+      lineHeight: 1.5,
+    }, */
+
+    headingFont_XL_Hero: {
+      fontFamily: headingFont,
+      fontWeight: 700,
+      fontSize: {
+        xs: "3.5rem", // ~56px
         sm: "4.5rem", // ~72px
         md: "6rem", // 96px (72pt target)
       },
@@ -285,11 +269,11 @@ const theme = createTheme({
       letterSpacing: "-0.02em",
     },
 
-    headingFontBig: {
+    headingFont_L: {
       fontFamily: headingFont,
       fontWeight: 700,
       fontSize: {
-        xs: "3rem", // ~48px (scaled down from 64pt/85px)
+        xs: "3rem", // ~48px
         sm: "4rem", // ~64px
         md: "5.33rem", // ~85px (64pt target)
       },
@@ -297,11 +281,11 @@ const theme = createTheme({
       letterSpacing: "-0.015em",
     },
 
-    headingFontMed: {
+    headingFont_M: {
       fontFamily: headingFont,
       fontWeight: 700,
       fontSize: {
-        xs: "2.25rem", // ~36px (scaled down from 48pt/64px)
+        xs: "2.25rem", // ~36px
         sm: "3rem", // ~48px
         md: "4rem", // 64px (48pt target)
       },
@@ -309,11 +293,11 @@ const theme = createTheme({
       letterSpacing: "-0.01em",
     },
 
-    headingFontSmall: {
+    headingFont_S: {
       fontFamily: headingFont,
       fontWeight: 700,
       fontSize: {
-        xs: "1.75rem", // ~28px (scaled down from 32pt/43px)
+        xs: "1.75rem", // ~28px
         sm: "2rem", // ~32px
         md: "2.67rem", // ~43px (32pt target)
       },
@@ -321,94 +305,107 @@ const theme = createTheme({
       letterSpacing: "-0.005em",
     },
 
-    bodyFontTitleBig: {
+    bodyFontTitle_XL: {
+      fontFamily: bodyFont,
+      fontWeight: 700,
+      fontSize: {
+       fontSize: {
+        xs: "2.25rem", // 36px
+        sm: "2.5rem",  // 40px
+        md: "2.75rem", // 44px
+      },
+      },
+      lineHeight: 1.3,
+    },
+
+     bodyFontTitle_L: {
       fontFamily: bodyFont,
       fontWeight: 600,
       fontSize: {
-        xs: "1.5rem", // ~24px (scaled down from 24pt/32px)
+        xs: "1.5rem", // ~24px
         sm: "1.75rem", // ~28px
         md: "2rem", // 32px (24pt target)
       },
       lineHeight: 1.3,
     },
 
-    bodyFontCardTitle: {
+    bodyFontTitle_M_Card: {
       fontFamily: bodyFont,
-      fontWeight: 600,
+      fontWeight: 700,
       fontSize: {
-        xs: "1.25rem", // ~20px (scaled down from 20pt/27px)
+        xs: "1.25rem", // ~20px
         sm: "1.5rem", // ~24px
         md: "1.67rem", // ~27px (20pt target)
       },
       lineHeight: 1.3,
     },
 
-    bodyFontTitleSmall: {
+    bodyFontTitle_S: {
       fontFamily: bodyFont,
       fontWeight: 600,
       fontSize: {
-        xs: "1rem", // 16px (scaled down from 16pt/21px)
+        xs: "1rem", // 16px
         sm: "1.125rem", // ~18px
         md: "1.33rem", // ~21px (16pt target)
       },
       lineHeight: 1.3,
     },
 
-    bodyFontXL: {
+    bodyFont_XL: {
       fontFamily: bodyFont,
       fontWeight: 400,
       fontSize: {
-        xs: "1.125rem", // ~18px (scaled down from 18pt/24px)
+        xs: "1.125rem", // ~18px
         sm: "1.25rem", // ~20px
         md: "1.5rem", // 24px (18pt target)
+      },
+      lineHeight: 1.3,
+    },
+
+    bodyFont_L: {
+      fontFamily: bodyFont,
+      fontWeight: 500,
+      fontSize: {
+        xs: "1rem", // 16px
+        sm: "1.125rem", // ~18px
+        md: "1.33rem", // ~21px (16pt target)
+      },
+      lineHeight: 1.2,
+    },
+
+    bodyFont_M: {
+      fontFamily: bodyFont,
+      fontWeight: 500,
+      fontSize: {
+        xs: "0.875rem", // ~14px
+        sm: "1rem", // 16px
+        md: "1.17rem", // ~19px (14pt target)
+      },
+      lineHeight: 1.2,
+    },
+
+    bodyFont_S: {
+      fontFamily: bodyFont,
+      fontWeight: 400,
+      fontSize: {
+        xs: "0.75rem", // 12px
+        sm: "0.875rem", // ~14px
+        md: "1rem", // 16px (12pt target)
       },
       lineHeight: 1.1,
     },
 
-    bodyFontL: {
-      fontFamily: bodyFont,
-      fontWeight: 400,
-      fontSize: {
-        xs: "1rem", // 16px (scaled down from 16pt/21px)
-        sm: "1.125rem", // ~18px
-        md: "1.33rem", // ~21px (16pt target)
-      },
-      lineHeight: 1.5,
-    },
-
-    bodyFontM: {
-      fontFamily: bodyFont,
-      fontWeight: 400,
-      fontSize: {
-        xs: "0.875rem", // ~14px (scaled down from 14pt/19px)
-        sm: "1rem", // 16px
-        md: "1.17rem", // ~19px (14pt target)
-      },
-      lineHeight: 1.5,
-    },
-
-    bodyFontSmall: {
-      fontFamily: bodyFont,
-      fontWeight: 400,
-      fontSize: {
-        xs: "0.75rem", // 12px (scaled down from 12pt/16px)
-        sm: "0.875rem", // ~14px
-        md: "1rem", // 16px (12pt target)
-      },
-      lineHeight: 1.5,
-    },
-
-    bodyFontLabel: {
+    bodyFont_XS_Label: {
       fontFamily: bodyFont,
       fontWeight: 500,
       textTransform: "uppercase",
       letterSpacing: "0.08em",
       fontSize: {
-        xs: "0.625rem", // 10px (scaled down from 10pt/13px)
+        xs: "0.625rem", // 10px
         sm: "0.75rem", // 12px
         md: "0.83rem", // ~13px (10pt target)
       },
-      lineHeight: 1.2,
+      lineHeight: 1.1,
     },
 
     button: {
@@ -426,6 +423,20 @@ const theme = createTheme({
   },
 
   mixins: {
+    sectionSpacing: {
+      mt: { xs: 12, sm: 14, md: 20 },
+      mb: { xs: 8, sm: 10, md: 20 },
+    },
+
+    sectionContentSpacing: {
+      py: { xs: 2, md: 0 },
+      px: { xs: 2, md: 4 },
+      maxWidth: "1200px",
+      mx: "auto",
+      mt: { xs: 12, sm: 15, md: 20},
+      mb: { xs: 8, sm: 10, md: 20},
+    },
+
     homeBoxLeft: {
       position: "absolute",
       left: 0,
@@ -449,6 +460,7 @@ const theme = createTheme({
       alignItems: "flex-end",
       justifyContent: { xs: "center", md: "flex-end" },
       px: { xs: 2, md: 6 },
+      pb: { xs: 3, md: 4 },
       zIndex: 3,
     },
     homeBoxRight: {
@@ -460,7 +472,7 @@ const theme = createTheme({
       bgcolor: "transparent",
       zIndex: 1,
     },
-    homeTitleLeft: {
+     homeTitleLeft: {
       position: "absolute",
       left: 0,
       top: 0,
@@ -471,11 +483,28 @@ const theme = createTheme({
       borderRight: "2px solid #1D2340",
       borderTopRightRadius: 120,
       display: "flex",
-      alignItems: "flex-end",
+      alignItems: "center",
       justifyContent: { xs: "center", md: "flex-start" },
       px: { xs: 2, md: 6 },
       zIndex: 3,
     },
+    // homeTitleLeft: {
+    //   position: "absolute",
+    //   left: 0,
+    //   top: 0,
+    //   width: { xs: "100vw", md: "50%" },
+    //   height: "100%",
+    //   backgroundColor: "#FFFFFF",
+    //   borderTop: "2px solid #1D2340",
+    //   borderRight: "2px solid #1D2340",
+    //   borderTopRightRadius: 120,
+    //   display: "flex",
+    //   alignItems: "flex-end",
+    //   justifyContent: { xs: "center", md: "flex-start" },
+    //   px: { xs: 2, md: 6 },
+    //   pb: { xs: 3, md: 4 },
+    //   zIndex: 3,
+    // },
     bottomLineLeft: {
       position: "absolute",
       left: 0,
@@ -516,15 +545,16 @@ const theme = createTheme({
           backgroundColor: "#1D2340",
           border: "2px solid #1D2340",
           borderRadius: 8,
-          boxShadow: "0px 4px 4px rgba(0,0,0,0.15)",
-          transition: "0.25s ease",
+          boxShadow: "-4px -2px 0px  #62d3d3ff",
+          transition: "transform 0.27s ease, box-shadow 0.27s ease",
+          cursor: "pointer",
           "&:hover": {
-            boxShadow: "0px 6px 6px rgba(0,0,0,0.2)",
-            backgroundColor: "#26C6DA",
-            border: "2px solid #1D2340",
+            transform: "scale(1.07)",
             color: "#1D2340",
-            transform: "scale(1.1)",
+            backgroundColor:"#00FF80",
+            border: "2px solid #1D2340",
             cursor: "pointer",
+            boxShadow: "-6px -4px 0px #16bb86ff",
           },
         },
       },
@@ -533,8 +563,27 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           border: "2px solid #1D2340",
-          borderRadius: 4,
+          borderRadius: 2,
           boxShadow: "0px 2px 4px rgba(0,0,0,0.1)",
+        },
+      },
+    },
+    MuiTab: {
+      styleOverrides: {
+        root: {
+          fontSize: "1.125rem",
+          fontWeight: 700,
+          textTransform: "none",
+          transition: "transform 0.25s ease",
+          "&:hover": {
+            color:"#FF8000",
+
+            transform: "scale(1.05)",
+          },
+          "&.Mui-selected": {
+            color: "#FF8000",
+
+          },
         },
       },
     },
@@ -563,7 +612,7 @@ const theme = createTheme({
       styleOverrides: {
         root: ({ theme }) => ({
           marginTop: theme.spacing(1),
-          color: "#1E88E5",
+          color: "#0000FF",
           fontSize: "18px",
           fontWeight: 700,
           display: "inline-flex",
@@ -584,92 +633,94 @@ const theme = createTheme({
           },
 
           "&:hover": {
-            transform: "scale(1.1)",
+            transform: "scale(1.05)",
             textDecoration: "none",
+            color: "#0080FF",
           },
         }),
       },
     },
 
-    MuiIconButton: {
+
+     MuiIconButton: {
       styleOverrides: {
-        root: ({ theme }) => ({
-          //width: 100,
-          //height: 100,
-          //borderRadius: "50%",
-          // border: "2px solid #1D2340",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          overflow: "hidden",
-          cursor: "pointer",
-          transition: "transform 0.25s ease, box-shadow 0.25s ease",
-          "&:hover": {
-            transform: "scale(1.08)",
-            //boxShadow: "0px 6px 12px rgba(0,0,0,0.15)",
-            cursor: "pointer",
-          },
-        }),
+        root: {
+          transition: "all 0.25s ease",
+        },
       },
       variants: [
         {
           props: { color: "arrowButton" },
-          style: ({ theme }) => ({
+          style: {
             color: "#1D2340",
-            backgroundColor: "#ffffff",
+            backgroundColor: "#FFFFFF",
             borderRadius: "50%",
             width: 60,
             height: 60,
             boxShadow: "0px 4px 4px rgba(0,0,0,0.15)",
-            //transition: "transform 0.25s ease, box-shadow 0.25s ease",
             "&:hover": {
-              // transform: "scale(1.1)",
               boxShadow: "0px 6px 6px rgba(0,0,0,0.2)",
-              color: "#26C6DA",
               backgroundColor: "#1D2340",
-              border: "2px solid #1D2340",
+              color: "#00b6d6ff",
+              transform: "scale(1.1)",
             },
-          }),
+          },
         },
-        {
-          props: { color: "blogIcon2" },
-          style: ({ theme }) => ({
-            color: "#43A047",
-            backgroundColor: "none",
-            boxShadow: "none",
-            //transition: "transform 0.25s ease, box-shadow 0.25s ease",
-            "&:hover": {
-              // transform: "scale(1.1)",
-              boxShadow: "0px 6px 6px rgba(0,0,0,0.2)",
-              color: "#1D2340",
-              backgroundColor: "#26C6DA",
-              border: "2px solid #1D2340",
-              borderRadius: "50%",
-            },
-          }),
-        },
+      ],
+    },
+
+       variants: [
+      
+
+        
         {
           props: { color: "topButton" },
           style: ({ theme }) => ({
             color: "#1D2340",
-            backgroundColor: "#26C6DA",
+            background: "transparent",
             borderRadius: "50%",
-            width: 60,
-            height: 60,
-            boxShadow: "0px 4px 4px rgba(0,0,0,0.15)",
-            //transition: "transform 0.25s ease, box-shadow 0.25s ease",
+              transition: "transform 0.25s ease",
+           // width: { xs: 60, sm: 70, md: 40 },
+           // height: { xs: 60, sm: 70, md: 40 },
+            boxShadow: "none",
             "&:hover": {
-              //transform: "scale(1.1)",
-              boxShadow: "0px 6px 6px rgba(0,0,0,0.2)",
-              color: "#ff5678ff",
-              backgroundColor: "#1D2340",
-              border: "2px solid #1D2340",
+           //   boxShadow: "0px 6px 6px rgba(0,0,0,0.2)",
+            //  color: "#ff5678ff",
+              backgroundColor: "transparent",
+            borderRadius: "50%",
+              boxShadow: "none",
+           //   border: "2px solid #1D2340",
             },
           }),
         },
+        {
+       props: { color: "socialButton" },
+       style: ({ theme }) => ({
+            color: "#1D2340",
+            backgroundColor: "#BBBBFF",
+            borderRadius: "50%",
+            border: "2px solid #1D2340",
+            width: 70,
+            height: 70,
+            overflow: "hidden",
+            padding: 0,
+            transition: "all 0.25s ease",
+            boxShadow:  "-2px -2px 0px #0000FF",
+            cursor: "pointer",
+
+            "&:hover": {
+              boxShadow:
+                "-4px -4px 0px  #0000FF",
+              backgroundColor: "#8888FF",
+              transform: "scale(1.1)",
+              border: "2px solid #1D2340",
+              cursor: "pointer",
+            },
+          }),
+          },
       ],
     },
-  },
+  
 })
 
 export default theme

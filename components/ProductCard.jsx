@@ -1,104 +1,107 @@
-"use client";
+"use client"
 
-import { Card, Box, Typography, Button, useTheme } from "@mui/material";
-import Link from "next/link";
+import { Card, Box, Typography, Button, useTheme } from "@mui/material"
+import Link from "next/link"
 
-export default function ProductCard({ product, imageUrl , apiUrl}) {
-  const theme = useTheme();
-
-  const cardSx = {
-    height: 470,
-    width: 300,
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    paddingTop: 8,
-    paddingBottom: 4,
-    paddingX: 6,
-    overflow: "hidden",
-    boxShadow: `-10px -8px 0px ${theme.palette.primary.orange}`,
-    mt: 2,
-  };
-
-  const imageContainerSx = {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    height: 160,
-    width: 160,
-    maxHeight: 160,
-    maxWidth: 160,
-    minHeight: 160,
-    minWidth: 160,
-    paddingBottom: 6,
-    marginBottom: 2,
-  };
-
-  const imageSx = {
-    flexGrow: 1,
-    padding: 0.5,
-    maxWidth: "100%",
-    height: 160,
-    borderRadius: 50,
-    objectFit: "contain",
-    overflow: "hidden",
-    border: `2px solid ${theme.palette.primary.main}`,
-    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-  };
+export default function ProductCard({ product, imageUrl, apiUrl }) {
+  const theme = useTheme()
 
   const image = product.image?.url
-  ? product.image.url.startsWith("http")
-    ? product.image.url
-    : `${apiUrl}${product.image.url}`
-  : null;
+    ? product.image.url.startsWith("http")
+      ? product.image.url
+      : `${apiUrl}${product.image.url}`
+    : null
 
   return (
-    <Card sx={cardSx}>
-      <Box sx={imageContainerSx}>
-        <Box component="img" src={imageUrl ? imageUrl : image} alt={product.title} sx={imageSx} />
-      </Box>
+    <Card
+      sx={{
+        height: 480,
+        width: 300,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "space-evenly",
+        px: 4,
+        py: 2,
+        boxShadow: `-8px -6px 0px  ${theme.palette.section.products.main}`,
+        transition: "transform 0.25s ease",
+        mt: 2,
 
-      <Box
-        sx={{ display: "flex", flexDirection: "column", gap: 2.5, flexGrow: 1 }}
-      >
-        {/* Centered Title */}
-        <Typography variant="h4" align="center" sx={{ textAlign: "center" }}>
-          {product.title || product.product_name}
-        </Typography>
+        "&:hover": {
+          transform: "translateY(-4px)",
+            boxShadow: `-4px -2px 0px  ${theme.palette.section.products.main}, 
+              -10px -6px 0px  ${theme.palette.section.products.vibrant}`,
+            transition: "transform 0.25s ease",
+        },
 
-        {/* Centered Description */}
-        <Typography
-          variant="body14reg"
+        "&:hover .productImage": {
+          transform: "scale(1.08)",
+          boxShadow: `-4px -4px 0px  ${theme.palette.section.products.main}, 
+            -4px -4px 0px  ${theme.palette.section.products.vibrant}`,
+        },
+
+        "&:hover .productTitle": {
+          transform: "scale(1.05)",
+          color: theme.palette.primary.main,
+        },
+      }}
+    >
+      {/* Image — clickable */}
+      <Link href={`/products/${product.slug}`} style={{ textDecoration: "none" }}>
+        <Box
+          className="productImage"
           sx={{
-            lineHeight: 1.2,
-            textAlign: "center", // Center the description text
-            pb: 2,
+            width: 158,
+            height: 158,
+            borderRadius: 50,
+            border: theme.mixins.borderStyle,
+            boxShadow: `-4px -2px 0px  ${theme.palette.section.products.main}, `,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            overflow: "hidden",
+            mb: 2,
+            cursor: "pointer",
+            transition: "transform 0.25s ease, box-shadow 0.25s ease",
           }}
         >
-          {product.product_type}
-        </Typography>
-      </Box>
-
-      {/* "Buy Online" Button */}
-      <Link href={`/products/${product.slug}`} passHref>
-        <Button
-          sx={{
-            mt: 2,
-            alignSelf: "center",
-            px: 2,
-            py: 1,
-            fontSize: 14,
-            backgroundColor: theme.palette.primary.main,
-            color: "#fff",
-            "&:hover": {
-              backgroundColor: theme.palette.primary.dark,
-            },
-          }}
-        >
-          Buy Online
-        </Button>
+          <Box
+            component="img"
+            src={imageUrl ? imageUrl : image}
+            alt={product.title}
+            sx={{
+              maxWidth: "100%",
+              height: 160,
+              objectFit: "contain",
+              p: 0.1,
+            }}
+          />
+        </Box>
       </Link>
+
+      <Box sx={{ display: "flex", flexDirection: "column", gap: 3, height: 140, textAlign: "center" }}>
+        {/* Title — clickable */}
+        <Link href={`/products/${product.slug}`} style={{ textDecoration: "none" }}>
+          <Typography
+            className="productTitle"
+            sx={{
+              ...theme.typography.bodyFontTitle_M_Card,
+              color: "inherit",
+              transition: "transform 0.25s ease, color 0.25s ease",
+              cursor: "pointer",
+            }}
+          >
+            {product.title || product.product_name}
+          </Typography>
+        </Link>
+
+        {/* Description */}
+        <Typography sx={{ ...theme.typography.bodyFont_M, lineHeight: 1.2, pb: 2 }}>{product.product_type}</Typography>
+      </Box>
+
+      <Button href={`/products/${product.slug}`} sx={{ alignSelf: "center", px: 1.5, py: 0.8, fontSize: 14 }}>
+        Buy Online
+      </Button>
     </Card>
-  );
+  )
 }

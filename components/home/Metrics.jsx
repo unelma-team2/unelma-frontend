@@ -47,28 +47,28 @@ export default function Metrics() {
       number: 2,
       label1: "Awards",
       label2: "Won",
-      bgColor: theme.palette.section.contact.soft,
+      bgColor: theme.palette.section.contact.pastel,
       icon: "/images/icons/icons8-award-64.png",
     },
     {
       number: 17,
       label1: "Total",
       label2: "Agents",
-      bgColor: theme.palette.section.blog.soft,
+      bgColor: theme.palette.section.blog.pastel,
       icon: "/images/icons/icons8-support-64.png",
     },
     {
       number: "1 M+",
       label1: "Happy",
       label2: "Users",
-      bgColor: theme.palette.section.feedback.soft,
+      bgColor: theme.palette.section.feedback.pastel,
       icon: "/images/icons/icons8-winner-64.png",
     },
     {
       number: "3 M+",
       label1: "Total",
       label2: "Downloads",
-      bgColor: theme.palette.section.caseStudies.soft,
+      bgColor: theme.palette.section.caseStudies.pastel,
       icon: "/images/icons/icons8-downloads-48.png",
     },
   ]
@@ -152,6 +152,7 @@ export default function Metrics() {
             borderRadius: "50%",
             border: "2px solid #1D2340",
             bgcolor: theme.palette.primary.main,
+            boxShadow: `0px 0px 0px 8px ${item.bgColor}`,
             color: "#FFFFFF",
             position: "absolute",
             top: item.top,
@@ -170,14 +171,16 @@ export default function Metrics() {
               width: { xs: 35, sm: 40, md: 48 },
               height: { xs: 35, sm: 40, md: 48 },
               borderRadius: "50%",
-              bgcolor: item.bgColor,
-              border: `2px solid ${theme.palette.primary.main}`,
+              bgcolor: "#FFFFFF",
+             // border: `2px solid ${theme.palette.primary.main}`,
+               boxShadow: `0px 0px 0px 4px ${item.bgColor}`,
               position: "absolute",
               top: { xs: -10, sm: -12, md: -13 },
               left: { xs: -10, sm: -12, md: -13 },
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
+        
             }}
           >
             <Image
@@ -190,13 +193,13 @@ export default function Metrics() {
           </Box>
 
           {/* Text */}
-          <Typography sx={{ color: item.bgColor, fontWeight: 700, fontSize: { xs: 16, sm: 18, md: 20 } }}>
+          <Typography sx={{ color: "#FFFFFF", fontWeight: 700, fontSize: { xs: 16, sm: 18, md: 20 } }}>
             {item.number}
           </Typography>
-          <Typography sx={{ color: item.bgColor,fontSize: { xs: 12, sm: 13, md: 15 }, fontWeight: 500 }}>
+          <Typography sx={{ color: "#FFFFFF", fontSize: { xs: 12, sm: 13, md: 15 }, fontWeight: 500 }}>
             {item.label1}
           </Typography>
-          <Typography sx={{ color: item.bgColor, fontSize: { xs: 12, sm: 13, md: 15 }, fontWeight: 500 }}>
+          <Typography sx={{ color: "#FFFFFF", fontSize: { xs: 12, sm: 13, md: 15 }, fontWeight: 500 }}>
             {item.label2}
           </Typography>
         </Box>

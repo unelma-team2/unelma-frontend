@@ -1,30 +1,43 @@
-"use client";
+"use client"
 
-import { Box, IconButton } from "@mui/material";
-import { useTheme } from "@mui/material/styles";
-import ArrowCircleLeftRoundedIcon from '@mui/icons-material/ArrowCircleLeftRounded';
-import ArrowCircleRightRoundedIcon from '@mui/icons-material/ArrowCircleRightRounded';
+import { Box, IconButton, useTheme } from "@mui/material"
+import ArrowCircleLeftRoundedIcon from "@mui/icons-material/ArrowCircleLeftRounded"
+import ArrowCircleRightRoundedIcon from "@mui/icons-material/ArrowCircleRightRounded"
 
 export default function ArrowButtons({ onPrev, onNext }) {
-  const theme = useTheme();
+  const theme = useTheme()
 
   return (
-    <Box sx={{ my: 12, display: "flex", justifyContent: "center", gap: 24 }}>
-      <IconButton
-        aria-label="previous"
-        onClick={onPrev}
-        color="arrowButton"
+    <>
+      <Box
+        sx={{
+          position: "absolute",
+          top: "50%",
+          left: { xs: -20, sm: -30, md: -40 }, // reduced negative values to keep buttons visible
+          transform: "translateY(-50%)",
+          zIndex: 10,
+          pointerEvents: "auto",
+        }}
       >
-        <ArrowCircleLeftRoundedIcon sx={{ fontSize: 72 }} />
-      </IconButton>
+        <IconButton onClick={onPrev} color="arrowButton" aria-label="Previous">
+          <ArrowCircleLeftRoundedIcon sx={{ fontSize: 72 }} />
+        </IconButton>
+      </Box>
 
-      <IconButton
-        aria-label="next"
-        onClick={onNext}
-        color="arrowButton"
+      <Box
+        sx={{
+          position: "absolute",
+          top: "50%",
+          right: { xs: -20, sm: -30, md: -40 }, // reduced negative values to keep buttons visible
+          transform: "translateY(-50%)",
+          zIndex: 10,
+          pointerEvents: "auto",
+        }}
       >
-        <ArrowCircleRightRoundedIcon sx={{ fontSize: 72 }} />
-      </IconButton>
-    </Box>
-  );
+        <IconButton onClick={onNext} color="arrowButton" aria-label="Next">
+          <ArrowCircleRightRoundedIcon sx={{ fontSize: 72 }} />
+        </IconButton>
+      </Box>
+    </>
+  )
 }

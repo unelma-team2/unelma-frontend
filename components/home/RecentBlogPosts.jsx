@@ -158,7 +158,7 @@ export default function RecentBlogPosts() {
         <Box
           sx={{
             ...theme.mixins.homeBoxLeft,
-            boxShadow: `inset 0px -8px 0px ${theme.palette.background.lightGreen}`,
+            boxShadow: `inset 0px -8px 0px ${theme.palette.section.blog.main}, inset -0px -12px 0px ${theme.palette.section.blog.vibrant}`,
           }}
         />
 
@@ -166,17 +166,16 @@ export default function RecentBlogPosts() {
         <Box
           sx={{
             ...theme.mixins.homeTitleRight,
-            boxShadow: `-10px -8px 0px ${theme.palette.background.lightGreen}`,
+            boxShadow: `-10px -8px 0px ${theme.palette.section.blog.main}, -14px -12px 0px ${theme.palette.section.blog.vibrant}`,
           }}
         >
           <Typography
             variant="h2"
             sx={{
-              fontWeight: 700,
-              fontSize: { xs: "32pt", sm: "36pt", md: theme.typography.h2?.fontSize || "38pt" },
+              ...theme.typography.headingFont_M,
+            ...theme.typography.headingFont_M,
               textAlign: { xs: "center", md: "right" },
-              color: theme.palette.text.primary,
-              //marginRight: { md: "120px" },
+              marginRight: { md: "100px"}
             }}
           >
             Recent Blog Posts
