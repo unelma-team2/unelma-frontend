@@ -16,15 +16,42 @@ export default function FavouritesPage() {
   const { user } = useAuth();
   const [tab, setTab] = useState(0);
 
-  const favouriteProducts = useMemo(
-    () => favorites.filter((fav) => fav.type === "product").map((fav) => fav.item),
-    [favorites]
-  );
+  const getKey = (item) => {
+    if (!item) return null;
+    return (
+      item.slug || item.id || item.attributes?.slug || item.attributes?.id || null
+    );
+  };
 
-  const favouriteServices = useMemo(
-    () => favorites.filter((fav) => fav.type === "service").map((fav) => fav.item),
-    [favorites]
-  );
+  const favouriteProducts = useMemo(() => {
+    const seen = new Set();
+    const out = [];
+    for (const fav of favorites) {
+      if (fav.type !== "product") continue;
+      const item = fav.item;
+      const key = getKey(item);
+      if (!key) continue;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      out.push(item);
+    }
+    return out;
+  }, [favorites]);
+
+  const favouriteServices = useMemo(() => {
+    const seen = new Set();
+    const out = [];
+    for (const fav of favorites) {
+      if (fav.type !== "service") continue;
+      const item = fav.item;
+      const key = getKey(item);
+      if (!key) continue;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      out.push(item);
+    }
+    return out;
+  }, [favorites]);
 
   if (!user) {
     return (
@@ -78,10 +105,10 @@ function FavouriteProducts({ items }) {
           : null;
 
         return (
-          <Grid item xs={12} sm={6} md={4} key={`product-${product.id}`}>
-            <ProductCard product={product} imageUrl={imageUrl} apiUrl={API_URL} />
-          </Grid>
-        );
+                <Grid item xs={12} sm={6} md={4} key={`product-${product.id}`}>
+                  <ProductCard product={product} imageUrl={imageUrl} apiUrl={API_URL} />
+                </Grid>
+              );
       })}
     </Grid>
   );
