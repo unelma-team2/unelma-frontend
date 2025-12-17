@@ -23,7 +23,7 @@ export default function ServiceCard({ service, apiUrl, imageUrl }) {
       : `${apiUrl}${service.image.url}`
     : null;
 
-  const isLiked = isFavorite(service?.id, "service");
+  const isLiked = isFavorite(service, "service");
 
   return (
     <Card
@@ -54,7 +54,6 @@ export default function ServiceCard({ service, apiUrl, imageUrl }) {
       ) : null}
       <CardContent sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
         
-        {/* Icon circle */}
         <Box
           sx={{
             width: 100,
@@ -81,7 +80,6 @@ export default function ServiceCard({ service, apiUrl, imageUrl }) {
          
         </Box>
 
-        {/* Title */}
         <Link href={`/services/${service.slug}`} style={{ textDecoration: "none" }}>
   <Typography
     variant="h4"
@@ -100,12 +98,10 @@ export default function ServiceCard({ service, apiUrl, imageUrl }) {
   </Typography>
 </Link>
 
-        {/* Description */}
         <Typography variant="body14reg" sx={{ textAlign: "justify", mb: 3 }}>
           {service.short_description || service.description}
         </Typography>
 
-        {/* Button */}
         <Button
           href={`/contact?contactType=Price%20quote%20request&service=${encodeURIComponent(service.service_name)}`}
           sx={{ mt: "auto", alignSelf: "center", px: 1.5, py: 0.5, fontSize: 14 }}
