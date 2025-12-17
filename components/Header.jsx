@@ -3,6 +3,7 @@
 import Badge from "@mui/material/Badge";
 import { useCart } from "@/app/context/CartContext";
 import { useAuth } from "@/app/context/AuthContext";
+import { useFavorites } from "@/app/context/FavoritesContext";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -25,6 +26,8 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -39,6 +42,7 @@ const navLinks = [
 export default function Header() {
   const { user, signOut } = useAuth();
   const { cartItems } = useCart();
+  const { favorites } = useFavorites();
   const router = useRouter();
   const theme = useTheme();
 
@@ -48,6 +52,7 @@ export default function Header() {
   const isTablet = useMediaQuery(theme.breakpoints.between("sm", "md"));
 
   const totalQuantity = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+  const favCount = favorites?.length || 0;
 
   return (
     <AppBar
@@ -245,6 +250,32 @@ export default function Header() {
                   >
                     Logout
                   </Button>
+                  <IconButton
+                    aria-label="favourites"
+                    sx={{
+                      height: 45,
+                      width: 45,
+                      transition: "transform 0.25s ease",
+                      "&:hover": {
+                        backgroundColor: theme.palette.background.lightBlue,
+                        transform: "scale(1.2)",
+                      },
+                    }}
+                    onClick={() => router.push("/favourites")}
+                  >
+                    <Badge
+                      badgeContent={favCount}
+                      color="error"
+                      overlap="circular"
+                      invisible={favCount === 0}
+                    >
+                      {favCount > 0 ? (
+                        <FavoriteIcon color="error" />
+                      ) : (
+                        <FavoriteBorderIcon sx={{ color: theme.palette.grey[700] }} />
+                      )}
+                    </Badge>
+                  </IconButton>
                 </>
               ) : (
                 <Button
