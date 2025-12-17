@@ -32,6 +32,8 @@ export function CartProvider({ children }) {
   const [cartItems, setCartItems] = useState([]);
   const [cartDocumentId, setCartDocumentId] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [selectedShipping, setSelectedShipping] = useState(null);
+
 
   /* -----------------------------------------
      1️⃣ FETCH OR CREATE CART (LOGGED-IN ONLY)
@@ -291,6 +293,8 @@ export function CartProvider({ children }) {
         removeFromCart,
         clearCart,
         loading,
+        selectedShipping,
+        setSelectedShipping,
       }}
     >
       {children}

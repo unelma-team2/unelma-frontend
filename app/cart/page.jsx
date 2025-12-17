@@ -22,7 +22,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
 
 export default function CartPage() {
-  const { cartItems, removeFromCart, updateQuantity } = useCart();
+  const { cartItems, removeFromCart, updateQuantity, setSelectedShipping, selectedShipping } = useCart();
   const router = useRouter();
   const { user } = useAuth();
 
@@ -33,8 +33,7 @@ const [orderSummary, setOrderSummary] = useState(null);
 const [cartTitle, setCartTitle] = useState("");
 const [serviceDeliveryTitle, setServiceDeliveryTitle] = useState("");
 
-  const [selectedShipping, setSelectedShipping] = useState(null);
-  const [shippingCost, setShippingCost] = useState(0);
+  // const [shippingCost, setShippingCost] = useState(0);
 
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -53,16 +52,24 @@ const [serviceDeliveryTitle, setServiceDeliveryTitle] = useState("");
         setCartTitle(data.cart_title || "Your Cart");
       setServiceDeliveryTitle(data.serviceDelivery_title || "Service Delivery");
 
-      if (data.ServiceDelivery?.length > 0) {
-        setSelectedShipping(data.ServiceDelivery[0]);
-        setShippingCost(Number(data.ServiceDelivery[0].cost) || 0);
-      }
-
       })
       .catch((err) => {
         console.error(err);
       });
   }, [API_URL]);
+
+  useEffect(() => {
+    if (!delivery || delivery.length === 0) return;
+  
+    const saved = localStorage.getItem("selectedShipping");
+  
+    if (saved) {
+      setSelectedShipping(JSON.parse(saved));
+    } else {
+      setSelectedShipping(delivery[0]); // default to first option
+    }
+  }, [delivery, setSelectedShipping]);
+  
 
   const { banner_title, banner_image } = banner || {};
   const {summary_title, subTotal_title, tax_title, deliveryCost_title, total_title } = orderSummary || {};
@@ -75,11 +82,13 @@ const [serviceDeliveryTitle, setServiceDeliveryTitle] = useState("");
 
   const taxRate = 0.24;
   const taxAmount = totalPrice * taxRate;
+  const shippingCost = Number(selectedShipping?.cost || 0);// read from context
   const grandTotal = totalPrice + taxAmount + shippingCost;
+
 
   const handleShippingChange = (option) => {
     setSelectedShipping(option);
-    setShippingCost(Number(option.cost) || 0);
+    localStorage.setItem("selectedShipping", JSON.stringify(option));
   };
 
   return (
@@ -191,12 +200,12 @@ const [serviceDeliveryTitle, setServiceDeliveryTitle] = useState("");
                     <TableCell width={40}>
                       <input
                         type="radio"
-                        checked={selectedShipping.id === option.id}
+                        checked={selectedShipping?.id === option.id}
                         onChange={() => handleShippingChange(option)}
                       />
                     </TableCell>
                     <TableCell>
-                      <Typography sx={{ fontWeight: selectedShipping.id === option.id ? "bold" : "normal" }}>
+                      <Typography sx={{ fontWeight: selectedShipping?.id === option.id ? "bold" : "normal" }}>
                       {option.delivery_type}
                       </Typography>
                       <Typography variant="body2" color="text.secondary">
@@ -231,7 +240,7 @@ const [serviceDeliveryTitle, setServiceDeliveryTitle] = useState("");
                 <TableRow>
                   <TableCell>{deliveryCost_title}</TableCell>
                   <TableCell align="right">
-                    + ${shippingCost.toFixed(2)}
+                    + ${Number(selectedShipping?.cost || 0).toFixed(2)}
                   </TableCell>
                 </TableRow>
                 <TableRow>
