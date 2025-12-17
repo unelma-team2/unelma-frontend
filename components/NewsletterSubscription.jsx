@@ -17,13 +17,15 @@ export default function SubscriptionBox() {
         alignItems: "center",
         justifyContent: "center",
         p: { xs: 0.5, sm: 1, md: 1 },
-        border: "2px solid #1D2340",
+        border: "4px solid #1D2340",
         borderRadius: "4px",
         overflow: "hidden",
         maxWidth: 550,
         width: "100%",
         mx: "auto",
         color: "primary.main",
+        boxShadow: `-5px -5px 0px  ${theme.palette.section.careers.vibrant}, -10px -10px 0px ${theme.palette.section.careers.main}, -15px -15px 0px ${theme.palette.section.careers.pastel}`,
+        backgroundColor: theme.palette.section.caseStudies.soft,
       }}
     >
       {/* Left Image */}

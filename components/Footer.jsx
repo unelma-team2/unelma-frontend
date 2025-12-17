@@ -11,11 +11,10 @@ export default function Footer() {
   const theme = useTheme()
 
   const linkSx = {
-    fontSize: { xs: "12pt", sm: "11pt", md: "14pt" },
     color: theme.palette.primary.main,
     textDecoration: "none",
     display: "inline-block",
-    transition: "color 0.18s ease",
+    transition: "all 0.25s ease",
     "&:hover": {
       color: theme.palette.section.caseStudies.main,
       transform: "scale(1.05)",
@@ -28,22 +27,21 @@ export default function Footer() {
       sx={{
         background: "linear-gradient(180deg, #FFDDBB 0%, #FFBBBB 100%)",
         color: theme.palette.primary.main,
-        borderTop: 2,
-        borderColor: theme.palette.primary.main,
-        boxShadow: `inset 0px -8px 0px ${theme.palette.section.careers.pastel}, inset -2px -2px 0px ${theme.palette.section.contact.pastel}`,
+        borderTop: "2px solid #1D2340",
+        boxShadow: `0px -8px 0px ${theme.palette.section.careers.pastel}, -2px -2px 0px ${theme.palette.section.contact.pastel}`,
         mt: { xs: 8, sm: 12, md: 18 },
       }}
     >
       <Box sx={{ maxWidth: 1500, mx: "auto", px: { xs: 2, sm: 4, md: 6 }, py: { xs: 6, sm: 8, md: 10 } }}>
-        {/* Newsletter Subscription - Mobile/Tablet only */}
+        {/* Newsletter Subscription - Mobile/Tablet at top */}
         <Box sx={{ mb: { xs: 4, sm: 6 }, display: { xs: "flex", md: "none" }, justifyContent: "center" }}>
           <NewsletterSubscription />
         </Box>
 
-        <Grid container spacing={{ xs: 4, sm: 2, md: 3 }} justifyContent="space-between">
-          {/* Column 1 */}
-          <Grid item xs={12} sm={4} md={2} sx={{ order: { xs: 1, sm: 0, md: 0 } }}>
-            <Box sx={{ mb: 2 }}>
+        <Grid container spacing={{ xs: 3, sm: 4, md: 3 }} justifyContent="space-between">
+          {/* Column 1 - Logo and Main Links */}
+          <Grid item xs={12} sm={6} md={2}>
+            <Box sx={{ mb: { xs: 3, sm: 4 } }}>
               <Image
                 src="/images/logos/logo-unelma.png"
                 alt="Unelma Platforms"
@@ -57,133 +55,119 @@ export default function Footer() {
               />
             </Box>
 
-            <Box sx={{ mt: { xs: 4, sm: 8, md: 12 }  }}>
-            <Link href="#">
-              <Typography
-                variant="h4"
-                sx={{ ...linkSx, fontSize: { xs: "16pt", sm: "15pt", md: "20pt" }, mt: { xs: 4, sm: 6, md: 4 } }}
-              >
-                &#x25B8; Products
-              </Typography>
-            </Link>
-            <br />
-            <Link href="#">
-              <Typography
-                variant="h4"
-                sx={{ ...linkSx, fontSize:{ xs: "16pt", sm: "15pt", md: "20pt" }, mt: { xs: 2, sm: 3, md: 4 } }}
-              >
-                &#x25B8; Services
-              </Typography>
-            </Link>
+            <Box sx={{ mt: { xs: 4, sm: 6, md: 8 } }}>
+              <Link href="/products">
+                <Typography sx={{ ...theme.typography.bodyFontTitle_M_Card, ...linkSx }}>&#x25B8; Products</Typography>
+              </Link>
+              <br />
+              <Link href="/services">
+                <Typography sx={{ ...theme.typography.bodyFontTitle_M_Card, ...linkSx, mt: { xs: 2, sm: 2, md: 3 } }}>
+                  &#x25B8; Services
+                </Typography>
+              </Link>
             </Box>
           </Grid>
 
-          {/* Column 2 */}
-          <Grid item xs={12} sm={4} md={2} sx={{ order: { xs: 2, sm: 1, md: 1 } }}>
-            <Typography variant="h4" sx={{ mb: 2, fontSize: { xs: "16pt", sm: "15pt", md: "20pt" } }}>
-              Resources
-            </Typography>
+          {/* Column 2 - Resources & Company */}
+          <Grid item xs={6} sm={3} md={2}>
+            <Typography sx={{ ...theme.typography.bodyFontTitle_M_Card, mb: 2 }}>Resources</Typography>
 
-            <Box sx={{ mb: 4 }}>
+            <Box sx={{ mb: { xs: 3, sm: 4 } }}>
               <Link href="/blog">
-                <Typography sx={{ ...linkSx }}>&#x25B8; Blog</Typography>
+                <Typography sx={{ ...theme.typography.bodyFont_M, ...linkSx }}>&#x25B8; Blog</Typography>
               </Link>
               <br />
               <Link href="/case-studies">
-                <Typography sx={{ ...linkSx }}>&#x25B8; Case Studies</Typography>
+                <Typography sx={{ ...theme.typography.bodyFont_M, ...linkSx }}>&#x25B8; Case Studies</Typography>
               </Link>
               <br />
               <Link href="/customer-testimonials">
-                <Typography sx={{ ...linkSx }}>&#x25B8; Customer Testimonials</Typography>
+                <Typography sx={{ ...theme.typography.bodyFont_M, ...linkSx }}>&#x25B8; Testimonials</Typography>
               </Link>
               <br />
-              <Link href="https://unelmasupport.com/">
-                <Typography sx={{ ...linkSx }}>&#x25B8; Tech Support</Typography>
+              <Link href="https://unelmasupport.com/" target="_blank" rel="noopener noreferrer">
+                <Typography sx={{ ...theme.typography.bodyFont_M, ...linkSx }}>&#x25B8; Tech Support</Typography>
               </Link>
             </Box>
 
-            <Typography variant="h4" sx={{ mb: 2, fontSize: { xs: "16pt", sm: "15pt", md: "20pt" } }}>
-              Company
-            </Typography>
+            <Typography sx={{ ...theme.typography.bodyFontTitle_M_Card, mb: 2 }}>Company</Typography>
 
-            <Box sx={{ mb: 4 }}>
+            <Box>
               <Link href="/about">
-                <Typography sx={{ ...linkSx }}>&#x25B8; About Us</Typography>
+                <Typography sx={{ ...theme.typography.bodyFont_M, ...linkSx }}>&#x25B8; About Us</Typography>
               </Link>
               <br />
               <Link href="/careers">
-                <Typography sx={{ ...linkSx }}>&#x25B8; Careers</Typography>
+                <Typography sx={{ ...theme.typography.bodyFont_M, ...linkSx }}>&#x25B8; Careers</Typography>
               </Link>
               <br />
-              <Link href="/careers">
-                <Typography sx={{ ...linkSx }}>&#x25B8; Internship/Traineeship</Typography>
+              <Link href="/careers#internships">
+                <Typography sx={{ ...theme.typography.bodyFont_M, ...linkSx }}>&#x25B8; Internships</Typography>
               </Link>
             </Box>
           </Grid>
 
-          {/* Column 3 */}
-          <Grid item xs={12} sm={4} md={4} sx={{ order: { xs: 3, sm: 2, md: 2 } }}>
-            <Typography variant="h4" sx={{ mb: 2, fontSize: { xs: "16pt", sm: "15pt", md: "20pt" } }}>
-              Contact Us
-            </Typography>
+          {/* Column 3 - Contact Us */}
+          <Grid item xs={6} sm={3} md={4}>
+            <Typography sx={{ ...theme.typography.bodyFontTitle_M_Card, mb: 2 }}>Contact Us</Typography>
 
-            <Box sx={{ mb: 4 }}>
+            <Box>
               <Link href="/contact">
-                <Typography sx={{ ...linkSx }}>&#x25B8; Request a Price Quote</Typography>
+                <Typography sx={{ ...theme.typography.bodyFont_M, ...linkSx }}>&#x25B8; Price Quote</Typography>
               </Link>
               <br />
               <Link href="/contact">
-                <Typography sx={{ ...linkSx }}>&#x25B8; Send a Message/Question</Typography>
+                <Typography sx={{ ...theme.typography.bodyFont_M, ...linkSx }}>&#x25B8; Send Message</Typography>
               </Link>
               <br />
-              <Link href="/contact">
-                <Typography sx={{ ...linkSx }}>&#x25B8; Give Feedback</Typography>
+              <Link href="/contact#feedback">
+                <Typography sx={{ ...theme.typography.bodyFont_M, ...linkSx }}>&#x25B8; Give Feedback</Typography>
               </Link>
               <br />
-              <Link href="/contact">
-                <Typography sx={{ ...linkSx }}>&#x25B8; Book a Meeting</Typography>
+              <Link href="/contact#meeting">
+                <Typography sx={{ ...theme.typography.bodyFont_M, ...linkSx }}>&#x25B8; Book Meeting</Typography>
               </Link>
               <br />
-              <Link href="/contact">
-                <Typography sx={{ ...linkSx }}>&#x25B8; Our Offices</Typography>
+              <Link href="/contact#offices">
+                <Typography sx={{ ...theme.typography.bodyFont_M, ...linkSx }}>&#x25B8; Our Offices</Typography>
               </Link>
               <br />
 
-              {/* Indented office items */}
-              <Box component="span" sx={{ paddingLeft: 2.75, display: "block" }}>
+              {/* Indented office locations */}
+              <Box component="span" sx={{ pl: 2.5, display: "block" }}>
                 <Link href="/contact?map=Tallinn%20Estonia">
-                  <Typography sx={{ ...linkSx }}>&#x25B8; Northern Europe</Typography>
+                  <Typography sx={{ ...theme.typography.bodyFont_S, ...linkSx }}>&#x25B8; Northern Europe</Typography>
                 </Link>
                 <br />
                 <Link href="/contact?map=Delaware%20USA">
-                  <Typography sx={{ ...linkSx }}>&#x25B8; USA</Typography>
+                  <Typography sx={{ ...theme.typography.bodyFont_S, ...linkSx }}>&#x25B8; USA</Typography>
                 </Link>
                 <br />
                 <Link href="/contact?map=Barrie%20Ontario%20Canada">
-                  <Typography sx={{ ...linkSx }}>&#x25B8; Canada</Typography>
+                  <Typography sx={{ ...theme.typography.bodyFont_S, ...linkSx }}>&#x25B8; Canada</Typography>
                 </Link>
                 <br />
                 <Link href="/contact?map=Ratnanagar%20Chitwan%20Nepal">
-                  <Typography sx={{ ...linkSx }}>&#x25B8; South Asia</Typography>
+                  <Typography sx={{ ...theme.typography.bodyFont_S, ...linkSx }}>&#x25B8; South Asia</Typography>
                 </Link>
               </Box>
             </Box>
           </Grid>
 
-          {/* Newsletter Subscription - Desktop only */}
-          <Grid item xs={12} md={4} sx={{ display: { xs: "none", md: "block" }, order: 3 }}>
+          {/* Newsletter Subscription - Desktop only on right */}
+          <Grid item xs={12} md={4} sx={{ display: { xs: "none", md: "block" } }}>
             <NewsletterSubscription />
           </Grid>
         </Grid>
 
-        {/* Bottom Logos */}
+        {/* Social Media and Partner Logos */}
         <Box
           sx={{
             display: "flex",
             flexDirection: { xs: "column", md: "row" },
             justifyContent: "space-between",
             alignItems: "center",
-            mt: { xs: 4, md: 8 },
+            mt: { xs: 6, sm: 8, md: 10 },
             gap: { xs: 4, md: 0 },
           }}
         >
@@ -193,8 +177,9 @@ export default function Footer() {
             sx={{
               display: "flex",
               flexWrap: "wrap",
-              gap: { xs: 2, md: 5 },
+              gap: { xs: 3, sm: 4, md: 5 },
               justifyContent: { xs: "center", md: "flex-end" },
+              alignItems: "center",
             }}
           >
             {[
@@ -210,46 +195,52 @@ export default function Footer() {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  height: { xs: 80, sm: 100, md: 120 },
+                  height: { xs: 60, sm: 80, md: 100 },
+                  maxWidth: { xs: 80, sm: 120, md: 150 },
                 }}
               >
                 <Image
                   src={logo.src || "/placeholder.svg"}
                   width={logo.w}
                   height={logo.h}
-                  alt=""
+                  alt="Partner logo"
                   style={{
                     width: "auto",
-                    height: "auto",
+                    height: "100%",
                     maxWidth: "100%",
-                    maxHeight: "100%",
+                    objectFit: "contain",
                   }}
                 />
               </Box>
             ))}
           </Box>
         </Box>
+
         <Box
           sx={{
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
             gap: 1,
-            mt: 2,
+            mt: { xs: 4, sm: 5, md: 6 },
             flexWrap: "wrap",
           }}
         >
-          <Typography sx={{ fontSize: { xs: 10, sm: 11, md: 12 }, fontWeight: 500 }}>
-            © {new Date().getFullYear()} by Unelma Platforms
-          </Typography>
+          <Typography sx={theme.typography.bodyFont_S}>© {new Date().getFullYear()} by Unelma Platforms</Typography>
 
-          <Typography sx={{ fontSize: { xs: 10, sm: 11, md: 12 }, fontWeight: 500 }}>
-            • Icons by{" "}
+          <Typography sx={theme.typography.bodyFont_S}>•</Typography>
+
+          <Typography sx={theme.typography.bodyFont_S}>
+            Icons by{" "}
             <Link
               href="https://icons8.com"
               target="_blank"
               rel="noopener noreferrer"
-              style={{ textDecoration: "underline" }}
+              sx={{
+                color: theme.palette.primary.main,
+                textDecoration: "underline",
+                "&:hover": { color: theme.palette.section.caseStudies.main },
+              }}
             >
               Icons8
             </Link>

@@ -85,7 +85,7 @@ export default function RecentBlogPosts() {
 
           "&:hover .blogTitle": {
             transform: "scale(1.05)",
-            color: theme.palette.section.blog.main,
+            color: theme.palette.section.careers.vibrant,
           },
         }}
       >
