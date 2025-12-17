@@ -106,7 +106,8 @@ const [serviceDeliveryTitle, setServiceDeliveryTitle] = useState("");
 
             <TableBody>
   {cartItems.map((item) => {
-    const itemKey = item.documentId ?? item.productId;
+    // prefer server documentId when available (stable for logged-in users)
+    const itemKey = item.documentId ?? item.productId ?? item.id;
 
     return (
       <TableRow key={itemKey}>
@@ -123,9 +124,10 @@ const [serviceDeliveryTitle, setServiceDeliveryTitle] = useState("");
             <TextField
               type="number"
               value={item.quantity}
-              onChange={(e) =>
-                updateQuantity(itemKey, Number(e.target.value))
-              }
+              onChange={(e) => {
+                const val = Math.max(1, Number(e.target.value || 1));
+                updateQuantity(itemKey, val);
+              }}
               inputProps={{
                 min: 1,
                 style: { textAlign: "center", width: 60 },
