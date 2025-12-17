@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   Box,
   Typography,
@@ -86,74 +86,25 @@ function CountrySelect({ value, onChange, label = "Country" }) {
   );
 }
 
-function generateOrderId() {
-    const date = new Date();
-    const ymd =
-      date.getFullYear().toString() +
-      String(date.getMonth() + 1).padStart(2, "0") +
-      String(date.getDate()).padStart(2, "0");
-  
-    const random = Math.random().toString(36).substring(2, 7).toUpperCase();
-  
-    return `ORD-${ymd}-${random}`;
-  }
-
 export default function CheckoutPage() {
-    const { cartItems, clearCart, selectedShipping, setSelectedShipping } = useCart();
-    const router = useRouter();
-  
-    const [showShipping, setShowShipping] = useState(false);
-    const [selectedPayment, setSelectedPayment] = useState("cod");
-  
-    const [billingAddress, setBillingAddress] = useState({
-      name: "",
-      email: "",
-      phone: "",
-      street: "",
-      city: "",
-      state: "",
-      postalCode: "",
-      country: "",
-    });
-  
-    const [deliveryAddress, setDeliveryAddress] = useState({
-      name: "",
-      email: "",
-      country: "",
-    });
-  
-    useEffect(() => {
-      const saved = localStorage.getItem("selectedShipping");
-      if (saved) setSelectedShipping(JSON.parse(saved));
-    }, [setSelectedShipping]);
-  
-    const totalPrice = cartItems.reduce(
-      (sum, item) => sum + item.quantity * Number(item.unitPrice),
-      0
-    );
-    const taxAmount = totalPrice * 0.24;
-    const shippingCost = Number(selectedShipping?.cost || 0);
-    const grandTotal = totalPrice + taxAmount + shippingCost;
-  
-    const handleConfirmOrder = () => {
-        const orderId = generateOrderId();
+  const { cartItems, clearCart } = useCart();
+  const router = useRouter();
 
-      const orderData = {
-        orderId,
-        items: cartItems,
-        shipping: selectedShipping,
-        total: grandTotal,
-        billingAddress,
-        deliveryAddress: showShipping ? deliveryAddress : null,
-        paymentMethod: selectedPayment,
-        createdAt: new Date().toISOString(),
-      };
-  
-      localStorage.setItem("lastOrder", JSON.stringify(orderData));
-      clearCart();
-      localStorage.removeItem("selectedShipping");
-      router.push("/order-success");
-    };
+  const [showShipping, setShowShipping] = useState(false);
+  const [billingCountry, setBillingCountry] = useState("");
+  const [shippingCountry, setShippingCountry] = useState("");
+  const [selectedPayment, setSelectedPayment] = useState(paymentOptions[0].value);
+  const [orderSuccess, setOrderSuccess] = useState(false);
+
+  // Calculate order summary values
+  const totalPrice = cartItems.reduce(
+    (total, item) =>
+      total + (item.quantity || 1) * (Number(item.unitPrice) || 0),
+    0
+  );
+  const taxAmount = totalPrice * 0.24;
+  const shippingCost = 0; // You can update this if you have shipping logic
+  const grandTotal = totalPrice + taxAmount + shippingCost;
 
   return (
     <>
@@ -182,31 +133,17 @@ export default function CheckoutPage() {
             <Typography variant="h4" sx={{ mb: 3 }}>
               Billing Information
             </Typography>
-            <TextField fullWidth label="Name" sx={{ mb: 2 }}
-            onChange={(e) => setBillingAddress({ ...billingAddress, name: e.target.value })} />
-
-          <TextField fullWidth label="Email" sx={{ mb: 2 }}
-            onChange={(e) => setBillingAddress({ ...billingAddress, email: e.target.value })} />
-
-          <TextField fullWidth label="Phone" sx={{ mb: 2 }}
-            onChange={(e) => setBillingAddress({ ...billingAddress, phone: e.target.value })} />
-
+            <TextField fullWidth label="Name" sx={{ mb: 2 }} />
+            <TextField fullWidth label="Email" sx={{ mb: 2 }} />
+            <TextField fullWidth label="Phone" sx={{ mb: 2 }} />
             <CountrySelect
-            value={billingAddress.country}
-            onChange={(e) => setBillingAddress({ ...billingAddress, country: e.target.value })}
-          />
-            <TextField fullWidth label="Street Address" sx={{ mb: 2 }}
-            onChange={(e) => setBillingAddress({ ...billingAddress, street: e.target.value })} />
-
-          <TextField fullWidth label="City" sx={{ mb: 2 }}
-            onChange={(e) => setBillingAddress({ ...billingAddress, city: e.target.value })} />
-
-          <TextField fullWidth label="State" sx={{ mb: 2 }}
-            onChange={(e) => setBillingAddress({ ...billingAddress, state: e.target.value })} />
-
-          <TextField fullWidth label="Postal Code" sx={{ mb: 2 }}
-            onChange={(e) => setBillingAddress({ ...billingAddress, postalCode: e.target.value })} />
-
+              value={billingCountry}
+              onChange={(e) => setBillingCountry(e.target.value)}
+            />
+            <TextField fullWidth label="Street Address" sx={{ mb: 2 }} />
+            <TextField fullWidth label="City/Town" sx={{ mb: 2 }} />
+            <TextField fullWidth label="State/Province/Region" sx={{ mb: 2 }} />
+            <TextField fullWidth label="Postal Code" sx={{ mb: 2 }} />
 
             <FormControlLabel
               control={
@@ -225,16 +162,13 @@ export default function CheckoutPage() {
                 <Typography variant="h5" sx={{ mb: 2 }}>
                   Recipient Information
                 </Typography>
-                <TextField fullWidth label="Name" sx={{ mb: 2 }}
-                onChange={(e) => setDeliveryAddress({ ...deliveryAddress, name: e.target.value })} />
-
-              <TextField fullWidth label="Email" sx={{ mb: 2 }}
-                onChange={(e) => setDeliveryAddress({ ...deliveryAddress, email: e.target.value })} />
+                <TextField fullWidth label="Name" sx={{ mb: 2 }} />
+                <TextField fullWidth label="Email" sx={{ mb: 2 }} />
                 <CountrySelect
-                value={deliveryAddress.country}
-                label="Recipient Country"
-                onChange={(e) => setDeliveryAddress({ ...deliveryAddress, country: e.target.value })}
-              />
+                  value={shippingCountry}
+                  onChange={(e) => setShippingCountry(e.target.value)}
+                  label="Recipient Country"
+                />
               </Box>
             )}
           </Box>
@@ -363,7 +297,10 @@ export default function CheckoutPage() {
               variant="contained"
               color="primary"
               sx={{ mt: 3, minWidth: 200, width: { xs: "100%", sm: "auto" } }}
-              onClick={handleConfirmOrder}
+              onClick={() => {
+                clearCart();
+                router.push("/order-success");
+              }}
             >
               Confirm Order
             </Button>
