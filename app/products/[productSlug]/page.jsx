@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import { useFavorites } from "@/app/context/FavoritesContext";
 import ProductsSinglePageHero from "@/components/products/ProductsSinglePageHero";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -25,10 +26,11 @@ export default function ProductPage() {
   const { productSlug } = useParams();
   const { addToCart } = useCart();
   const router = useRouter();
+  const { isFavorite, toggleFavorite } = useFavorites();
   const [productData, setProductData] = useState(null);
   const [rating, setRating] = useState(0);
   const [quantity, setQuantity] = useState(1);
-  const [isFavorite, setIsFavorite] = useState(false);
+  
   const [selectedImage, setSelectedImage] = useState("");
   const [relatedItems, setRelatedItems] = useState([]);
 
@@ -134,14 +136,7 @@ export default function ProductPage() {
     router.push("/cart");
   };
   
-  const toggleFavorite = () => {
-    setIsFavorite(!isFavorite);
-    console.log(
-      `${productData.name} is ${
-        !isFavorite ? "added to" : "removed from"
-      } favorites.`
-    );
-  };
+  
 
   const handleImageClick = (image) => {
     setSelectedImage(image);
@@ -455,10 +450,15 @@ export default function ProductPage() {
               {cartButton_description}
             </Button>
             <IconButton
-              onClick={() => setIsFavorite(!isFavorite)}
+              onClick={() => toggleFavorite(productData, "product")}
               color="secondary"
+              aria-label="toggle-favourite"
             >
-              {isFavorite ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+              {isFavorite(productData, "product") ? (
+                <FavoriteIcon color="error" />
+              ) : (
+                <FavoriteBorderIcon />
+              )}
             </IconButton>
           </Box>
 
