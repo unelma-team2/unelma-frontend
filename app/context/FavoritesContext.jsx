@@ -5,6 +5,15 @@ import { useAuth } from "./AuthContext";
 
 const FavoritesContext = createContext(undefined);
 
+const buildKey = (item, type) => {
+  if (!item) return null;
+  const slug = item.slug || item.attributes?.slug;
+  const id = item.id || item.attributes?.id;
+  const identifier = slug || id;
+  if (!identifier) return null;
+  return `${type}-${identifier}`;
+};
+
 export function FavoritesProvider({ children }) {
   const { user } = useAuth();
   const [favorites, setFavorites] = useState([]);
@@ -19,7 +28,17 @@ export function FavoritesProvider({ children }) {
 
     try {
       const stored = storageKey ? localStorage.getItem(storageKey) : null;
-      setFavorites(stored ? JSON.parse(stored) : []);
+      const parsed = stored ? JSON.parse(stored) : [];
+      const seen = new Set();
+      const normalized = [];
+      parsed.forEach((fav) => {
+        const key = fav?.key || buildKey(fav?.item, fav?.type);
+        if (!key || seen.has(key)) return;
+        seen.add(key);
+        normalized.push({ ...fav, key });
+      });
+
+      setFavorites(normalized);
     } catch (err) {
       console.error("Failed to load favourites:", err);
       setFavorites([]);
@@ -46,9 +65,8 @@ export function FavoritesProvider({ children }) {
         return;
       }
 
-      if (!item?.id) return;
-
-      const key = `${type}-${item.id}`;
+      const key = buildKey(item, type);
+      if (!key) return;
 
       updateAndPersist((prev) => {
         const exists = prev.some((fav) => fav.key === key);
@@ -61,14 +79,23 @@ export function FavoritesProvider({ children }) {
   );
 
   const removeFavorite = useCallback(
-    (key) => {
+    (keyOrItem, type) => {
+      const key = typeof keyOrItem === "string" ? keyOrItem : buildKey(keyOrItem, type);
+      if (!key) return;
       updateAndPersist((prev) => prev.filter((fav) => fav.key !== key));
     },
     [updateAndPersist]
   );
 
   const isFavorite = useCallback(
-    (id, type) => favorites.some((fav) => fav.key === `${type}-${id}`),
+    (itemOrId, type) => {
+      const key =
+        typeof itemOrId === "string" || typeof itemOrId === "number"
+          ? `${type}-${itemOrId}`
+          : buildKey(itemOrId, type);
+      if (!key) return false;
+      return favorites.some((fav) => fav.key === key);
+    },
     [favorites]
   );
 
