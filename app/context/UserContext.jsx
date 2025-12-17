@@ -28,12 +28,12 @@ export function UserProvider({ children }) {
           }),
         });
 
-        const text = await res.text();
-        console.log('/api/user-profile raw response:', text);
-
-        if (!res.ok) throw new Error(`Failed: ${res.status} ${text}`);
-
-        const data = await res.json();
+        if (!res.ok) {
+          const errorText = await res.text(); // only read on error
+          throw new Error(`Failed: ${res.status} ${errorText}`);
+        }
+        
+        const data = await res.json(); // read ONCE
         setProfile(data);
       } catch (err) {
         console.error('Failed to fetch/create profile:', err);
