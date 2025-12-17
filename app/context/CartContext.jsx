@@ -31,6 +31,8 @@ export function CartProvider({ children }) {
   const [cartItems, setCartItems] = useState([]);
   const [cartDocumentId, setCartDocumentId] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [selectedShipping, setSelectedShipping] = useState(null);
+
 
   // Exposed helper: merge guest cart (localStorage) into server cart (Strapi).
   // Hoisted so it can be called from checkout/login flows and exposed in provider value.
@@ -406,6 +408,8 @@ export function CartProvider({ children }) {
         clearCart,
         mergeGuestCartToServer, // expose merge function to be called at checkout
         loading,
+        selectedShipping,
+        setSelectedShipping,
       }}
     >
       {children}
