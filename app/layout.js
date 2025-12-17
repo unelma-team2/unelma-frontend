@@ -1,13 +1,13 @@
-import localFont from "next/font/local"
-import { Outfit } from "next/font/google"
-import "./globals.css"
-import EmotionRegistry from "@/providers/EmotionRegistry"
-import ThemeRegistry from "@/providers/ThemeRegistry"
-import ClientLayoutWrapper from "@/components/ClientLayoutWrapper"
-import { Box } from "@mui/material"
-import { CartProvider } from "@/context/CartContext"
-import { AuthProvider } from "./context/AuthContext"
-import { UserProvider } from "./context/UserContext"
+import localFont from "next/font/local";
+import { Outfit } from "next/font/google";
+import "./globals.css";
+import EmotionRegistry from "@/providers/EmotionRegistry";
+import ThemeRegistry from "@/providers/ThemeRegistry";
+import ClientLayoutWrapper from "@/components/ClientLayoutWrapper";
+import { Box } from "@mui/material";
+import { CartProvider } from "@/context/CartContext"; // Import CartProvider
+import { AuthProvider } from "./context/AuthContext";
+import { UserProvider } from "./context/UserContext";
 
 const stackSansNotch = localFont({
   src: "../public/fonts/stack-sans-notch/StackSansNotch-VariableFont_wght.ttf",

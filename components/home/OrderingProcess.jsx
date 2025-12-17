@@ -4,8 +4,83 @@ import { useEffect, useState } from "react"
 import axios from "axios"
 import LoadingSpinner from "../LoadingSpinner"
 
+<<<<<<< HEAD
 function CustomStepIcon(props) {
   const theme = useTheme()
+=======
+import Badge from "@mui/material/Badge";
+import { useCart } from "@/app/context/CartContext";
+import { useState } from "react";
+import { useAuth } from "@/app/context/AuthContext";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import {
+  AppBar,
+  Toolbar,
+  Box,
+  Typography,
+  TextField,
+  IconButton,
+  InputAdornment,
+  Button,
+  Drawer,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+  useTheme,
+} from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
+
+const navLinks = [
+  { label: "Home", href: "/" },
+  { label: "About Us", href: "/about" },
+  { label: "Products & Services", href: "/products" },
+  { label: "Our Work", href: "/case-studies" },
+  { label: "Blog", href: "/blog" },
+  { label: "Careers", href: "/careers" },
+  { label: "Contact Us", href: "/contact" },
+];
+
+export default function Header() {
+  const { user, signOut } = useAuth();
+  const { cartItems } = useCart();
+  const router = useRouter();
+  const theme = useTheme();
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  const toggleDrawer = () => setMobileOpen(!mobileOpen);
+
+  const drawer = (
+    <Box sx={{ width: 260, p: 2 }}>
+      <List>
+        {navLinks.map((link) => (
+          <ListItem key={link.href} disablePadding>
+            <ListItemButton
+              component={Link}
+              href={link.href}
+              onClick={() => setMobileOpen(false)}
+            >
+              <ListItemText
+                primary={link.label}
+                primaryTypographyProps={{
+                  textTransform: "uppercase",
+                  fontWeight: 600,
+                }}
+              />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+    </Box>
+  );
+
+  const totalQuantity = cartItems.reduce(
+    (sum, item) => sum + item.quantity,
+    0
+  );
+>>>>>>> 368e36702497d49b444a02da4103a93b2e81d44b
 
   return (
     <Box

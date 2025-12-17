@@ -19,7 +19,7 @@ import {
   Grid,
 } from "@mui/material";
 import countryList from "react-select-country-list";
-import { useCart } from "@/context/CartContext";
+import { useCart } from "@/app/context/CartContext";
 import { useRouter } from "next/navigation";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
