@@ -13,7 +13,11 @@ import {
   Rating,
   Stack,
   Typography,
+  IconButton,
 } from "@mui/material";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import { useFavorites } from "@/app/context/FavoritesContext";
 import Link from "next/link";
 import ServicesSinglePageHero from "@/components/services/ServicesSinglePageHero";
 import ServiceCard from "@/components/ServiceCard";
@@ -146,6 +150,8 @@ export default function ServicePage() {
       </Container>
     );
   }
+
+  const { isFavorite } = useFavorites();
 
   return (
     <>
@@ -358,12 +364,20 @@ export default function ServicePage() {
               gap: 2,
             }}
           >
-            <Typography
-              variant="h6"
-              sx={{ fontWeight: 700, alignSelf: "flex-start" }}
-            >
-              {service_name}
-            </Typography>
+            <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
+              <Typography variant="h6" sx={{ fontWeight: 700 }}>{service_name}</Typography>
+              <IconButton
+                sx={{ backgroundColor: "#fff" }}
+                aria-label="toggle-favourite"
+                onClick={() => toggleFavorite(serviceData, "service")}
+              >
+                {isFavorite(serviceData, "service") ? (
+                  <FavoriteIcon color="error" />
+                ) : (
+                  <FavoriteBorderIcon />
+                )}
+              </IconButton>
+            </Box>
 
             <Typography
               variant="body2"
