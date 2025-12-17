@@ -1,13 +1,8 @@
 "use client"
-import { Box, Container, Typography, Stepper, Step, StepLabel, useTheme } from "@mui/material"
+import { Container, Typography, Stepper, Step, StepLabel, useTheme } from "@mui/material"
 import { useEffect, useState } from "react"
 import axios from "axios"
 import LoadingSpinner from "../LoadingSpinner"
-
-<<<<<<< HEAD
-function CustomStepIcon(props) {
-  const theme = useTheme()
-=======
 import Badge from "@mui/material/Badge";
 import { useCart } from "@/app/context/CartContext";
 import { useState } from "react";
@@ -80,7 +75,6 @@ export default function Header() {
     (sum, item) => sum + item.quantity,
     0
   );
->>>>>>> 368e36702497d49b444a02da4103a93b2e81d44b
 
   return (
     <Box
