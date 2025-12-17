@@ -88,8 +88,9 @@ export default function CartPage() {
     setShippingCost(Number(option.cost) || 0);
   };
 
-  const handleRequireLogin = () => {
-    router.push(`/login?next=${encodeURIComponent(path)}`);
+  // allow specifying where to return after login (default to checkout)
+  const handleRequireLogin = (nextPath = "/checkout") => {
+    router.push(`/login?next=${encodeURIComponent(nextPath)}`);
   };
 
   return (
@@ -271,7 +272,7 @@ export default function CartPage() {
             sx={{ mt: 3, minWidth: 200, width: { xs: "100%", sm: "auto" } }}
             onClick={() => {
               if (!user) {
-                handleRequireLogin();
+                handleRequireLogin("/checkout");
               } else {
                 router.push("/checkout");
               }
