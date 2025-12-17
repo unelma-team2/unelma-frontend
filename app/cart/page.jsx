@@ -1,10 +1,9 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useCart } from "@/app/context/CartContext";
-import { useRouter } from "next/navigation";
-import { useAuth } from "@/app/context/AuthContext";
-import { useUserProfile } from "@/app/context/UserContext";
+import {useRouter} from "next/navigation";
+import {useAuth} from "@/app/context/AuthContext";
 import {
   Box,
   Typography,
@@ -18,56 +17,23 @@ import {
   TextField,
   IconButton,
 } from "@mui/material";
-import HeroPage from "@/components/common/HeroPage";
+ import CartPageHero from "@/components/common/HeroPage";
 import DeleteIcon from "@mui/icons-material/Delete";
-import axios from "axios";
+
+const shippingOptions = [
+  { label: "Free Shipping", description: "Shipment will be within 10-15 Days", cost: 0 },
+  { label: "Standard Shipping", description: "Shipment will be within 5-10 Day.", cost: 5 },
+  { label: "2-Day Shipping", description: "Shipment will be within 2 Days.", cost: 10 },
+  { label: "Same day delivery", description: "Shipment will be within 1 Day.", cost: 20 },
+];
 
 export default function CartPage() {
   const { cartItems, removeFromCart, updateQuantity } = useCart();
   const router = useRouter();
   const { user } = useAuth();
 
-  const [banner, setBanner] = useState(null);
-const [delivery, setDelivery] = useState([]); // array
-const [orderSummary, setOrderSummary] = useState(null);
-
-const [cartTitle, setCartTitle] = useState("");
-const [serviceDeliveryTitle, setServiceDeliveryTitle] = useState("");
-
-  const [selectedShipping, setSelectedShipping] = useState(null);
-  const [shippingCost, setShippingCost] = useState(0);
-
-  const API_URL = process.env.NEXT_PUBLIC_API_URL;
-
-  useEffect(() => {
-
-    axios
-      .get(
-        `${API_URL}/api/cart-page?populate[CartBannerSection][populate]=*&populate[ServiceDelivery]=*&populate[OrderSummary]=*`
-      )
-      .then((res) => {
-        const data = res.data?.data || {};
-
-        setBanner(data.CartBannerSection || null);
-        setDelivery(data.ServiceDelivery || null);
-        setOrderSummary(data.OrderSummary || null);
-        setCartTitle(data.cart_title || "Your Cart");
-      setServiceDeliveryTitle(data.serviceDelivery_title || "Service Delivery");
-
-      if (data.ServiceDelivery?.length > 0) {
-        setSelectedShipping(data.ServiceDelivery[0]);
-        setShippingCost(Number(data.ServiceDelivery[0].cost) || 0);
-      }
-
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  }, [API_URL]);
-
-  const { banner_title, banner_image } = banner || {};
-  const {summary_title, subTotal_title, tax_title, deliveryCost_title, total_title } = orderSummary || {};
-
+  const [selectedShipping, setSelectedShipping] = useState(shippingOptions[0]);
+  const [shippingCost, setShippingCost] = useState(shippingOptions[0].cost);
 
   const totalPrice = cartItems.reduce(
     (total, item) => total + item.quantity * (Number(item.unitPrice) || 0),
@@ -80,32 +46,18 @@ const [serviceDeliveryTitle, setServiceDeliveryTitle] = useState("");
 
   const handleShippingChange = (option) => {
     setSelectedShipping(option);
-    setShippingCost(Number(option.cost) || 0);
+    setShippingCost(option.cost);
   };
 
   return (
     <>
-      <HeroPage
-        title={banner_title || "Cart"}
-        image1={{
-          src: "/blog/blog-hero-1.png",
-          alt: "Order Success Hero 1",
-          width: 244,
-          height: 261,
-        }}
-        image2={{
-          src: "/blog/blog-hero-2.png",
-          alt: "Order Success Hero 2",
-          width: 272,
-          height: 309,
-        }}
-      />
+      <CartPageHero />
       <Box sx={{ p: { xs: 1, sm: 2, md: 4 } }}>
         <Typography
           variant="h4"
           sx={{ mb: 3, fontSize: { xs: "1.5rem", sm: "2rem", md: "2.5rem" } }}
         >
-          {cartTitle}
+          Your Cart
         </Typography>
 
         <TableContainer sx={{ overflowX: "auto" }}>
@@ -120,66 +72,65 @@ const [serviceDeliveryTitle, setServiceDeliveryTitle] = useState("");
             </TableHead>
 
             <TableBody>
-              {cartItems.map((item) => (
-                <TableRow key={item.id}>
-                  <TableCell>{item.name}</TableCell>
+  {cartItems.map((item) => {
+    const itemKey = item.documentId ?? item.productId;
 
-                  <TableCell align="center">
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                      }}
-                    >
-                      <TextField
-                        type="number"
-                        value={item.quantity}
-                        onChange={(e) =>
-                          updateQuantity(
-                            item.id,
-                            Number(e.target.value) - item.quantity
-                          )
-                        }
-                        inputProps={{
-                          min: 1,
-                          style: { textAlign: "center", width: 60 },
-                        }}
-                        size="small"
-                      />
-                      <IconButton
-                        aria-label="delete"
-                        size="small"
-                        sx={{
-                          ml: 1,
-                          backgroundColor: "transparent",
-                          color: "black",
-                          "&:hover": {
-                            backgroundColor: "#f5f5f5",
-                            border: "1.5px solid black",
-                          },
-                        }}
-                        onClick={() => removeFromCart(item.id)}
-                      >
-                        <DeleteIcon fontSize="small" />
-                      </IconButton>
-                    </Box>
-                  </TableCell>
+    return (
+      <TableRow key={itemKey}>
+        <TableCell>{item.name}</TableCell>
 
-                  <TableCell align="center">
-                    $
-                    {item.unitPrice
-                      ? Number(item.unitPrice).toFixed(2)
-                      : "0.00"}
-                  </TableCell>
+        <TableCell align="center">
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <TextField
+              type="number"
+              value={item.quantity}
+              onChange={(e) =>
+                updateQuantity(itemKey, Number(e.target.value))
+              }
+              inputProps={{
+                min: 1,
+                style: { textAlign: "center", width: 60 },
+              }}
+              size="small"
+            />
 
-                  <TableCell align="center">
-                    $
-                    {(item.quantity * (Number(item.unitPrice) || 0)).toFixed(2)}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
+            <IconButton
+              aria-label="delete"
+              size="small"
+              sx={{
+                ml: 1,
+                backgroundColor: "transparent",
+                color: "black",
+                "&:hover": {
+                  backgroundColor: "#f5f5f5",
+                  border: "1.5px solid black",
+                },
+              }}
+              onClick={() => removeFromCart(itemKey)}
+            >
+              <DeleteIcon fontSize="small" />
+            </IconButton>
+          </Box>
+        </TableCell>
+
+        <TableCell align="center">
+          ${Number(item.unitPrice || 0).toFixed(2)}
+        </TableCell>
+
+        <TableCell align="center">
+          ${(item.quantity * Number(item.unitPrice || 0)).toFixed(2)}
+        </TableCell>
+      </TableRow>
+    );
+  })}
+</TableBody>
+
           </Table>
         </TableContainer>
 
@@ -187,7 +138,7 @@ const [serviceDeliveryTitle, setServiceDeliveryTitle] = useState("");
           Total: ${totalPrice.toFixed(2)}
         </Typography>
 
-        <Box
+         <Box
           sx={{
             mt: { xs: 3, md: 5 },
             mb: { xs: 3, md: 5 },
@@ -197,66 +148,61 @@ const [serviceDeliveryTitle, setServiceDeliveryTitle] = useState("");
           }}
         >
           <Typography variant="h6" sx={{ mb: 2 }}>
-            {serviceDeliveryTitle}
+            Shipping
           </Typography>
           <TableContainer>
             <Table>
               <TableBody>
-                {delivery.map((option) => (
-                  <TableRow key={option.id} hover>
+                {shippingOptions.map((option) => (
+                  <TableRow key={option.label} hover>
                     <TableCell width={40}>
                       <input
                         type="radio"
-                        checked={selectedShipping.id === option.id}
+                        checked={selectedShipping.label === option.label}
                         onChange={() => handleShippingChange(option)}
                       />
                     </TableCell>
                     <TableCell>
-                      <Typography
-                        sx={{
-                          fontWeight:
-                            selectedShipping.id === option.id
-                              ? "bold"
-                              : "normal",
-                        }}
-                      >
-                        {option.delivery_type}
+                      <Typography sx={{ fontWeight: selectedShipping.label === option.label ? "bold" : "normal" }}>
+                        {option.label}
                       </Typography>
                       <Typography variant="body2" color="text.secondary">
-                        {option.delivery_description}
+                        {option.description}
                       </Typography>
                     </TableCell>
-                    <TableCell align="right">${Number(option.cost).toFixed(2)}</TableCell>
+                    <TableCell align="right">
+                      ${option.cost} 
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
             </Table>
           </TableContainer>
         </Box>
-
+        
         <Box sx={{ mt: 5 }}>
           <Typography variant="h5" sx={{ mb: 2 }}>
-           { summary_title }
+            Order Summary
           </Typography>
           <TableContainer>
             <Table>
               <TableBody>
                 <TableRow>
-                  <TableCell>{subTotal_title}</TableCell>
+                  <TableCell>Subtotal</TableCell>
                   <TableCell align="right">${totalPrice.toFixed(2)}</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell>{tax_title}</TableCell>
+                  <TableCell>Tax (24%)</TableCell>
                   <TableCell align="right">+ ${taxAmount.toFixed(2)}</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell>{deliveryCost_title}</TableCell>
+                  <TableCell>Shipping Cost</TableCell>
                   <TableCell align="right">
                     + ${shippingCost.toFixed(2)}
                   </TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell sx={{ fontWeight: "bold" }}>{total_title}</TableCell>
+                  <TableCell sx={{ fontWeight: "bold" }}>Total</TableCell>
                   <TableCell align="right" sx={{ fontWeight: "bold" }}>
                     ${grandTotal.toFixed(2)}
                   </TableCell>
