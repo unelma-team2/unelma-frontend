@@ -47,8 +47,8 @@ export default function FavouritesPage() {
       <Typography variant="h2" sx={{ mb: 2 }}>
         Favourites
       </Typography>
-      <Typography variant="body16reg" sx={{ color: "text.secondary", mb: 4 }}>
-        Quickly access the services and products you have saved for later.
+      <Typography variant="body16reg" sx={{ color: "text.secondary", mb: 6 }}>
+        Access your favourite services and products below
       </Typography>
 
       <Tabs value={tab} onChange={(_e, value) => setTab(value)} sx={{ mb: 4 }}>
@@ -121,7 +121,7 @@ function EmptyState({ message }) {
       }}
     >
       <Typography variant="body16reg">{message}</Typography>
-      <Typography variant="body14reg" sx={{ mt: 1, color: "text.secondary" }}>
+      <Typography variant="body14reg" sx={{ m: 3, color: "text.secondary" , display: 'block'}}>
         Browse products or services and tap the heart icon to save your favourites.
       </Typography>
     </Box>
