@@ -151,7 +151,7 @@ export default function ServicePage() {
     );
   }
 
-  const { isFavorite } = useFavorites();
+  const { isFavorite, toggleFavorite } = useFavorites();
 
   return (
     <>
