@@ -26,7 +26,7 @@ export default function ProductsPageHero({bannerSection}) {
                     //marginLeft: "170px"
                 }}
             >
-                {productBanner_title} & <br />Services
+                {productBanner_title} Products & <br />Services
             </Typography>
             <Box sx={{flexGrow: 1}}>
                 <Image

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo, useCallback } from "react"
 import axios from "axios"
 import ProductsPageHero from "@/components/products/ProductsPageHero"
 import { Box, Tabs, Tab, useTheme, Select, MenuItem, FormControl, Typography } from "@mui/material"
@@ -28,9 +28,85 @@ export default function ProductsPage() {
 
   const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com"
 
-  const productCategories = ["All", "Enterprise Software", "Open Source", "E-Commerce", "Accessories"]
-  const serviceCategories = ["All", "Web Development", "Website Design", "Mobile Development", "Cyber Support"]
+  // helper: extract raw category name from various shapes (iterative, stable)
+  const extractCategoryRaw = useCallback((initialCat) => {
+    let cat = initialCat
+    // unwrap nested product_category pointers iteratively
+    while (cat && typeof cat === "object" && cat.product_category) {
+      cat = cat.product_category
+    }
+    if (!cat) return ""
+    if (typeof cat === "string") return cat
+    if (cat.data?.attributes?.name) return cat.data.attributes.name
+    if (cat.attributes?.name) return cat.attributes.name
+    if (cat.name) return cat.name
+    if (cat.product_category_name) return cat.product_category_name
+    return ""
+  }, [])
+  
+  // helper: extract a list of category names from various shapes (for services that can have multiple categories)
+  const extractCategoryList = useCallback((value) => {
+    if (!value) return []
+    // if it's already an array of strings or relation objects
+    if (Array.isArray(value)) {
+      return value
+        .map((v) => (typeof v === "string" ? v : v?.data?.attributes?.name ?? v?.attributes?.name ?? v?.name))
+        .filter(Boolean)
+    }
 
+    // if it's a relation container { data: [...] }
+    if (value.data && Array.isArray(value.data)) {
+      return value.data.map((d) => d?.attributes?.name).filter(Boolean)
+    }
+
+    // if it's a single relation or field that may contain multiple via delimiter
+    const single = extractCategoryRaw(value)
+    if (!single) return []
+    // if backend stored multiple categories in a single string separated by commas
+    return single.split(",").map((s) => s.trim()).filter(Boolean)
+  }, [extractCategoryRaw])
+
+  // normalize for comparison: remove non-alphanumeric, collapse whitespace, lowercase
+  const normalizeForCompare = (s) =>
+    (s || "")
+      .toString()
+      .toLowerCase()
+      .replace(/[^a-z0-9]/g, " ")
+      .replace(/\s+/g, " ")
+      .trim()
+ 
+   // derive product categories from loaded products so tab labels match backend values
+   const productCategories = useMemo(() => {
+     try {
+       const setVals = new Set()
+       setVals.add("All")
+       products.forEach((p) => {
+         const raw = extractCategoryRaw(p?.product_category ?? p?.category)
+         if (raw) setVals.add(raw)
+       })
+       return Array.from(setVals)
+     } catch (e) {
+       console.warn("Failed to derive product categories", e)
+       return ["All"]
+     }
+   }, [products, extractCategoryRaw])
+ 
+   // derive service categories (supports services having multiple categories)
+   const serviceCategories = useMemo(() => {
+     try {
+       const setVals = new Set()
+       setVals.add("All")
+       services.forEach((s) => {
+         const list = extractCategoryList(s?.service_category ?? s?.category ?? s?.service_categories)
+         list.forEach((c) => c && setVals.add(c))
+       })
+       return Array.from(setVals)
+     } catch (e) {
+       console.warn("Failed to derive service categories", e)
+       return ["All"]
+     }
+   }, [services, extractCategoryList])
+ 
   useEffect(() => {
     axios
       .get(`${API_URL}/api/product?populate[ProductBannerSection][populate]=*&populate[all_products][populate]=*`)
@@ -87,39 +163,76 @@ export default function ProductsPage() {
     setSearchQuery(query)
   }
 
+  // helper: normalize category value from different shapes
+  const getCategoryName = (cat) => {
+    if (!cat) return ""
+    if (typeof cat === "string") return cat
+    // Strapi relation shape: { data: { attributes: { name: "..." } } }
+    if (cat.data?.attributes?.name) return cat.data.attributes.name
+    // direct field shape: { attributes: { name: "..." } } or { name: "..." }
+    if (cat.attributes?.name) return cat.attributes.name
+    if (cat.name) return cat.name
+    // new: support product_category field that may be a string or relation
+    if (cat.product_category) return getCategoryName(cat.product_category)
+    if (cat.product_category_name) return cat.product_category_name
+    return ""
+  }
+
   const filteredProducts = products.filter((product) => {
-    const matchesSearch = searchQuery ? product?.title?.toLowerCase().includes(searchQuery.toLowerCase()) : true
-    const matchesCategory = categoryTab === 0 ? true : product?.category === productCategories[categoryTab]
+    const matchesSearch = searchQuery
+      ? product?.title?.toLowerCase().includes(searchQuery.toLowerCase())
+      : true
+
+    // read product_category first (Strapi field), fall back to generic category
+    const productCatField = product?.product_category ?? product?.category
+    const productCategoryName = getCategoryName(productCatField)
+    const selectedCategory = productCategories[categoryTab] || "All"
+
+    // if "All" selected, allow all; otherwise match case-insensitively
+    const matchesCategory =
+      selectedCategory === "All" || productCategoryName.toLowerCase() === selectedCategory.toLowerCase()
+
     if (categoryTab > 0) {
       console.log(
         "[v0] Filtering product:",
         product.title,
-        "Category:",
-        product.category,
+        "product_category:",
+        productCategoryName,
         "Expected:",
-        productCategories[categoryTab],
+        selectedCategory,
         "Matches:",
         matchesCategory,
       )
     }
+
     return matchesSearch && matchesCategory
   })
 
   const filteredServices = services.filter((service) => {
-    const matchesSearch = searchQuery ? service?.service_name?.toLowerCase().includes(searchQuery.toLowerCase()) : true
-    const matchesCategory = categoryTab === 0 ? true : service?.category === serviceCategories[categoryTab]
+    const matchesSearch = searchQuery
+      ? service?.service_name?.toLowerCase().includes(searchQuery.toLowerCase())
+      : true
+
+    // get list of categories for this service and compare normalized forms
+    const serviceCategoryList = extractCategoryList(service?.service_category ?? service?.category ?? service?.service_categories)
+    const selectedCategory = serviceCategories[categoryTab] || "All"
+    const matchesCategory =
+      selectedCategory === "All" ||
+      serviceCategoryList.some((c) => normalizeForCompare(c) === normalizeForCompare(selectedCategory))
+
     if (categoryTab > 0) {
       console.log(
         "[v0] Filtering service:",
         service.service_name,
-        "Category:",
-        service.category,
+        "Categories:",
+        serviceCategoryList,
         "Expected:",
-        serviceCategories[categoryTab],
+        selectedCategory,
         "Matches:",
         matchesCategory,
       )
     }
+
     return matchesSearch && matchesCategory
   })
 
@@ -206,8 +319,8 @@ export default function ProductsPage() {
               },
             }}
           >
-            {(tab === 0 ? productCategories : serviceCategories).map((category, index) => (
-              <Tab key={index} label={category} />
+            {(tab === 0 ? productCategories : serviceCategories).map((category) => (
+              <Tab key={category} label={category} />
             ))}
           </Tabs>
         </Box>
