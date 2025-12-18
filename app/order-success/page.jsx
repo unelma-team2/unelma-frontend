@@ -6,14 +6,23 @@ import HeroPage from "@/components/common/HeroPage";
 
 export default function OrderSuccessPage() {
   const router = useRouter();
-  const [order, setOrder] = useState(null);
-
-  useEffect(() => {
-    const savedOrder = localStorage.getItem("lastOrder");
-    if (savedOrder) {
-      setOrder(JSON.parse(savedOrder));
-      localStorage.removeItem("lastOrder"); // clear after reading
+  // initialize order from localStorage (lazy) to avoid calling setState inside an effect
+  const [order, setOrder] = useState(() => {
+    if (typeof window === "undefined") return null;
+    try {
+      const s = localStorage.getItem("lastOrder");
+      return s ? JSON.parse(s) : null;
+    } catch {
+      return null;
     }
+  });
+
+  // remove the stored order as a side-effect (no setState here)
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      localStorage.removeItem("lastOrder");
+    } catch {}
   }, []);
 
   if (!order) {
@@ -58,8 +67,8 @@ export default function OrderSuccessPage() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {order.items.map((item) => (
-                  <TableRow key={item.productId || item.documentId}>
+                {order.items.map((item, idx) => (
+                  <TableRow key={item.productId ?? item.documentId ?? item.id ?? `order-item-${idx}`}>
                     <TableCell>{item.name}</TableCell>
                     <TableCell align="center">{item.quantity}</TableCell>
                     <TableCell align="right">${(item.unitPrice * item.quantity).toFixed(2)}</TableCell>
