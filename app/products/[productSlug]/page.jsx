@@ -28,7 +28,7 @@ export default function ProductPage() {
   const router = useRouter();
   const { isFavorite, toggleFavorite } = useFavorites();
   const [productData, setProductData] = useState(null);
-  const [rating, setRating] = useState(0);
+  const [rating, setRating] = useState(4);
   const [quantity, setQuantity] = useState(1);
   
   const [selectedImage, setSelectedImage] = useState("");

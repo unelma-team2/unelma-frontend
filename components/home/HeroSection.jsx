@@ -42,7 +42,7 @@ export default function HeroSection({ heroSection }) {
         }}
       >
         <Image
-          src={hero_image_bottom || "/images/home/hero/hero_background.png"}
+          src={"/images/home/hero/hero_background.png" || hero_image_bottom}
           alt="Hero background"
           width={1600}
           height={900}
@@ -62,7 +62,7 @@ export default function HeroSection({ heroSection }) {
         }}
       >
         <Image
-          src={hero_image_top || "/images/home/hero/hero_top_smaller.png"}
+          src={ "/images/home/hero/hero_top_smaller.png" || hero_image_top}
           alt="Overlay graphic"
           width={500}
           height={500}

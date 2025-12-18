@@ -38,7 +38,7 @@ export default function ServicePage() {
   const [relatedServices, setRelatedServices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [rating, setRating] = useState(0);
+  const [rating, setRating] = useState(4);
   const router = useRouter();
   const { addToCart } = useCart();
 
