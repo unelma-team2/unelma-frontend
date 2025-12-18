@@ -84,7 +84,7 @@ export default function AboutPage() {
   }
 
   return (
-    <Container maxWidth="lg" sx={{ py: { xs: 4, md: 6 }, pb: { xs: 8, md: 12 } }}>
+    <Container maxWidth="lg" sx={{ py: { xs: 4, md: 6 }, pb: { xs: 16, md: 24 } }}>
       <AboutPageHero bannerSection={bannerSection} imageUrl={imageUrl} />
 
       <Typography
@@ -108,7 +108,7 @@ export default function AboutPage() {
           <AboutImageList imageUrl={imageUrl} imageList={imageList} />
 
           <Box>
-            <Typography sx={{ ...theme.typography.headingFont_M, mb: 2.5, color: theme.palette.text.primary }}>
+            <Typography sx={{ ...theme.typography.headingFont_M, mb: 2, color: theme.palette.text.primary }}>
               {welcome_title1}
               <br />
               {welcome_title2}
@@ -126,14 +126,14 @@ export default function AboutPage() {
           </Box>
 
           <Box>
-            <BulletPoints text={point1} backgroundColor={theme.palette.section.feedback.main} />
-            <BulletPoints text={point2} backgroundColor={theme.palette.section.blog.main} />
-            <BulletPoints text={point3} backgroundColor={theme.palette.section.careers.main} />
-            <BulletPoints text={point4} backgroundColor={theme.palette.section.home.main} />
+                <BulletPoints text={point1} backgroundColor={theme.palette.section.feedback.main} />
+                <BulletPoints text={point2} backgroundColor={theme.palette.section.blog.main} />
+                <BulletPoints text={point3} backgroundColor={theme.palette.section.careers.main} />
+                <BulletPoints text={point4} backgroundColor={theme.palette.section.home.main} />
           </Box>
 
           <Box>
-            <Typography sx={{ ...theme.typography.headingFont_M, mb: 2.5, color: theme.palette.text.primary }}>
+            <Typography sx={{ ...theme.typography.headingFont_M, mb: 4, color: theme.palette.text.primary }}>
               {innovation_title1}
               <br />
               {innovation_title2}
@@ -152,7 +152,7 @@ export default function AboutPage() {
           </Box>
 
           <Box>
-            <Typography sx={{ ...theme.typography.headingFont_M, mb: 2.5, color: theme.palette.text.primary }}>
+            <Typography sx={{ ...theme.typography.headingFont_M, mb: { xs: 2, md: 4 }, color: theme.palette.text.primary }}>
               {philosophy_title}
             </Typography>
             <Typography
@@ -170,7 +170,7 @@ export default function AboutPage() {
             src={imageUrl(network_image)}
             alt="Global Map"
             sx={{
-              width: { xs: "120%", sm: "130%" },
+              width: "100%",
               height: "auto",
               borderRadius: "10px",
               objectFit: "cover",
@@ -178,7 +178,7 @@ export default function AboutPage() {
           />
 
           <Box>
-            <Typography sx={{ ...theme.typography.headingFont_M, mb: 2.5, color: theme.palette.text.primary }}>
+            <Typography sx={{ ...theme.typography.headingFont_M, mb: { xs: 2, md: 4 }, color: theme.palette.text.primary }}>
               {network_title}
             </Typography>
             <Typography
@@ -204,7 +204,7 @@ export default function AboutPage() {
           />
 
           <Box>
-            <Typography sx={{ ...theme.typography.headingFont_M, mb: 2.5, color: theme.palette.text.primary }}>
+            <Typography sx={{ ...theme.typography.headingFont_M, mb: { xs: 2, md: 4 }, color: theme.palette.text.primary }}>
               {promise_title}
             </Typography>
             <Typography
@@ -228,18 +228,19 @@ export default function AboutPage() {
               width: { xs: 100, sm: 120 },
               height: "auto",
               objectFit: "contain",
-              alignSelf: "flex-end",
             }}
           />
         </Box>
       ) : (
         /* DESKTOP LAYOUT */
-        <Box sx={{ display: "flex", position: "relative", gap: 6, minHeight: { md: 3200, lg: 3400 } }}>
+        <Box sx={{ display: "flex", position: "relative", gap: 6, minHeight: { md: 2800, lg: 3000 } }}>
           {/* LEFT COLUMN */}
           <Box sx={{ flex: 1, position: "relative" }}>
             {/* Welcome Section */}
             <Box sx={{ position: "absolute", top: { md: 80, lg: 100 }, width: "100%" }}>
-              <Typography sx={{ ...theme.typography.headingFont_M, mb: 4.5, color: theme.palette.text.primary }}>
+              <Typography
+                sx={{ ...theme.typography.headingFont_M, mb: { md: 8, lg: 12 }, color: theme.palette.text.primary }}
+              >
                 {welcome_title1}
                 <br />
                 {welcome_title2}
@@ -262,16 +263,16 @@ export default function AboutPage() {
             </Box>
 
             {/* Bullet Points */}
-            <Box sx={{ position: "absolute", top: { md: 850, lg: 1050 }, width: "100%" }}>
-              <BulletPoints text={point1} backgroundColor={theme.palette.section.feedback.main} />
-              <BulletPoints text={point2} backgroundColor={theme.palette.section.blog.main} />
-              <BulletPoints text={point3} backgroundColor={theme.palette.section.careers.main} />
-              <BulletPoints text={point4} backgroundColor={theme.palette.section.home.main} />
+            <Box sx={{ position: "absolute", top: { md: 940, lg: 900 }, width: "100%" }}>
+                <BulletPoints text={point1} backgroundColor={theme.palette.section.feedback.main} />
+                <BulletPoints text={point2} backgroundColor={theme.palette.section.blog.main} />
+                <BulletPoints text={point3} backgroundColor={theme.palette.section.careers.main} />
+                <BulletPoints text={point4} backgroundColor={theme.palette.section.home.main} />
             </Box>
 
             {/* Philosophy Section */}
             <Box sx={{ position: "absolute", top: { md: 1400, lg: 1500 }, width: "100%" }}>
-              <Typography sx={{ ...theme.typography.headingFont_M, mb: 4.5, color: theme.palette.text.primary }}>
+              <Typography sx={{ ...theme.typography.headingFont_M, mb: { xs: 2, md: 4 }, color: theme.palette.text.primary }}>
                 {philosophy_title}
               </Typography>
               <Typography
@@ -291,7 +292,7 @@ export default function AboutPage() {
 
             {/* Network Section */}
             <Box sx={{ position: "absolute", top: { md: 1900, lg: 2000 }, width: "100%" }}>
-              <Typography sx={{ ...theme.typography.headingFont_M, mb: 4.5, color: theme.palette.text.primary }}>
+              <Typography sx={{ ...theme.typography.headingFont_M, mb: { xs: 2, md: 4 }, color: theme.palette.text.primary }}>
                 {network_title}
               </Typography>
               <Typography
@@ -310,7 +311,7 @@ export default function AboutPage() {
             </Box>
 
             {/* Video Image */}
-            <Box sx={{ position: "absolute", top: { md: 2500, lg: 2650 }, width: "100%" }}>
+            <Box sx={{ position: "absolute", top: { md: 2350, lg: 2400 }, width: "100%" }}>
               <Box
                 component="img"
                 src={imageUrl(video_image)}
@@ -327,6 +328,7 @@ export default function AboutPage() {
 
           {/* RIGHT COLUMN */}
           <Box sx={{ flex: 1, position: "relative" }}>
+            {/* Image List */}
             <Box sx={{ position: "absolute", top: 0, right: 0, width: "100%" }}>
               <AboutImageList imageUrl={imageUrl} imageList={imageList} />
             </Box>
@@ -338,13 +340,15 @@ export default function AboutPage() {
                 top: { md: 1000, lg: 1100 },
                 right: 0,
                 width: "100%",
+                display: "flex",
+                justifyContent: "flex-end",
               }}
             >
-              <Box sx={{ maxWidth: 400, ml: "auto" }}>
+              <Box sx={{ maxWidth: 400 }}>
                 <Typography
                   sx={{
                     ...theme.typography.headingFont_M,
-                    mb: 4.5,
+                    mb: 4,
                     textAlign: "right",
                     color: theme.palette.text.primary,
                   }}
@@ -374,9 +378,8 @@ export default function AboutPage() {
               alt="Global Map"
               sx={{
                 position: "absolute",
-                top: { md: 1900, lg: 2050 },
-                right: 0,
-                width: "120%",
+                top: { md: 1800, lg: 1900 },
+                width: "100%",
                 height: "auto",
                 opacity: 0.8,
                 objectFit: "cover",
@@ -387,16 +390,18 @@ export default function AboutPage() {
             <Box
               sx={{
                 position: "absolute",
-                top: { md: 2400, lg: 2600 },
+                top: { md: 2350, lg: 2450 },
                 right: 0,
                 width: "100%",
+                display: "flex",
+                justifyContent: "flex-end",
               }}
             >
-              <Box sx={{ maxWidth: 400, ml: "auto" }}>
+              <Box sx={{ maxWidth: 400, position: "relative" }}>
                 <Typography
                   sx={{
                     ...theme.typography.headingFont_M,
-                    mb: 4.5,
+                    mb: { xs: 2, md: 4 },
                     textAlign: "right",
                     color: theme.palette.text.primary,
                   }}
@@ -419,12 +424,12 @@ export default function AboutPage() {
                   src={imageUrl(promise_image)}
                   alt="Signature"
                   sx={{
+                    position: "absolute",
+                    bottom: { md: "-110px", lg: "-130px" },
+                    right: 0,
                     width: { md: 100, lg: 110 },
                     height: "auto",
                     objectFit: "contain",
-                    mt: 4,
-                    display: "block",
-                    ml: "auto",
                   }}
                 />
               </Box>

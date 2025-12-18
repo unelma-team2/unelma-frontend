@@ -266,12 +266,11 @@ export default function Header() {
                   width: 45,
                   transition: "transform 0.25s ease",
                   "&:hover": {
-                    //backgroundColor: theme.palette.section.products.soft,
+                    backgroundColor: "#ffffff",
                     border: `2px solid ${theme.palette.section.products.vibrant}`,
                     borderRadius: 100,
                     padding: 3,
                     boxShadow: "none",
-                    backgroundColor: "transparent !important",
                     transform: "scale(1.3)",
                   },
                 }}
@@ -298,8 +297,12 @@ export default function Header() {
                     width: 40,
                     transition: "transform 0.25s ease",
                     "&:hover": {
-                      backgroundColor: theme.palette.section.products.soft,
-                      transform: "scale(1.2)",
+                      backgroundColor: "#ffffff",
+                      border: `2px solid ${theme.palette.section.products.vibrant}`,
+                      borderRadius: 100,
+                      padding: 3,
+                      boxShadow: "none",
+                      transform: "scale(1.3)",
                     },
                   }}
                   onClick={() => router.push("/cart")}

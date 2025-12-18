@@ -5,14 +5,18 @@ import { useRouter } from "next/navigation"
 import { TextField, IconButton, InputAdornment, useTheme } from "@mui/material"
 import Image from "next/image"
 
-export default function SearchInput({ placeholder = "Search…", size = "medium" }) {
+export default function SearchInput({ placeholder = "Search…", size = "medium", onSearch }) {
   const [searchQuery, setSearchQuery] = useState("")
   const router = useRouter()
   const theme = useTheme()
 
   const handleSearch = () => {
     if (searchQuery.trim()) {
-      router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`)
+      if (onSearch) {
+        onSearch(searchQuery.trim())
+      } else {
+        router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`)
+      }
     }
   }
 
@@ -23,7 +27,6 @@ export default function SearchInput({ placeholder = "Search…", size = "medium"
   }
 
   const iconSize = size === "small" ? 24 : 30
-  const maxWidth = size === "small" ? { sm: 120, md: 150 } : { sm: 150, md: 200 }
 
   return (
     <TextField
@@ -34,18 +37,15 @@ export default function SearchInput({ placeholder = "Search…", size = "medium"
       onChange={(e) => setSearchQuery(e.target.value)}
       onKeyPress={handleKeyPress}
       sx={{
-        maxWidth: maxWidth,
+        width: "100%",
         "& .MuiOutlinedInput-root": {
           borderRadius: "6px",
           backgroundColor: theme.palette.background.paper,
           border: `2px solid ${theme.palette.primary.main}`,
+          transition: "all 0.25s ease",
           "& .MuiOutlinedInput-notchedOutline": { border: "none" },
-          "&:hover .MuiOutlinedInput-notchedOutline": {
-            border: `2px solid ${theme.palette.section.products.vibrant}`,
-            borderRadius: "4px",
-          },
           "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-            border: `2px solid ${theme.palette.section.products.vibrant}`,
+            border: `2px solid ${theme.palette.primary.blue1}`,
             borderRadius: "4px",
           },
         },
@@ -63,11 +63,14 @@ export default function SearchInput({ placeholder = "Search…", size = "medium"
                 height: 40,
                 width: 40,
                 borderRadius: "6px",
+                backgroundColor: theme.palette.background.paper,
                 transition: "transform 0.25s ease",
                 "&:hover": {
-                  //border: `2px solid ${theme.palette.section.products.vibrant}`,
-                  //backgroundColor: theme.palette.section.products.soft,
-                  backgroundColor: "transparent !important",
+                  border: `2px solid ${theme.palette.section.products.vibrant}`,
+                  borderRadius: 100,
+                  backgroundColor: theme.palette.section.products.soft,
+                  padding: 2,
+                  boxShadow: "none",
                   transform: "scale(1.4)",
                 },
               }}
