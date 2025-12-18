@@ -65,9 +65,10 @@ export default function SearchInput({ placeholder = "Search…", size = "medium"
                 borderRadius: "6px",
                 transition: "transform 0.25s ease",
                 "&:hover": {
-                  border: `2px solid ${theme.palette.section.products.vibrant}`,
-                  backgroundColor: theme.palette.section.products.soft,
-                  transform: "scale(1.1)",
+                  //border: `2px solid ${theme.palette.section.products.vibrant}`,
+                  //backgroundColor: theme.palette.section.products.soft,
+                  backgroundColor: "transparent !important",
+                  transform: "scale(1.4)",
                 },
               }}
             >
