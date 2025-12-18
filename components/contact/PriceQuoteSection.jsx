@@ -1,22 +1,12 @@
 "use client"
 
-import {
-  Box,
-  Typography,
-  TextField,
-  FormControl,
-  Select,
-  MenuItem,
-  Checkbox,
-  FormControlLabel,
-  Button,
-} from "@mui/material"
-import { useState, useEffect } from "react"
-import axios from "axios"
-import { AttachFile } from "@mui/icons-material"
+import { Box, Typography, TextField, FormControl, Select, MenuItem, Button } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
+import { AttachFile } from "@mui/icons-material"
+import { useState } from "react"
+import axios from "axios"
 
-export default function PriceQuoteSection({ requestQuote, countryCodes, preselectedService }) {
+export default function MessageQuestionSection({ contactForm, countryCodes }) {
   const theme = useTheme()
   const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:1337"
 
@@ -25,10 +15,10 @@ export default function PriceQuoteSection({ requestQuote, countryCodes, preselec
     email: "",
     phone: "",
     countryCode: "+358",
-    selectedServices: [],
     message: "",
     file: null,
   })
+
   const [fileName, setFileName] = useState("")
   const [status, setStatus] = useState({
     loading: false,
@@ -36,44 +26,21 @@ export default function PriceQuoteSection({ requestQuote, countryCodes, preselec
     error: false,
   })
 
-  useEffect(() => {
-    if (preselectedService) {
-      setFormData((prev) => ({
-        ...prev,
-        selectedServices: [preselectedService],
-      }))
-    }
-  }, [preselectedService])
-
   const selectedCountry = countryCodes.find((cc) => cc.code === formData.countryCode)
 
-  const { title, message_title, attachement_title, attachement_description, services, phone_number_title } =
-    requestQuote || {}
+  const { message_title, attachement_title, attachement_description, phone_number_title } = contactForm
 
   const handleChange = (field) => (e) => {
-    const value = e.target.value
-
     if (field === "file") {
       const file = e.target.files[0]
       setFormData((prev) => ({ ...prev, file }))
       setFileName(file ? file.name : "")
-      return
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [field]: e.target.value,
+      }))
     }
-
-    if (field === "selectedServices") {
-      setFormData((prev) => {
-        const current = prev.selectedServices || []
-        return current.includes(value)
-          ? { ...prev, selectedServices: current.filter((s) => s !== value) }
-          : { ...prev, selectedServices: [...current, value] }
-      })
-      return
-    }
-
-    setFormData((prev) => ({
-      ...prev,
-      [field]: value,
-    }))
   }
 
   const uploadFile = async () => {
@@ -86,8 +53,7 @@ export default function PriceQuoteSection({ requestQuote, countryCodes, preselec
     return uploadRes.data[0].id
   }
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
+  const handleSubmit = async () => {
     setStatus({ loading: true, message: "Sending...", error: false })
 
     try {
@@ -98,18 +64,18 @@ export default function PriceQuoteSection({ requestQuote, countryCodes, preselec
         email: formData.email,
         phone: `${formData.countryCode} ${formData.phone}`,
         message: formData.message,
-        selectedServices: formData.selectedServices,
         attachement: uploadedFileId ? uploadedFileId : null,
       }
 
-      const res = await axios.post(`${API_URL}/api/request-quote-forms`, {
+      const res = await axios.post(`${API_URL}/api/contact-forms`, {
         data: payload,
       })
 
-      console.log("Response:", res.data)
+      console.log("Response from Strapi:", res.data)
+
       setStatus({
         loading: false,
-        message: "Quote request sent successfully!",
+        message: "Message sent successfully!",
         error: false,
       })
 
@@ -118,32 +84,24 @@ export default function PriceQuoteSection({ requestQuote, countryCodes, preselec
         email: "",
         phone: "",
         countryCode: "+358",
-        selectedServices: [],
         message: "",
         file: null,
       })
+
       setFileName("")
     } catch (error) {
-      console.error(error.response?.data || error.message)
+      console.error("Strapi error:", error.response?.data || error.message)
       setStatus({
         loading: false,
-        message: "Failed to send quote request.",
+        message: "Failed to send message.",
         error: true,
       })
     }
   }
 
   return (
-    <Box component="form" onSubmit={handleSubmit}>
-      <Typography
-        sx={{
-          ...theme.typography.bodyFont_M,
-          mb: 1,
-          fontWeight: 600,
-        }}
-      >
-        Name
-      </Typography>
+    <>
+      <Typography sx={{ ...theme.typography.bodyFont_L, mb: 1.5, fontWeight: 600 }}>Name</Typography>
 
       <TextField
         fullWidth
@@ -153,22 +111,12 @@ export default function PriceQuoteSection({ requestQuote, countryCodes, preselec
         required
         sx={{
           mb: 3,
-          "& .MuiOutlinedInput-root": {
-            ...theme.typography.bodyFont_M,
-            boxShadow: "0px 2px 4px rgba(0,0,0,0.1)",
-          },
+          ...theme.mixins.borderStyle,
+          boxShadow: "0px 2px 4px rgba(0,0,0,0.1)",
         }}
       />
 
-      <Typography
-        sx={{
-          ...theme.typography.bodyFont_M,
-          mb: 1,
-          fontWeight: 600,
-        }}
-      >
-        Email
-      </Typography>
+      <Typography sx={{ ...theme.typography.bodyFont_L, mb: 1.5, fontWeight: 600 }}>Email</Typography>
 
       <TextField
         fullWidth
@@ -179,131 +127,73 @@ export default function PriceQuoteSection({ requestQuote, countryCodes, preselec
         required
         sx={{
           mb: 3,
-          "& .MuiOutlinedInput-root": {
-            ...theme.typography.bodyFont_M,
-            boxShadow: "0px 2px 4px rgba(0,0,0,0.1)",
-          },
+          ...theme.mixins.borderStyle,
+          boxShadow: "0px 2px 4px rgba(0,0,0,0.1)",
         }}
       />
 
-      <Typography
-        sx={{
-          ...theme.typography.bodyFont_M,
-          mb: 1,
-          fontWeight: 600,
-        }}
-      >
-        {phone_number_title}
-      </Typography>
+      <Box sx={{ mb: 3 }}>
+        <Typography sx={{ ...theme.typography.bodyFont_L, mb: 1.5, fontWeight: 600 }}>{phone_number_title}</Typography>
 
-      <Box sx={{ display: "flex", gap: 1, mb: 3 }}>
-        <FormControl sx={{ minWidth: 120 }}>
-          <Select
-            value={formData.countryCode}
-            onChange={handleChange("countryCode")}
+        <Box sx={{ display: "flex", gap: 2 }}>
+          <FormControl sx={{ minWidth: 120 }}>
+            <Select
+              value={formData.countryCode}
+              onChange={handleChange("countryCode")}
+              sx={{
+                ...theme.mixins.borderStyle,
+                boxShadow: "0px 2px 4px rgba(0,0,0,0.1)",
+              }}
+            >
+              {countryCodes.map((cc) => (
+                <MenuItem key={cc.code} value={cc.code}>
+                  {cc.country}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
+          <TextField
+            fullWidth
+            placeholder={selectedCountry?.format}
+            value={formData.phone}
+            onChange={handleChange("phone")}
             sx={{
-              ...theme.typography.bodyFont_M,
+              ...theme.mixins.borderStyle,
               boxShadow: "0px 2px 4px rgba(0,0,0,0.1)",
-            }}
-          >
-            {countryCodes?.map((cc) => (
-              <MenuItem key={cc.code} value={cc.code}>
-                {cc.country}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-
-        <TextField
-          fullWidth
-          placeholder={selectedCountry?.format || "+ 358 (0) 00-0000000"}
-          value={formData.phone}
-          onChange={handleChange("phone")}
-          sx={{
-            "& .MuiOutlinedInput-root": {
-              ...theme.typography.bodyFont_M,
-              boxShadow: "0px 2px 4px rgba(0,0,0,0.1)",
-            },
-          }}
-        />
-      </Box>
-
-      <Typography
-        sx={{
-          ...theme.typography.bodyFont_M,
-          mb: 1,
-          fontWeight: 600,
-        }}
-      >
-        {title}
-      </Typography>
-
-      <Box sx={{ mb: 3, display: "flex", flexWrap: "wrap", gap: 2 }}>
-        {services?.map((service) => (
-          <FormControlLabel
-            key={service}
-            control={
-              <Checkbox
-                checked={formData.selectedServices.includes(service)}
-                onChange={handleChange("selectedServices")}
-                value={service}
-              />
-            }
-            label={service}
-            sx={{
-              "& .MuiFormControlLabel-label": {
-                ...theme.typography.bodyFont_M,
-              },
             }}
           />
-        ))}
+        </Box>
       </Box>
 
-      <Typography
-        sx={{
-          ...theme.typography.bodyFont_M,
-          mb: 1,
-          fontWeight: 600,
-        }}
-      >
-        {message_title}
-      </Typography>
+      <Typography sx={{ ...theme.typography.bodyFont_L, mb: 1.5, fontWeight: 600 }}>{message_title}</Typography>
 
       <TextField
         fullWidth
         multiline
         rows={6}
-        placeholder="Tell us about your project"
+        placeholder="Message"
         value={formData.message}
         onChange={handleChange("message")}
         required
         sx={{
           mb: 3,
-          "& .MuiOutlinedInput-root": {
-            ...theme.typography.bodyFont_M,
-            boxShadow: "0px 2px 4px rgba(0,0,0,0.1)",
-          },
+          ...theme.mixins.borderStyle,
+          boxShadow: "0px 2px 4px rgba(0,0,0,0.1)",
         }}
       />
 
       <Box sx={{ mb: 4 }}>
-        <Typography
-          sx={{
-            ...theme.typography.bodyFont_M,
-            mb: 1,
-            fontWeight: 600,
-          }}
-        >
-          {attachement_title}
-        </Typography>
+        <Typography sx={{ ...theme.typography.bodyFont_L, mb: 1.5, fontWeight: 600 }}>{attachement_title}</Typography>
 
-        <Box sx={{ display: "flex", alignItems: "center", gap: 2, flexWrap: "wrap" }}>
-          <AttachFile sx={{ color: theme.palette.text.secondary, fontSize: 24 }} />
+        <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+          <AttachFile sx={{ color: theme.palette.text.secondary, fontSize: 28 }} />
 
           <Button
             variant="outlined"
             component="label"
             sx={{
+              ...theme.mixins.borderStyle,
               textTransform: "none",
               ...theme.typography.bodyFont_M,
             }}
@@ -313,36 +203,41 @@ export default function PriceQuoteSection({ requestQuote, countryCodes, preselec
           </Button>
 
           {fileName && (
-            <Typography
-              sx={{
-                ...theme.typography.bodyFont_M,
-                color: theme.palette.text.secondary,
-              }}
-            >
+            <Typography sx={{ ...theme.typography.bodyFont_M, color: theme.palette.text.secondary }}>
               {fileName}
             </Typography>
           )}
         </Box>
       </Box>
 
-      <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
-        <Button type="submit" variant="contained" size="large" disabled={status.loading} sx={{ px: 6 }}>
-          {status.loading ? "Submitting..." : "Submit"}
+      <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
+        <Button
+          variant="contained"
+          onClick={handleSubmit}
+          disabled={status.loading}
+          sx={{
+            px: 6,
+            py: 2,
+            ...theme.typography.button,
+          }}
+        >
+          {status.loading ? "Sending..." : "Submit"}
         </Button>
       </Box>
 
       {status.message && (
         <Typography
           sx={{
-            ...theme.typography.bodyFont_M,
-            mt: 2,
+            mt: 3,
             textAlign: "center",
-            color: status.error ? "error.main" : "success.main",
+            ...theme.typography.bodyFont_M,
+            color: status.error ? theme.palette.section.contact.main : theme.palette.primary.green1,
+            fontWeight: 600,
           }}
         >
           {status.message}
         </Typography>
       )}
-    </Box>
+    </>
   )
 }

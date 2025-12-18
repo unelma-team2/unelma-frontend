@@ -47,7 +47,7 @@ export default function MapLocation() {
 
       <Typography sx={{ ...theme.typography.bodyFontTitle_M_Card, textAlign: "center", mb: 6 }}>We hold offices in Northern America, Northern Europe and South Asia.</Typography>
      {subtitle && (
-        <Typography sx={{ ...theme.typography.bodyFontTitle_S, textAlign: "center", mb: 6 }}>{subtitle}</Typography>
+        <Typography sx={{ ...theme.typography.bodyFont_S, textAlign: "center", mb: 6 }}>{subtitle}</Typography>
       )}
 
       <Box

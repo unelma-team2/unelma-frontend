@@ -2,12 +2,18 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/app/context/AuthContext"; 
-import { Box, Typography, Button, Paper, Grid, Avatar, Divider, TextField, IconButton } from "@mui/material";
+import { Box, Typography, Button, Card, CardContent, Grid, Avatar, Divider, TextField, IconButton, useTheme } from "@mui/material";
 import HeroPage from "@/components/common/HeroPage";
 import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
+import PersonIcon from "@mui/icons-material/Person";
+import EmailIcon from "@mui/icons-material/Email";
+import PhoneIcon from "@mui/icons-material/Phone";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
 
 export default function ProfilePage() {
   const router = useRouter();
+  const theme = useTheme();
   const { user, loading } = useAuth();
 
   const [editMode, setEditMode] = useState(false);
@@ -20,7 +26,6 @@ export default function ProfilePage() {
   const [avatarPreview, setAvatarPreview] = useState(null);
   const [avatarFile, setAvatarFile] = useState(null);
 
-  // Load profile data from localStorage if exists
   useEffect(() => {
     const savedProfile = localStorage.getItem("profileData");
     if (savedProfile) {
@@ -71,7 +76,6 @@ export default function ProfilePage() {
   };
 
   const handleSave = () => {
-    // Save profile and avatar to localStorage
     const profileToSave = { ...formData, avatar: avatarPreview };
     localStorage.setItem("profileData", JSON.stringify(profileToSave));
     setEditMode(false);
@@ -80,67 +84,248 @@ export default function ProfilePage() {
   return (
     <>
       <HeroPage title="My Profile" compact />
-      <Box component="main" sx={{ p: { xs: 3, md: 6 }, maxWidth: 1100, mx: "auto" }}>
-        <Paper sx={{ p: { xs: 2, md: 4 } }}>
-          <Grid container spacing={3} alignItems="center">
-            <Grid item xs={12} sm="auto">
-              <Box sx={{ position: "relative", display: "inline-block" }}>
-                <Avatar
-                  src={avatarPreview || undefined}
-                  sx={{ width: 96, height: 96, bgcolor: "primary.main", fontSize: 32 }}
-                >
-                  {formData.name ? formData.name.charAt(0).toUpperCase() : formData.email.charAt(0).toUpperCase()}
-                </Avatar>
-                {editMode && (
-                  <IconButton
-                    component="label"
-                    sx={{ position: "absolute", bottom: -5, right: -5, bgcolor: "background.paper", border: "1px solid #ccc" }}
-                  >
-                    <input type="file" accept="image/*" hidden onChange={handleAvatarChange} />
-                    <PhotoCameraIcon />
-                  </IconButton>
-                )}
-              </Box>
-            </Grid>
+      <Box component="main" sx={{ px: { xs: 2, md: 6 }, py: 8, maxWidth: 1200, mx: "auto" }}>
+        <Grid container spacing={4} sx={{ display: "flex" }}>
 
-            <Grid item xs>
-              {editMode ? (
-                <>
-                  <TextField fullWidth label="Name" value={formData.name} onChange={handleChange("name")} sx={{ mb: 1 }} />
-                  <TextField fullWidth label="Email" value={formData.email} onChange={handleChange("email")} sx={{ mb: 1 }} />
-                  <TextField fullWidth label="Phone" value={formData.phone} onChange={handleChange("phone")} sx={{ mb: 1 }} />
-                  <TextField fullWidth label="Address" value={formData.address} onChange={handleChange("address")} sx={{ mb: 1 }} />
-                </>
-              ) : (
-                <>
-                  <Typography variant="h6" sx={{ fontWeight: 700 }}>{formData.name || formData.email}</Typography>
-                  <Typography variant="body2" color="text.secondary">{formData.email}</Typography>
-                  {formData.phone && <Typography variant="body2" color="text.secondary">{formData.phone}</Typography>}
-                  {formData.address && <Typography variant="body2" color="text.secondary">{formData.address}</Typography>}
-                  {joined && <Typography variant="body2" color="text.secondary">Joined: {joined}</Typography>}
-                </>
-              )}
-            </Grid>
+          <Grid item xs={12} md={9.6} sx={{ flex: "0 0 60%" }}>
+            <Card
+              sx={{
+                height: "100%",
+                display: "flex",
+                flexDirection: "column",
+                boxShadow: `2px 2px 2px 2px ${theme.palette.section.products.main}`,
+                transition: "transform 0.25s ease, box-shadow 0.25s ease",
+
+              }}
+            >
+              <CardContent sx={{ p: 4, display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center" }}>
+
+                <Box sx={{ position: "relative", mb: 3 }}>
+                  <Avatar
+                    src={avatarPreview || undefined}
+                    sx={{
+                      width: 140,
+                      height: 140,
+                      bgcolor: theme.palette.section.products.soft,
+                      fontSize: 48,
+                      fontWeight: 700,
+                      border: theme.mixins.borderStyle.border,
+                      color: theme.palette.primary.main,
+                    }}
+                  >
+                    {formData.name ? formData.name.charAt(0).toUpperCase() : formData.email.charAt(0).toUpperCase()}
+                  </Avatar>
+                  {editMode && (
+                    <IconButton
+                      component="label"
+                      sx={{
+                        position: "absolute",
+                        bottom: 0,
+                        right: 0,
+                        bgcolor: theme.palette.section.products.main,
+                        color: "#FFFFFF",
+                        border: theme.mixins.borderStyle.border,
+                        width: 50,
+                        height: 50,
+                        transition: "all 0.25s ease",
+                        "&:hover": {
+                          bgcolor: theme.palette.section.products.vibrant,
+                          transform: "scale(1.1)",
+                        },
+                      }}
+                    >
+                      <input type="file" accept="image/*" hidden onChange={handleAvatarChange} />
+                      <PhotoCameraIcon />
+                    </IconButton>
+                  )}
+                </Box>
+
+                {editMode ? (
+                  <Box sx={{ width: "100%", display: "flex", flexDirection: "column", gap: 2 }}>
+                    <TextField
+                      fullWidth
+                      label="Full Name"
+                      value={formData.name}
+                      onChange={handleChange("name")}
+                      variant="outlined"
+                      sx={{
+                        "& .MuiOutlinedInput-root": {
+                          backgroundColor: theme.palette.background.paper,
+                        },
+                      }}
+                    />
+                    <TextField
+                      fullWidth
+                      label="Email"
+                      value={formData.email}
+                      onChange={handleChange("email")}
+                      variant="outlined"
+                      disabled
+                      sx={{
+                        "& .MuiOutlinedInput-root": {
+                          backgroundColor: "#f5f5f5",
+                        },
+                      }}
+                    />
+                    <TextField
+                      fullWidth
+                      label="Phone"
+                      value={formData.phone}
+                      onChange={handleChange("phone")}
+                      variant="outlined"
+                    />
+                    <TextField
+                      fullWidth
+                      label="Address"
+                      value={formData.address}
+                      onChange={handleChange("address")}
+                      variant="outlined"
+                      multiline
+                      rows={3}
+                    />
+                  </Box>
+                ) : (
+                  <Box sx={{ width: "100%" }}>
+                    <Typography sx={{ ...theme.typography.bodyFontTitle_L, mb: 1, color: theme.palette.primary.main }}>
+                      {formData.name || "User"}
+                    </Typography>
+                    <Divider sx={{ my: 2, borderColor: theme.palette.section.products.soft }} />
+
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 2, py: 1.5, justifyContent: "center" }}>
+                      <EmailIcon sx={{ color: theme.palette.section.products.main }} />
+                      <Typography sx={{ ...theme.typography.bodyFont_M, color: theme.palette.primary.main }}>
+                        {formData.email}
+                      </Typography>
+                    </Box>
+
+                    {formData.phone && (
+                      <Box sx={{ display: "flex", alignItems: "center", gap: 2, py: 1.5, justifyContent: "center" }}>
+                        <PhoneIcon sx={{ color: theme.palette.section.products.main }} />
+                        <Typography sx={{ ...theme.typography.bodyFont_M, color: theme.palette.primary.main }}>
+                          {formData.phone}
+                        </Typography>
+                      </Box>
+                    )}
+
+                    {formData.address && (
+                      <Box sx={{ display: "flex", alignItems: "center", gap: 2, py: 1.5, justifyContent: "center" }}>
+                        <LocationOnIcon sx={{ color: theme.palette.section.products.main }} />
+                        <Typography sx={{ ...theme.typography.bodyFont_M, color: theme.palette.primary.main }}>
+                          {formData.address}
+                        </Typography>
+                      </Box>
+                    )}
+
+                    {joined && (
+                      <>
+                        <Divider sx={{ my: 2, borderColor: theme.palette.section.products.soft }} />
+                        <Typography sx={{ ...theme.typography.bodyFont_S, color: theme.palette.text.secondary }}>
+                          Member since {joined}
+                        </Typography>
+                      </>
+                    )}
+                  </Box>
+                )}
+              </CardContent>
+            </Card>
           </Grid>
 
-          <Divider sx={{ my: 3 }} />
+          <Grid item xs={12} md={2.4} sx={{ flex: "0 0 25%" }}>
+            <Card
+              sx={{
+                height: "100%",
+                display: "flex",
+                flexDirection: "column",
+                boxShadow: `2px 2px 2px 2px ${theme.palette.section.shopOrder.main}`,
 
-          <Box sx={{ display: "flex", gap: 2, mt: 2 }}>
-            {editMode ? (
-              <>
-                <Button variant="contained" onClick={handleSave}>Save</Button>
-                <Button variant="outlined" onClick={() => setEditMode(false)}>Cancel</Button>
-              </>
-            ) : (
-              <>
-                <Button variant="contained" onClick={() => router.push("/profile/orders")}>View Orders</Button>
-                <Button variant="outlined" onClick={() => setEditMode(true)}>Edit Profile</Button>
-              </>
-            )}
-          </Box>
-        </Paper>
+              }}
+            >
+              <CardContent sx={{ p: 4, display: "flex", flexDirection: "column", justifyContent: "space-between", height: "100%" }}>
+                <Box>
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 3 }}>
+                    <PersonIcon sx={{ color: theme.palette.section.shopOrder.main, fontSize: 28 }} />
+                    <Typography sx={{ ...theme.typography.bodyFontTitle_L, color: theme.palette.primary.main }}>
+                      Account Settings
+                    </Typography>
+                  </Box>
+
+                  <Divider sx={{ mb: 3, borderColor: theme.palette.section.shopOrder.soft }} />
+
+                  {editMode ? (
+                    <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                      <Button
+                        onClick={handleSave}
+                        sx={{
+                          py: 1.5,
+                          backgroundColor: theme.palette.section.products.soft,
+                          color: theme.palette.primary.main,
+                          fontWeight: 600,
+                        }}
+                      >
+                        Save Changes
+                      </Button>
+                      <Button
+                        onClick={() => setEditMode(false)}
+                        sx={{
+                          py: 1.5,
+                          backgroundColor: theme.palette.section.products.soft,
+                          color: theme.palette.primary.main,
+                          fontWeight: 600,
+                        }}
+                      >
+                        Cancel
+                      </Button>
+                    </Box>
+                  ) : (
+                    <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                      <Button
+                        onClick={() => router.push("/profile/orders")}
+                        sx={{
+                          py: 1.5,
+                          display: "flex",
+                          gap: 1,
+                          backgroundColor: theme.palette.section.products.soft,
+                          color: theme.palette.primary.main,
+                          fontWeight: 600,
+                          justifyContent: "flex-start",
+                          transition: "all 0.25s ease",
+                          "&:hover": {
+                            backgroundColor: theme.palette.section.products.pastel,
+                            transform: "translateX(4px)",
+                          },
+                        }}
+                      >
+                        <ShoppingBagIcon />
+                        View Orders
+                      </Button>
+                      <Button
+                        onClick={() => setEditMode(true)}
+                        sx={{
+                          py: 1.5,
+                          display: "flex",
+                          gap: 1,
+                          backgroundColor: theme.palette.section.products.soft,
+                          color: theme.palette.primary.main,
+                          fontWeight: 600,
+                          justifyContent: "flex-start",
+                          transition: "all 0.25s ease",
+                          "&:hover": {
+                            backgroundColor: theme.palette.section.products.pastel,
+                            transform: "translateX(4px)",
+                          },
+                        }}
+                      >
+                        <PersonIcon />
+                        Edit Profile
+                      </Button>
+                    </Box>
+                  )}
+                </Box>
+              </CardContent>
+            </Card>
+          </Grid>
+        </Grid>
       </Box>
     </>
   );
 }
-

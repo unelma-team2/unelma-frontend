@@ -6,13 +6,16 @@ import Image from "next/image"
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com"
 
 const PLACEHOLDER_AVATARS = [
-  "/images/feedback/avatar1.png",
-  "/images/feedback/avatar2.png",
-  "/images/feedback/avatar3.png",
-  "/images/feedback/avatar4.png",
-  "/images/feedback/avatar5.png",
-  "/images/feedback/avatar6.png",
-  "/images/feedback/avatar7.png",
+  "/images/home/feedback/avatar2.png",
+  "/images/home/feedback/avatar3.png",
+  "/images/home/feedback/avatar5.png",
+  "/images/home/feedback/avatar6.png",
+  "/images/home/feedback/avatar7.png",
+  "/images/home/feedback/avatar8.png",
+  "/images/home/feedback/avatar9.png",
+  "/images/home/feedback/avatar10.png",
+  "/images/home/feedback/avatar11.png",
+  "/images/home/feedback/avatar12.png",
 ]
 
 // Simple hash function to get consistent avatar for same name
@@ -48,7 +51,7 @@ export default function FeedbackCard({ name, message, avatar }) {
         textAlign: "center",
         display: "flex",
         flexDirection: "column",
-        boxShadow: `-8px -6px 0px  ${theme.palette.section.feedback.main}`, 
+        boxShadow: `-8px -6px 0px  ${theme.palette.section.feedback.main}`,
         mt: 2,
         transition: "transform 0.25s ease, box-shadow 0.25s ease",
 
@@ -65,7 +68,7 @@ export default function FeedbackCard({ name, message, avatar }) {
 
         "&:hover .feedbackName": {
           transform: "scale(1.05)",
-          color: theme.palette.section.products.vibrant
+          color: theme.palette.section.products.vibrant,
         },
       }}
     >
@@ -83,7 +86,13 @@ export default function FeedbackCard({ name, message, avatar }) {
           overflow: "hidden",
         }}
       >
-        <Image src="/images/feedback/icons8-quote.png" alt="quote" width={100} height={100} style={{ objectFit: "cover" }} />
+        <Image
+          src="/images/home/feedback/icons8-quote.png"
+          alt="quote"
+          width={100}
+          height={100}
+          style={{ objectFit: "cover" }}
+        />
       </Box>
 
       {/* Message */}

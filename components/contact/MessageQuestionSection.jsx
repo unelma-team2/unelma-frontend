@@ -101,7 +101,7 @@ export default function MessageQuestionSection({ contactForm, countryCodes }) {
 
   return (
     <>
-      <Typography sx={{ ...theme.typography.bodyFont_L, mb: 1.5, fontWeight: 600 }}>Name</Typography>
+      <Typography sx={{ ...theme.typography.bodyFont_L, mb: 2, fontWeight: 600 }}>Name</Typography>
 
       <TextField
         fullWidth
@@ -110,7 +110,7 @@ export default function MessageQuestionSection({ contactForm, countryCodes }) {
         onChange={handleChange("name")}
         required
         sx={{
-          mb: 3,
+          mb: 4,
           "& .MuiOutlinedInput-root": {
             ...theme.mixins.borderStyle,
           },
@@ -118,7 +118,7 @@ export default function MessageQuestionSection({ contactForm, countryCodes }) {
         }}
       />
 
-      <Typography sx={{ ...theme.typography.bodyFont_L, mb: 1.5, fontWeight: 600 }}>Email</Typography>
+      <Typography sx={{ ...theme.typography.bodyFont_L, mb: 2, fontWeight: 600 }}>Email</Typography>
 
       <TextField
         fullWidth
@@ -128,7 +128,7 @@ export default function MessageQuestionSection({ contactForm, countryCodes }) {
         onChange={handleChange("email")}
         required
         sx={{
-          mb: 3,
+          mb: 4,
           "& .MuiOutlinedInput-root": {
             ...theme.mixins.borderStyle,
           },
@@ -136,8 +136,8 @@ export default function MessageQuestionSection({ contactForm, countryCodes }) {
         }}
       />
 
-      <Box sx={{ mb: 3 }}>
-        <Typography sx={{ ...theme.typography.bodyFont_L, mb: 1.5, fontWeight: 600 }}>{phone_number_title}</Typography>
+      <Box sx={{ mb: 4 }}>
+        <Typography sx={{ ...theme.typography.bodyFont_L, mb: 2, fontWeight: 600 }}>{phone_number_title}</Typography>
 
         <Box sx={{ display: "flex", gap: 2 }}>
           <FormControl sx={{ minWidth: 120 }}>
@@ -172,7 +172,7 @@ export default function MessageQuestionSection({ contactForm, countryCodes }) {
         </Box>
       </Box>
 
-      <Typography sx={{ ...theme.typography.bodyFont_L, mb: 1.5, fontWeight: 600 }}>{message_title}</Typography>
+      <Typography sx={{ ...theme.typography.bodyFont_L, mb: 2, fontWeight: 600 }}>{message_title}</Typography>
 
       <TextField
         fullWidth
@@ -183,7 +183,7 @@ export default function MessageQuestionSection({ contactForm, countryCodes }) {
         onChange={handleChange("message")}
         required
         sx={{
-          mb: 3,
+          mb: 4,
           "& .MuiOutlinedInput-root": {
             ...theme.mixins.borderStyle,
           },
@@ -192,7 +192,7 @@ export default function MessageQuestionSection({ contactForm, countryCodes }) {
       />
 
       <Box sx={{ mb: 4 }}>
-        <Typography sx={{ ...theme.typography.bodyFont_L, mb: 1.5, fontWeight: 600 }}>{attachement_title}</Typography>
+        <Typography sx={{ ...theme.typography.bodyFont_L, mb: 2, fontWeight: 600 }}>{attachement_title}</Typography>
 
         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
           <AttachFile sx={{ color: theme.palette.text.secondary, fontSize: 28 }} />
@@ -218,7 +218,7 @@ export default function MessageQuestionSection({ contactForm, countryCodes }) {
         </Box>
       </Box>
 
-      <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
+      <Box sx={{ display: "flex", justifyContent: "center", mt: 6 }}>
         <Button
           variant="contained"
           onClick={handleSubmit}

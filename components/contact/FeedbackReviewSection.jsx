@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
   Box,
@@ -7,19 +7,21 @@ import {
   FormControl,
   Select,
   MenuItem,
+  InputLabel,
   Rating,
   RadioGroup,
   Radio,
   FormControlLabel,
   Button,
-} from "@mui/material"
-import { useState, useEffect } from "react"
-import axios from "axios"
-import { useTheme } from "@mui/material/styles"
+} from "@mui/material";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 export default function FeedbackReviewSection({ feedbackForm, countryCodes, preselectedService, preselectedProduct }) {
-  const theme = useTheme()
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:1337"
+  const API_URL = "http://localhost:1337";
+
+  //   const API_URL =
+  //   process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
 
   const [formData, setFormData] = useState({
     name: "",
@@ -32,32 +34,34 @@ export default function FeedbackReviewSection({ feedbackForm, countryCodes, pres
     rating: 0,
     canBePublished: "",
     wishToBeContacted: "",
-  })
+  });
 
   const [status, setStatus] = useState({
     loading: false,
     message: "",
     error: false,
-  })
+  });
 
   useEffect(() => {
     if (preselectedService) {
       setFormData((prev) => ({
         ...prev,
-        feedbackType: "Service",
-        selectedServiceOrProduct: preselectedService,
-      }))
+        feedbackType: "Service",                    
+        selectedServiceOrProduct: preselectedService 
+      }));
     }
     if (preselectedProduct) {
       setFormData((prev) => ({
         ...prev,
-        feedbackType: "Product",
-        selectedServiceOrProduct: preselectedProduct,
-      }))
+        feedbackType: "Product",                    
+        selectedServiceOrProduct: preselectedProduct
+      }));
     }
-  }, [preselectedService, preselectedProduct])
+  }, [preselectedProduct]);
 
-  const selectedCountry = countryCodes.find((cc) => cc.code === formData.countryCode)
+  const selectedCountry = countryCodes.find(
+    (cc) => cc.code === formData.countryCode
+  );
 
   const {
     feedbackTypes,
@@ -68,46 +72,48 @@ export default function FeedbackReviewSection({ feedbackForm, countryCodes, pres
     message_title,
     canBePublish_title,
     wishToBeContact_title,
+    attachement_title,
+    attachement_description,
     phone_number_title,
-  } = feedbackForm
+  } = feedbackForm;
 
   const handleChange = (field) => (e) => {
     setFormData({
       ...formData,
       [field]: e.target.value,
-    })
-  }
+    });
+  };
 
   const handleRatingChange = (event, newValue) => {
-    setFormData({ ...formData, rating: newValue })
-  }
+    setFormData({ ...formData, rating: newValue });
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    console.log("Submitting formData:", formData)
-    setStatus({ loading: true, message: "Sending...", error: false })
+    e.preventDefault();
+    console.log("Submitting formData:", formData);
+    setStatus({ loading: true, message: "Sending...", error: false });
 
     try {
       const payload = {
         name: formData.name,
         email: formData.email,
-        phone: `${formData.countryCode} ${formData.phone}`,
+        phone: formData.phone,
         feedbackType: formData.feedbackType,
         selectedServiceOrProduct: formData.selectedServiceOrProduct,
         message: formData.message,
         rating: formData.rating,
         canBePublished: formData.canBePublished === "yes",
         wishToBeContacted: formData.wishToBeContacted === "yes",
-      }
+      };
 
       const res = await axios.post(`${API_URL}/api/feedback-forms`, {
         data: payload,
-      })
+      });
       setStatus({
         loading: false,
         message: "Feedback sent successfully!",
         error: false,
-      })
+      });
 
       setFormData({
         name: "",
@@ -120,64 +126,45 @@ export default function FeedbackReviewSection({ feedbackForm, countryCodes, pres
         rating: 0,
         canBePublished: "",
         wishToBeContacted: "",
-      })
+      });
     } catch (error) {
-      console.error("Strapi error:", error.response?.data || error.message)
+      console.error("Strapi error:", error.response?.data || error.message);
       setStatus({
         loading: false,
         message: "Failed to send message.",
         error: true,
-      })
+      });
     }
-  }
+  };
 
   return (
-    <Box component="form" onSubmit={handleSubmit}>
-      <Typography sx={{ ...theme.typography.bodyFont_L, mb: 1.5, fontWeight: 600 }}>Name</Typography>
+    <Box component="form" onSubmit={handleSubmit} sx={{ width: "100%" }}>
+
+      <Typography sx={labelStyle}>Name</Typography>
       <TextField
         fullWidth
         placeholder="Your name"
         value={formData.name}
         onChange={handleChange("name")}
-        required
-        sx={{
-          mb: 3,
-          boxShadow: "0px 2px 4px rgba(0,0,0,0.1)",
-          "& .MuiOutlinedInput-root": {
-            ...theme.mixins.borderStyle,
-          },
-        }}
+        sx={{ mb: 3 }}
       />
 
-      <Typography sx={{ ...theme.typography.bodyFont_L, mb: 1.5, fontWeight: 600 }}>Email</Typography>
+      <Typography sx={labelStyle}>Email</Typography>
       <TextField
         fullWidth
         placeholder="you@company.com"
         type="email"
         value={formData.email}
         onChange={handleChange("email")}
-        required
-        sx={{
-          mb: 3,
-          boxShadow: "0px 2px 4px rgba(0,0,0,0.1)",
-          "& .MuiOutlinedInput-root": {
-            ...theme.mixins.borderStyle,
-          },
-        }}
+        sx={{ mb: 3 }}
       />
 
-      <Typography sx={{ ...theme.typography.bodyFont_L, mb: 1.5, fontWeight: 600 }}>{phone_number_title}</Typography>
-      <Box sx={{ display: "flex", gap: 2, mb: 3 }}>
+      <Typography sx={labelStyle}>{phone_number_title}</Typography>
+      <Box sx={{ display: "flex", gap: 1, mb: 3 }}>
         <FormControl sx={{ minWidth: 120 }}>
           <Select
             value={formData.countryCode}
             onChange={handleChange("countryCode")}
-            sx={{
-              boxShadow: "0px 2px 4px rgba(0,0,0,0.1)",
-              "& .MuiOutlinedInput-root": {
-                ...theme.mixins.borderStyle,
-              },
-            }}
           >
             {countryCodes.map((cc) => (
               <MenuItem key={cc.code} value={cc.code}>
@@ -192,28 +179,16 @@ export default function FeedbackReviewSection({ feedbackForm, countryCodes, pres
           placeholder={selectedCountry?.format}
           value={formData.phone}
           onChange={handleChange("phone")}
-          sx={{
-            mb: 3,
-            boxShadow: "0px 2px 4px rgba(0,0,0,0.1)",
-            "& .MuiOutlinedInput-root": {
-              ...theme.mixins.borderStyle,
-            },
-          }}
         />
       </Box>
 
-      <Typography sx={{ ...theme.typography.bodyFont_L, mb: 1.5, fontWeight: 600 }}>{feedback_title}</Typography>
-      <FormControl
-        fullWidth
-        sx={{
-          mb: 3,
-          "& .MuiOutlinedInput-root": {
-            ...theme.mixins.borderStyle,
-            boxShadow: "0px 2px 4px rgba(0,0,0,0.1)",
-          },
-        }}
-      >
-        <Select value={formData.feedbackType} onChange={handleChange("feedbackType")} displayEmpty>
+      <Typography sx={labelStyle}>{feedback_title}</Typography>
+      <FormControl fullWidth sx={{ mb: 3 }}>
+        <Select
+          value={formData.feedbackType}
+          onChange={handleChange("feedbackType")}
+          displayEmpty
+        >
           <MenuItem disabled value="">
             Select Feedback Type
           </MenuItem>
@@ -227,19 +202,8 @@ export default function FeedbackReviewSection({ feedbackForm, countryCodes, pres
 
       {formData.feedbackType && formData.feedbackType !== "Other" && (
         <>
-          <Typography sx={{ ...theme.typography.bodyFont_L, mb: 1.5, fontWeight: 600 }}>
-            Choose Service/Product
-          </Typography>
-          <FormControl
-            fullWidth
-            sx={{
-              mb: 3,
-              "& .MuiOutlinedInput-root": {
-                ...theme.mixins.borderStyle,
-                boxShadow: "0px 2px 4px rgba(0,0,0,0.1)",
-              },
-            }}
-          >
+          <Typography sx={labelStyle}>Choose Service/Product</Typography>
+          <FormControl fullWidth sx={{ mb: 3 }}>
             <Select
               value={formData.selectedServiceOrProduct}
               onChange={handleChange("selectedServiceOrProduct")}
@@ -267,78 +231,59 @@ export default function FeedbackReviewSection({ feedbackForm, countryCodes, pres
         </>
       )}
 
-      <Typography sx={{ ...theme.typography.bodyFont_L, mb: 1.5, fontWeight: 600 }}>{rating_title}</Typography>
-      <Rating value={formData.rating} onChange={handleRatingChange} sx={{ mb: 3 }} size="large" />
+      <Typography sx={{ fontWeight: 500, mb: 1 }}>{rating_title}</Typography>
+      <Rating
+        value={formData.rating}
+        onChange={handleRatingChange}
+        sx={{ mb: 3 }}
+      />
 
-      <Typography sx={{ ...theme.typography.bodyFont_L, mb: 1.5, fontWeight: 600 }}>{message_title}</Typography>
+      <Typography sx={labelStyle}>{message_title}</Typography>
       <TextField
         fullWidth
         multiline
-        rows={6}
+        rows={4}
         placeholder="Write your feedback here..."
         value={formData.message}
         onChange={handleChange("message")}
-        required
-        sx={{
-          mb: 3,
-          boxShadow: "0px 2px 4px rgba(0,0,0,0.1)",
-          "& .MuiOutlinedInput-root": {
-            ...theme.mixins.borderStyle,
-          },
-        }}
+        sx={{ mb: 3 }}
       />
 
-      <Typography sx={{ ...theme.typography.bodyFont_L, mb: 1, fontWeight: 600 }}>{canBePublish_title}</Typography>
-      <RadioGroup row value={formData.canBePublished} onChange={handleChange("canBePublished")} sx={{ mb: 3 }}>
-        <FormControlLabel
-          value="yes"
-          control={<Radio />}
-          label="Yes"
-          sx={{ "& .MuiFormControlLabel-label": theme.typography.bodyFont_M }}
-        />
-        <FormControlLabel
-          value="no"
-          control={<Radio />}
-          label="No"
-          sx={{ "& .MuiFormControlLabel-label": theme.typography.bodyFont_M }}
-        />
+      <Typography sx={{ mb: 1 }}>{canBePublish_title}</Typography>
+      <RadioGroup
+        row
+        value={formData.canBePublished}
+        onChange={handleChange("canBePublished")}
+      >
+        <FormControlLabel value="yes" control={<Radio />} label="Yes" />
+        <FormControlLabel value="no" control={<Radio />} label="No" />
       </RadioGroup>
 
-      <Typography sx={{ ...theme.typography.bodyFont_L, mb: 1, fontWeight: 600 }}>{wishToBeContact_title}</Typography>
-      <RadioGroup row value={formData.wishToBeContacted} onChange={handleChange("wishToBeContacted")} sx={{ mb: 3 }}>
-        <FormControlLabel
-          value="yes"
-          control={<Radio />}
-          label="Yes"
-          sx={{ "& .MuiFormControlLabel-label": theme.typography.bodyFont_M }}
-        />
-        <FormControlLabel
-          value="no"
-          control={<Radio />}
-          label="No"
-          sx={{ "& .MuiFormControlLabel-label": theme.typography.bodyFont_M }}
-        />
+      <Typography sx={{ mt: 2, mb: 1 }}>{wishToBeContact_title}</Typography>
+      <RadioGroup
+        row
+        value={formData.wishToBeContacted}
+        onChange={handleChange("wishToBeContacted")}
+      >
+        <FormControlLabel value="yes" control={<Radio />} label="Yes" />
+        <FormControlLabel value="no" control={<Radio />} label="No" />
       </RadioGroup>
 
-      <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
-        <Button type="submit" variant="contained" size="large" disabled={status.loading} sx={{ px: 6, py: 2 }}>
-          {status.loading ? "Sending..." : "Submit"}
-        </Button>
-      </Box>
+      <Button type="submit" variant="contained" sx={{ mt: 3 }}>
+        Submit
+      </Button>
 
       {status.message && (
-        <Typography
-          sx={{
-            mt: 3,
-            textAlign: "center",
-            ...theme.typography.bodyFont_M,
-            color: status.error ? theme.palette.section.contact.main : theme.palette.primary.main,
-            fontWeight: 600,
-          }}
-        >
+        <Typography color={status.error ? "error" : "primary"} sx={{ mt: 2 }}>
           {status.message}
         </Typography>
       )}
     </Box>
-  )
+  );
 }
+const labelStyle = {
+  mb: 1,
+  fontSize: "14px",
+  fontWeight: 500,
+  color: "#000",
+};
