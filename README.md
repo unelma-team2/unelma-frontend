@@ -26,90 +26,84 @@ This project is a **redesign of Unelma Platforms** (https://www.unelmaplatforms.
 | **Frontend** | Next.js (React) |
 | **Styling** | MUI + Custom CSS |
 | **Backend** | Strapi (Headless CMS) + Supabase (Database) |
-| **Deployment** | Vercel (Frontend) + Render (Backend) |
+| **Deployment** | Frontend: Local (presentation) • Backend: Strapi deployed on Render (URL withheld) |
 | **Version Control** | GitHub (Organization: `unelma-team2`) |
-| **Design Tool** | Figma (Mobile & Desktop wireframes) |
+| **Design Tool** | Figma (Wireframes) |
 
 ---
 
-## ⚙️ Getting Started (Frontend)
+## 👥 Contributors
 
-**Step 1: Clone the repository**
+- TJ — @TJsohn  
+- Suganya — @SuganyaPrabagarane  
+- Saara — @SaaraRi  
+- Fizza — @Fizzaishfaq110
+
+All team members contributed across design, development, testing and project coordination.
+
+---
+
+## 🏃‍♀️ Run the project (local demo)
+
+You can run the frontend locally and point it either to the deployed Strapi backend (managed by the team) or to a local Strapi instance (if you have access to the backend repo).
+
+1) Clone & install
 ```bash
 git clone https://github.com/unelma-team2/unelma-frontend.git
 cd unelma-frontend
-```
-
-**Step 2: Install dependencies**
-```bash
 npm install
 ```
 
-**Step 3: Set up environment variables**
-Create a .env.local file in the project root:
-```bash
-NEXT_PUBLIC_API_URL=http://localhost:1337
-```
-(Update this URL to the deployed backend once available.)
+2) Environment variables
+Create a `.env.local` in the project root. Minimum required keys:
 
-**Step 4: Run the development server**
+```env
+# Use the deployed backend URL (ask maintainers for the Render URL)
+NEXT_PUBLIC_API_URL=https://<your-strapi-render-url>
+
+# If you need to test Supabase auth locally, set anon key (do NOT expose service_role)
+NEXT_PUBLIC_SUPABASE_URL=https://<your-supabase-url>
+NEXT_PUBLIC_SUPABASE_ANON_KEY=<your-supabase-anon-key>
+
+# Optional: if Strapi requires a read token for public API
+NEXT_PUBLIC_STRAPI_API_TOKEN=<optional_read_token>
+```
+
+Notes:
+- If you do NOT have the deployed backend URL, set NEXT_PUBLIC_API_URL=http://localhost:1337 and run a local Strapi instance (see step 4).
+- Never commit `.env.local` or secret keys to version control.
+
+3) Start the frontend
 ```bash
 npm run dev
+# open http://localhost:3000
 ```
 
-**Step 5: Visit the local site**
-http://localhost:3000
-
-## 🧱 Project Structure
-
-## 🧱 Project Structure
-
-```text
-app/
-├── products/      # Products & Services showcase page
-├── blog/          # Blog list and single blog pages
-├── case-studies/  # “Coming Soon” placeholder
-├── about/         # About page
-├── careers/       # “Coming Soon” placeholder
-├── contact/       # Contact page
-└── page.js        # Home page
+4) (Optional) Run Strapi locally — only if you have backend repo access
+- Clone the backend repo (private). Follow its README to install and create `.env` and database.
+- Typical commands (may vary by repo):
+```bash
+git clone git@github.com:unelma-team2/unelma-backend.git
+cd unelma-backend
+npm install
+cp .env.example .env   # update DB credentials
+npm run develop
+# Strapi typically runs at http://localhost:1337
 ```
+- Then point frontend to `http://localhost:1337` in `.env.local`.
 
-## 🧩 Environment Files
+5) OAuth / Supabase notes (for local demo)
+- Ensure Supabase redirect URLs include:
+  - `http://localhost:3000/login`
+- Use the anon key in the frontend. Keep the service_role key on the server only.
 
-| File | Purpose |
-|------|----------|
-| `.env.local` | Local development (ignored by Git) |
-| `.env.example` | Example template for teammates |
+6) Quick test checklist
+- Load home and product pages.
+- Add items to cart (guest), refresh — guest cart persists.
+- Click "Process to Checkout" while logged out → login → confirm you return to `/checkout`.
+- Change item quantity and verify updates.
 
-## 🚀 Deployment Notes
-	•	Frontend: Deployed on Vercel￼
-	•	Backend: To be deployed on Strapi Cloud / Render
-	•	Update NEXT_PUBLIC_API_URL in .env.local when backend is live.
-
-## 📚 Team Focus (Sprint 1)
-
-*(Roles may rotate each sprint based on workload and interest.)*
-
-| Member | Focus This Sprint |
-|---------|------------------|
-| **TJ** | Frontend setup, documentation |
-| **Suganya** | Backend setup, Supabase integration |
-| **Fizza** | Mobile wireframes |
-| **Saara** | Desktop wireframes |
-
-## 🧪 Current Sprint Focus (Sprint 1)
-	•	✅ Frontend & backend repo setup
-	•	✅ Blog connected with local Strapi
-	•	✅ .env.example and README created
-	•	🚧 Supabase + backend deployment in progress
-	•	🚧 Mobile-first and desktop wireframes in Figma
-
-## ✅ Next Steps (Sprint 2 Preview)
-	•	Implement Figma UI design in frontend
-	•	Deploy backend & connect to Supabase
-	•	Add full navigation and “Coming soon” pages
-	•	Integrate Unelma Mail newsletter signup
+If you need the deployed Strapi URL or a demo user account, request it from the maintainers — do not post secrets in the repo.
 
 ## 📚 Credits
 
