@@ -35,11 +35,19 @@ export default function BlogPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [searchQuery, setSearchQuery] = useState("")
-  const [currentPage, setCurrentPage] = useState(1)
+  const [selectedCategory, setSelectedCategory] = useState("All")
+  const [selectedYear, setSelectedYear] = useState(null)
+  const [selectedMonth, setSelectedMonth] = useState(null)
   const [yearArchive, setYearArchive] = useState({})
+  const [openYears, setOpenYears] = useState({})
+  const [currentPage, setCurrentPage] = useState(1)
   const postsPerPage = 3
 
   const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com"
+
+  const toggleYear = (year) => {
+    setOpenYears((prev) => ({ ...prev, [year]: !prev[year] }))
+  }
 
   useEffect(() => {
     axios
@@ -75,14 +83,31 @@ export default function BlogPage() {
   }, [API_URL])
 
   const sortedBlogs = [...blogs].sort(
-    (a, b) => new Date(b.createdAt || b.publishedAt) - new Date(a.createdAt || a.publishedAt),
+    (a, b) => new Date(b.date || b.publishedAt || b.createdAt) - new Date(a.date || a.publishedAt || a.createdAt),
   )
 
-  const filteredBlogs = sortedBlogs.filter((blog) => {
-    const { Title, Description } = blog
-    const query = searchQuery.toLowerCase()
-    return Title?.toLowerCase().includes(query) || Description?.toLowerCase().includes(query)
+  const allFilteredBlogs = sortedBlogs.filter((blog) => {
+    const matchesSearch =
+      blog.Title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      blog.Description?.toLowerCase().includes(searchQuery.toLowerCase())
+
+    const matchesCategory = selectedCategory === "All" || (blog.category || "Other") === selectedCategory
+
+    let matchesDate = true
+    if (selectedYear && selectedMonth) {
+      const date = blog.date || blog.publishedAt || blog.createdAt
+      if (date) {
+        const d = new Date(date)
+        const blogYear = d.getFullYear()
+        const blogMonth = d.toLocaleString("en-US", { month: "long" })
+        matchesDate = blogYear === selectedYear && blogMonth === selectedMonth
+      }
+    }
+
+    return matchesSearch && matchesCategory && matchesDate
   })
+
+  const [featured, ...filteredBlogs] = allFilteredBlogs
 
   const totalPages = Math.max(1, Math.ceil(filteredBlogs.length / postsPerPage))
   const paginatedPosts = filteredBlogs.slice((currentPage - 1) * postsPerPage, currentPage * postsPerPage)
@@ -110,10 +135,10 @@ export default function BlogPage() {
             {/* Main Content */}
             <Box sx={{ flex: 1 }}>
               {/* Featured Blog Post */}
-              {currentPage === 1 && !searchQuery && blogs.length > 0 && (
+              {featured && (
                 <Box
                   component={Link}
-                  href={`/blog/${blogs[0].slug}`}
+                  href={`/blog/${featured.slug}`}
                   sx={{
                     display: "flex",
                     flexDirection: "column",
@@ -129,28 +154,26 @@ export default function BlogPage() {
                   }}
                 >
                   {(() => {
-                    const { Title, Description, blog_image, createdAt, category } = blogs[0]
+                    const { Title, Description, blog_image, createdAt, category } = featured
                     const imageUrl = blog_image?.url || "/images/blog/pngwing.com - 2025-11-17T021857.109 copy.png"
 
                     return (
                       <>
-                        {blog_image?.url && (
-                          <Box
-                            sx={{
-                              width: "100%",
-                              height: 450,
-                              position: "relative",
-                            }}
-                          >
-                            <Image
-                              src={imageUrl || "/placeholder.svg"}
-                              alt={Title || "Featured Blog Image"}
-                              fill
-                              style={{ objectFit: "cover" }}
-                              priority
-                            />
-                          </Box>
-                        )}
+                        <Box
+                          sx={{
+                            width: "100%",
+                            height: 450,
+                            position: "relative",
+                          }}
+                        >
+                          <Image
+                            src={imageUrl || "/placeholder.svg"}
+                            alt={Title || "Featured Blog Image"}
+                            fill
+                            style={{ objectFit: "cover" }}
+                            priority
+                          />
+                        </Box>
                         <Box sx={{ display: "flex", flexDirection: "column", p: 5 }}>
                           <Box sx={{ display: "flex", gap: 4, alignItems: "center", mb: 4, flexWrap: "wrap" }}>
                             <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
@@ -203,7 +226,7 @@ export default function BlogPage() {
                                 <EditNoteIcon sx={{ fontSize: 24 }} />
                               </IconButton>
                               <Typography sx={{ ...theme.typography.bodyFontTitle_S }}>
-                                {blogs[0].author_name || "Author's Name"}
+                                {featured.author_name || "Author's Name"}
                               </Typography>
                             </Box>
 
@@ -351,10 +374,10 @@ export default function BlogPage() {
                   display: "flex",
                   flexDirection: "column",
                   gap: 6,
-                  mt: currentPage === 1 && !searchQuery && blogs.length > 0 ? 6 : 0,
+                  mt: featured ? 6 : 0,
                 }}
               >
-                {currentBlogs.map((blog) => {
+                {currentBlogs.slice(1).map((blog) => {
                   const { Title, Description, blog_image, category } = blog
                   const imageUrl = blog_image?.url || "/images/blog/pngwing.com - 2025-11-17T021857.109 copy.png"
 
@@ -374,26 +397,25 @@ export default function BlogPage() {
                         "&:hover": {
                           transform: "translateY(-2px)",
                         },
-                        minHeight: 380,
+                        height: { xs: "auto", md: 380 },
                       }}
                     >
-                      {blog_image?.url && (
-                        <Box
-                          sx={{
-                            minWidth: { xs: "100%", md: 300 },
-                            height: { xs: 250, md: "100%" },
-                            position: "relative",
-                            flexShrink: 0,
-                          }}
-                        >
-                          <Image
-                            src={imageUrl || "/placeholder.svg"}
-                            alt={Title || "Blog Image"}
-                            fill
-                            style={{ objectFit: "cover" }}
-                          />
-                        </Box>
-                      )}
+                      <Box
+                        sx={{
+                          minWidth: { xs: "100%", md: 300 },
+                          height: { xs: 250, md: 380 },
+                          position: "relative",
+                          flexShrink: 0,
+                        }}
+                      >
+                        <Image
+                          src={imageUrl || "/placeholder.svg"}
+                          alt={Title || "Blog Image"}
+                          fill
+                          sizes="(max-width: 768px) 100vw, 300px"
+                          style={{ objectFit: "cover" }}
+                        />
+                      </Box>
                       <Box sx={{ flex: 1, display: "flex", flexDirection: "column", p: 4, gap: 3 }}>
                         <Box sx={{ display: "flex", gap: 3, alignItems: "center", flexWrap: "wrap" }}>
                           <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
@@ -639,6 +661,29 @@ export default function BlogPage() {
                   Blog Categories
                 </Typography>
                 <ul style={{ listStyle: "none", padding: 0 }}>
+                  <li style={{ marginBottom: "0.5rem" }}>
+                    <Box
+                      onClick={() => {
+                        setSelectedCategory("All")
+                        setSelectedYear(null)
+                        setSelectedMonth(null)
+                        setCurrentPage(1)
+                      }}
+                      sx={{
+                        ...theme.typography.bodyFont_M,
+                        p: 1.5,
+                        cursor: "pointer",
+                        transition: "all 0.25s ease",
+                        color: theme.palette.text.primary,
+                        backgroundColor: selectedCategory === "All" ? theme.palette.section.blog.pastel : "transparent",
+                        "&:hover": {
+                          backgroundColor: theme.palette.section.blog.pastel,
+                        },
+                      }}
+                    >
+                      All ({allFilteredBlogs.length})
+                    </Box>
+                  </li>
                   {[
                     "Digital Marketing",
                     "E-Commerce",
@@ -651,25 +696,28 @@ export default function BlogPage() {
                     const count = categories[category] || 0
                     return (
                       <li key={category} style={{ marginBottom: "0.5rem" }}>
-                        <Link
-                          href={`/blog/category/${encodeURIComponent(category)}`}
-                          style={{ textDecoration: "none" }}
+                        <Box
+                          onClick={() => {
+                            setSelectedCategory(category)
+                            setSelectedYear(null)
+                            setSelectedMonth(null)
+                            setCurrentPage(1)
+                          }}
+                          sx={{
+                            ...theme.typography.bodyFont_M,
+                            p: 1.5,
+                            cursor: "pointer",
+                            transition: "all 0.25s ease",
+                            color: theme.palette.text.primary,
+                            backgroundColor:
+                              selectedCategory === category ? theme.palette.section.blog.pastel : "transparent",
+                            "&:hover": {
+                              backgroundColor: theme.palette.section.blog.pastel,
+                            },
+                          }}
                         >
-                          <Box
-                            sx={{
-                              ...theme.typography.bodyFont_M,
-                              p: 1.5,
-                              cursor: "pointer",
-                              transition: "all 0.25s ease",
-                              color: theme.palette.text.primary,
-                              "&:hover": {
-                                backgroundColor: theme.palette.section.blog.pastel,
-                              },
-                            }}
-                          >
-                            {category} ({count})
-                          </Box>
-                        </Link>
+                          {category} ({count})
+                        </Box>
                       </li>
                     )
                   })}
@@ -696,27 +744,52 @@ export default function BlogPage() {
                       const totalPosts = Object.values(months).reduce((a, b) => a + b, 0)
                       return (
                         <li key={year} style={{ marginBottom: "1rem" }}>
-                          <Typography
+                          <Box
+                            onClick={() => toggleYear(year)}
                             sx={{
                               ...theme.typography.bodyFont_M,
-                              fontWeight: 600,
-                              mb: 1,
+                              cursor: "pointer",
+                              display: "flex",
+                              justifyContent: "space-between",
+                              p: 1.5,
+                              transition: "all 0.25s ease",
+                              color: theme.palette.text.primary,
+                              backgroundColor:
+                                selectedYear === Number.parseInt(year) && !selectedMonth
+                                  ? theme.palette.section.blog.pastel
+                                  : "transparent",
+                              "&:hover": {
+                                backgroundColor: theme.palette.section.blog.pastel,
+                              },
                             }}
                           >
-                            {year} ({totalPosts})
-                          </Typography>
-                          <ul style={{ listStyle: "none", padding: 0 }}>
-                            {Object.keys(months).map((month) => (
-                              <li key={month}>
-                                <Link href={`/blog/archive/${year}/${month}`} style={{ textDecoration: "none" }}>
+                            <span>
+                              {year} ({totalPosts})
+                            </span>
+                            <span>{openYears[year] ? "−" : "+"}</span>
+                          </Box>
+                          {openYears[year] && (
+                            <ul style={{ listStyle: "none", padding: 0, marginTop: "0.5rem" }}>
+                              {Object.keys(months).map((month) => (
+                                <li key={month}>
                                   <Box
+                                    onClick={() => {
+                                      setSelectedYear(Number.parseInt(year))
+                                      setSelectedMonth(month)
+                                      setSelectedCategory("All")
+                                      setCurrentPage(1)
+                                    }}
                                     sx={{
                                       ...theme.typography.bodyFont_M,
-                                      pl: 2,
+                                      pl: 4,
                                       p: 1,
                                       cursor: "pointer",
                                       transition: "all 0.25s ease",
                                       color: theme.palette.text.secondary,
+                                      backgroundColor:
+                                        selectedYear === Number.parseInt(year) && selectedMonth === month
+                                          ? theme.palette.section.blog.pastel
+                                          : "transparent",
                                       "&:hover": {
                                         backgroundColor: theme.palette.section.blog.pastel,
                                         color: theme.palette.text.primary,
@@ -725,10 +798,10 @@ export default function BlogPage() {
                                   >
                                     {month} ({months[month]})
                                   </Box>
-                                </Link>
-                              </li>
-                            ))}
-                          </ul>
+                                </li>
+                              ))}
+                            </ul>
+                          )}
                         </li>
                       )
                     })}

@@ -431,19 +431,11 @@ export default function SingleBlogPage() {
                 Blog Categories
               </Typography>
               <ul style={{ listStyle: "none", padding: 0 }}>
-                {[
-                  "Digital Marketing",
-                  "E-Commerce",
-                  "API",
-                  "Events & Conferences",
-                  "Startup Business",
-                  "Internships",
-                  "Other",
-                ].map((category) => {
+                {Object.keys(categories).map((category) => {
                   const count = categories[category] || 0
                   return (
                     <li key={category} style={{ marginBottom: "0.75rem" }}>
-                      <Link href={`/category/${category}`} style={{ textDecoration: "none" }}>
+                      <Link href={`/blog/category/${encodeURIComponent(category)}`} style={{ textDecoration: "none" }}>
                         <Box
                           sx={{
                             ...theme.typography.bodyFont_M,

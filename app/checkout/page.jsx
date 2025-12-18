@@ -1,439 +1,525 @@
-"use client";
-import { useState, useEffect } from "react";
-import {
-  Box,
-  Typography,
-  TextField,
-  Switch,
-  FormControlLabel,
-  Select,
-  MenuItem,
-  InputLabel,
-  FormControl,
-  TableContainer,
-  Table,
-  TableBody,
-  TableRow,
-  TableCell,
-  Button,
-  Grid,
-} from "@mui/material";
-import countryList from "react-select-country-list";
-import { useCart } from "@/app/context/CartContext";
-import { useRouter } from "next/navigation";
-import AccessTimeIcon from "@mui/icons-material/AccessTime";
-import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
-import Image from "next/image";
-import Alert from "@mui/material/Alert";
-import HeroPage from "@/components/common/HeroPage";
-import axios from "axios";
-import { useUserProfile } from "@/app/context/UserContext";
+"use client"
 
-const STRAPI_TOKEN = process.env.NEXT_PUBLIC_STRAPI_API_TOKEN;
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:1337";
+import { useState, useEffect } from "react"
+import axios from "axios"
+import Image from "next/image"
+import Link from "next/link"
+import { useParams } from "next/navigation"
+import { Box, Card, CardContent, Typography, Stack, useTheme, IconButton } from "@mui/material"
+import ShareIcon from "@mui/icons-material/Share"
+import CommentIcon from "@mui/icons-material/Comment"
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward"
+import ArrowBackIcon from "@mui/icons-material/ArrowBack"
+import CalendarTodayIcon from "@mui/icons-material/CalendarToday"
+import EditNoteIcon from "@mui/icons-material/EditNote"
+import CategoryIcon from "@mui/icons-material/Category"
+import BackToTopButton from "@/components/BackToTopButton"
+import LoadingSpinner from "@/components/LoadingSpinner"
+import SearchInput from "@/components/SearchInput"
+import BlogPageHero from "@/components/blog/BlogPageHero"
 
-const countries = countryList().getData();
-
-const paymentOptions = [
-  {
-    label: "Pay After Delivery",
-    value: "cod",
-    icon: <AccessTimeIcon fontSize="large" />,
-  },
-  {
-    label: "Bank Transfer",
-    value: "bank",
-    icon: <AccountBalanceIcon fontSize="large" />,
-  },
-  {
-    label: "PayPal",
-    value: "paypal",
-    icon: (
-      <Image
-        src="/images/payment/paypal.png"
-        alt="PayPal"
-        width={100}
-        height={100}
-        style={{ objectFit: "contain" }}
-      />
-    ),
-  },
-  {
-    label: "UnelmaPay",
-    value: "unelmapay",
-    icon: (
-      <Image
-        src="/images/payment/unelmapay.png"
-        alt="UnelmaPay"
-        width={60}
-        height={60}
-        style={{ objectFit: "contain" }}
-      />
-    ),
-  },
-];
-
-function CountrySelect({ value, onChange, label = "Country" }) {
-  return (
-    <FormControl fullWidth sx={{ mb: 2 }}>
-      <InputLabel>{label}</InputLabel>
-      <Select value={value} label={label} onChange={onChange}>
-        <MenuItem value="">
-          <em>Select Country</em>
-        </MenuItem>
-        {countries.map((country) => (
-          <MenuItem key={country.value} value={country.label}>
-            {country.label}
-          </MenuItem>
-        ))}
-      </Select>
-    </FormControl>
-  );
+function formatBlogDate(date) {
+  if (!date) return "Unknown Date"
+  const d = new Date(date)
+  return d.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })
 }
 
-function generateOrderId() {
-    const date = new Date();
-    const ymd =
-      date.getFullYear().toString() +
-      String(date.getMonth() + 1).padStart(2, "0") +
-      String(date.getDate()).padStart(2, "0");
-  
-    const random = Math.random().toString(36).substring(2, 7).toUpperCase();
-  
-    return `UNEL${ymd}${random}`;
+export default function SingleBlogPage() {
+  const theme = useTheme()
+  const { slug } = useParams()
+
+  const [blog, setBlog] = useState(null)
+  const [allBlogs, setAllBlogs] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+  const [comments, setComments] = useState([])
+  const [newComment, setNewComment] = useState("")
+  const [commentsVisible, setCommentsVisible] = useState(false)
+  const [categories, setCategories] = useState({})
+  const [yearArchive, setYearArchive] = useState({})
+  const [openYears, setOpenYears] = useState({})
+  const [relatedPosts, setRelatedPosts] = useState([])
+  const [searchQuery, setSearchQuery] = useState("")
+
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com"
+
+  const toggleYear = (year) => {
+    setOpenYears((prev) => ({ ...prev, [year]: !prev[year] }))
   }
 
-export default function CheckoutPage() {
-    const { cartItems, clearCart, selectedShipping, setSelectedShipping } = useCart();
-    const { profile, loading: profileLoading } = useUserProfile();
-    const router = useRouter();
-  
-    const [showShipping, setShowShipping] = useState(false);
-    const [selectedPayment, setSelectedPayment] = useState("cod");
-  
-    const [billingAddress, setBillingAddress] = useState({
-      name: "",
-      email: "",
-      phone: "",
-      street: "",
-      city: "",
-      state: "",
-      postalCode: "",
-      country: "",
-    });
-  
-    const [deliveryAddress, setDeliveryAddress] = useState({
-      name: "",
-      email: "",
-      country: "",
-    });
-  
-    useEffect(() => {
-      const saved = localStorage.getItem("selectedShipping");
-      if (saved) setSelectedShipping(JSON.parse(saved));
-    }, [setSelectedShipping]);
-  
-    const totalPrice = cartItems.reduce(
-      (sum, item) => sum + item.quantity * Number(item.unitPrice),
-      0
-    );
-    const taxAmount = totalPrice * 0.24;
-    const shippingCost = Number(selectedShipping?.cost || 0);
-    const grandTotal = totalPrice + taxAmount + shippingCost;
-  
+  useEffect(() => {
+    if (!slug) return
 
-    const handleConfirmOrder = async () => {
-        if (!profile) {
-          alert("User profile not loaded yet. Please try again.");
-          return;
+    const singlePost = axios.get(`${API_URL}/api/blogs?filters[slug][$eq]=${slug}&populate=*`)
+    const allPosts = axios.get(`${API_URL}/api/blogs?populate=*`)
+
+    Promise.all([singlePost, allPosts])
+      .then(([singleRes, allRes]) => {
+        const currentBlog = singleRes.data.data[0] || null
+        const allBlogsData = allRes.data.data || []
+
+        setBlog(currentBlog)
+        setAllBlogs(allBlogsData)
+
+        const categoryCounts = allBlogsData.reduce((acc, b) => {
+          const cat = b.category || "Other"
+          acc[cat] = (acc[cat] || 0) + 1
+          return acc
+        }, {})
+        setCategories(categoryCounts)
+
+        const archive = allBlogsData.reduce((acc, blog) => {
+          const date = blog.date || blog.publishedAt || blog.createdAt
+          if (!date) return acc
+
+          const d = new Date(date)
+          const year = d.getFullYear()
+          const month = d.toLocaleString("en-US", { month: "long" })
+
+          if (!acc[year]) acc[year] = {}
+          if (!acc[year][month]) acc[year][month] = 0
+          acc[year][month]++
+          return acc
+        }, {})
+        setYearArchive(archive)
+
+        if (currentBlog) {
+          const currentCategory = currentBlog.category
+          const related = allBlogsData
+            .filter((b) => b.id !== currentBlog.id && (b.category || "Other") === currentCategory)
+            .slice(0, 3)
+          setRelatedPosts(related)
         }
-      
-        const orderId = generateOrderId();
-      
-        try {
-          // 1️⃣ Create the Order first
-          const orderPayload = {
-            data: {
-              order_id: orderId,
-              user_profile: profile.id, // Many-to-one relation
-              order_status: "Pending",
-              payment_method: selectedPayment,
-              subTotal: totalPrice,
-              tax: taxAmount,
-              delivery_type: selectedShipping?.delivery_type || "",
-              delivery_cost: shippingCost,
-              total: grandTotal,
-              billing_address: billingAddress,
-              delivery_address: showShipping ? deliveryAddress : null,
-            },
-          };
-      
-          const orderRes = await axios.post(`${API_URL}/api/orders`, orderPayload, {
-            headers: { Authorization: `Bearer ${STRAPI_TOKEN}` },
-          });
-      
-          const createdOrder = orderRes.data.data; // <-- Strapi order ID
-      
-          // 2️⃣ Create Order Items separately and link them to the order
-          await Promise.all(
-            cartItems.map((item) =>
-              axios.post(
-                `${API_URL}/api/order-items`,
-                {
-                  data: {
-                    order: createdOrder.id, // Link to parent order
-                    product_id: item.productId,
-                    product_name: item.name,
-                    unitPrice: item.unitPrice,
-                    quantity: item.quantity,
-                    subTotal: item.unitPrice * item.quantity,
-                  },
-                },
-                { headers: { Authorization: `Bearer ${STRAPI_TOKEN}` } }
-              )
-            )
-          );
-      
-          // 3️⃣ Clear cart & redirect
-          clearCart();
-          localStorage.removeItem("selectedShipping");
-      
-          // Save order info locally for the success page
-          localStorage.setItem(
-            "lastOrder",
-            JSON.stringify({
-              orderId: orderId,
-              total: grandTotal,
-              billingAddress,
-              deliveryAddress: showShipping ? deliveryAddress : null,
-              shipping: selectedShipping,
-              items: cartItems, // optional: for display in success page
-            })
-          );
-      
-          router.push("/order-success");
-        } catch (err) {
-          console.error("Checkout failed:", err.response?.data || err);
-          alert("Something went wrong while placing the order.");
-        }
-      };
-      
+      })
+      .catch((err) => setError(err))
+      .finally(() => setLoading(false))
+  }, [slug, API_URL])
+
+  const handleCommentSubmit = (e) => {
+    e.preventDefault()
+    if (newComment.trim()) {
+      setComments((prev) => [
+        ...prev,
+        {
+          text: newComment,
+          author: "You",
+          date: new Date().toLocaleDateString(),
+        },
+      ])
+      setNewComment("")
+    }
+  }
+
+  if (loading) return <LoadingSpinner />
+  if (error) return <Box sx={{ p: 4, textAlign: "center" }}>Error: {error.message}</Box>
+  if (!blog) return <Box sx={{ p: 4, textAlign: "center" }}>Blog not found.</Box>
+
+  const { Title, Description, blog_image, createdAt, category } = blog
+  const imageUrl = blog_image?.url || "/images/blog/pngwing.com - 2025-11-17T021857.109 copy.png"
+
+  const currentIndex = allBlogs.findIndex((b) => b.slug === slug)
+  const prevBlog = currentIndex > 0 ? allBlogs[currentIndex - 1] : null
+  const nextBlog = currentIndex < allBlogs.length - 1 ? allBlogs[currentIndex + 1] : null
 
   return (
-    <>
-      <HeroPage
-        title="Checkout"
-        image1={{ src: "/blog/blog-hero-1.png", alt: "Checkout Hero 1", width: 244, height: 261 }}
-        image2={{ src: "/blog/blog-hero-2.png", alt: "Checkout Hero 2", width: 272, height: 309 }}
-      />
-      <Grid
-        container
-        columns={{ xs: 1, md: 2 }}
-        columnSpacing={4}
-        sx={{ maxWidth: 1200, mx: "auto", mt: 4 }}
-      >
-        {/* Billing & Shipping Form (Left) */}
-        <Grid
-          sx={{
-            width: "100%",
-            maxWidth: 500, // or 600 for wider
-            mx: "auto",
-            mb: { xs: 4, md: 0 },
-            pr: { xs: 0, md: 2 },
-          }}
-        >
-          <Box sx={{ p: { xs: 1, sm: 2, md: 4 } }}>
-            <Typography variant="h4" sx={{ mb: 3 }}>
-              Billing Information
-            </Typography>
-            <TextField fullWidth label="Name" sx={{ mb: 2 }}
-            onChange={(e) => setBillingAddress({ ...billingAddress, name: e.target.value })} />
+    <main>
+      <BlogPageHero />
 
-          <TextField fullWidth label="Email" sx={{ mb: 2 }}
-            onChange={(e) => setBillingAddress({ ...billingAddress, email: e.target.value })} />
-
-          <TextField fullWidth label="Phone" sx={{ mb: 2 }}
-            onChange={(e) => setBillingAddress({ ...billingAddress, phone: e.target.value })} />
-
-            <CountrySelect
-            value={billingAddress.country}
-            onChange={(e) => setBillingAddress({ ...billingAddress, country: e.target.value })}
-          />
-            <TextField fullWidth label="Street Address" sx={{ mb: 2 }}
-            onChange={(e) => setBillingAddress({ ...billingAddress, street: e.target.value })} />
-
-          <TextField fullWidth label="City" sx={{ mb: 2 }}
-            onChange={(e) => setBillingAddress({ ...billingAddress, city: e.target.value })} />
-
-          <TextField fullWidth label="State" sx={{ mb: 2 }}
-            onChange={(e) => setBillingAddress({ ...billingAddress, state: e.target.value })} />
-
-          <TextField fullWidth label="Postal Code" sx={{ mb: 2 }}
-            onChange={(e) => setBillingAddress({ ...billingAddress, postalCode: e.target.value })} />
-
-
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={showShipping}
-                  onChange={() => setShowShipping(!showShipping)}
-                  color="primary"
+      <Box sx={{ px: { xs: 2, md: "150px" }, py: 8, mb: 10 }}>
+        <Box sx={{ display: "flex", gap: 8, flexDirection: { xs: "column", lg: "row" } }}>
+          {/* MAIN CONTENT */}
+          <Box sx={{ flex: 1 }}>
+            <Card
+              sx={{
+                ...theme.mixins.borderStyle,
+                overflow: "hidden",
+              }}
+            >
+              <Box sx={{ position: "relative", height: { xs: 300, md: 500 }, width: "100%" }}>
+                <Image
+                  src={imageUrl || "/placeholder.svg"}
+                  alt={Title || "Blog"}
+                  fill
+                  style={{ objectFit: "cover" }}
+                  priority
                 />
-              }
-              label="Deliver to a different recipient?"
-              sx={{ mt: 2 }}
-            />
+              </Box>
 
-            {showShipping && (
-              <Box sx={{ mt: 4 }}>
-                <Typography variant="h5" sx={{ mb: 2 }}>
-                  Recipient Information
+              <CardContent sx={{ p: { xs: 4, md: 6 } }}>
+                <Stack direction="row" spacing={3} mb={5} flexWrap="wrap" alignItems="center">
+                  <IconButton
+                    size="small"
+                    sx={{
+                      borderRadius: 100,
+                      border: theme.mixins.borderStyle,
+                      p: 0.6,
+                      color: theme.palette.primary.main,
+                      backgroundColor: theme.palette.section.blog.pastel,
+                      transition: "transform 0.25s ease",
+                      "&:hover": {
+                        transform: "scale(1.2)",
+                        backgroundColor: theme.palette.section.shopOrder.soft,
+                        boxShadow: "none",
+                      },
+                    }}
+                  >
+                    <CalendarTodayIcon sx={{ fontSize: 20 }} />
+                  </IconButton>
+                  <Typography sx={{ ...theme.typography.bodyFont_M }}>{formatBlogDate(createdAt)}</Typography>
+
+                  <IconButton
+                    size="small"
+                    sx={{
+                      borderRadius: 100,
+                      border: theme.mixins.borderStyle,
+                      p: 0.6,
+                      color: theme.palette.primary.main,
+                      backgroundColor: theme.palette.section.blog.pastel,
+                      transition: "transform 0.25s ease",
+                      "&:hover": {
+                        transform: "scale(1.2)",
+                        backgroundColor: theme.palette.section.shopOrder.soft,
+                        boxShadow: "none",
+                      },
+                    }}
+                  >
+                    <EditNoteIcon sx={{ fontSize: 20 }} />
+                  </IconButton>
+                  <Typography sx={{ ...theme.typography.bodyFont_M }}>Author</Typography>
+
+                  <IconButton
+                    size="small"
+                    sx={{
+                      borderRadius: 100,
+                      border: theme.mixins.borderStyle,
+                      p: 0.6,
+                      color: theme.palette.primary.main,
+                      backgroundColor: theme.palette.section.blog.pastel,
+                      transition: "transform 0.25s ease",
+                      "&:hover": {
+                        transform: "scale(1.2)",
+                        backgroundColor: theme.palette.section.shopOrder.soft,
+                        boxShadow: "none",
+                      },
+                    }}
+                  >
+                    <CategoryIcon sx={{ fontSize: 20 }} />
+                  </IconButton>
+                  <Typography sx={{ ...theme.typography.bodyFont_M }}>{category || "Category"}</Typography>
+                </Stack>
+
+                <Typography sx={{ ...theme.typography.headingFont_S, mb: 5, mt: 4 }}>{Title}</Typography>
+
+                <Typography
+                  sx={{
+                    ...theme.typography.bodyFont_L,
+                    color: theme.palette.text.secondary,
+                    whiteSpace: "pre-line",
+                    mb: 6,
+                    mt: 4,
+                  }}
+                >
+                  {Description}
                 </Typography>
-                <TextField fullWidth label="Name" sx={{ mb: 2 }}
-                onChange={(e) => setDeliveryAddress({ ...deliveryAddress, name: e.target.value })} />
 
-              <TextField fullWidth label="Email" sx={{ mb: 2 }}
-                onChange={(e) => setDeliveryAddress({ ...deliveryAddress, email: e.target.value })} />
-                <CountrySelect
-                value={deliveryAddress.country}
-                label="Recipient Country"
-                onChange={(e) => setDeliveryAddress({ ...deliveryAddress, country: e.target.value })}
-              />
+                <Stack direction="row" spacing={4} alignItems="center">
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 1.5,
+                      cursor: "pointer",
+                      color: theme.palette.primary.main,
+                      transition: "all 0.25s ease",
+                      "&:hover": {
+                        transform: "scale(1.2)",
+                        color: theme.palette.section.products.vibrant,
+                      },
+                    }}
+                    onClick={() => alert("Share functionality coming soon!")}
+                  >
+                    <IconButton
+                      size="small"
+                      sx={{
+                        borderRadius: 100,
+                        border: theme.mixins.borderStyle,
+                        p: 0.6,
+                        color: theme.palette.primary.main,
+                        backgroundColor: theme.palette.section.blog.pastel,
+                        transition: "transform 0.25s ease",
+                        "&:hover": {
+                          transform: "scale(1.2)",
+                          backgroundColor: theme.palette.section.shopOrder.soft,
+                          boxShadow: "none",
+                        },
+                      }}
+                    >
+                      <ShareIcon sx={{ fontSize: 20 }} />
+                    </IconButton>
+                    <Typography sx={{ ...theme.typography.bodyFont_M }}>Share</Typography>
+                  </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 1.5,
+                      cursor: "pointer",
+                      color: theme.palette.primary.main,
+                      transition: "all 0.25s ease",
+                      "&:hover": {
+                        transform: "scale(1.2)",
+                        color: theme.palette.section.products.vibrant,
+                      },
+                    }}
+                    onClick={() => alert("Comment functionality coming soon!")}
+                  >
+                    <IconButton
+                      size="small"
+                      sx={{
+                        borderRadius: 100,
+                        border: theme.mixins.borderStyle,
+                        p: 0.6,
+                        color: theme.palette.primary.main,
+                        backgroundColor: theme.palette.section.blog.pastel,
+                        transition: "transform 0.25s ease",
+                        "&:hover": {
+                          transform: "scale(1.2)",
+                          backgroundColor: theme.palette.section.shopOrder.soft,
+                          boxShadow: "none",
+                        },
+                      }}
+                    >
+                      <CommentIcon sx={{ fontSize: 20 }} />
+                    </IconButton>
+                    <Typography sx={{ ...theme.typography.bodyFont_M }}>Comment</Typography>
+                  </Box>
+                </Stack>
+              </CardContent>
+            </Card>
+
+            <Box
+              sx={{
+                mt: 6,
+                display: "flex",
+                justifyContent: "space-between",
+                gap: 2,
+                flexDirection: { xs: "column", sm: "row" },
+              }}
+            >
+              {prevBlog ? (
+                <Link href={`/blog/${prevBlog.slug}`} passHref style={{ textDecoration: "none", flex: 1 }}>
+                  <Box
+                    sx={{
+                      p: 2,
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 1,
+                      cursor: "pointer",
+                      color: theme.palette.section.about.main,
+                      transition: "all 0.25s ease",
+                      "&:hover": {
+                        color: theme.palette.section.products.vibrant,
+                        transform: "translateX(-4px)",
+                      },
+                    }}
+                  >
+                    <ArrowBackIcon />
+                    <Typography sx={{ ...theme.typography.bodyFont_M }}>Previous Post</Typography>
+                  </Box>
+                </Link>
+              ) : (
+                <Box sx={{ flex: 1 }} />
+              )}
+
+              {nextBlog ? (
+                <Link href={`/blog/${nextBlog.slug}`} passHref style={{ textDecoration: "none", flex: 1 }}>
+                  <Box
+                    sx={{
+                      p: 2,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "flex-end",
+                      gap: 1,
+                      cursor: "pointer",
+                      color: theme.palette.section.about.main,
+                      transition: "all 0.25s ease",
+                      "&:hover": {
+                        color: theme.palette.section.products.vibrant,
+                        transform: "translateX(4px)",
+                      },
+                    }}
+                  >
+                    <Typography sx={{ ...theme.typography.bodyFont_M }}>Next Post</Typography>
+                    <ArrowForwardIcon />
+                  </Box>
+                </Link>
+              ) : (
+                <Box sx={{ flex: 1 }} />
+              )}
+            </Box>
+
+            {relatedPosts.length > 0 && (
+              <Box sx={{ mt: 8 }}>
+                <Typography sx={{ ...theme.typography.headingFont_S, mb: 4 }}>Related Posts</Typography>
+                <Box
+                  sx={{
+                    display: "grid",
+                    gridTemplateColumns: { xs: "1fr", sm: "repeat(2, 1fr)", md: "repeat(3, 1fr)" },
+                    gap: 3,
+                  }}
+                >
+                  {relatedPosts.map((post) => (
+                    <Link key={post.id} href={`/blog/${post.slug}`} passHref style={{ textDecoration: "none" }}>
+                      <Card
+                        sx={{
+                          ...theme.mixins.borderStyle,
+                          height: "100%",
+                          cursor: "pointer",
+                          transition: "all 0.25s ease",
+                          overflow: "hidden",
+                          "&:hover": {
+                            transform: "translateY(-4px)",
+                          },
+                        }}
+                      >
+                        <Box sx={{ position: "relative", height: 180, width: "100%" }}>
+                          <Image
+                            src="/images/blog/pngwing.com - 2025-11-17T021857.109 copy.png"
+                            alt={post.Title}
+                            fill
+                            style={{ objectFit: "cover" }}
+                          />
+                        </Box>
+                        <CardContent sx={{ p: 2 }}>
+                          <Typography sx={{ ...theme.typography.bodyFontTitle_S, mb: 1 }}>{post.Title}</Typography>
+                          <Stack direction="row" spacing={2} sx={{ mt: 1 }}>
+                            <Typography
+                              sx={{ ...theme.typography.bodyFont_S, color: theme.palette.section.blog.muted }}
+                            >
+                              {post.category || "Category"}
+                            </Typography>
+                            <Typography
+                              sx={{ ...theme.typography.bodyFont_S, color: theme.palette.section.blog.muted }}
+                            >
+                              {formatBlogDate(post.createdAt)}
+                            </Typography>
+                          </Stack>
+                        </CardContent>
+                      </Card>
+                    </Link>
+                  ))}
+                </Box>
               </Box>
             )}
           </Box>
-        </Grid>
 
-        {/* Order Summary & Payment (Right) */}
-        <Grid
-          sx={{
-            width: { xs: "100%", md: "50%" },
-            pl: { xs: 0, md: 2 },
-          }}
-        >
-          <Box sx={{ p: { xs: 1, sm: 2, md: 4 }, background: "#fff" }}>
-            <Typography variant="h5" sx={{ mb: 2 }}>
-              Order Summary
-            </Typography>
-            <TableContainer>
-              <Table>
-                <TableBody>
-                  <TableRow>
-                    <TableCell>Subtotal</TableCell>
-                    <TableCell align="right">${totalPrice.toFixed(2)}</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>Tax (24%)</TableCell>
-                    <TableCell align="right">+ ${taxAmount.toFixed(2)}</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>Delivery Cost</TableCell>
-                    <TableCell align="right">
-                      + ${shippingCost.toFixed(2)}
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell sx={{ fontWeight: "bold" }}>Total</TableCell>
-                    <TableCell align="right" sx={{ fontWeight: "bold" }}>
-                      ${grandTotal.toFixed(2)}
-                    </TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
-            </TableContainer>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: { xs: "column", md: "row" },
-                gap: 4,
-                justifyContent: "center",
-                my: 4,
-                alignItems: "center",
-              }}
-            >
-              {paymentOptions.map((option) => (
-                <Box
-                  key={option.value}
-                  onClick={() => setSelectedPayment(option.value)}
-                  sx={{
-                    border:
-                      selectedPayment === option.value
-                        ? "2px solid #1976d2"
-                        : "2px solid transparent",
-                    borderRadius: 2,
-                    p: 1,
-                    cursor: "pointer",
-                    boxShadow:
-                      selectedPayment === option.value ? "0 0 8px #1976d2" : "none",
-                    position: "relative",
-                    minWidth: 100,
-                    minHeight: 120,
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    justifyContent: "flex-start",
-                    background: "#fff",
-                    mb: { xs: 2, md: 0 },
-                  }}
-                >
-                  <Box
-                    sx={{
-                      height: 80, // fixed icon area height
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      mb: 1,
-                    }}
-                  >
-                    {option.icon}
-                  </Box>
-                  <Typography
-                    variant="body2"
-                    sx={{
-                      textAlign: "center",
-                      color: "#333",
-                      minHeight: 24, // ensures consistent label height
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                    }}
-                  >
-                    {option.label}
-                  </Typography>
-                  {selectedPayment === option.value && (
-                    <Box
-                      sx={{
-                        position: "absolute",
-                        top: 4,
-                        right: 4,
-                        width: 18,
-                        height: 18,
-                        background: "#1976d2",
-                        borderRadius: "50%",
-                        color: "#fff",
-                        fontSize: 14,
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                      }}
-                    >
-                      ✓
-                    </Box>
-                  )}
-                </Box>
-              ))}
+          {/* Sidebar - Same as blog page */}
+          <Box sx={{ width: { xs: "100%", lg: 350 }, flexShrink: 0 }}>
+            <Box sx={{ ...theme.mixins.borderStyle, p: 3 }}>
+              <Typography
+                sx={{ ...theme.typography.bodyFontTitle_M, textTransform: "uppercase", textAlign: "center", mb: 3 }}
+              >
+                Search
+              </Typography>
+              <SearchInput placeholder="Search blogs..." size="small" fullWidth onSearch={(q) => setSearchQuery(q)} />
             </Box>
-            <Button
-              variant="contained"
-              color="primary"
-              sx={{ mt: 3, minWidth: 200, width: { xs: "100%", sm: "auto" } }}
-              onClick={handleConfirmOrder}
-            >
-              Confirm Order
-            </Button>
+
+            <Box sx={{ ...theme.mixins.borderStyle, p: 3 }}>
+              <Typography
+                sx={{ ...theme.typography.bodyFontTitle_M, textTransform: "uppercase", textAlign: "center", mb: 3 }}
+              >
+                Blog Categories
+              </Typography>
+              <ul style={{ listStyle: "none", padding: 0 }}>
+                {Object.keys(categories).map((category) => {
+                  const count = categories[category] || 0
+                  return (
+                    <li key={category} style={{ marginBottom: "0.75rem" }}>
+                      <Link href={`/blog/category/${encodeURIComponent(category)}`} style={{ textDecoration: "none" }}>
+                        <Box
+                          sx={{
+                            ...theme.typography.bodyFont_M,
+                            p: 1.5,
+                            cursor: "pointer",
+                            transition: "all 0.25s ease",
+                            "&:hover": {
+                              backgroundColor: theme.palette.section.blog.pastel,
+                            },
+                          }}
+                        >
+                          {category} ({count})
+                        </Box>
+                      </Link>
+                    </li>
+                  )
+                })}
+              </ul>
+            </Box>
+
+            <Box sx={{ ...theme.mixins.borderStyle, p: 3 }}>
+              <Typography
+                sx={{ ...theme.typography.bodyFontTitle_M, textTransform: "uppercase", textAlign: "center", mb: 3 }}
+              >
+                Blog Archive
+              </Typography>
+              <ul style={{ listStyle: "none", padding: 0 }}>
+                {Object.keys(yearArchive)
+                  .sort((a, b) => b - a)
+                  .map((year) => {
+                    const months = yearArchive[year]
+                    const totalPosts = Object.values(months).reduce((a, b) => a + b, 0)
+                    return (
+                      <li key={year} style={{ marginBottom: "1rem" }}>
+                        <Box
+                          onClick={() => toggleYear(year)}
+                          sx={{
+                            ...theme.typography.bodyFont_M,
+                            cursor: "pointer",
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                            p: 1.5,
+                            transition: "all 0.25s ease",
+                            "&:hover": {
+                              backgroundColor: theme.palette.section.blog.pastel,
+                            },
+                          }}
+                        >
+                          <span>
+                            {year} ({totalPosts})
+                          </span>
+                          <span>{openYears[year] ? "▲" : "▼"}</span>
+                        </Box>
+                        {openYears[year] && (
+                          <ul style={{ listStyle: "none", paddingLeft: "1rem", marginTop: "0.5rem" }}>
+                            {Object.keys(months).map((month) => (
+                              <li key={month} style={{ marginBottom: "0.5rem" }}>
+                                <Box
+                                  sx={{
+                                    ...theme.typography.bodyFont_S,
+                                    cursor: "pointer",
+                                    p: 1,
+                                    transition: "all 0.25s ease",
+                                    "&:hover": {
+                                      backgroundColor: theme.palette.section.blog.pastel,
+                                    },
+                                  }}
+                                >
+                                  {month} ({months[month]})
+                                </Box>
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                      </li>
+                    )
+                  })}
+              </ul>
+            </Box>
           </Box>
-        </Grid>
-      </Grid>
-    </>
-  );
+        </Box>
+      </Box>
+      <BackToTopButton />
+    </main>
+  )
 }
