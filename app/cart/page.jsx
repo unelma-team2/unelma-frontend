@@ -59,6 +59,16 @@ const [serviceDeliveryTitle, setServiceDeliveryTitle] = useState("");
   }, [API_URL]);
 
   useEffect(() => {
+    console.log("Cart Items from context:", cartItems);
+  
+    cartItems.forEach((item) => {
+      const itemKey = item.documentId ?? item.productId ?? item.id;
+      console.log("Item Key:", itemKey, "Name:", item.name, "Quantity:", item.quantity);
+    });
+  }, [cartItems]);
+  
+
+  useEffect(() => {
     if (!delivery || delivery.length === 0) return;
   
     const saved = localStorage.getItem("selectedShipping");
@@ -69,6 +79,8 @@ const [serviceDeliveryTitle, setServiceDeliveryTitle] = useState("");
       setSelectedShipping(delivery[0]); // default to first option
     }
   }, [delivery, setSelectedShipping]);
+
+
   
 
   const { banner_title, banner_image } = banner || {};
