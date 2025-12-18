@@ -36,7 +36,7 @@ export default function SubscriptionBox() {
           width: "auto",
         }}
       >
-        <Image src="/images/cat.png" alt="Subscribe Cat Image" fill style={{ objectFit: "contain" }} />
+        <Image src="/images/cat.png" alt="Subscribe Cat Image" sx={{width: 254, height: 320 }}   fill style={{ objectFit: "contain" }} />
       </Box>
 
       {/* Right Form Content */}
