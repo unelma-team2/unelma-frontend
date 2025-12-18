@@ -60,7 +60,7 @@ export default function Footer() {
                 <Typography sx={{ ...theme.typography.bodyFontTitle_M_Card, ...linkSx }}>&#x25B8; Products</Typography>
               </Link>
               <br />
-              <Link href="/services">
+              <Link href="/products?tab=services">
                 <Typography sx={{ ...theme.typography.bodyFontTitle_M_Card, ...linkSx, mt: { xs: 2, sm: 2, md: 3 } }}>
                   &#x25B8; Services
                 </Typography>
@@ -81,7 +81,7 @@ export default function Footer() {
                 <Typography sx={{ ...theme.typography.bodyFont_M, ...linkSx }}>&#x25B8; Case Studies</Typography>
               </Link>
               <br />
-              <Link href="/customer-testimonials">
+              <Link href="/case-studies">
                 <Typography sx={{ ...theme.typography.bodyFont_M, ...linkSx }}>&#x25B8; Testimonials</Typography>
               </Link>
               <br />
@@ -112,7 +112,7 @@ export default function Footer() {
             <Typography sx={{ ...theme.typography.bodyFontTitle_M_Card, mb: 2 }}>Contact Us</Typography>
 
             <Box>
-              <Link href="/contact">
+            <Link href="/contact?contactType=Price%20quote%20request">
                 <Typography sx={{ ...theme.typography.bodyFont_M, ...linkSx }}>&#x25B8; Price Quote</Typography>
               </Link>
               <br />
@@ -120,11 +120,11 @@ export default function Footer() {
                 <Typography sx={{ ...theme.typography.bodyFont_M, ...linkSx }}>&#x25B8; Send Message</Typography>
               </Link>
               <br />
-              <Link href="/contact#feedback">
+              <Link href="/contact?contactType=Feedback/review">
                 <Typography sx={{ ...theme.typography.bodyFont_M, ...linkSx }}>&#x25B8; Give Feedback</Typography>
               </Link>
               <br />
-              <Link href="/contact#meeting">
+              <Link href="/contact?contactType=Book%20appointment">
                 <Typography sx={{ ...theme.typography.bodyFont_M, ...linkSx }}>&#x25B8; Book Meeting</Typography>
               </Link>
               <br />
