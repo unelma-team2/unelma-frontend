@@ -30,18 +30,25 @@ export default function HomePage() {
     process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
 
   useEffect(() => {
-    axios
-      .get(`${API_URL}/api/home?populate[HeroSection][populate]=*&populate[Metrics][populate]=*&populate[OrderingProcess][populate]=*&populate[Products][populate]=*&populate[ProjectInquiry][populate]=*&populate[Category][populate]=*&populate[RecentWorks][populate]=*&populate[Services][populate]=*`)
-      .then((res) => {
-        const data = res.data.data;
-        setHeroSection(data?.HeroSection || []);
-        setMetrics(data?.Metrics || []);
-        setOrderProcess(data?.OrderingProcess || []);
-        setProducts(data?.Products || []);
-        setProjectInquiry(data?.ProjectInquiry || []);
-        setCategories(data?.Category || []);
-        setWorks(data?.RecentWorks || []);
-        setServices(data?.Services || []);
+    Promise.all([
+      axios.get(`${API_URL}/api/home?populate[HeroSection][populate]=*&populate[Metrics][populate]=*&populate[OrderingProcess][populate]=*&populate[ProjectInquiry][populate]=*&populate[Category][populate]=*&populate[RecentWorks][populate]=*`),
+
+      axios.get(`${API_URL}/api/product?populate[all_products][populate]=*`),
+      axios.get(`${API_URL}/api/service-page?populate[all_services][populate]=*`),
+
+    ])
+      .then(([homeRes, productRes, serviceRes]) => {
+        const productData = productRes.data.data;
+        const homeData = homeRes.data.data
+        const serviceData = serviceRes.data.data
+        setHeroSection(homeData?.HeroSection || []);
+        setMetrics(homeData?.Metrics || []);
+        setOrderProcess(homeData?.OrderingProcess || []);
+        setProjectInquiry(homeData?.ProjectInquiry || []);
+        setCategories(homeData?.Category || []);
+        setWorks(homeData?.RecentWorks || []);
+        setProducts(productData?.all_products || []);
+        setServices(serviceData?.all_services || []);
       })
       .catch((err) => setError(err))
       .finally(() => setLoading(false));
