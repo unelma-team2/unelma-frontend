@@ -70,42 +70,58 @@ export default function FavouritesPage() {
   }
 
   return (
-    <Box sx={{ py: 6 }}>
-      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
-        <Typography variant="h2">
-          Favourites
-        </Typography>
-        <Button 
-          component={Link} 
-          href="/products" 
-          variant="outlined"
-          sx={{ 
-            textTransform: "none",
-            fontWeight: 600,
-            borderRadius: "8px",
-            px: 3,
-            py: 1
-          }}
-        >
-          Back to Products & Services
-        </Button>
-      </Box>
-      <Typography variant="body16reg" sx={{ color: "text.secondary", mb: 6 }}>
-        Access your favourite services and products below
-      </Typography>
+  <Box
+    sx={{
+      py: 6,
+      px: { xs: 2, sm: 3, md: 1 },
+      maxWidth: "1450px",
+      mx: "auto",
+    }}
+  >
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        mb: 2,
+        gap: 2,
+        flexWrap: "wrap",
+      }}
+    >
+      <Typography variant="h2">Favourites</Typography>
 
-      <Tabs value={tab} onChange={(_e, value) => setTab(value)} sx={{ mb: 4 }}>
-        <Tab label="Products" />
-        <Tab label="Services" />
-      </Tabs>
-
-      {tab === 0 ? (
-        <FavouriteProducts items={favouriteProducts} />
-      ) : (
-        <FavouriteServices items={favouriteServices} />
-      )}
+      <Button
+        component={Link}
+        href="/products"
+        variant="outlined"
+        sx={{
+          textTransform: "none",
+          fontWeight: 600,
+          borderRadius: "8px",
+          px: 3,
+          py: 1,
+        }}
+      >
+        Back to Products & Services
+      </Button>
     </Box>
-  );
+
+    <Typography variant="body16reg" sx={{ color: "text.secondary", mb: 6 }}>
+      Access your favourite services and products below
+    </Typography>
+
+    <Tabs value={tab} onChange={(_e, value) => setTab(value)} sx={{ mb: 4 }}>
+      <Tab label="Products" />
+      <Tab label="Services" />
+    </Tabs>
+
+    {tab === 0 ? (
+      <FavouriteProducts items={favouriteProducts} />
+    ) : (
+      <FavouriteServices items={favouriteServices} />
+    )}
+  </Box>
+);
 }
 
 function FavouriteProducts({ items }) {
