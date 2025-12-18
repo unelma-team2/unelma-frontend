@@ -4,8 +4,13 @@ import { Box, Typography, useTheme, Link as MUILink } from "@mui/material"
 import NextLink from "next/link"
 import Image from "next/image"
 
-export default function HeroSection({ heroSection }) {
+export default function HeroSection({ heroSection, imageUrl }) {
   const theme = useTheme()
+
+  if (!imageUrl || typeof imageUrl !== "function") {
+    console.error("[v0] imageUrl is not a function:", imageUrl)
+    return null
+  }
 
   const {
     hero_title,
@@ -17,14 +22,15 @@ export default function HeroSection({ heroSection }) {
     hero_image_bottom,
   } = heroSection || {}
 
+  const topImageUrl = imageUrl(hero_image_top) || "/images/home/hero/hero_top_smaller.png"
+  const bottomImageUrl = imageUrl(hero_image_bottom) || "/images/home/hero/hero_background.png"
+
   return (
     <Box
       component="section"
       sx={{
         width: "100vw",
         position: "relative",
-        // left: "50%",
-        // ml: "-50vw",
         paddingTop: { xs: 8 },
         paddingBottom: { xs: 2, sm: 6, md: 6 },
         minHeight: { xs: 850, sm: 1200, md: 1400, lg: 1400 },
@@ -42,10 +48,11 @@ export default function HeroSection({ heroSection }) {
         }}
       >
         <Image
-          src={hero_image_bottom || "/images/home/hero/hero_background.png"}
+          src={bottomImageUrl || "/placeholder.svg"}
           alt="Hero background"
           width={1600}
           height={900}
+          sizes="100vw"
           style={{ width: "100%", height: "auto", display: "block" }}
           priority
         />
@@ -62,10 +69,11 @@ export default function HeroSection({ heroSection }) {
         }}
       >
         <Image
-          src={hero_image_top || "/images/home/hero/hero_top_smaller.png"}
+          src={topImageUrl || "/placeholder.svg"}
           alt="Overlay graphic"
           width={500}
           height={500}
+          sizes="(max-width: 600px) 55vw, (max-width: 960px) 30vw, 30vw"
           style={{ width: "100%", height: "auto" }}
         />
       </Box>
@@ -81,8 +89,7 @@ export default function HeroSection({ heroSection }) {
           zIndex: 4,
           width: { xs: "90%", sm: "65%", md: "60%" },
           textAlign: { xs: "center", sm: "left", md: "left" },
-          color:  "#ef2d53",
-
+          color: "#ef2d53",
           pl: { xs: 0, md: 8 },
           ml: { xs: 0, md: 4 },
         }}
@@ -134,7 +141,6 @@ export default function HeroSection({ heroSection }) {
           underline="none"
           sx={{
             mt: 1,
-            //  color: theme.palette.primary.blue1 || theme.palette.primary.main,
             color: theme.palette.section.services.main,
             fontSize: { xs: 16, sm: 18, md: 20 },
             fontWeight: 700,
@@ -142,10 +148,7 @@ export default function HeroSection({ heroSection }) {
             alignItems: { xs: "flex-start", sm: "flex-start", md: "center" },
             textAlign: { xs: "left", sm: "left", md: "center" },
             gap: 0.5,
-            // transition: "transform 0.25s ease",
             "&:hover": {
-              //   transform: "scale(1.1)",
-              //   cursor: "pointer",
               color: theme.palette.section.shopOrder.main,
             },
           }}
