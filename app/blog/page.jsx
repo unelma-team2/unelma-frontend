@@ -35,19 +35,11 @@ export default function BlogPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [searchQuery, setSearchQuery] = useState("")
-  const [selectedCategory, setSelectedCategory] = useState("All")
-  const [selectedYear, setSelectedYear] = useState(null)
-  const [selectedMonth, setSelectedMonth] = useState(null)
-  const [yearArchive, setYearArchive] = useState({})
-  const [openYears, setOpenYears] = useState({})
   const [currentPage, setCurrentPage] = useState(1)
+  const [yearArchive, setYearArchive] = useState({})
   const postsPerPage = 3
 
   const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com"
-
-  const toggleYear = (year) => {
-    setOpenYears((prev) => ({ ...prev, [year]: !prev[year] }))
-  }
 
   useEffect(() => {
     axios
@@ -83,30 +75,13 @@ export default function BlogPage() {
   }, [API_URL])
 
   const sortedBlogs = [...blogs].sort(
-    (a, b) => new Date(b.date || b.publishedAt || b.createdAt) - new Date(a.date || a.publishedAt || a.createdAt),
+    (a, b) => new Date(b.createdAt || b.publishedAt) - new Date(a.createdAt || a.publishedAt),
   )
 
-  const [featured, ...rest] = sortedBlogs
-
-  const filteredBlogs = rest.filter((blog) => {
-    const matchesSearch =
-      blog.Title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      blog.Description?.toLowerCase().includes(searchQuery.toLowerCase())
-
-    const matchesCategory = selectedCategory === "All" || (blog.category || "Other") === selectedCategory
-
-    let matchesDate = true
-    if (selectedYear && selectedMonth) {
-      const date = blog.date || blog.publishedAt || blog.createdAt
-      if (date) {
-        const d = new Date(date)
-        const blogYear = d.getFullYear()
-        const blogMonth = d.toLocaleString("en-US", { month: "long" })
-        matchesDate = blogYear === selectedYear && blogMonth === selectedMonth
-      }
-    }
-
-    return matchesSearch && matchesCategory && matchesDate
+  const filteredBlogs = sortedBlogs.filter((blog) => {
+    const { Title, Description } = blog
+    const query = searchQuery.toLowerCase()
+    return Title?.toLowerCase().includes(query) || Description?.toLowerCase().includes(query)
   })
 
   const totalPages = Math.max(1, Math.ceil(filteredBlogs.length / postsPerPage))
@@ -135,10 +110,10 @@ export default function BlogPage() {
             {/* Main Content */}
             <Box sx={{ flex: 1 }}>
               {/* Featured Blog Post */}
-              {currentPage === 1 && !searchQuery && featured && (
+              {currentPage === 1 && !searchQuery && blogs.length > 0 && (
                 <Box
                   component={Link}
-                  href={`/blog/${featured.slug}`}
+                  href={`/blog/${blogs[0].slug}`}
                   sx={{
                     display: "flex",
                     flexDirection: "column",
@@ -153,211 +128,220 @@ export default function BlogPage() {
                     minHeight: 600,
                   }}
                 >
-                  {featured.blog_image?.url && (
-                    <Box
-                      sx={{
-                        width: "100%",
-                        height: 450,
-                        position: "relative",
-                      }}
-                    >
-                      <Image
-                        src="/images/blog/pngwing.com - 2025-11-17T021857.109 copy.png"
-                        alt={featured.Title || "Featured Blog Image"}
-                        fill
-                        style={{ objectFit: "cover" }}
-                        priority
-                      />
-                    </Box>
-                  )}
-                  <Box sx={{ display: "flex", flexDirection: "column", p: 5 }}>
-                    <Box sx={{ display: "flex", gap: 4, alignItems: "center", mb: 4, flexWrap: "wrap" }}>
-                      <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
-                        <IconButton
-                          size="small"
-                          sx={{
-                            borderRadius: 100,
-                            border: theme.mixins.borderStyle,
-                            p: 0.6,
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            color: theme.palette.primary.main,
-                            backgroundColor: theme.palette.section.blog.pastel,
-                            transition: "transform 0.25s ease",
-                            "&:hover": {
-                              transform: "scale(1.2)",
-                              backgroundColor: theme.palette.section.shopOrder.soft,
-                              boxShadow: "none",
-                            },
-                          }}
-                        >
-                          <CalendarTodayIcon sx={{ fontSize: 24 }} />
-                        </IconButton>
-                        <Typography sx={{ ...theme.typography.bodyFontTitle_S }}>
-                          {formatBlogDate(featured.date || featured.publishedAt)}
-                        </Typography>
-                      </Box>
+                  {(() => {
+                    const { Title, Description, blog_image, createdAt, category } = blogs[0]
+                    const imageUrl = blog_image?.url || "/images/blog/pngwing.com - 2025-11-17T021857.109 copy.png"
 
-                      <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
-                        <IconButton
-                          size="small"
-                          sx={{
-                            borderRadius: 100,
-                            border: theme.mixins.borderStyle,
-                            p: 0.6,
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            color: theme.palette.primary.main,
-                            backgroundColor: theme.palette.section.blog.pastel,
-                            transition: "transform 0.25s ease",
-                            "&:hover": {
-                              transform: "scale(1.2)",
-                              backgroundColor: theme.palette.section.shopOrder.soft,
-                              boxShadow: "none",
-                            },
-                          }}
-                        >
-                          <EditNoteIcon sx={{ fontSize: 24 }} />
-                        </IconButton>
-                        <Typography sx={{ ...theme.typography.bodyFontTitle_S }}>
-                          {featured.author_name || "Author's Name"}
-                        </Typography>
-                      </Box>
-
-                      <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
-                        <IconButton
-                          size="small"
-                          sx={{
-                            borderRadius: 100,
-                            border: theme.mixins.borderStyle,
-                            p: 0.6,
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            color: theme.palette.primary.main,
-                            backgroundColor: theme.palette.section.blog.pastel,
-                            transition: "transform 0.25s ease",
-                            "&:hover": {
-                              transform: "scale(1.2)",
-                              backgroundColor: theme.palette.section.shopOrder.soft,
-                              boxShadow: "none",
-                            },
-                          }}
-                        >
-                          <CategoryIcon sx={{ fontSize: 24 }} />
-                        </IconButton>
-                        <Typography sx={{ ...theme.typography.bodyFontTitle_S }}>
-                          {featured.category || "Category"}
-                        </Typography>
-                      </Box>
-                    </Box>
-
-                    <Typography sx={{ ...theme.typography.bodyFontTitle_M_Card, my: 4 }}>
-                      {featured.Title || "Featured Blog Title"}
-                    </Typography>
-                    <Typography
-                      sx={{
-                        ...theme.typography.bodyFont_M,
-                        color: theme.palette.text.secondary,
-                        mb: 5,
-                        textAlign: "justify",
-                        lineHeight: 1.8,
-                      }}
-                    >
-                      {featured.Description?.slice(0, 600) || ""}
-                    </Typography>
-                    <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                      <Box sx={{ display: "flex", gap: 4, alignItems: "center" }}>
-                        <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
-                          <IconButton
-                            size="small"
+                    return (
+                      <>
+                        {blog_image?.url && (
+                          <Box
                             sx={{
-                              borderRadius: 100,
-                              border: theme.mixins.borderStyle,
-                              p: 0.6,
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-                              color: theme.palette.primary.main,
-                              backgroundColor: theme.palette.section.blog.pastel,
-                              transition: "transform 0.25s ease",
-                              "&:hover": {
-                                transform: "scale(1.2)",
-                                backgroundColor: theme.palette.section.shopOrder.soft,
-                                boxShadow: "none",
-                              },
+                              width: "100%",
+                              height: 450,
+                              position: "relative",
                             }}
                           >
-                            <ShareIcon sx={{ fontSize: 24 }} />
-                          </IconButton>
+                            <Image
+                              src={imageUrl || "/placeholder.svg"}
+                              alt={Title || "Featured Blog Image"}
+                              fill
+                              style={{ objectFit: "cover" }}
+                              priority
+                            />
+                          </Box>
+                        )}
+                        <Box sx={{ display: "flex", flexDirection: "column", p: 5 }}>
+                          <Box sx={{ display: "flex", gap: 4, alignItems: "center", mb: 4, flexWrap: "wrap" }}>
+                            <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+                              <IconButton
+                                size="small"
+                                sx={{
+                                  borderRadius: 100,
+                                  border: theme.mixins.borderStyle,
+                                  p: 0.6,
+                                  display: "flex",
+                                  alignItems: "center",
+                                  justifyContent: "center",
+                                  color: theme.palette.primary.main,
+                                  backgroundColor: theme.palette.section.blog.pastel,
+                                  transition: "transform 0.25s ease",
+                                  "&:hover": {
+                                    transform: "scale(1.2)",
+                                    backgroundColor: theme.palette.section.shopOrder.soft,
+                                    boxShadow: "none",
+                                  },
+                                }}
+                              >
+                                <CalendarTodayIcon sx={{ fontSize: 24 }} />
+                              </IconButton>
+                              <Typography sx={{ ...theme.typography.bodyFontTitle_S }}>
+                                {formatBlogDate(createdAt)}
+                              </Typography>
+                            </Box>
+
+                            <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+                              <IconButton
+                                size="small"
+                                sx={{
+                                  borderRadius: 100,
+                                  border: theme.mixins.borderStyle,
+                                  p: 0.6,
+                                  display: "flex",
+                                  alignItems: "center",
+                                  justifyContent: "center",
+                                  color: theme.palette.primary.main,
+                                  backgroundColor: theme.palette.section.blog.pastel,
+                                  transition: "transform 0.25s ease",
+                                  "&:hover": {
+                                    transform: "scale(1.2)",
+                                    backgroundColor: theme.palette.section.shopOrder.soft,
+                                    boxShadow: "none",
+                                  },
+                                }}
+                              >
+                                <EditNoteIcon sx={{ fontSize: 24 }} />
+                              </IconButton>
+                              <Typography sx={{ ...theme.typography.bodyFontTitle_S }}>
+                                {blogs[0].author_name || "Author's Name"}
+                              </Typography>
+                            </Box>
+
+                            <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+                              <IconButton
+                                size="small"
+                                sx={{
+                                  borderRadius: 100,
+                                  border: theme.mixins.borderStyle,
+                                  p: 0.6,
+                                  display: "flex",
+                                  alignItems: "center",
+                                  justifyContent: "center",
+                                  color: theme.palette.primary.main,
+                                  backgroundColor: theme.palette.section.blog.pastel,
+                                  transition: "transform 0.25s ease",
+                                  "&:hover": {
+                                    transform: "scale(1.2)",
+                                    backgroundColor: theme.palette.section.shopOrder.soft,
+                                    boxShadow: "none",
+                                  },
+                                }}
+                              >
+                                <CategoryIcon sx={{ fontSize: 24 }} />
+                              </IconButton>
+                              <Typography sx={{ ...theme.typography.bodyFontTitle_S }}>
+                                {category || "Category"}
+                              </Typography>
+                            </Box>
+                          </Box>
+
+                          <Typography sx={{ ...theme.typography.bodyFontTitle_M_Card, my: 4 }}>
+                            {Title || "Featured Blog Title"}
+                          </Typography>
                           <Typography
                             sx={{
-                              ...theme.typography.bodyFontTitle_S,
-                              cursor: "pointer",
+                              ...theme.typography.bodyFont_M,
+                              color: theme.palette.text.secondary,
+                              mb: 5,
+                              textAlign: "justify",
+                              lineHeight: 1.8,
                             }}
                           >
-                            Share
+                            {Description?.slice(0, 600) || ""}
                           </Typography>
+                          <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                            <Box sx={{ display: "flex", gap: 4, alignItems: "center" }}>
+                              <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+                                <IconButton
+                                  size="small"
+                                  sx={{
+                                    borderRadius: 100,
+                                    border: theme.mixins.borderStyle,
+                                    p: 0.6,
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    color: theme.palette.primary.main,
+                                    backgroundColor: theme.palette.section.blog.pastel,
+                                    transition: "transform 0.25s ease",
+                                    "&:hover": {
+                                      transform: "scale(1.2)",
+                                      backgroundColor: theme.palette.section.shopOrder.soft,
+                                      boxShadow: "none",
+                                    },
+                                  }}
+                                >
+                                  <ShareIcon sx={{ fontSize: 24 }} />
+                                </IconButton>
+                                <Typography
+                                  sx={{
+                                    ...theme.typography.bodyFontTitle_S,
+                                    cursor: "pointer",
+                                  }}
+                                >
+                                  Share
+                                </Typography>
+                              </Box>
+                              <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+                                <IconButton
+                                  size="small"
+                                  sx={{
+                                    borderRadius: 100,
+                                    border: theme.mixins.borderStyle,
+                                    p: 0.6,
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    color: theme.palette.primary.main,
+                                    backgroundColor: theme.palette.section.blog.pastel,
+                                    transition: "transform 0.25s ease",
+                                    "&:hover": {
+                                      transform: "scale(1.2)",
+                                      backgroundColor: theme.palette.section.shopOrder.soft,
+                                      boxShadow: "none",
+                                    },
+                                  }}
+                                >
+                                  <CommentIcon sx={{ fontSize: 24 }} />
+                                </IconButton>
+                                <Typography
+                                  sx={{
+                                    ...theme.typography.bodyFontTitle_S,
+                                    cursor: "pointer",
+                                  }}
+                                >
+                                  Comment
+                                </Typography>
+                              </Box>
+                            </Box>
+                            <Box
+                              sx={{
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: 1,
+                                color: theme.palette.section.about.main,
+                                transition: "all 0.25s ease",
+                                "&:hover": {
+                                  color: theme.palette.section.products.vibrant,
+                                  transform: "scale(1.05)",
+                                },
+                              }}
+                            >
+                              <Typography
+                                sx={{
+                                  ...theme.typography.bodyFontTitle_S,
+                                  textTransform: "uppercase",
+                                }}
+                              >
+                                Read More
+                              </Typography>
+                              <ArrowForward sx={{ fontSize: 20 }} />
+                            </Box>
+                          </Box>
                         </Box>
-                        <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
-                          <IconButton
-                            size="small"
-                            sx={{
-                              borderRadius: 100,
-                              border: theme.mixins.borderStyle,
-                              p: 0.6,
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-                              color: theme.palette.primary.main,
-                              backgroundColor: theme.palette.section.blog.pastel,
-                              transition: "transform 0.25s ease",
-                              "&:hover": {
-                                transform: "scale(1.2)",
-                                backgroundColor: theme.palette.section.shopOrder.soft,
-                                boxShadow: "none",
-                              },
-                            }}
-                          >
-                            <CommentIcon sx={{ fontSize: 24 }} />
-                          </IconButton>
-                          <Typography
-                            sx={{
-                              ...theme.typography.bodyFontTitle_S,
-                              cursor: "pointer",
-                            }}
-                          >
-                            Comment
-                          </Typography>
-                        </Box>
-                      </Box>
-                      <Box
-                        sx={{
-                          display: "inline-flex",
-                          alignItems: "center",
-                          gap: 1,
-                          color: theme.palette.section.about.main,
-                          transition: "all 0.25s ease",
-                          "&:hover": {
-                            color: theme.palette.section.products.vibrant,
-                            transform: "scale(1.05)",
-                          },
-                        }}
-                      >
-                        <Typography
-                          sx={{
-                            ...theme.typography.bodyFontTitle_S,
-                            textTransform: "uppercase",
-                          }}
-                        >
-                          Read More
-                        </Typography>
-                        <ArrowForward sx={{ fontSize: 20 }} />
-                      </Box>
-                    </Box>
-                  </Box>
+                      </>
+                    )
+                  })()}
                 </Box>
               )}
 
@@ -367,232 +351,237 @@ export default function BlogPage() {
                   display: "flex",
                   flexDirection: "column",
                   gap: 6,
-                  mt: currentPage === 1 && !searchQuery && featured ? 6 : 0,
+                  mt: currentPage === 1 && !searchQuery && blogs.length > 0 ? 6 : 0,
                 }}
               >
-                {currentBlogs.map((blog) => (
-                  <Box
-                    key={blog.id}
-                    component={Link}
-                    href={`/blog/${blog.slug}`}
-                    sx={{
-                      display: "flex",
-                      flexDirection: { xs: "column", md: "row" },
-                      ...theme.mixins.borderStyle,
-                      overflow: "hidden",
-                      cursor: "pointer",
-                      textDecoration: "none",
-                      transition: "all 0.25s ease",
-                      "&:hover": {
-                        transform: "translateY(-2px)",
-                      },
-                      minHeight: 380,
-                    }}
-                  >
-                    {blog.blog_image?.url && (
-                      <Box
-                        sx={{
-                          minWidth: { xs: "100%", md: 300 },
-                          height: { xs: 250, md: "100%" },
-                          position: "relative",
-                          flexShrink: 0,
-                        }}
-                      >
-                        <Image
-                          src="/images/blog/pngwing.com - 2025-11-17T021857.109 copy.png"
-                          alt={blog.Title || "Blog Image"}
-                          fill
-                          style={{ objectFit: "cover" }}
-                        />
-                      </Box>
-                    )}
-                    <Box sx={{ flex: 1, display: "flex", flexDirection: "column", p: 4, gap: 3 }}>
-                      <Box sx={{ display: "flex", gap: 3, alignItems: "center", flexWrap: "wrap" }}>
-                        <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
-                          <IconButton
-                            size="small"
-                            sx={{
-                              borderRadius: 100,
-                              border: theme.mixins.borderStyle,
-                              p: 0.6,
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-                              color: theme.palette.primary.main,
-                              backgroundColor: theme.palette.section.blog.pastel,
-                              transition: "transform 0.25s ease",
-                              "&:hover": {
-                                transform: "scale(1.2)",
-                                backgroundColor: theme.palette.section.shopOrder.soft,
-                                boxShadow: "none",
-                              },
-                            }}
-                          >
-                            <CalendarTodayIcon sx={{ fontSize: 24 }} />
-                          </IconButton>
-                          <Typography sx={{ ...theme.typography.bodyFont_M }}>
-                            {formatBlogDate(blog.date || blog.publishedAt)}
-                          </Typography>
-                        </Box>
+                {currentBlogs.map((blog) => {
+                  const { Title, Description, blog_image, category } = blog
+                  const imageUrl = blog_image?.url || "/images/blog/pngwing.com - 2025-11-17T021857.109 copy.png"
 
-                        <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
-                          <IconButton
-                            size="small"
-                            sx={{
-                              borderRadius: 100,
-                              border: theme.mixins.borderStyle,
-                              p: 0.6,
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-                              color: theme.palette.primary.main,
-                              backgroundColor: theme.palette.section.blog.pastel,
-                              transition: "transform 0.25s ease",
-                              "&:hover": {
-                                transform: "scale(1.2)",
-                                backgroundColor: theme.palette.section.shopOrder.soft,
-                                boxShadow: "none",
-                              },
-                            }}
-                          >
-                            <EditNoteIcon sx={{ fontSize: 24 }} />
-                          </IconButton>
-                          <Typography sx={{ ...theme.typography.bodyFont_M }}>
-                            {blog.author_name || "Author's Name"}
-                          </Typography>
-                        </Box>
-
-                        <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
-                          <IconButton
-                            size="small"
-                            sx={{
-                              borderRadius: 100,
-                              border: theme.mixins.borderStyle,
-                              p: 0.6,
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-                              color: theme.palette.primary.main,
-                              backgroundColor: theme.palette.section.blog.pastel,
-                              transition: "transform 0.25s ease",
-                              "&:hover": {
-                                transform: "scale(1.2)",
-                                backgroundColor: theme.palette.section.shopOrder.soft,
-                                boxShadow: "none",
-                              },
-                            }}
-                          >
-                            <CategoryIcon sx={{ fontSize: 24 }} />
-                          </IconButton>
-                          <Typography sx={{ ...theme.typography.bodyFont_M }}>{blog.category || "Category"}</Typography>
-                        </Box>
-                      </Box>
-
-                      <Typography sx={{ ...theme.typography.bodyFontTitle_S, mt: 1 }}>{blog.Title}</Typography>
-                      <Typography
-                        sx={{
-                          ...theme.typography.bodyFont_M,
-                          color: theme.palette.text.secondary,
-                          flex: 1,
-                          textAlign: "justify",
-                          lineHeight: 1.7,
-                        }}
-                      >
-                        {blog.Description ? blog.Description.slice(0, 350) + "..." : ""}
-                      </Typography>
-
-                      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mt: 2 }}>
-                        <Box sx={{ display: "flex", gap: 4, alignItems: "center" }}>
-                          <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
-                            <IconButton
-                              size="small"
-                              sx={{
-                                borderRadius: 100,
-                                border: theme.mixins.borderStyle,
-                                p: 0.6,
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                color: theme.palette.primary.main,
-                                backgroundColor: theme.palette.section.blog.pastel,
-                                transition: "transform 0.25s ease",
-                                "&:hover": {
-                                  transform: "scale(1.2)",
-                                  backgroundColor: theme.palette.section.shopOrder.soft,
-                                  boxShadow: "none",
-                                },
-                              }}
-                            >
-                              <ShareIcon sx={{ fontSize: 24 }} />
-                            </IconButton>
-                            <Typography
-                              sx={{
-                                ...theme.typography.bodyFontTitle_S,
-                                cursor: "pointer",
-                              }}
-                            >
-                              Share
-                            </Typography>
-                          </Box>
-                          <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
-                            <IconButton
-                              size="small"
-                              sx={{
-                                borderRadius: 100,
-                                border: theme.mixins.borderStyle,
-                                p: 0.6,
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                color: theme.palette.primary.main,
-                                backgroundColor: theme.palette.section.blog.pastel,
-                                transition: "transform 0.25s ease",
-                                "&:hover": {
-                                  transform: "scale(1.2)",
-                                  backgroundColor: theme.palette.section.shopOrder.soft,
-                                  boxShadow: "none",
-                                },
-                              }}
-                            >
-                              <CommentIcon sx={{ fontSize: 24 }} />
-                            </IconButton>
-                            <Typography
-                              sx={{
-                                ...theme.typography.bodyFontTitle_S,
-                                cursor: "pointer",
-                              }}
-                            >
-                              Comment
-                            </Typography>
-                          </Box>
-                        </Box>
+                  return (
+                    <Box
+                      key={blog.id}
+                      component={Link}
+                      href={`/blog/${blog.slug}`}
+                      sx={{
+                        display: "flex",
+                        flexDirection: { xs: "column", md: "row" },
+                        ...theme.mixins.borderStyle,
+                        overflow: "hidden",
+                        cursor: "pointer",
+                        textDecoration: "none",
+                        transition: "all 0.25s ease",
+                        "&:hover": {
+                          transform: "translateY(-2px)",
+                        },
+                        minHeight: 380,
+                      }}
+                    >
+                      {blog_image?.url && (
                         <Box
                           sx={{
-                            display: "inline-flex",
-                            alignItems: "center",
-                            gap: 1,
-                            color: theme.palette.section.about.main,
-                            transition: "all 0.25s ease",
-                            "&:hover": {
-                              color: theme.palette.section.products.vibrant,
-                              transform: "scale(1.05)",
-                            },
+                            minWidth: { xs: "100%", md: 300 },
+                            height: { xs: 250, md: "100%" },
+                            position: "relative",
+                            flexShrink: 0,
                           }}
                         >
-                          <Typography
+                          <Image
+                            src={imageUrl || "/placeholder.svg"}
+                            alt={Title || "Blog Image"}
+                            fill
+                            style={{ objectFit: "cover" }}
+                          />
+                        </Box>
+                      )}
+                      <Box sx={{ flex: 1, display: "flex", flexDirection: "column", p: 4, gap: 3 }}>
+                        <Box sx={{ display: "flex", gap: 3, alignItems: "center", flexWrap: "wrap" }}>
+                          <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+                            <IconButton
+                              size="small"
+                              sx={{
+                                borderRadius: 100,
+                                border: theme.mixins.borderStyle,
+                                p: 0.6,
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                color: theme.palette.primary.main,
+                                backgroundColor: theme.palette.section.blog.pastel,
+                                transition: "transform 0.25s ease",
+                                "&:hover": {
+                                  transform: "scale(1.2)",
+                                  backgroundColor: theme.palette.section.shopOrder.soft,
+                                  boxShadow: "none",
+                                },
+                              }}
+                            >
+                              <CalendarTodayIcon sx={{ fontSize: 24 }} />
+                            </IconButton>
+                            <Typography sx={{ ...theme.typography.bodyFont_M }}>
+                              {formatBlogDate(blog.publishedAt)}
+                            </Typography>
+                          </Box>
+
+                          <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+                            <IconButton
+                              size="small"
+                              sx={{
+                                borderRadius: 100,
+                                border: theme.mixins.borderStyle,
+                                p: 0.6,
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                color: theme.palette.primary.main,
+                                backgroundColor: theme.palette.section.blog.pastel,
+                                transition: "transform 0.25s ease",
+                                "&:hover": {
+                                  transform: "scale(1.2)",
+                                  backgroundColor: theme.palette.section.shopOrder.soft,
+                                  boxShadow: "none",
+                                },
+                              }}
+                            >
+                              <EditNoteIcon sx={{ fontSize: 24 }} />
+                            </IconButton>
+                            <Typography sx={{ ...theme.typography.bodyFont_M }}>
+                              {blog.author_name || "Author's Name"}
+                            </Typography>
+                          </Box>
+
+                          <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+                            <IconButton
+                              size="small"
+                              sx={{
+                                borderRadius: 100,
+                                border: theme.mixins.borderStyle,
+                                p: 0.6,
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                color: theme.palette.primary.main,
+                                backgroundColor: theme.palette.section.blog.pastel,
+                                transition: "transform 0.25s ease",
+                                "&:hover": {
+                                  transform: "scale(1.2)",
+                                  backgroundColor: theme.palette.section.shopOrder.soft,
+                                  boxShadow: "none",
+                                },
+                              }}
+                            >
+                              <CategoryIcon sx={{ fontSize: 24 }} />
+                            </IconButton>
+                            <Typography sx={{ ...theme.typography.bodyFont_M }}>{category || "Category"}</Typography>
+                          </Box>
+                        </Box>
+
+                        <Typography sx={{ ...theme.typography.bodyFontTitle_S, mt: 1 }}>{Title}</Typography>
+                        <Typography
+                          sx={{
+                            ...theme.typography.bodyFont_M,
+                            color: theme.palette.text.secondary,
+                            flex: 1,
+                            textAlign: "justify",
+                            lineHeight: 1.7,
+                          }}
+                        >
+                          {Description ? Description.slice(0, 350) + "..." : ""}
+                        </Typography>
+
+                        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mt: 2 }}>
+                          <Box sx={{ display: "flex", gap: 4, alignItems: "center" }}>
+                            <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+                              <IconButton
+                                size="small"
+                                sx={{
+                                  borderRadius: 100,
+                                  border: theme.mixins.borderStyle,
+                                  p: 0.6,
+                                  display: "flex",
+                                  alignItems: "center",
+                                  justifyContent: "center",
+                                  color: theme.palette.primary.main,
+                                  backgroundColor: theme.palette.section.blog.pastel,
+                                  transition: "transform 0.25s ease",
+                                  "&:hover": {
+                                    transform: "scale(1.2)",
+                                    backgroundColor: theme.palette.section.shopOrder.soft,
+                                    boxShadow: "none",
+                                  },
+                                }}
+                              >
+                                <ShareIcon sx={{ fontSize: 24 }} />
+                              </IconButton>
+                              <Typography
+                                sx={{
+                                  ...theme.typography.bodyFontTitle_S,
+                                  cursor: "pointer",
+                                }}
+                              >
+                                Share
+                              </Typography>
+                            </Box>
+                            <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+                              <IconButton
+                                size="small"
+                                sx={{
+                                  borderRadius: 100,
+                                  border: theme.mixins.borderStyle,
+                                  p: 0.6,
+                                  display: "flex",
+                                  alignItems: "center",
+                                  justifyContent: "center",
+                                  color: theme.palette.primary.main,
+                                  backgroundColor: theme.palette.section.blog.pastel,
+                                  transition: "transform 0.25s ease",
+                                  "&:hover": {
+                                    transform: "scale(1.2)",
+                                    backgroundColor: theme.palette.section.shopOrder.soft,
+                                    boxShadow: "none",
+                                  },
+                                }}
+                              >
+                                <CommentIcon sx={{ fontSize: 24 }} />
+                              </IconButton>
+                              <Typography
+                                sx={{
+                                  ...theme.typography.bodyFontTitle_S,
+                                  cursor: "pointer",
+                                }}
+                              >
+                                Comment
+                              </Typography>
+                            </Box>
+                          </Box>
+                          <Box
                             sx={{
-                              ...theme.typography.bodyFontTitle_S,
-                              textTransform: "uppercase",
+                              display: "inline-flex",
+                              alignItems: "center",
+                              gap: 1,
+                              color: theme.palette.section.about.main,
+                              transition: "all 0.25s ease",
+                              "&:hover": {
+                                color: theme.palette.section.products.vibrant,
+                                transform: "scale(1.05)",
+                              },
                             }}
                           >
-                            Read
-                          </Typography>
-                          <ArrowForward sx={{ fontSize: 20 }} />
+                            <Typography
+                              sx={{
+                                ...theme.typography.bodyFontTitle_S,
+                                textTransform: "uppercase",
+                              }}
+                            >
+                              Read
+                            </Typography>
+                            <ArrowForward sx={{ fontSize: 20 }} />
+                          </Box>
                         </Box>
                       </Box>
                     </Box>
-                  </Box>
-                ))}
+                  )
+                })}
               </Box>
 
               {/* Pagination */}
@@ -650,29 +639,6 @@ export default function BlogPage() {
                   Blog Categories
                 </Typography>
                 <ul style={{ listStyle: "none", padding: 0 }}>
-                  <li style={{ marginBottom: "0.5rem" }}>
-                    <Box
-                      onClick={() => {
-                        setSelectedCategory("All")
-                        setSelectedYear(null)
-                        setSelectedMonth(null)
-                        setCurrentPage(1)
-                      }}
-                      sx={{
-                        ...theme.typography.bodyFont_M,
-                        p: 1.5,
-                        cursor: "pointer",
-                        transition: "all 0.25s ease",
-                        color: theme.palette.text.primary,
-                        backgroundColor: selectedCategory === "All" ? theme.palette.section.blog.pastel : "transparent",
-                        "&:hover": {
-                          backgroundColor: theme.palette.section.blog.pastel,
-                        },
-                      }}
-                    >
-                      All ({blogs.length - 1})
-                    </Box>
-                  </li>
                   {[
                     "Digital Marketing",
                     "E-Commerce",
@@ -685,28 +651,25 @@ export default function BlogPage() {
                     const count = categories[category] || 0
                     return (
                       <li key={category} style={{ marginBottom: "0.5rem" }}>
-                        <Box
-                          onClick={() => {
-                            setSelectedCategory(category)
-                            setSelectedYear(null)
-                            setSelectedMonth(null)
-                            setCurrentPage(1)
-                          }}
-                          sx={{
-                            ...theme.typography.bodyFont_M,
-                            p: 1.5,
-                            cursor: "pointer",
-                            transition: "all 0.25s ease",
-                            color: theme.palette.text.primary,
-                            backgroundColor:
-                              selectedCategory === category ? theme.palette.section.blog.pastel : "transparent",
-                            "&:hover": {
-                              backgroundColor: theme.palette.section.blog.pastel,
-                            },
-                          }}
+                        <Link
+                          href={`/blog/category/${encodeURIComponent(category)}`}
+                          style={{ textDecoration: "none" }}
                         >
-                          {category} ({count})
-                        </Box>
+                          <Box
+                            sx={{
+                              ...theme.typography.bodyFont_M,
+                              p: 1.5,
+                              cursor: "pointer",
+                              transition: "all 0.25s ease",
+                              color: theme.palette.text.primary,
+                              "&:hover": {
+                                backgroundColor: theme.palette.section.blog.pastel,
+                              },
+                            }}
+                          >
+                            {category} ({count})
+                          </Box>
+                        </Link>
                       </li>
                     )
                   })}
@@ -733,52 +696,27 @@ export default function BlogPage() {
                       const totalPosts = Object.values(months).reduce((a, b) => a + b, 0)
                       return (
                         <li key={year} style={{ marginBottom: "1rem" }}>
-                          <Box
-                            onClick={() => toggleYear(year)}
+                          <Typography
                             sx={{
                               ...theme.typography.bodyFont_M,
-                              cursor: "pointer",
-                              display: "flex",
-                              justifyContent: "space-between",
-                              p: 1.5,
-                              transition: "all 0.25s ease",
-                              color: theme.palette.text.primary,
-                              backgroundColor:
-                                selectedYear === Number.parseInt(year) && !selectedMonth
-                                  ? theme.palette.section.blog.pastel
-                                  : "transparent",
-                              "&:hover": {
-                                backgroundColor: theme.palette.section.blog.pastel,
-                              },
+                              fontWeight: 600,
+                              mb: 1,
                             }}
                           >
-                            <span>
-                              {year} ({totalPosts})
-                            </span>
-                            <span>{openYears[year] ? "−" : "+"}</span>
-                          </Box>
-                          {openYears[year] && (
-                            <ul style={{ listStyle: "none", padding: 0, marginTop: "0.5rem" }}>
-                              {Object.keys(months).map((month) => (
-                                <li key={month}>
+                            {year} ({totalPosts})
+                          </Typography>
+                          <ul style={{ listStyle: "none", padding: 0 }}>
+                            {Object.keys(months).map((month) => (
+                              <li key={month}>
+                                <Link href={`/blog/archive/${year}/${month}`} style={{ textDecoration: "none" }}>
                                   <Box
-                                    onClick={() => {
-                                      setSelectedYear(Number.parseInt(year))
-                                      setSelectedMonth(month)
-                                      setSelectedCategory("All")
-                                      setCurrentPage(1)
-                                    }}
                                     sx={{
                                       ...theme.typography.bodyFont_M,
-                                      pl: 4,
+                                      pl: 2,
                                       p: 1,
                                       cursor: "pointer",
                                       transition: "all 0.25s ease",
                                       color: theme.palette.text.secondary,
-                                      backgroundColor:
-                                        selectedYear === Number.parseInt(year) && selectedMonth === month
-                                          ? theme.palette.section.blog.pastel
-                                          : "transparent",
                                       "&:hover": {
                                         backgroundColor: theme.palette.section.blog.pastel,
                                         color: theme.palette.text.primary,
@@ -787,10 +725,10 @@ export default function BlogPage() {
                                   >
                                     {month} ({months[month]})
                                   </Box>
-                                </li>
-                              ))}
-                            </ul>
-                          )}
+                                </Link>
+                              </li>
+                            ))}
+                          </ul>
                         </li>
                       )
                     })}
