@@ -19,12 +19,16 @@ export async function POST(req) {
         );
         const checkData = await checkRes.json();
 
-        if (Array.isArray(checkData.data) && checkData.data.length > 0) {
-            // Strip unwanted fields
-            const profile = checkData.data[0];
-            const { createdAt, updatedAt, publishedAt, ...filteredProfile } = profile;
-            return NextResponse.json(filteredProfile);
+        if (checkData.data?.length) {
+            return NextResponse.json(checkData.data[0]);
         }
+
+        // if (Array.isArray(checkData.data) && checkData.data.length > 0) {
+        //     // Strip unwanted fields
+        //     const profile = checkData.data[0];
+        //     const { createdAt, updatedAt, publishedAt, ...filteredProfile } = profile;
+        //     return NextResponse.json(filteredProfile);
+        // }
 
         // Create new profile
         const createRes = await fetch(`${STRAPI_URL}/api/user-profiles`, {
@@ -41,8 +45,8 @@ export async function POST(req) {
         const created = await createRes.json();
         if (!createRes.ok) throw new Error('Strapi create failed: ' + JSON.stringify(created));
 
-        const { createdAt, updatedAt, publishedAt, ...filteredCreated } = created.data;
-        return NextResponse.json(filteredCreated);
+        // const { createdAt, updatedAt, publishedAt, ...filteredCreated } = created.data;
+        return NextResponse.json(created.data);
     } catch (err) {
         console.error('Error in /api/user-profile:', err);
         return NextResponse.json({ error: err.message }, { status: 500 });

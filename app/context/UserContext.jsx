@@ -11,15 +11,14 @@ export function UserProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (authLoading) return; // wait for auth to initialize
-    if (!user) return; 
+    if (authLoading || !user || profile) return; 
 
     const fetchOrCreateProfile = async () => {
       try {
         console.log('Fetching/creating Strapi profile for user:', user);
 
         const res = await fetch('/api/user-profile', {
-          method: 'POST',
+          method: 'POST', 
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             supabase_user_id: user.id,
@@ -29,12 +28,12 @@ export function UserProvider({ children }) {
           }),
         });
 
-        const text = await res.text();
-        console.log('/api/user-profile raw response:', text);
-
-        if (!res.ok) throw new Error(`Failed: ${res.status} ${text}`);
-
-        const data = JSON.parse(text);
+        if (!res.ok) {
+          const errorText = await res.text(); // only read on error
+          throw new Error(`Failed: ${res.status} ${errorText}`);
+        }
+        
+        const data = await res.json(); // read ONCE
         setProfile(data);
       } catch (err) {
         console.error('Failed to fetch/create profile:', err);
@@ -44,7 +43,7 @@ export function UserProvider({ children }) {
     };
 
     fetchOrCreateProfile();
-  }, [user, authLoading]);
+  }, [user, authLoading, profile]);
 
   return (
     <UserContext.Provider value={{ profile, loading }}>

@@ -3,10 +3,11 @@
 import Badge from "@mui/material/Badge";
 import { useCart } from "@/app/context/CartContext";
 import { useAuth } from "@/app/context/AuthContext";
+import { useFavorites } from "@/app/context/FavoritesContext";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import {
   AppBar,
   Toolbar,
@@ -20,9 +21,13 @@ import {
   useMediaQuery,
   Drawer,
   Divider,
+  Avatar,        
+  Tooltip,       
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -37,6 +42,7 @@ const navLinks = [
 export default function Header() {
   const { user, signOut } = useAuth();
   const { cartItems } = useCart();
+  const { favorites } = useFavorites();
   const router = useRouter();
   const theme = useTheme();
 
@@ -46,6 +52,22 @@ export default function Header() {
   const isTablet = useMediaQuery(theme.breakpoints.between("sm", "md"));
 
   const totalQuantity = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+
+  const favCount = useMemo(() => {
+    if (!favorites || !favorites.length) return 0;
+    const seen = new Set();
+    for (const fav of favorites) {
+      if (!fav) continue;
+      // prefer explicit key if present
+      let key = fav.key;
+      const item = fav.item;
+      if (!key && item) {
+        key = item.slug || item.id || item.attributes?.slug || item.attributes?.id || null;
+      }
+      if (key) seen.add(String(key));
+    }
+    return seen.size;
+  }, [favorites]);
 
   return (
     <AppBar
@@ -189,37 +211,87 @@ export default function Header() {
               </Box>
 
               {user ? (
-                <Button
-                  variant="text"
-                  disableRipple
-                  onClick={() => {
-                    signOut();
-                    setMobileMenuOpen(false);
-                  }}
-                  sx={{
-                    textTransform: "uppercase",
-                    fontSize: { sm: "0.65rem", md: "1rem" },
-                    fontWeight: 600,
-                    padding: { sm: "6px 12px", md: "8px 16px" },
-                    color: theme.palette.text.primary,
-                    backgroundColor: "transparent !important",
-                    border: "none",
-                    boxShadow: "none !important",
-                    transition: "transform 0.25s ease, color 0.25s ease",
-                    "&:hover, &:focus, &:active, &.Mui-focusVisible": {
+                <>
+                  {/* Profile avatar button (click -> /profile) */}
+                  <Tooltip title={user?.name || user?.email || "Profile"}>
+                    <IconButton
+                      onClick={() => {
+                        router.push("/profile");
+                        setMobileMenuOpen(false);
+                      }}
+                      sx={{ p: 0, mr: 1 }}
+                      aria-label="Profile"
+                    >
+                      <Avatar
+                        src={user?.avatar || user?.photoURL || undefined}
+                        alt={user?.name || user?.email}
+                        sx={{
+                          width: { xs: 34, sm: 36 },
+                          height: { xs: 34, sm: 36 },
+                          fontSize: 14,
+                          bgcolor: "primary.main",
+                        }}
+                      >
+                        {(user?.name && user.name.charAt(0).toUpperCase()) ||
+                          (user?.email && user.email.charAt(0).toUpperCase()) ||
+                          "U"}
+                      </Avatar>
+                    </IconButton>
+                  </Tooltip>
+
+                  {/* Logout */}
+                  <Button
+                    variant="text"
+                    disableRipple
+                    onClick={() => {
+                      signOut();
+                      setMobileMenuOpen(false);
+                    }}
+                    sx={{
+                      textTransform: "uppercase",
+                      fontSize: { sm: "0.65rem", md: "1rem" },
+                      fontWeight: 600,
+                      padding: { sm: "6px 12px", md: "8px 16px" },
+                      color: theme.palette.text.primary,
                       backgroundColor: "transparent !important",
+                      border: "none",
                       boxShadow: "none !important",
-                      color: theme.palette.primary.blue,
-                      transform: "scale(1.1)",
-                    },
-                    "&.MuiButton-root": {
-                      backgroundColor: "transparent !important",
-                      boxShadow: "none !important",
-                    },
-                  }}
-                >
-                  Logout
-                </Button>
+                      transition: "transform 0.25s ease, color 0.25s ease",
+                      "&:hover": {
+                        color: theme.palette.primary.blue,
+                        transform: "scale(1.1)",
+                      },
+                    }}
+                  >
+                    Logout
+                  </Button>
+                  <IconButton
+                    aria-label="favourites"
+                    sx={{
+                      height: 45,
+                      width: 45,
+                      transition: "transform 0.25s ease",
+                      "&:hover": {
+                        backgroundColor: theme.palette.background.lightBlue,
+                        transform: "scale(1.2)",
+                      },
+                    }}
+                    onClick={() => router.push("/favourites")}
+                  >
+                    <Badge
+                      badgeContent={favCount}
+                      color="error"
+                      overlap="circular"
+                      invisible={favCount === 0}
+                    >
+                      {favCount > 0 ? (
+                        <FavoriteIcon color="error" />
+                      ) : (
+                        <FavoriteBorderIcon sx={{ color: theme.palette.grey[700] }} />
+                      )}
+                    </Badge>
+                  </IconButton>
+                </>
               ) : (
                 <Button
                   variant="text"
