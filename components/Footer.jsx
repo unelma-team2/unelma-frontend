@@ -60,7 +60,7 @@ export default function Footer() {
                 <Typography sx={{ ...theme.typography.bodyFontTitle_M_Card, ...linkSx }}>&#x25B8; Products</Typography>
               </Link>
               <br />
-              <Link href="/services">
+              <Link href="/products?tab=services">
                 <Typography sx={{ ...theme.typography.bodyFontTitle_M_Card, ...linkSx, mt: { xs: 2, sm: 2, md: 3 } }}>
                   &#x25B8; Services
                 </Typography>
