@@ -1,40 +1,18 @@
-"use client";
+"use client"
+import { Box, Grid, Typography, useTheme, useMediaQuery } from "@mui/material"
+import Carousel from "@/components/Carousel.jsx"
+import ServiceCard from "@/components/ServiceCard.jsx"
 
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { Box, Grid, Typography, useTheme, useMediaQuery } from "@mui/material";
-import LoadingSpinner from "../LoadingSpinner";
-import Carousel from "../Carousel.jsx";
-import ServiceCard from "@/components/ServiceCard.jsx";
+export default function Services({ services, API_URL }) {
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
 
-export default function Services() {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  if (!services.length) return <p>No services found.</p>
 
-  const [services, setServices] = useState([]);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
-
-  useEffect(() => {
-    axios
-      .get(`${API_URL}/api/home?populate[Services][populate]=*`)
-      .then((res) => setServices(res.data.data?.Services || []))
-      .catch((err) => setError(err))
-      .finally(() => setLoading(false));
-  }, [API_URL]);
-
-  if (loading) return <LoadingSpinner />;
-  if (error) return <p>Error: {error.message}</p>;
-  if (!services.length) return <p>No services found.</p>;
-
-  // Header settings
-  const headerHeight = 180;
-  //const headerRadius = 120;
+  const headerHeight = 180
 
   return (
-    <Box sx={{ width: "100%", mt: 8 }}>
+    <Box sx={{ width: "100%", mt: 0, pt: 0 }}>
       {/* HEADER */}
       <Box
         sx={{
@@ -48,7 +26,7 @@ export default function Services() {
         <Box
           sx={{
             ...theme.mixins.homeBoxLeft,
-            boxShadow: `inset 0px -8px 0px ${theme.palette.background.lightYellow}`,
+              boxShadow: `inset 0px -5px 0px ${theme.palette.section.services.pastel}, inset 0px -14px 0px ${theme.palette.section.services.main}`,
           }}
         />
 
@@ -56,17 +34,14 @@ export default function Services() {
         <Box
           sx={{
             ...theme.mixins.homeTitleRight,
-             boxShadow: `-10px -8px 0px ${theme.palette.background.lightYellow}`,
+              boxShadow: `0px -3px 0px ${theme.palette.section.services.pastel}, 0px -12px 0px ${theme.palette.section.services.main}`,
           }}
         >
           <Typography
-            variant="h2"
             sx={{
-              fontWeight: 700,
-              fontSize: { xs: "24px", sm: "28px", md: theme.typography.h2?.fontSize || "38pt" },
+              ...theme.typography.headingFont_M,
               textAlign: { xs: "center", md: "right" },
-              color: theme.palette.text.primary,
-              marginRight: { md: "170px"}
+              marginRight: { md: "120px"}
             }}
           >
             Our Services
@@ -74,44 +49,21 @@ export default function Services() {
         </Box>
 
         {/* OPTIONAL TOP BORDER EXTENSION */}
-        <Box
-          sx={{
-            ...theme.mixins.bottomLineLeft,
-           //  boxShadow: `-10px -8px 0px ${theme.palette.primary.yellow}`,
-          }}
-        />
+        <Box sx={{ ...theme.mixins.bottomLineLeft }} />
       </Box>
 
       {/* CONTENT BELOW HEADER */}
-      <Box
-        sx={{
-          //mt: { xs: Math.max(120, Math.round(headerHeight * 0.75)), md: headerHeight },
-          px: { xs: 2, md: 4 },
-          maxWidth: "1200px",
-          mx: "auto",
-          mt: 18,
-        }}
-      >
+      <Box sx={{ ...theme.mixins.sectionContentSpacing }}>
         {/* MOBILE — Carousel */}
         {isMobile && (
-          <Carousel
-            items={services}
-            renderItem={(service) => <ServiceCard service={service} apiUrl={API_URL} />}
-          />
+          <Carousel items={services} renderItem={(service) => <ServiceCard service={service} apiUrl={API_URL} />} />
         )}
 
         {/* DESKTOP — Grid */}
         {!isMobile && (
           <Grid container spacing={8} justifyContent="center">
             {services.map((service, index) => (
-              <Grid
-                item
-                xs={12}
-                sm={6}
-                md={4}
-                key={index}
-                sx={{ display: "flex", justifyContent: "center" }}
-              >
+              <Grid item xs={12} sm={6} md={4} key={index} sx={{ display: "flex", justifyContent: "center" }}>
                 <ServiceCard service={service} apiUrl={API_URL} />
               </Grid>
             ))}
@@ -119,5 +71,5 @@ export default function Services() {
         )}
       </Box>
     </Box>
-  );
+  )
 }

@@ -1,7 +1,8 @@
 "use client";
 
-import { ThemeProvider, CssBaseline } from "@mui/material";
-import theme from "../theme";
+import { ThemeProvider } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
+import theme from "../theme.js";
 
 export default function ThemeRegistry({ children }) {
   return (

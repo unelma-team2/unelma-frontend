@@ -1,81 +1,88 @@
-"use client";
+"use client"
 
-import Badge from "@mui/material/Badge";
-import { useCart } from "@/app/context/CartContext";
-import { useAuth } from "@/app/context/AuthContext";
-import { useFavorites } from "@/app/context/FavoritesContext";
-import Image from "next/image";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState, useMemo } from "react";
+import Badge from "@mui/material/Badge"
+import { useCart } from "@/app/context/CartContext"
+import { useAuth } from "@/app/context/AuthContext"
+import { useFavorites } from "@/app/context/FavoritesContext"
+import Image from "next/image"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { useState, useMemo } from "react"
 import {
   AppBar,
   Toolbar,
   Box,
   Typography,
-  TextField,
   IconButton,
-  InputAdornment,
   Button,
   useTheme,
   useMediaQuery,
   Drawer,
   Divider,
-  Avatar,        
-  Tooltip,       
-} from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
-import CloseIcon from "@mui/icons-material/Close";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import FavoriteIcon from "@mui/icons-material/Favorite";
+  Avatar,
+  Tooltip,
+} from "@mui/material"
+import MenuIcon from "@mui/icons-material/Menu"
+import CloseIcon from "@mui/icons-material/Close"
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder"
+import FavoriteIcon from "@mui/icons-material/Favorite"
+import SearchInput from "./SearchInput"
 
 const navLinks = [
-  { label: "Home", href: "/" },
-  { label: "About Us", href: "/about" },
-  { label: "Products & Services", href: "/products", multiline: true },
-  { label: "Our Work", href: "/case-studies" },
-  { label: "Blog", href: "/blog" },
-  { label: "Careers", href: "/careers" },
-  { label: "Contact Us", href: "/contact" },
-];
+  { label: "Home", href: "/", underline: "#d0478bff" },
+  { label: "About Us", href: "/about", underline: "#8E24AA" },
+  {
+    label: "Products & Services",
+    href: "/products",
+    multiline: true,
+    underline: "linear-gradient(90deg, #5E35B1, #3949AB, #1E88E5)",
+  },
+  {
+    label: "Our Work",
+    href: "/case-studies",
+    underline: "linear-gradient(90deg, #26C6DA, #43A047)",
+  },
+  { label: "Blog", href: "/blog", underline: "#FFEB3B" },
+  { label: "Careers", href: "/careers", underline: "#FB8C00" },
+  { label: "Contact Us", href: "/contact", underline: "#E53935" },
+]
 
 export default function Header() {
-  const { user, signOut } = useAuth();
-  const { cartItems } = useCart();
-  const { favorites } = useFavorites();
-  const router = useRouter();
-  const theme = useTheme();
+  const { user, signOut } = useAuth()
+  const { cartItems } = useCart()
+  const { favorites } = useFavorites()
+  const router = useRouter()
+  const theme = useTheme()
 
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const isTablet = useMediaQuery(theme.breakpoints.between("sm", "md"));
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
+  const isTablet = useMediaQuery(theme.breakpoints.between("sm", "md"))
 
-  const totalQuantity = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+  const totalQuantity = cartItems.reduce((sum, item) => sum + item.quantity, 0)
 
   const favCount = useMemo(() => {
-    if (!favorites || !favorites.length) return 0;
-    const seen = new Set();
+    if (!favorites || !favorites.length) return 0
+    const seen = new Set()
     for (const fav of favorites) {
-      if (!fav) continue;
-      // prefer explicit key if present
-      let key = fav.key;
-      const item = fav.item;
+      if (!fav) continue
+      let key = fav.key
+      const item = fav.item
       if (!key && item) {
-        key = item.slug || item.id || item.attributes?.slug || item.attributes?.id || null;
+        key = item.slug || item.id || item.attributes?.slug || item.attributes?.id || null
       }
-      if (key) seen.add(String(key));
+      if (key) seen.add(String(key))
     }
-    return seen.size;
-  }, [favorites]);
+    return seen.size
+  }, [favorites])
 
   return (
     <AppBar
       position="static"
       elevation={0}
       sx={{
-        backgroundColor: (theme) => theme.palette.background.default,
-        color: (theme) => theme.palette.text.primary,
+        backgroundColor: theme.palette.background.default,
+        color: theme.palette.text.primary,
         boxShadow: "none",
         padding: { xs: 1, sm: 2, md: 4 },
       }}
@@ -99,6 +106,7 @@ export default function Header() {
             flexWrap: "wrap",
           }}
         >
+          {/* Logo */}
           <Box
             sx={{
               display: "flex",
@@ -118,12 +126,8 @@ export default function Header() {
                   cursor: "pointer",
                   transition: "transform 0.25s ease",
                 }}
-                onMouseEnter={(e) =>
-                  (e.currentTarget.style.transform = "scale(1.05)")
-                }
-                onMouseLeave={(e) =>
-                  (e.currentTarget.style.transform = "scale(1.0)")
-                }
+                onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
+                onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1.0)")}
               />
             </Link>
           </Box>
@@ -146,78 +150,15 @@ export default function Header() {
                 gap: { sm: 2, md: 3 },
               }}
             >
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 1,
-                  maxWidth: 400,
-                  width: "100%",
-                }}
-              >
-                <TextField
-                  fullWidth
-                  size="small"
-                  placeholder="Search…"
-                  sx={{
-                    maxWidth: { sm: 150, md: 200 },
-                    "& .MuiOutlinedInput-root": {
-                      borderRadius: "6px",
-                      backgroundColor: theme.palette.background.paper,
-                      border: "2px solid" + theme.palette.primary.main,
-                      "& .MuiOutlinedInput-notchedOutline": { border: "none" },
-                      "&:hover .MuiOutlinedInput-notchedOutline": {
-                        border: "2px solid" + theme.palette.primary.blue,
-                        borderRadius: "4px",
-                      },
-                      "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                        border: "2px solid" + theme.palette.primary.blue,
-                        borderRadius: "4px",
-                      },
-                    },
-                    "& .MuiInputBase-input": {
-                      padding: "8px 12px",
-                    },
-                  }}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton
-                          edge="end"
-                          sx={{
-                            height: 40,
-                            width: 40,
-                            borderRadius: "6px",
-                            transition: "transform 0.25s ease",
-                            "&:hover": {
-                              border: "2px solid" + theme.palette.primary.blue,
-                              backgroundColor:
-                                theme.palette.background.lightBlue,
-                              transform: "scale(1.1)",
-                            },
-                          }}
-                        >
-                          <Image
-                            src="/images/icons/icons8-search-32.png"
-                            alt="Search Icon"
-                            width={30}
-                            height={30}
-                          />
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  }}
-                />
-              </Box>
+              <SearchInput />
 
               {user ? (
                 <>
-                  {/* Profile avatar button (click -> /profile) */}
                   <Tooltip title={user?.name || user?.email || "Profile"}>
                     <IconButton
                       onClick={() => {
-                        router.push("/profile");
-                        setMobileMenuOpen(false);
+                        router.push("/profile")
+                        setMobileMenuOpen(false)
                       }}
                       sx={{ p: 0, mr: 1 }}
                       aria-label="Profile"
@@ -239,18 +180,17 @@ export default function Header() {
                     </IconButton>
                   </Tooltip>
 
-                  {/* Logout */}
                   <Button
                     variant="text"
                     disableRipple
                     onClick={() => {
-                      signOut();
-                      setMobileMenuOpen(false);
+                      signOut()
+                      setMobileMenuOpen(false)
                     }}
                     sx={{
+                      ...theme.typography.bodyFont_M,
                       textTransform: "uppercase",
                       fontSize: { sm: "0.65rem", md: "1rem" },
-                      fontWeight: 600,
                       padding: { sm: "6px 12px", md: "8px 16px" },
                       color: theme.palette.text.primary,
                       backgroundColor: "transparent !important",
@@ -258,8 +198,9 @@ export default function Header() {
                       boxShadow: "none !important",
                       transition: "transform 0.25s ease, color 0.25s ease",
                       "&:hover": {
-                        color: theme.palette.primary.blue,
-                        transform: "scale(1.1)",
+                        color: theme.palette.section.products.vibrant,
+                        transform: "scale(1.15)",
+                        border: "none !important",
                       },
                     }}
                   >
@@ -272,18 +213,13 @@ export default function Header() {
                       width: 45,
                       transition: "transform 0.25s ease",
                       "&:hover": {
-                        backgroundColor: theme.palette.background.lightBlue,
-                        transform: "scale(1.2)",
+                        //backgroundColor: theme.palette.section.products.soft,
+                        transform: "scale(1.3)",
                       },
                     }}
                     onClick={() => router.push("/favourites")}
                   >
-                    <Badge
-                      badgeContent={favCount}
-                      color="error"
-                      overlap="circular"
-                      invisible={favCount === 0}
-                    >
+                    <Badge badgeContent={favCount} color="error" overlap="circular" invisible={favCount === 0}>
                       {favCount > 0 ? (
                         <FavoriteIcon color="error" />
                       ) : (
@@ -297,13 +233,13 @@ export default function Header() {
                   variant="text"
                   disableRipple
                   onClick={() => {
-                    router.push("/login");
-                    setMobileMenuOpen(false);
+                    router.push("/login")
+                    setMobileMenuOpen(false)
                   }}
                   sx={{
+                    ...theme.typography.bodyFont_M,
                     textTransform: "uppercase",
                     fontSize: { sm: "0.65rem", md: "1rem" },
-                    fontWeight: 600,
                     padding: { sm: "6px 12px", md: "8px 16px" },
                     color: theme.palette.text.primary,
                     backgroundColor: "transparent !important",
@@ -313,12 +249,9 @@ export default function Header() {
                     "&:hover, &:focus, &:active, &.Mui-focusVisible": {
                       backgroundColor: "transparent !important",
                       boxShadow: "none !important",
-                      color: theme.palette.primary.blue,
-                      transform: "scale(1.1)",
-                    },
-                    "&.MuiButton-root": {
-                      backgroundColor: "transparent !important",
-                      boxShadow: "none !important",
+                      border: "none !important",
+                      color: theme.palette.section.products.vibrant,
+                      transform: "scale(1.15)",
                     },
                   }}
                 >
@@ -333,18 +266,17 @@ export default function Header() {
                   width: 45,
                   transition: "transform 0.25s ease",
                   "&:hover": {
-                    backgroundColor: theme.palette.background.lightBlue,
-                    transform: "scale(1.2)",
+                    backgroundColor: "#ffffff",
+                    border: `2px solid ${theme.palette.section.products.vibrant}`,
+                    borderRadius: 100,
+                    padding: 3,
+                    boxShadow: "none",
+                    transform: "scale(1.3)",
                   },
                 }}
                 onClick={() => router.push("/cart")}
               >
-                <Badge
-                  badgeContent={totalQuantity}
-                  color="error"
-                  overlap="circular"
-                  invisible={totalQuantity === 0}
-                >
+                <Badge badgeContent={totalQuantity} color="error" overlap="circular" invisible={totalQuantity === 0}>
                   <Image
                     src="/images/icons/icons8-shopping-cart-64.png"
                     alt="Shopping cart icon"
@@ -365,18 +297,17 @@ export default function Header() {
                     width: 40,
                     transition: "transform 0.25s ease",
                     "&:hover": {
-                      backgroundColor: theme.palette.background.lightBlue,
-                      transform: "scale(1.2)",
+                      backgroundColor: "#ffffff",
+                      border: `2px solid ${theme.palette.section.products.vibrant}`,
+                      borderRadius: 100,
+                      padding: 3,
+                      boxShadow: "none",
+                      transform: "scale(1.3)",
                     },
                   }}
                   onClick={() => router.push("/cart")}
                 >
-                  <Badge
-                    badgeContent={totalQuantity}
-                    color="error"
-                    overlap="circular"
-                    invisible={totalQuantity === 0}
-                  >
+                  <Badge badgeContent={totalQuantity} color="error" overlap="circular" invisible={totalQuantity === 0}>
                     <Image
                       src="/images/icons/icons8-shopping-cart-64.png"
                       alt="Shopping cart icon"
@@ -418,15 +349,13 @@ export default function Header() {
         >
           <Box sx={{ display: "flex", gap: { xs: 1.5, sm: 2, md: 4 } }}>
             {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                style={{ textDecoration: "none", color: "inherit" }}
-              >
+              <Link key={link.href} href={link.href} style={{ textDecoration: "none", color: "inherit" }}>
                 <Typography
-                  variant="body14bold"
                   sx={{
+                    ...theme.typography.bodyFont_M,
+                    position: "relative",
                     textTransform: "uppercase",
+                    fontWeight: 600,
                     textAlign: "center",
                     whiteSpace: link.multiline ? "pre-line" : "normal",
                     lineHeight: 1.2,
@@ -434,9 +363,28 @@ export default function Header() {
                     display: "inline-block",
                     fontSize: { sm: "0.65rem", md: "1.2rem" },
                     transition: "transform 0.25s ease, color 0.25s ease",
+
+                    "&::after": {
+                      content: '""',
+                      position: "absolute",
+                      left: 0,
+                      bottom: -16,
+                      width: "100%",
+                      height: "8px",
+                      background: link.underline,
+                      transform: "scaleX(0)",
+                      transformOrigin: "left",
+                      transition: "transform 0.3s ease",
+                      //borderRadius: 2,
+                    },
+
                     "&:hover": {
                       transform: "scale(1.1)",
-                      color: theme.palette.primary.blue,
+                      color: theme.palette.primary.main,
+                    },
+
+                    "&:hover::after": {
+                      transform: "scaleX(1)",
                     },
                   }}
                 >
@@ -455,6 +403,7 @@ export default function Header() {
         </Box>
       </Toolbar>
 
+      {/* Mobile Drawer */}
       <Drawer
         anchor="right"
         open={mobileMenuOpen}
@@ -475,9 +424,7 @@ export default function Header() {
             padding: 2,
           }}
         >
-          <Typography variant="h6" sx={{ fontWeight: 600 }}>
-            Menu
-          </Typography>
+          <Typography sx={{ ...theme.typography.bodyFontTitle_M }}>Menu</Typography>
           <IconButton onClick={() => setMobileMenuOpen(false)}>
             <CloseIcon />
           </IconButton>
@@ -486,61 +433,11 @@ export default function Header() {
 
         {/* Mobile search */}
         <Box sx={{ padding: 2 }}>
-          <TextField
-            fullWidth
-            size="small"
-            placeholder="Search…"
-            sx={{
-              "& .MuiOutlinedInput-root": {
-                borderRadius: "6px",
-                backgroundColor: theme.palette.background.paper,
-                border: "2px solid " + theme.palette.primary.main,
-                "& .MuiOutlinedInput-notchedOutline": { border: "none" },
-                "&:hover .MuiOutlinedInput-notchedOutline": {
-                  border: "2px solid " + theme.palette.primary.blue,
-                  borderRadius: "4px",
-                },
-                "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                  border: "2px solid " + theme.palette.primary.blue,
-                  borderRadius: "4px",
-                },
-              },
-              "& .MuiInputBase-input": {
-                padding: "8px 12px",
-              },
-            }}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    edge="end"
-                    sx={{
-                      height: 40,
-                      width: 40,
-                      borderRadius: "6px",
-                      transition: "transform 0.25s ease",
-                      "&:hover": {
-                        border: "2px solid " + theme.palette.primary.blue,
-                        backgroundColor: theme.palette.background.lightBlue,
-                        transform: "scale(1.1)",
-                      },
-                    }}
-                  >
-                    <Image
-                      src="/images/icons/icons8-search-32.png"
-                      alt="Search Icon"
-                      width={24}
-                      height={24}
-                    />
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-          />
+          <SearchInput size="small" />
         </Box>
         <Divider />
 
-        {/* Mobile nav links */}
+        {/* Mobile nav links with colored underlines */}
         <Box
           sx={{
             padding: 2,
@@ -550,57 +447,77 @@ export default function Header() {
           }}
         >
           {navLinks.map((link) => (
-            <Link
+            <Box
               key={link.href}
+              component={Link}
               href={link.href}
-              style={{ textDecoration: "none", color: "inherit" }}
               onClick={() => setMobileMenuOpen(false)}
+              sx={{
+                position: "relative",
+                textDecoration: "none",
+                color: "inherit",
+                display: "inline-block",
+
+                "&::after": {
+                  content: '""',
+                  position: "absolute",
+                  left: 0,
+                  bottom: -6,
+                  width: "100%",
+                  height: "3px",
+                  background: link.underline,
+                  transform: "scaleX(0)",
+                  transformOrigin: "left",
+                  transition: "transform 0.3s ease",
+                  borderRadius: 2,
+                },
+
+                "&:hover::after": {
+                  transform: "scaleX(1)",
+                },
+              }}
             >
               <Typography
                 sx={{
+                  ...theme.typography.bodyFont_M,
                   textTransform: "uppercase",
                   fontSize: "0.875rem",
-                  fontWeight: 600,
                   letterSpacing: "0.5px",
-                  transition: "color 0.25s ease",
+                  transition: "transform 0.25s ease, color 0.25s ease",
                   "&:hover": {
-                    color: theme.palette.primary.blue,
+                    transform: "scale(1.05)",
+                    color: theme.palette.primary.main,
                   },
                 }}
               >
                 {link.multiline ? "PRODUCTS & SERVICES" : link.label}
               </Typography>
-            </Link>
+            </Box>
           ))}
         </Box>
         <Divider />
 
-        <Box
-          sx={{ padding: 2, display: "flex", flexDirection: "column", gap: 1 }}
-        >
+        <Box sx={{ padding: 2, display: "flex", flexDirection: "column", gap: 1 }}>
           {user ? (
             <Button
               onClick={() => {
-                signOut();
-                setMobileMenuOpen(false);
+                signOut()
+                setMobileMenuOpen(false)
               }}
               sx={{
+                ...theme.typography.bodyFont_M,
                 textTransform: "uppercase",
-                fontSize: { sm: "0.65rem", md: "1rem" },
-                fontWeight: 600,
-                padding: { sm: "6px 12px", md: "8px 16px" },
+                fontSize: "0.875rem",
+                padding: "8px 16px",
                 color: theme.palette.text.primary,
-                backgroundColor: "transparent",
+                backgroundColor: "transparent !important",
                 border: "none",
                 boxShadow: "none",
                 transition: "transform 0.25s ease, color 0.25s ease",
-                "&:hover": {
-                  backgroundColor: "transparent !important", // <-- force transparent
-                  color: theme.palette.primary.blue,
+                "&:hover, &:active": {
+                  backgroundColor: "transparent !important",
+                  color: theme.palette.section.careers.vibrant,
                   transform: "scale(1.1)",
-                },
-                "&:active": {
-                  backgroundColor: "transparent !important", // <-- also for active state
                 },
               }}
             >
@@ -609,26 +526,23 @@ export default function Header() {
           ) : (
             <Button
               onClick={() => {
-                router.push("/login");
-                setMobileMenuOpen(false);
+                router.push("/login")
+                setMobileMenuOpen(false)
               }}
               sx={{
+                ...theme.typography.bodyFont_M,
                 textTransform: "uppercase",
-                fontSize: { sm: "0.65rem", md: "1rem" },
-                fontWeight: 600,
-                padding: { sm: "6px 12px", md: "8px 16px" },
+                fontSize: "0.875rem",
+                padding: "8px 16px",
                 color: theme.palette.text.primary,
-                backgroundColor: "transparent",
+                backgroundColor: "transparent !important",
                 border: "none",
                 boxShadow: "none",
                 transition: "transform 0.25s ease, color 0.25s ease",
-                "&:hover": {
-                  backgroundColor: "transparent !important", // <-- force transparent
-                  color: theme.palette.primary.blue,
+                "&:hover, &:active": {
+                  backgroundColor: "transparent !important",
+                  color: theme.palette.section.careers.vibrant,
                   transform: "scale(1.1)",
-                },
-                "&:active": {
-                  backgroundColor: "transparent !important", // <-- also for active state
                 },
               }}
             >
@@ -638,5 +552,5 @@ export default function Header() {
         </Box>
       </Drawer>
     </AppBar>
-  );
+  )
 }

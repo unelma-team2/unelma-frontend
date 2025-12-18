@@ -1,50 +1,64 @@
-"use client";
+"use client"
 
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import Link from "next/link";
-import Image from "next/image";
-import { Box, Card, CardContent, Typography, IconButton, Stack, useTheme } from "@mui/material";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import ShareIcon from "@mui/icons-material/Share";
-import CommentIcon from "@mui/icons-material/Comment";
-import Carousel from "@/components/Carousel.jsx";
-import LoadingSpinner from "@/components/LoadingSpinner";
+import { useEffect, useState } from "react"
+import axios from "axios"
+import Link from "next/link"
+import Image from "next/image"
+import { Box, Card, CardContent, Typography, IconButton, Stack, useTheme } from "@mui/material"
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward"
+import ShareIcon from "@mui/icons-material/Share"
+import CommentIcon from "@mui/icons-material/Comment"
+import EditNoteIcon from "@mui/icons-material/EditNote"
+import CategoryIcon from "@mui/icons-material/Category"
+import CreateIcon from '@mui/icons-material/Create';
+import Carousel from "@/components/Carousel.jsx"
+import LoadingSpinner from "@/components/LoadingSpinner"
+//import { o } from "framer-motion/dist/types.d-DagZKalS"
 
 export default function RecentBlogPosts() {
-  const theme = useTheme();
-  const [blogs, setBlogs] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const theme = useTheme()
+  const [blogs, setBlogs] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com"
+
+  const placeholderImages = [
+    "/images/blog/blog1.jpg",
+    "/images/blog/blog2.jpg",
+    "/images/blog/blog3.jpg",
+  ]
+
+  const getPlaceholderImage = (id) => {
+    const index = id % placeholderImages.length
+    return placeholderImages[index]
+  }
 
   useEffect(() => {
     axios
       .get(`${API_URL}/api/blogs?populate=*`)
       .then((res) => setBlogs(res.data.data))
       .catch((err) => setError(err))
-      .finally(() => setLoading(false));
-  }, [API_URL]);
+      .finally(() => setLoading(false))
+  }, [API_URL])
 
-  if (loading) return <LoadingSpinner />;
-  if (error) return <p>Error loading blogs: {error.message}</p>;
-  if (!blogs?.length) return <p>No blogs found.</p>;
+  //if (loading) return <LoadingSpinner />
+  if (error) return <p>Error loading blogs: {error.message}</p>
+  if (!blogs?.length) return <p>No blogs found.</p>
 
-  const headerHeight = 180;
+  const headerHeight = 180
 
   const renderBlogCard = (blog) => {
-    const { id, Title, Description, slug, blog_image, createdAt } = blog.attributes || blog;
+    const { id, Title, Description, slug, blog_image, createdAt } = blog.attributes || blog
 
     const imageUrl = blog_image?.data?.attributes?.url
       ? blog_image.data.attributes.url.startsWith("http")
         ? blog_image.data.attributes.url
         : `${API_URL}${blog_image.data.attributes.url}`
-      : "/images/blog/pngwing.com - 2025-11-17T021857.109 copy.png";
-
-    const date = new Date(createdAt);
-    const dayMonth = `${date.getDate()} ${date.toLocaleString("en-US", { month: "short" })}`;
-    const year = date.getFullYear();
+      : getPlaceholderImage(id)
+    const date = new Date(createdAt)
+    const dayMonth = `${date.getDate()} ${date.toLocaleString("en-US", { month: "short" })}`
+    const year = date.getFullYear()
 
     return (
       <Card
@@ -52,88 +66,206 @@ export default function RecentBlogPosts() {
         sx={{
           width: 300,
           minWidth: 300,
-          height: 700,
-          boxShadow: `-10px -8px 0px ${theme.palette.primary.green2}`,
+          height: 800,
+          boxShadow: `-8px -6px 0px ${theme.palette.section.blog.main}`,
           overflow: "hidden",
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
           mt: 2,
+          transition: "transform 0.25s ease, box-shadow 0.25s ease",
+
+          "&:hover": {
+            transform: "translateY(-4px)",
+            boxShadow: `-10px -8px 0px ${theme.palette.section.blog.vibrant}`,
+          },
+
+          "&:hover .dateBadge": {
+            transform: "scale(1.08)",
+            boxShadow: `inset -4px -3px 0px ${theme.palette.primary.main}`,
+          },
+
+          "&:hover .blogTitle": {
+            transform: "scale(1.05)",
+            color: theme.palette.section.careers.vibrant,
+          },
         }}
       >
-        {/* Image */}
-        <Box sx={{ position: "relative", height: 240 }}>
-          {imageUrl && (
+        <Link href={`/blog/${slug}`} passHref style={{ textDecoration: "none" }}>
+          <Box sx={{ position: "relative", height: 240, width: "100%", cursor: "pointer" }}>
             <Image
-              src={imageUrl}
+              src={imageUrl || "/placeholder.svg"}
               alt={Title || "Blog Image"}
               fill
-              style={{ objectFit: "contain" }}
+              style={{ objectFit: "cover" }}
             />
-          )}
-          <Box
-            sx={{
-              position: "absolute",
-              top: 10,
-              left: 10,
-              background: theme.palette.background.lightGreen,
-              width: 90,
-              height: 90,
-              borderRadius: "50%",
-              border: `2px solid ${theme.palette.primary.main}`,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontWeight: 700,
-              fontSize: "0.7rem",
-              textAlign: "center",
-            }}
-          >
-            <div>
-              <div style={{ fontSize: "14pt", fontWeight: "bold" }}>{dayMonth}</div>
-              <div style={{ fontSize: "12pt" }}>{year}</div>
-            </div>
+            <Box
+              className="dateBadge"
+              sx={{
+                position: "absolute",
+                top: 10,
+                left: 10,
+                background: theme.palette.section.blog.pastel,
+                width: 90,
+                height: 90,
+                borderRadius: "50%",
+                border: theme.mixins.borderStyle,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                transition: "transform 0.25s ease, box-shadow 0.25s ease",
+                boxShadow: `-4px -3px 0px ${theme.palette.primary.main}`,
+              }}
+            >
+              <Typography sx={{ ...theme.typography.bodyFontTitle_S }}>{dayMonth}</Typography>
+              <Typography sx={{ ...theme.typography.bodyFont_M }}>{year}</Typography>
+            </Box>
           </Box>
-        </Box>
+        </Link>
 
-        {/* Content */}
         <CardContent sx={{ flexGrow: 1 }}>
-          <Stack direction="row" spacing={2} mb={4}>
-            <Stack direction="row" spacing={0.5} alignItems="center">
-              <Image src="/images/icons/icons8-writing-64.png" alt="Author" width={24} height={24} />
-              <Typography variant="bodyreg12" color={theme.palette.primary.blue1}>Author</Typography>
+          <Stack direction="row" spacing={4} mb={4}>
+            <Stack
+              direction="row"
+              spacing={0.8}
+              alignItems="center"
+              component={Link}
+              href="#"
+              sx={{
+                textDecoration: "none",
+                transition: "transform 0.25s ease",
+                "&:hover": {
+                  transform: "scale(1.2)",
+                },
+              }}
+            >
+              <CreateIcon sx={{ 
+                fontSize: 28, 
+                color: theme.palette.text.secondary,  
+                borderRadius: 100,
+                border: "2px solid" + theme.palette.text.secondary, 
+                padding: 0.5, 
+                backgroundColor: theme.palette.section.blog.soft,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }} />
+              <Typography sx={{ ...theme.typography.bodyFont_S, color: theme.palette.text.secondary }}>
+                Author
+              </Typography>
             </Stack>
-            <Stack direction="row" spacing={0.5} alignItems="center">
-              <Image src="/images/icons/icons8-opened-folder-26.png" alt="Category" width={24} height={24} />
-              <Typography variant="bodyreg12" color={theme.palette.primary.blue1}>Category</Typography>
+            <Stack
+              direction="row"
+              spacing={0.7}
+              alignItems="center"
+              component={Link}
+              href="#"
+              sx={{
+                textDecoration: "none",
+                transition: "transform 0.25s ease",
+                "&:hover": {
+                  transform: "scale(1.2)",
+                },
+              }}
+            >
+              <CategoryIcon sx={{ 
+                fontSize: 28, 
+                color: theme.palette.text.secondary,  
+                borderRadius: 100,
+                border: "2px solid" + theme.palette.text.secondary, 
+                padding: 0.5, 
+                backgroundColor: theme.palette.section.blog.soft,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }} />
+              <Typography sx={{ ...theme.typography.bodyFont_S, color: theme.palette.text.secondary }}>
+                Category
+              </Typography>
             </Stack>
           </Stack>
 
-          <Typography variant="h4" fontWeight={600} mb={2} align="center">{Title}</Typography>
-          <Typography variant="body14reg" align="justify">
+          <Typography
+            className="blogTitle"
+            sx={{
+              ...theme.typography.bodyFontTitle_M_Card,
+              mb: 4,
+              textAlign: "center",
+              transition: "transform 0.25s ease, color 0.25s ease",
+                  "&:hover": {
+            transform: "scale(1.07)",
+            color: theme.palette.primary.main,
+          }}}
+          >
+            {Title}
+          </Typography>
+          <Typography sx={{ ...theme.typography.bodyFont_M, textAlign: "justify" }}>
             {Description?.slice(0, 300)}...
           </Typography>
         </CardContent>
 
-        {/* Bottom Bar */}
         <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", px: 2, pb: 2, mt: "auto" }}>
           <Stack direction="row" spacing={1.5}>
-            <IconButton size="small"><ShareIcon fontSize="small" sx={{ color: theme.palette.primary.violet }} /></IconButton>
-            <IconButton size="small"><CommentIcon fontSize="small" sx={{ color: theme.palette.primary.violet }} /></IconButton>
+            <IconButton
+              size="small"
+              sx={{
+                borderRadius: 100,
+                border: theme.mixins.borderStyle,
+                p: 0.6,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center", 
+                color: theme.palette.primary.main,
+                backgroundColor: theme.palette.section.blog.pastel,
+                transition: "transform 0.25s ease",
+                "&:hover": {
+                  transform: "scale(1.2)",
+                  backgroundColor: theme.palette.section.shopOrder.soft,
+                   boxShadow: "none"
+                },
+              }}
+            >
+              <ShareIcon sx={{ fontSize: 24 }} />
+            </IconButton>
+            <IconButton
+              size="small"
+              sx={{
+                borderRadius: 100,
+                border: theme.mixins.borderStyle,
+                p: 0.6,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center", 
+                color: theme.palette.primary.main,
+                backgroundColor: theme.palette.section.blog.pastel,
+                transition: "transform 0.25s ease",
+                "&:hover": {
+                  transform: "scale(1.2)",
+                  backgroundColor: theme.palette.section.shopOrder.soft,
+                   boxShadow: "none"
+                },
+              }}
+            >
+              <CommentIcon sx={{ fontSize: 24 }} />
+            </IconButton>
           </Stack>
 
-          <Link href={`/blog/${slug}`} passHref>
+          <Link href={`/blog/${slug}`} passHref style={{ textDecoration: "none" }}>
             <Typography
               sx={{
-                fontSize: 20,
-                color: theme.palette.primary.violet,
-                textDecoration: "none",
+                ...theme.typography.bodyFontTitle_S,
+                color: theme.palette.section.about.main,
                 textTransform: "uppercase",
-                fontWeight: "bold",
-                cursor: "pointer",
                 display: "flex",
                 alignItems: "center",
                 gap: "3px",
+                cursor: "pointer",
+                transition: "all 0.25s ease",
+                "&:hover": {
+                  color: theme.palette.section.products.vibrant,
+                  transform: "scale(1.05)",
+                },
               }}
             >
               Read More <ArrowForwardIcon sx={{ fontSize: 24 }} />
@@ -141,8 +273,8 @@ export default function RecentBlogPosts() {
           </Link>
         </Box>
       </Card>
-    );
-  };
+    )
+  }
 
   return (
     <Box sx={{ width: "100%", mt: 16 }}>
@@ -155,36 +287,30 @@ export default function RecentBlogPosts() {
           overflow: "visible",
         }}
       >
-        {/* LEFT DARK BLOCK */}
         <Box
           sx={{
             ...theme.mixins.homeBoxLeft,
-            boxShadow: `inset 0px -8px 0px ${theme.palette.background.lightGreen}`,
+            boxShadow: `inset 0px -5px 0px ${theme.palette.section.blog.pastel}, inset -0px -14px 0px ${theme.palette.section.blog.main}`,
           }}
         />
 
-        {/* RIGHT WHITE CURVED PANEL WITH TITLE */}
         <Box
           sx={{
             ...theme.mixins.homeTitleRight,
-            boxShadow: `-10px -8px 0px ${theme.palette.background.lightGreen}`,
+              boxShadow: `-0px -3px 0px ${theme.palette.section.blog.pastel}, 0px -12px 0px ${theme.palette.section.blog.main}`,
           }}
         >
           <Typography
-            variant="h2"
             sx={{
-              fontWeight: 700,
-              fontSize: { xs: "24px", sm: "28px", md: theme.typography.h2?.fontSize || "38pt" },
+              ...theme.typography.headingFont_M,
               textAlign: { xs: "center", md: "right" },
-              color: theme.palette.text.primary,
-              marginRight: { md: "170px" },
+              marginRight: { md: "100px" },
             }}
           >
             Recent Blog Posts
           </Typography>
         </Box>
 
-        {/* BOTTOM LINE */}
         <Box sx={{ ...theme.mixins.bottomLineLeft }} />
       </Box>
 
@@ -200,5 +326,5 @@ export default function RecentBlogPosts() {
         <Carousel items={blogs} renderItem={renderBlogCard} />
       </Box>
     </Box>
-  );
+  )
 }

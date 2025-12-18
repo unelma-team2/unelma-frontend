@@ -53,7 +53,7 @@ export default function RootLayout({ children }) {
                     <ClientLayoutWrapper>
                       <Box
                         sx={{
-                          mx: { xs: 2, md: "120px" },
+                         // mx: { xs: 2, md: "120px" },
                           my: "2rem",
                         }}
                       >

@@ -1,42 +1,17 @@
-"use client";
+"use client"
+import { Box, Typography, useTheme } from "@mui/material"
+import Carousel from "@/components/Carousel.jsx"
+import ProductCard from "@/components/ProductCard.jsx"
 
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { Box, Grid, Typography, useTheme, useMediaQuery } from "@mui/material";
+export default function Products({ products, API_URL }) {
+  const theme = useTheme()
 
-import LoadingSpinner from "../LoadingSpinner";
-import Carousel from "../Carousel.jsx";
-import ProductCards from "../ProductCard.jsx";
+  if (!products.length) return <p>No products found.</p>
 
-export default function Products() {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-
-  const [products, setProducts] = useState([]);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  const API_URL =
-    process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
-
-  useEffect(() => {
-    axios
-      .get(`${API_URL}/api/home?populate[Products][populate]=*`)
-      .then((res) => setProducts(res.data.data?.Products || []))
-      .catch((err) => setError(err))
-      .finally(() => setLoading(false));
-  }, [API_URL]);
-  
-
-  if (loading) return <LoadingSpinner />;
-  if (error) return <p>Error: {error.message}</p>;
-  if (!products.length) return <p>No products found.</p>;
-
-  // Header settings
-  const headerHeight = 180;
+  const headerHeight = 180
 
   return (
-    <Box sx={{ width: "100%", mt: 16 }}>
+    <Box sx={{ ...theme.mixins.sectionSpacing, width: "100%" }}>
       {/* HEADER */}
       <Box
         sx={{
@@ -50,17 +25,15 @@ export default function Products() {
         <Box
           sx={{
             ...theme.mixins.homeTitleLeft,
-              boxShadow: `10px -8px 0px ${theme.palette.background.lightOrange}`,
+            boxShadow: `0px -3px 0px ${theme.palette.section.products.pastel}, 0px -12px 0px ${theme.palette.section.products.main}`,
+
           }}
         >
           <Typography
-            variant="h2"
             sx={{
-              fontWeight: 700,
-              fontSize: { xs: "24px", sm: "28px", md: theme.typography.h2?.fontSize || "38pt" },
+              ...theme.typography.headingFont_M,
               textAlign: { xs: "center", md: "left" },
-              color: theme.palette.text.primary,
-              marginLeft: { md: "170px" }, // optional padding from left edge
+              marginLeft: { md: "120px"}
             }}
           >
             Our Products
@@ -68,36 +41,22 @@ export default function Products() {
         </Box>
 
         {/* RIGHT DARK BLOCK */}
-        <Box
+         <Box
           sx={{
             ...theme.mixins.homeBoxRight,
-              boxShadow: `inset 0px -8px 0px ${theme.palette.background.lightOrange}`,
+               boxShadow: `inset 0px -5px 0px ${theme.palette.section.products.pastel}, inset -0px -14px 0px ${theme.palette.section.products.main}`,
           }}
         />
 
+
         {/* OPTIONAL BOTTOM LINE */}
-        <Box
-          sx={{
-            ...theme.mixins.bottomLineRight,
-          }}
-        />
+        <Box sx={{ ...theme.mixins.bottomLineRight }} />
       </Box>
 
       {/* CONTENT BELOW HEADER */}
-      <Box
-        sx={{
-          px: { xs: 2, md: 4 },
-          maxWidth: "1200px",
-          mx: "auto",
-          mt: 18,
-        }}
-      >
-     
-          <Carousel
-            items={products}
-            renderItem={(product) => <ProductCards product={product} apiUrl={API_URL} />}
-          />
+      <Box sx={{ ...theme.mixins.sectionContentSpacing }}>
+        <Carousel items={products} renderItem={(product) => <ProductCard product={product} apiUrl={API_URL} />} />
       </Box>
     </Box>
-  );
+  )
 }

@@ -1,42 +1,43 @@
-"use client";
+"use client"
 
-import { Box, IconButton } from "@mui/material";
-import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
-import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
-import { useTheme } from "@mui/material/styles";
+import { Box, IconButton, useTheme } from "@mui/material"
+import ArrowCircleLeftRoundedIcon from "@mui/icons-material/ArrowCircleLeftRounded"
+import ArrowCircleRightRoundedIcon from "@mui/icons-material/ArrowCircleRightRounded"
 
 export default function ArrowButtons({ onPrev, onNext }) {
-  const theme = useTheme();
+  const theme = useTheme()
 
   return (
-    <Box sx={{ mt: 6, display: "flex", justifyContent: "center", gap: 4 }}>
-      <IconButton
-        aria-label="previous"
-        onClick={onPrev}
+    <>
+      <Box
         sx={{
-          color: theme.palette.primary.main,
-          "&:hover": {
-            color: theme.palette.primary.violet,
-            transform: "scale(1.1)",
-          },
+          position: "absolute",
+          top: "50%",
+          left: { xs: -20, sm: -30, md: -40 }, // reduced negative values to keep buttons visible
+          transform: "translateY(-50%)",
+          zIndex: 10,
+          pointerEvents: "auto",
         }}
       >
-        <ArrowCircleLeftIcon sx={{ fontSize: 48 }} />
-      </IconButton>
+        <IconButton onClick={onPrev} color="arrowButton" aria-label="Previous">
+          <ArrowCircleLeftRoundedIcon sx={{ fontSize: 72 }} />
+        </IconButton>
+      </Box>
 
-      <IconButton
-        aria-label="next"
-        onClick={onNext}
+      <Box
         sx={{
-          color: theme.palette.primary.main,
-          "&:hover": {
-            color: theme.palette.primary.violet,
-            transform: "scale(1.1)",
-          },
+          position: "absolute",
+          top: "50%",
+          right: { xs: -20, sm: -30, md: -40 }, // reduced negative values to keep buttons visible
+          transform: "translateY(-50%)",
+          zIndex: 10,
+          pointerEvents: "auto",
         }}
       >
-        <ArrowCircleRightIcon sx={{ fontSize: 48 }} />
-      </IconButton>
-    </Box>
-  );
+        <IconButton onClick={onNext} color="arrowButton" aria-label="Next">
+          <ArrowCircleRightRoundedIcon sx={{ fontSize: 72 }} />
+        </IconButton>
+      </Box>
+    </>
+  )
 }
