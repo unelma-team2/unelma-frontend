@@ -75,7 +75,7 @@ export default function OrdersPage() {
       <HeroPage title="My Orders" compact />
 
       <Box sx={{ px: { xs: 2, md: 6 }, py: 1, maxWidth: 1200, mx: "auto" }}>
-        {/* Back button */}
+
         <Box sx={{ display: "flex", justifyContent: "flex-end" , pb: 2}}>
           <Button onClick={() => router.push("/profile")}>
             Back to Dashboard
@@ -83,7 +83,17 @@ export default function OrdersPage() {
         </Box>
 
         {orders.length === 0 ? (
-          <Box sx={{ textAlign: "center", py: 8 }}>
+          <Box
+            sx={{
+              textAlign: "center",
+              py: 8,
+              px: { xs: 2, md: 4 },
+              border: "2px dashed",
+              borderColor: theme.palette.section.feedback.main,
+              borderRadius: 2,
+              backgroundColor: theme.palette.background.paper,
+            }}
+          >
             <ShoppingBagIcon sx={{ fontSize: 80, color: theme.palette.section.feedback.soft, mb: 2 }} />
             <Typography 
               sx={{ 
@@ -119,7 +129,7 @@ export default function OrdersPage() {
                   }}
                 >
                   <CardContent sx={{ p: 3, display: "flex", flexDirection: "column", height: "100%" }}>
-                    {/* Order Header */}
+
                     <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", mb: 2 }}>
                       <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                         <ReceiptIcon sx={{ color: theme.palette.section.feedback.main }} />
@@ -142,7 +152,6 @@ export default function OrdersPage() {
 
                     <Divider sx={{ mb: 2, borderColor: theme.palette.text.primary }} />
 
-                    {/* Order Items */}
                     <Box sx={{ mb: 2, flex: 1 }}>
                       <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1.5 }}>
                         <ShoppingBagIcon sx={{ fontSize: 18, color: theme.palette.section.feedback.main }} />
@@ -181,7 +190,6 @@ export default function OrdersPage() {
 
                     <Divider sx={{ mb: 2, borderColor: theme.palette.text.primary }} />
 
-                    {/* Delivery Info */}
                     <Box sx={{ mb: 2 }}>
                       <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}>
                         <LocalShippingIcon sx={{ fontSize: 18, color: theme.palette.section.feedback.main }} />
@@ -196,7 +204,6 @@ export default function OrdersPage() {
 
                     <Divider sx={{ mb: 2, borderColor: theme.palette.text.primary }} />
 
-                    {/* Payment & Total */}
                     <Box>
                       <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1.5 }}>
                         <PaymentIcon sx={{ fontSize: 18, color: theme.palette.section.feedback.main }} />

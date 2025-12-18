@@ -76,7 +76,6 @@ export default function ProfilePage() {
   };
 
   const handleSave = () => {
-    // Save profile and avatar to localStorage
     const profileToSave = { ...formData, avatar: avatarPreview };
     localStorage.setItem("profileData", JSON.stringify(profileToSave));
     setEditMode(false);
@@ -87,7 +86,7 @@ export default function ProfilePage() {
       <HeroPage title="My Profile" compact />
       <Box component="main" sx={{ px: { xs: 2, md: 6 }, py: 8, maxWidth: 1200, mx: "auto" }}>
         <Grid container spacing={4} sx={{ display: "flex" }}>
-          {/* Profile Card - 80% */}
+
           <Grid item xs={12} md={9.6} sx={{ flex: "0 0 60%" }}>
             <Card
               sx={{
@@ -100,7 +99,7 @@ export default function ProfilePage() {
               }}
             >
               <CardContent sx={{ p: 4, display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center" }}>
-                {/* Avatar Section */}
+
                 <Box sx={{ position: "relative", mb: 3 }}>
                   <Avatar
                     src={avatarPreview || undefined}
@@ -141,7 +140,6 @@ export default function ProfilePage() {
                   )}
                 </Box>
 
-                {/* User Info Section */}
                 {editMode ? (
                   <Box sx={{ width: "100%", display: "flex", flexDirection: "column", gap: 2 }}>
                     <TextField
@@ -193,7 +191,6 @@ export default function ProfilePage() {
                     </Typography>
                     <Divider sx={{ my: 2, borderColor: theme.palette.section.products.soft }} />
 
-                    {/* Info Items */}
                     <Box sx={{ display: "flex", alignItems: "center", gap: 2, py: 1.5, justifyContent: "center" }}>
                       <EmailIcon sx={{ color: theme.palette.section.products.main }} />
                       <Typography sx={{ ...theme.typography.bodyFont_M, color: theme.palette.primary.main }}>
@@ -233,7 +230,6 @@ export default function ProfilePage() {
             </Card>
           </Grid>
 
-          {/* Quick Actions Card - 20% */}
           <Grid item xs={12} md={2.4} sx={{ flex: "0 0 25%" }}>
             <Card
               sx={{
