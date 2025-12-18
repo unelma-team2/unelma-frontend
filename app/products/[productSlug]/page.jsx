@@ -1,7 +1,7 @@
-"use client";
+"use client"
 
-import { useParams, useRouter } from "next/navigation";
-import { useCart } from "@/app/context/CartContext";
+import { useRouter } from "next/navigation"
+import { useCart } from "@/app/context/CartContext"
 import {
   Box,
   Container,
@@ -11,75 +11,119 @@ import {
   IconButton,
   TextField,
   Grid,
-} from "@mui/material";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import { useFavorites } from "@/app/context/FavoritesContext";
-import ProductsSinglePageHero from "@/components/products/ProductsSinglePageHero";
-import Image from "next/image";
-import { useEffect, useState } from "react";
-import ProductCard from "@/components/ProductCard";
-import axios from "axios";
-import Link from "next/link";
+  Card,
+  CardContent,
+  useTheme,
+} from "@mui/material"
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder"
+import FavoriteIcon from "@mui/icons-material/Favorite"
+import { useFavorites } from "@/app/context/FavoritesContext"
+import ProductsSinglePageHero from "@/components/products/ProductsSinglePageHero"
+import Image from "next/image"
+import { useEffect, useState, use } from "react"
+import ProductCard from "@/components/ProductCard"
+import axios from "axios"
+import Link from "next/link"
+import BackToTopButton from "@/components/BackToTopButton"
+import LoadingSpinner from "@/components/LoadingSpinner"
 
-export default function ProductPage() {
-  const { productSlug } = useParams();
-  const { addToCart } = useCart();
-  const router = useRouter();
-  const { isFavorite, toggleFavorite } = useFavorites();
-  const [productData, setProductData] = useState(null);
-  const [rating, setRating] = useState(0);
-  const [quantity, setQuantity] = useState(1);
-  
-  const [selectedImage, setSelectedImage] = useState("");
-  const [relatedItems, setRelatedItems] = useState([]);
+export default function ProductPage({ params }) {
+  const resolvedParams = use(params)
+  const { productSlug } = resolvedParams
+  const { addToCart } = useCart()
+  const router = useRouter()
+  const { isFavorite, toggleFavorite } = useFavorites()
+  const theme = useTheme()
+  const [productData, setProductData] = useState(null)
+  const [rating, setRating] = useState(0)
+  const [quantity, setQuantity] = useState(1)
+  const [loading, setLoading] = useState(true)
+  const [relatedItems, setRelatedItems] = useState([])
 
-  const API_URL =
-    process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com"
 
-  // Fetch product data by slug
   useEffect(() => {
-    if (!productSlug) return;
+    if (!productSlug) return
 
     axios
       .get(`${API_URL}/api/product?populate[all_products][populate]=*`)
       .then((res) => {
-        const allProducts = res.data?.data?.all_products || [];
-        const product = allProducts.find((item) => item.slug === productSlug);
-        if (product) setProductData(product);
+        const allProducts = res.data?.data?.all_products || []
+        const product = allProducts.find((item) => item.slug === productSlug)
+        if (product) setProductData(product)
 
-        // Filter related products (exclude current product)
-        const relatedProducts = allProducts.filter(
-          (item) => item.slug !== productSlug
-        );
+        const relatedProducts = allProducts.filter((item) => item.slug !== productSlug)
 
-        // Pick 3 random related items
         const getRandomItems = (items, count) => {
-          const shuffled = [...items].sort(() => 0.5 - Math.random());
-          return shuffled.slice(0, count);
-        };
+          const shuffled = [...items].sort(() => 0.5 - Math.random())
+          return shuffled.slice(0, count)
+        }
 
-        setRelatedItems(getRandomItems(relatedProducts, 3));
+        setRelatedItems(getRandomItems(relatedProducts, 3))
       })
-      .catch((err) => console.error("Error fetching product:", err));
-  }, [productSlug, API_URL]);
+      .catch((err) => console.error("Error fetching product:", err))
+      .finally(() => setLoading(false))
+  }, [productSlug, API_URL])
 
-  // Guard against undefined productData
+  const imageUrl = (image) => {
+    if (!image) return null
+    const img = Array.isArray(image) ? image[0] : image
+    if (img?.data?.attributes?.url) {
+      const url = img.data.attributes.url
+      return url.startsWith("http") ? url : `${API_URL}${url}`
+    }
+    if (img?.url) {
+      return img.url.startsWith("http") ? img.url : `${API_URL}${img.url}`
+    }
+    return null
+  }
+
+  const getPriceNumber = (price) => {
+    if (!price) return 0
+    const num = Number.parseFloat(price.replace(/[^0-9.]/g, ""))
+    return isNaN(num) ? 0 : num
+  }
+
+  const handleAddToCart = async () => {
+    if (!productData) return
+    const quantityValue = quantity || 1
+    const unitPriceValue = getPriceNumber(productData.ProductDetails?.product_price)
+    await addToCart({
+      id: productData.id,
+      name: productData.product_name,
+      unitPrice: unitPriceValue,
+      quantity: quantityValue,
+    })
+    router.push("/cart")
+  }
+
+  if (loading) {
+    return (
+      <Container maxWidth="lg" sx={{ py: 4 }}>
+        <LoadingSpinner />
+      </Container>
+    )
+  }
+
   if (!productData) {
     return (
       <Container maxWidth="lg" sx={{ py: 4 }}>
-        <Typography variant="h5" sx={{ textAlign: "center", mt: 10 }}>
-          Loading product...
+        <Typography sx={{ ...theme.typography.headingFont_M, textAlign: "center", mt: 10 }}>
+          Product not found
         </Typography>
+        <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
+          <Button component={Link} href="/products">
+            Back to Products
+          </Button>
+        </Box>
       </Container>
-    );
+    )
   }
+
   const {
     product_name,
     product_type,
-    product_category,
     product_image,
-    short_description,
     long_description,
     productOffer_title,
     WhatProductOffer_Points,
@@ -87,418 +131,237 @@ export default function ProductPage() {
     WhoProductFor_Points,
     WhyChooseProduct,
     WhyChooseProduct_Points,
-    ProductLink,
     ProductDetails,
     product_logo,
-    productRelated_images,
-  } = productData;
+  } = productData
 
-  const { product_price, cartButton_description, reviewButton_description } =
-    ProductDetails || {};
-
-  const imageUrl = (image) => {
-    if (!image) return null;
-
-    const img = Array.isArray(image) ? image[0] : image;
-
-    if (img?.data?.attributes?.url) {
-      const url = img.data.attributes.url;
-      return url.startsWith("http") ? url : `${API_URL}${url}`;
-    }
-
-    if (img?.url) {
-      return img.url.startsWith("http") ? img.url : `${API_URL}${img.url}`;
-    }
-
-    return null;
-  };
-
-  const handleRatingChange = (newValue) => {
-    setRating(newValue);
-    console.log("Rating submitted:", newValue);
-  };
-
-  const handleAddToCart = async () => {
-    if (!productData) return;
-  
-    const quantityValue = quantity || 1;
-    const unitPriceValue = getPriceNumber(product_price);
-  
-    // Wait for addToCart to finish
-    await addToCart({
-      id: productData.id, // backend product id
-      name: product_name,
-      unitPrice: unitPriceValue,
-      quantity: quantityValue,
-    });
-  
-    // Now navigate to cart
-    router.push("/cart");
-  };
-  
-  
-
-  const handleImageClick = (image) => {
-    setSelectedImage(image);
-  };
-
-  const getPriceNumber = (price) => {
-    if (!price) return 0;
-    const num = parseFloat(price.replace(/[^0-9.]/g, ""));
-    return isNaN(num) ? 0 : num;
-  };
+  const { product_price, cartButton_description, reviewButton_description } = ProductDetails || {}
 
   return (
-    <Container maxWidth="lg" sx={{ py: 4 }}>
-      {/* Hero Section */}
+    <>
       <ProductsSinglePageHero />
-
-      {/* Breadcrumb */}
-      <Box sx={{ mt: 4, mb: 2 }}>
-        <Typography variant="h3" sx={{ fontWeight: 700, mb: 8 }}>
-          <Link
-            href="/products"
-            style={{ color: "#1976d2", textDecoration: "none" }}
-          >
+      <Box
+        sx={{
+          mx: { xs: 2, sm: 4, md: "150px" },
+          py: 6,
+        }}
+      >
+        <Typography sx={{ ...theme.typography.bodyFontTitle_L, mb: 6 }}>
+          <Link href="/products" style={{ color: theme.palette.section.products.main, textDecoration: "none" }}>
             Products
           </Link>
           {" > "} {product_name}
         </Typography>
-      </Box>
 
-      {/* Product Details */}
-      <Box sx={{ display: "flex", gap: 4 }}>
-        {/* Product Image and Detailed Description (Left) */}
-        <Box sx={{ flex: 1, display: "flex", flexDirection: "column", gap: 4 }}>
-          {/* Main Image */}
-          <Box
-            sx={{
-              width: "100%",
-              maxWidth: 665,
-              height: 401,
-              aspectRatio: "16/9",
-              position: "relative",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              background: "#fff",
-              borderRadius: "8px",
-              overflow: "hidden",
-              boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-            }}
-          >
-            <Image
-              src={imageUrl(product_image)}
-              alt={product_name}
-              fill
-              style={{
-                objectFit: "contain",
-              }}
-            />
-          </Box>
-          {/* Detailed Description */}
-          <Box
-            sx={{
-              padding: "16px",
-              border: "1px solid #ccc",
-              borderRadius: "8px",
-              backgroundColor: "#f9f9f9",
-            }}
-          >
-            {/* LONG DESCRIPTION */}
-            {long_description && (
-              <Typography
-                variant="body1"
-                sx={{ color: "#555", whiteSpace: "pre-line" }}
+        <Grid container spacing={4}>
+          {/* Left: Product Image Card */}
+          <Grid item xs={12} md={7}>
+            <Card>
+              <Box
+                sx={{
+                  position: "relative",
+                  width: "100%",
+                  height: { xs: 300, sm: 400, md: 500 },
+                  overflow: "hidden",
+                }}
               >
-                {long_description}
-              </Typography>
-            )}
-
-            {/* WHAT PRODUCT OFFERS */}
-            {productOffer_title && (
-              <Typography variant="h4" sx={{ fontWeight: 700, mt: 4, mb: 2 }}>
-                {productOffer_title}
-              </Typography>
-            )}
-
-            {WhatProductOffer_Points?.map((item) => (
-              <Box key={item.id} sx={{ mb: 2 }}>
-                <Typography variant="body1" sx={{ color: "#555" }}>
-                  <Box component="span" sx={{ fontWeight: "bold", mr: 1 }}>
-                    •
-                  </Box>
-                  <Box component="span" sx={{ fontWeight: "bold", mr: 1 }}>
-                    {item.productOfferPoints_title}:
-                  </Box>
-                  <Box component="span">
-                    {item.productOfferPoints_description}
-                  </Box>
-                </Typography>
+                <Image
+                  src={imageUrl(product_image) || "/placeholder.svg"}
+                  alt={product_name}
+                  fill
+                  style={{ objectFit: "contain" }}
+                  priority
+                />
               </Box>
-            ))}
+            </Card>
 
-            {/* WHY CHOOSE PRODUCT */}
-            {WhyChooseProduct?.chooseProduct_title && (
-              <Typography variant="h4" sx={{ fontWeight: 700, mt: 4, mb: 2 }}>
-                {WhyChooseProduct.chooseProduct_title}
-              </Typography>
-            )}
+            <Card sx={{ mt: 4 }}>
+              <CardContent sx={{ p: 4 }}>
+                <Typography sx={{ ...theme.typography.headingFont_S, mb: 3 }}>Product Details</Typography>
 
-            {WhyChooseProduct_Points?.map((item) => (
-              <Box key={item.id} sx={{ mb: 2 }}>
-                <Typography variant="body1" sx={{ color: "#555" }}>
-                  <Box component="span" sx={{ fontWeight: "bold", mr: 1 }}>
-                    •
+                {long_description && (
+                  <Typography sx={{ ...theme.typography.bodyFont_M, mb: 3, whiteSpace: "pre-line" }}>
+                    {long_description}
+                  </Typography>
+                )}
+
+                {productOffer_title && (
+                  <Typography sx={{ ...theme.typography.bodyFontTitle_L, mt: 4, mb: 2 }}>
+                    {productOffer_title}
+                  </Typography>
+                )}
+
+                {WhatProductOffer_Points?.map((item) => (
+                  <Box key={item.id} sx={{ mb: 2 }}>
+                    <Typography sx={{ ...theme.typography.bodyFont_M }}>
+                      <Box component="span" sx={{ fontWeight: "bold", mr: 1 }}>
+                        •
+                      </Box>
+                      <Box component="span" sx={{ fontWeight: "bold", mr: 1 }}>
+                        {item.productOfferPoints_title}:
+                      </Box>
+                      <Box component="span">{item.productOfferPoints_description}</Box>
+                    </Typography>
                   </Box>
-                  <Box component="span" sx={{ fontWeight: "bold", mr: 1 }}>
-                    {item.productChoosePoints_title}
+                ))}
+
+                {WhyChooseProduct?.chooseProduct_title && (
+                  <Typography sx={{ ...theme.typography.bodyFontTitle_L, mt: 4, mb: 2 }}>
+                    {WhyChooseProduct.chooseProduct_title}
+                  </Typography>
+                )}
+
+                {WhyChooseProduct_Points?.map((item) => (
+                  <Box key={item.id} sx={{ mb: 2 }}>
+                    <Typography sx={{ ...theme.typography.bodyFont_M }}>
+                      <Box component="span" sx={{ fontWeight: "bold", mr: 1 }}>
+                        •
+                      </Box>
+                      <Box component="span" sx={{ fontWeight: "bold", mr: 1 }}>
+                        {item.productChoosePoints_title}
+                      </Box>
+                      <Box component="span">{item.productChoosePoint_description}</Box>
+                    </Typography>
                   </Box>
-                  <Box component="span">
-                    {item.productChoosePoint_description}
+                ))}
+
+                {WhoProductFor?.productFor_title && (
+                  <Typography sx={{ ...theme.typography.bodyFontTitle_L, mt: 4, mb: 2 }}>
+                    {WhoProductFor.productFor_title}
+                  </Typography>
+                )}
+
+                {WhoProductFor?.productFor_description1 && (
+                  <Typography sx={{ ...theme.typography.bodyFont_M, mb: 2, whiteSpace: "pre-line" }}>
+                    {WhoProductFor.productFor_description1}
+                  </Typography>
+                )}
+
+                {WhoProductFor_Points?.map((item) => (
+                  <Box key={item.id} sx={{ mb: 1 }}>
+                    <Typography sx={{ ...theme.typography.bodyFont_M }}>
+                      • {item.productForPoints_description}
+                    </Typography>
                   </Box>
-                </Typography>
-              </Box>
-            ))}
+                ))}
+              </CardContent>
+            </Card>
+          </Grid>
 
-            {/* WHO PRODUCT IS FOR */}
-            {WhoProductFor?.productFor_title && (
-              <Typography variant="h4" sx={{ fontWeight: 700, mt: 4, mb: 2 }}>
-                {WhoProductFor.productFor_title}
-              </Typography>
-            )}
-
-            {WhoProductFor?.productFor_description1 && (
-              <Typography
-                variant="body1"
-                sx={{ color: "#555", whiteSpace: "pre-line", mb: 2 }}
-              >
-                {WhoProductFor.productFor_description1}
-              </Typography>
-            )}
-
-            {WhoProductFor_Points?.map((item) => (
-              <Box key={item.id} sx={{ mb: 1 }}>
-                <Typography variant="body1" sx={{ color: "#555" }}>
-                  • {item.productForPoints_description}
-                </Typography>
-              </Box>
-            ))}
-
-            {WhoProductFor?.productFor_description2 && (
-              <Typography
-                variant="body1"
-                sx={{ color: "#555", whiteSpace: "pre-line", mb: 2 }}
-              >
-                {WhoProductFor.productFor_description2}
-              </Typography>
-            )}
-
-            {ProductLink?.link_description && (
-              <Typography
-                variant="body1"
-                sx={{ color: "#555", whiteSpace: "pre-line", mb: 2 }}
-              >
-                {ProductLink.link_description}
-              </Typography>
-            )}
-          </Box>
-
-          {Array.isArray(productRelated_images) &&
-            productRelated_images.length > 0 && (
-              <Box sx={{ display: "flex", gap: 2, mt: 2 }}>
-                {productRelated_images.slice(0, 2).map((imgObj, index) => {
-                  const url = imageUrl(imgObj); // pass single image object here
-
-                  if (!url) return null; // skip empty images
-
-                  return (
-                    <Box
-                      key={index}
-                      sx={{
-                        border: "2px solid #ccc",
-                        borderRadius: "8px",
-                        overflow: "hidden",
-                        cursor: "pointer",
-                        width: "100px",
-                        height: "100px",
-                        boxShadow:
-                          selectedImage === imgObj ? "0 0 10px #000" : "none",
-                      }}
-                      onClick={() => handleImageClick(imgObj)}
-                    >
-                      <Image
-                        src={url}
-                        alt={`Gallery Image ${index + 1}`}
-                        width={100}
-                        height={100}
-                        style={{ objectFit: "cover" }}
-                      />
-                    </Box>
-                  );
-                })}
-              </Box>
-            )}
-        </Box>
-
-        {/* Product Logo, Short Description, and Pricing (Right) */}
-        <Box sx={{ flex: 1, display: "flex", flexDirection: "column", gap: 2 }}>
-          {/* Product Logo */}
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center",
-              mb: 2,
-            }}
-          >
-            {/* Logo Container */}
+          {/* Right: Logo and Product Info Card */}
+          <Grid item xs={12} md={5}>
             <Box
               sx={{
-                width: 160, 
-                height: 120,
-                position: "relative",
                 display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                background: "#fff",
-                borderRadius: "8px",
-                overflow: "hidden",
-                mb: 1,
+                justifyContent: "flex-end",
+                mb: 2,
               }}
             >
-              <Image
-                src={imageUrl(product_logo)}
-                alt={`${product_name} Logo`}
-                fill
-                style={{
-                  objectFit: "contain",
+              <Box
+                sx={{
+                  position: "relative",
+                  width: 120,
+                  height: 90,
                 }}
-              />
+              >
+                <Image
+                  src={imageUrl(product_logo) || "/placeholder.svg"}
+                  alt={`${product_name} Logo`}
+                  fill
+                  style={{ objectFit: "contain" }}
+                />
+              </Box>
             </Box>
-            {/* Product Type */}
+
             <Typography
-              variant="body1"
               sx={{
-                color: "#555",
-                fontWeight: "bold",
-                textAlign: "center",
+                ...theme.typography.bodyFont_M,
+                textAlign: "right",
+                mb: 3,
+                color: theme.palette.text.secondary,
               }}
             >
               {product_type}
             </Typography>
-          </Box>
 
-          {/* Product Name */}
-          <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 1, mb: 1 }}>
-            <Typography
-              variant="h5"
-              sx={{ fontWeight: "bold", textAlign: "center" }}
-            >
-              {product_name}
-            </Typography>
-            <IconButton
-              onClick={() => toggleFavorite(productData, "product")}
-              color="secondary"
-              aria-label="toggle-favourite"
-              sx={{ p: 0 }}
-            >
-              {isFavorite(productData, "product") ? (
-                <FavoriteIcon color="error" />
-              ) : (
-                <FavoriteBorderIcon />
-              )}
-            </IconButton>
-          </Box>
+            <Card>
+              <CardContent sx={{ p: 4 }}>
+                {/* Product Name */}
+                <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 3 }}>
+                  <Typography sx={{ ...theme.typography.headingFont_S }}>{product_name}</Typography>
+                  <IconButton onClick={() => toggleFavorite(productData, "product")} aria-label="toggle-favourite">
+                    {isFavorite(productData, "product") ? <FavoriteIcon color="error" /> : <FavoriteBorderIcon />}
+                  </IconButton>
+                </Box>
 
-          {/* Ratings */}
-          <Box sx={{ textAlign: "center", mb: 2 }}>
-            <Rating
-              name="product-rating"
-              value={rating}
-              onChange={(event, newValue) => setRating(newValue)}
-            />
-            <Typography variant="body2" sx={{ color: "#555" }}>
-              {rating} Stars
-            </Typography>
-          </Box>
+                {/* Price */}
+                <Typography
+                  sx={{
+                    ...theme.typography.headingFont_M,
+                    color: theme.palette.section.products.main,
+                    mb: 3,
+                  }}
+                >
+                  ${getPriceNumber(product_price).toFixed(2)}
+                </Typography>
 
-          {/* Price */}
-          <Typography
-            variant="h4"
-            sx={{
-              color: "black",
-              fontWeight: "bold",
-              textAlign: "center",
-              mb: 2,
-            }}
-          >
-            ${getPriceNumber(product_price).toFixed(2)}
-          </Typography>
+                {/* Quantity and Add to Cart */}
+                <Box sx={{ display: "flex", gap: 2, alignItems: "center", mb: 3 }}>
+                  <TextField
+                    type="number"
+                    value={quantity}
+                    onChange={(e) => setQuantity(Math.max(1, Number.parseInt(e.target.value) || 1))}
+                    sx={{ width: "80px" }}
+                    inputProps={{ min: 1 }}
+                    size="small"
+                  />
+                  <Button variant="contained" fullWidth onClick={handleAddToCart}>
+                    {cartButton_description || "Add to Cart"}
+                  </Button>
+                </Box>
 
-          {/* Quantity Controller and Add to Cart */}
-          <Box
-            sx={{
-              display: "flex",
-              gap: 2,
-              justifyContent: "center",
-              alignItems: "center",
-              mt: 2,
-            }}
-          >
-            <TextField
-              type="number"
-              value={quantity}
-              onChange={(e) =>
-                setQuantity(Math.max(1, parseInt(e.target.value) || 1))
-              }
-              sx={{ width: "60px" }}
-              inputProps={{ min: 1 }}
-            />
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => handleAddToCart()}
-            >
-              {cartButton_description}
-            </Button>
-          </Box>
+                {/* Star Rating */}
+                <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 1, my: 3 }}>
+                  <Rating value={rating} onChange={(event, newValue) => setRating(newValue)} size="large" />
+                  <Typography sx={{ ...theme.typography.bodyFont_S }}>{rating} Stars</Typography>
+                </Box>
 
-          {/* Leave a Review Button */}
-          <Box sx={{ textAlign: "center", mt: 2 }}>
-            <Button 
-                variant="outlined" 
-                color="secondary"
-                component={Link}
-                href={`/contact?contactType=Feedback%2Freview&product=${encodeURIComponent(product_name)}`} 
-            >
-              {reviewButton_description}
-            </Button>
-          </Box>
-        </Box>
-      </Box>
-
-      {/* Related Items Section */}
-      <Box sx={{ mt: 4 }}>
-        <Typography variant="h6" sx={{ fontWeight: "bold", mb: 2 }}>
-          Related Items
-        </Typography>
-        <Grid container spacing={4}>
-          {relatedItems.map((item) => {
-            const imageUrl = item.product_logo?.url
-              ? item.product_logo.url.startsWith("http")
-                ? item.product_logo.url
-                : `${API_URL}${item.product_logo.url}`
-              : null;
-            return (
-              <Grid item xs={12} sm={6} md={4} key={item.id}>
-                <ProductCard product={item} imageUrl={imageUrl} />
-              </Grid>
-            );
-          })}
+                {/* Leave a Review Button */}
+                <Button
+                  variant="outlined"
+                  fullWidth
+                  component={Link}
+                  href={`/contact?contactType=Feedback%2Freview&product=${encodeURIComponent(product_name)}`}
+                >
+                  {reviewButton_description || "Leave a Review"}
+                </Button>
+              </CardContent>
+            </Card>
+          </Grid>
         </Grid>
+
+        {/* Related Items Section */}
+        {relatedItems.length > 0 && (
+          <Box sx={{ mt: 8 }}>
+            <Typography sx={{ ...theme.typography.headingFont_S, mb: 4 }}>Related Products</Typography>
+            <Grid container spacing={4}>
+              {relatedItems.map((item) => {
+                const logoUrl = item.product_logo?.url
+                  ? item.product_logo.url.startsWith("http")
+                    ? item.product_logo.url
+                    : `${API_URL}${item.product_logo.url}`
+                  : null
+                return (
+                  <Grid item xs={12} sm={6} md={4} key={item.id}>
+                    <ProductCard product={item} imageUrl={logoUrl} />
+                  </Grid>
+                )
+              })}
+            </Grid>
+          </Box>
+        )}
       </Box>
-    </Container>
-  );
+      <BackToTopButton />
+    </>
+  )
 }

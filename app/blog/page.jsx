@@ -170,8 +170,10 @@ export default function BlogPage() {
                             src={imageUrl || "/placeholder.svg"}
                             alt={Title || "Featured Blog Image"}
                             fill
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 800px"
                             style={{ objectFit: "cover" }}
                             priority
+                            loading="eager"
                           />
                         </Box>
                         <Box sx={{ display: "flex", flexDirection: "column", p: 5 }}>
@@ -412,7 +414,7 @@ export default function BlogPage() {
                           src={imageUrl || "/placeholder.svg"}
                           alt={Title || "Blog Image"}
                           fill
-                          sizes="(max-width: 768px) 100vw, 300px"
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 800px"
                           style={{ objectFit: "cover" }}
                         />
                       </Box>

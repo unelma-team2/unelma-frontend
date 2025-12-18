@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import axios from "axios"
 import Image from "next/image"
 import Link from "next/link"
-import { useParams } from "next/navigation"
+import { useRouter } from "next/navigation"
 import { Box, Card, CardContent, Typography, Stack, useTheme, IconButton } from "@mui/material"
 import ShareIcon from "@mui/icons-material/Share"
 import CommentIcon from "@mui/icons-material/Comment"
@@ -17,6 +17,7 @@ import BackToTopButton from "@/components/BackToTopButton"
 import LoadingSpinner from "@/components/LoadingSpinner"
 import SearchInput from "@/components/SearchInput"
 import BlogPageHero from "@/components/blog/BlogPageHero"
+import { use } from "react"
 
 function formatBlogDate(date) {
   if (!date) return "Unknown Date"
@@ -24,22 +25,23 @@ function formatBlogDate(date) {
   return d.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })
 }
 
-export default function SingleBlogPage() {
+export default function SingleBlogPage({ params }) {
+  const { slug } = use(params)
   const theme = useTheme()
-  const { slug } = useParams()
-
+  const router = useRouter()
   const [blog, setBlog] = useState(null)
   const [allBlogs, setAllBlogs] = useState([])
+  const [prevBlog, setPrevBlog] = useState(null)
+  const [nextBlog, setNextBlog] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
-  const [comments, setComments] = useState([])
-  const [newComment, setNewComment] = useState("")
-  const [commentsVisible, setCommentsVisible] = useState(false)
+  const [searchQuery, setSearchQuery] = useState("")
   const [categories, setCategories] = useState({})
-  const [yearArchive, setYearArchive] = useState({})
+  const [archiveData, setArchiveData] = useState({})
   const [openYears, setOpenYears] = useState({})
   const [relatedPosts, setRelatedPosts] = useState([])
-  const [searchQuery, setSearchQuery] = useState("")
+  const [comments, setComments] = useState([])
+  const [newComment, setNewComment] = useState("")
 
   const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com"
 
@@ -81,7 +83,7 @@ export default function SingleBlogPage() {
           acc[year][month]++
           return acc
         }, {})
-        setYearArchive(archive)
+        setArchiveData(archive)
 
         if (currentBlog) {
           const currentCategory = currentBlog.category
@@ -89,6 +91,10 @@ export default function SingleBlogPage() {
             .filter((b) => b.id !== currentBlog.id && (b.category || "Other") === currentCategory)
             .slice(0, 3)
           setRelatedPosts(related)
+
+          const currentIndex = allBlogsData.findIndex((b) => b.slug === slug)
+          setPrevBlog(currentIndex > 0 ? allBlogsData[currentIndex - 1] : null)
+          setNextBlog(currentIndex < allBlogsData.length - 1 ? allBlogsData[currentIndex + 1] : null)
         }
       })
       .catch((err) => setError(err))
@@ -116,10 +122,6 @@ export default function SingleBlogPage() {
 
   const { Title, Description, blog_image, createdAt, category } = blog
   const imageUrl = blog_image?.url || "/images/blog/pngwing.com - 2025-11-17T021857.109 copy.png"
-
-  const currentIndex = allBlogs.findIndex((b) => b.slug === slug)
-  const prevBlog = currentIndex > 0 ? allBlogs[currentIndex - 1] : null
-  const nextBlog = currentIndex < allBlogs.length - 1 ? allBlogs[currentIndex + 1] : null
 
   return (
     <main>
@@ -435,21 +437,20 @@ export default function SingleBlogPage() {
                   const count = categories[category] || 0
                   return (
                     <li key={category} style={{ marginBottom: "0.75rem" }}>
-                      <Link href={`/blog/category/${encodeURIComponent(category)}`} style={{ textDecoration: "none" }}>
-                        <Box
-                          sx={{
-                            ...theme.typography.bodyFont_M,
-                            p: 1.5,
-                            cursor: "pointer",
-                            transition: "all 0.25s ease",
-                            "&:hover": {
-                              backgroundColor: theme.palette.section.blog.pastel,
-                            },
-                          }}
-                        >
-                          {category} ({count})
-                        </Box>
-                      </Link>
+                      <Box
+                        onClick={() => router.push(`/blog`)}
+                        sx={{
+                          ...theme.typography.bodyFont_M,
+                          p: 1.5,
+                          cursor: "pointer",
+                          transition: "all 0.25s ease",
+                          "&:hover": {
+                            backgroundColor: theme.palette.section.blog.pastel,
+                          },
+                        }}
+                      >
+                        {category} ({count})
+                      </Box>
                     </li>
                   )
                 })}
@@ -463,10 +464,10 @@ export default function SingleBlogPage() {
                 Blog Archive
               </Typography>
               <ul style={{ listStyle: "none", padding: 0 }}>
-                {Object.keys(yearArchive)
+                {Object.keys(archiveData)
                   .sort((a, b) => b - a)
                   .map((year) => {
-                    const months = yearArchive[year]
+                    const months = archiveData[year]
                     const totalPosts = Object.values(months).reduce((a, b) => a + b, 0)
                     return (
                       <li key={year} style={{ marginBottom: "1rem" }}>
