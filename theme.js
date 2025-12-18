@@ -114,14 +114,14 @@ const theme = createTheme({
     background: {
       default: "#FFFFFF",
       paper: "#FFFFFF",
-      lightBlue: "#C9DCFF",
-      lightBlue2: "#adf3ffff",
-      lightViolet: "#dbcef7ff",
-      lightOrange: "#ffd48eff",
-      lightYellow: "#ffefb4ff",
-      lightGreen: "#caecc9ff",
-      lightRed: "#FFBCC9",
-      lightMint: "#DDFAFF",
+      // lightBlue: "#C9DCFF",
+      // lightBlue2: "#adf3ffff",
+      // lightViolet: "#dbcef7ff",
+      // lightOrange: "#ffd48eff",
+      // lightYellow: "#ffefb4ff",
+      // lightGreen: "#caecc9ff",
+      // lightRed: "#FFBCC9",
+      // lightMint: "#DDFAFF",
     },
   },
 
@@ -211,51 +211,6 @@ const theme = createTheme({
 
   typography: {
     fontFamily: bodyFont,
-
-  /*  h2: {
-      fontFamily: headingFont,
-      fontWeight: 700,
-      fontSize: {
-        xs: "2rem", // 32px
-        sm: "2.25rem", // 36px
-        md: "2.67rem", // ~43px (32pt target)
-      },
-      lineHeight: 1.2,
-      letterSpacing: "-0.005em",
-    },
-
-    h4: {
-      fontFamily: bodyFont,
-      fontWeight: 600,
-      fontSize: {
-        xs: "1.25rem", // 20px
-        sm: "1.5rem", // 24px
-        md: "1.67rem", // ~27px (20pt target)
-      },
-      lineHeight: 1.3,
-    },
-
-    body14reg: {
-      fontFamily: bodyFont,
-      fontWeight: 400,
-      fontSize: {
-        xs: "0.875rem", // 14px
-        sm: "1rem", // 16px
-        md: "1.17rem", // ~19px (14pt target)
-      },
-      lineHeight: 1.5,
-    },
-
-    bodyreg12: {
-      fontFamily: bodyFont,
-      fontWeight: 400,
-      fontSize: {
-        xs: "0.75rem", // 12px
-        sm: "0.875rem", // 14px
-        md: "1rem", // 16px (12pt target)
-      },
-      lineHeight: 1.5,
-    }, */
 
     headingFont_XL_Hero: {
       fontFamily: headingFont,
@@ -505,6 +460,7 @@ const theme = createTheme({
     //   pb: { xs: 3, md: 4 },
     //   zIndex: 3,
     // },
+    
     bottomLineLeft: {
       position: "absolute",
       left: 0,

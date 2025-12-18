@@ -25,10 +25,8 @@ export default function WorkProjectCard({ work, API_URL }) {
 
           "&:hover": {
             transform: "translateY(-6px)",
-           // boxShadow: `-12px -10px 0px ${theme.palette.section.caseStudies.main}`,
-            //  boxShadow: `-16px -14px 0px  ${theme.palette.section.caseStudies.muted}`,
-              boxShadow: `-4px -2px 0px  ${theme.palette.section.caseStudies.main}, 
-              -10px -6px 0px  ${theme.palette.section.caseStudies.vibrant}`,
+              boxShadow: `-10px -8px 0px  ${theme.palette.section.caseStudies.vibrant}`,
+             
           },
 
           "&:hover .workImage": {

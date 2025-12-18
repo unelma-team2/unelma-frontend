@@ -228,15 +228,14 @@ export default function Footer() {
         >
           <Typography sx={theme.typography.bodyFont_S}>© {new Date().getFullYear()} by Unelma Platforms</Typography>
 
-          <Typography sx={theme.typography.bodyFont_S}>•</Typography>
-
           <Typography sx={theme.typography.bodyFont_S}>
-            Icons by{" "}
+            • Icons by{" "}
             <Link
               href="https://icons8.com"
               target="_blank"
               rel="noopener noreferrer"
               sx={{
+                ...theme.typography.bodyFont_S,
                 color: theme.palette.primary.main,
                 textDecoration: "underline",
                 "&:hover": { color: theme.palette.section.caseStudies.main },

@@ -5,7 +5,7 @@ import EmotionRegistry from "@/providers/EmotionRegistry";
 import ThemeRegistry from "@/providers/ThemeRegistry";
 import ClientLayoutWrapper from "@/components/ClientLayoutWrapper";
 import { Box } from "@mui/material";
-import { CartProvider } from "./context/CartContext"; // Import CartProvider
+import { CartProvider } from "@/app/context/CartContext"; // Import CartProvider
 import { AuthProvider } from "./context/AuthContext";
 import { UserProvider } from "./context/UserContext";
 import { FavoritesProvider } from "./context/FavoritesContext";
@@ -15,14 +15,14 @@ const stackSansNotch = localFont({
   variable: "--font-stack-sans-notch",
   weight: "100 900",
   display: "swap",
-})
+});
 
 const outfit = Outfit({
   subsets: ["latin"],
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
   variable: "--font-outfit",
   display: "swap",
-})
+});
 
 export const metadata = {
   title: "Unelma Platforms",
@@ -36,7 +36,7 @@ export const metadata = {
     apple: "/favicon/apple-touch-icon.png?v=2",
   },
   manifest: "/favicon/site.webmanifest",
-}
+};
 
 export default function RootLayout({ children }) {
   return (
@@ -46,17 +46,6 @@ export default function RootLayout({ children }) {
           <ThemeRegistry>
             <AuthProvider>
               <UserProvider>
-                <CartProvider>
-                  <ClientLayoutWrapper>
-                    <Box
-                      sx={{
-                        //my: "2rem",
-                      }}
-                    >
-                      {children}
-                    </Box>
-                  </ClientLayoutWrapper>
-                </CartProvider>
                 <FavoritesProvider>
                   <CartProvider>
                     {" "}
@@ -64,7 +53,7 @@ export default function RootLayout({ children }) {
                     <ClientLayoutWrapper>
                       <Box
                         sx={{
-                          mx: { xs: 2, md: "120px" },
+                         // mx: { xs: 2, md: "120px" },
                           my: "2rem",
                         }}
                       >
@@ -78,6 +67,6 @@ export default function RootLayout({ children }) {
           </ThemeRegistry>
         </EmotionRegistry>
       </body>
-    </html>
-  )
+    </html >
+  );
 }
