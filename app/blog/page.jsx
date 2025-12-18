@@ -268,8 +268,17 @@ export default function BlogPage() {
                     >
                       {featured.Description?.slice(0, 600) || ""}
                     </Typography>
-                    <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                      <Box sx={{ display: "flex", gap: 4, alignItems: "center" }}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        gap: 3,
+                        mt: 2,
+                        flexWrap: "nowrap", // keep everything on one line
+                      }}
+                    >
+                      <Box sx={{ display: "flex", gap: 4, alignItems: "center", minWidth: 0, flex: 1 }}>
                         <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
                           <IconButton
                             size="small"
@@ -333,6 +342,7 @@ export default function BlogPage() {
                           </Typography>
                         </Box>
                       </Box>
+
                       <Box
                         sx={{
                           display: "inline-flex",
@@ -340,6 +350,7 @@ export default function BlogPage() {
                           gap: 1,
                           color: theme.palette.section.about.main,
                           transition: "all 0.25s ease",
+                          whiteSpace: "nowrap", // prevent wrapping of Read More
                           "&:hover": {
                             color: theme.palette.section.products.vibrant,
                             transform: "scale(1.05)",
@@ -501,8 +512,17 @@ export default function BlogPage() {
                         {blog.Description ? blog.Description.slice(0, 350) + "..." : ""}
                       </Typography>
 
-                      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mt: 2 }}>
-                        <Box sx={{ display: "flex", gap: 4, alignItems: "center" }}>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          gap: 3,
+                          mt: 2,
+                          flexWrap: "nowrap", // keep everything on one line
+                        }}
+                      >
+                        <Box sx={{ display: "flex", gap: 4, alignItems: "center", minWidth: 0, flex: 1 }}>
                           <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
                             <IconButton
                               size="small"
@@ -566,6 +586,7 @@ export default function BlogPage() {
                             </Typography>
                           </Box>
                         </Box>
+
                         <Box
                           sx={{
                             display: "inline-flex",
@@ -573,6 +594,7 @@ export default function BlogPage() {
                             gap: 1,
                             color: theme.palette.section.about.main,
                             transition: "all 0.25s ease",
+                            whiteSpace: "nowrap", // prevent wrapping of Read More
                             "&:hover": {
                               color: theme.palette.section.products.vibrant,
                               transform: "scale(1.05)",
@@ -585,7 +607,7 @@ export default function BlogPage() {
                               textTransform: "uppercase",
                             }}
                           >
-                            Read
+                            Read More
                           </Typography>
                           <ArrowForward sx={{ fontSize: 20 }} />
                         </Box>
