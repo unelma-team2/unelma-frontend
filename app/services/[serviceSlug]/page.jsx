@@ -21,6 +21,7 @@ import { useFavorites } from "@/app/context/FavoritesContext";
 import Link from "next/link";
 import ServicesSinglePageHero from "@/components/services/ServicesSinglePageHero";
 import ServiceCard from "@/components/ServiceCard";
+import { useCart } from "@/app/context/CartContext";
 
 const toSlug = (value = "") =>
   value
@@ -39,6 +40,7 @@ export default function ServicePage() {
   const [error, setError] = useState(null);
   const [rating, setRating] = useState(0);
   const router = useRouter();
+  const { addToCart } = useCart();
 
   const API_URL =
     process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
@@ -106,6 +108,20 @@ export default function ServicePage() {
   //     : `${API_URL}${service.image.url}`;
   // }, [API_URL, service]);
 
+  const handleAddToCart = async (quantityValue = 1, unitPriceValue ) => {
+    if (!serviceData) return;
+
+    const finalPrice = unitPriceValue ?? PricingPlan
+  
+    await addToCart({
+      id: serviceData.id, // backend product id
+      name: serviceData.service_name,
+      unitPrice: unitPriceValue,
+      quantity: quantityValue,
+    });
+  
+    router.push("/cart");
+  };
   const imageUrl = (image) => {
     if (!image) return null;
 
@@ -507,6 +523,10 @@ export default function ServicePage() {
           <Button
             fullWidth
             variant="contained"
+            onClick={() => {
+              console.log("PricingPlan full object:", PricingPlan);
+              handleAddToCart(1, PricingPlan.businessPlan_price);
+            }}
             sx={{
               borderRadius: "999px",
               bgcolor: "#90F0FF",
@@ -554,6 +574,7 @@ export default function ServicePage() {
           <Button
             fullWidth
             variant="contained"
+            onClick={() => handleAddToCart(1, PricingPlan.professionalPlan_price)}
             sx={{
               borderRadius: "999px",
               bgcolor: "#90F0FF",
