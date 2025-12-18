@@ -6,11 +6,11 @@ import Link from "next/link"
 export default function ProductCard({ product, imageUrl, apiUrl }) {
   const theme = useTheme()
 
-  const image = product.image?.url
-    ? product.image.url.startsWith("http")
-      ? product.image.url
-      : `${apiUrl}${product.image.url}`
-    : null
+  const image = product.product_logo?.url
+  ? product.product_logo.url.startsWith("http")
+    ? product.product_logo.url
+    : `${apiUrl}${product.product_logo.url}`
+  : null;
 
   return (
     <Card

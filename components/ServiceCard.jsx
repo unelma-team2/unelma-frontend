@@ -9,13 +9,13 @@ export default function ServiceCard({ service, apiUrl, imageUrl }) {
 
   if (!service) return null
 
-  const image = service.image?.url
-    ? service.image.url.startsWith("http")
-      ? service.image.url
-      : `${apiUrl}${service.image.url}`
-    : null
+  const image = service.service_logo?.url
+              ? service.service_logo.url.startsWith("http")
+                ? service.service_logo.url
+                : `${apiUrl}${service.service_logo.url}`
+              : null;
 
-  const quoteHref = `/contact?contactType=Price%20quote%20request&service=${encodeURIComponent(service.service_name)}`
+  // const quoteHref = `/contact?contactType=Price%20quote%20request&service=${encodeURIComponent(service.service_name)}`
 
   return (
     <Card
@@ -50,7 +50,7 @@ export default function ServiceCard({ service, apiUrl, imageUrl }) {
     >
       <CardContent sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
         {/* Icon circle — clickable */}
-        <Link href={quoteHref} style={{ textDecoration: "none" }}>
+        <Link href={`/services/${service.slug}`} style={{ textDecoration: "none" }}>
           <Box
             className="iconCircle"
             sx={{
@@ -105,7 +105,7 @@ export default function ServiceCard({ service, apiUrl, imageUrl }) {
 
         {/* Button — quote */}
         <Button
-          href={quoteHref}
+          href={`/services/${service.slug}`}
           sx={{
             mt: "auto",
             alignSelf: "center",
@@ -116,7 +116,7 @@ export default function ServiceCard({ service, apiUrl, imageUrl }) {
             color: theme.palette.primary.main,
           }}}
         >
-          Request a Quote
+          Buy Online
         </Button>
       </CardContent>
     </Card>
