@@ -17,50 +17,25 @@ const Login = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // try query param first; if missing, we'll read localStorage fallback below
   const paramNext = searchParams.get("next");
 
-  // persist paramNext to localStorage so provider callbacks that drop the query still remember it
   useEffect(() => {
-    if (typeof window === "undefined") return;
-    if (paramNext) {
-      try {
-        localStorage.setItem(STORAGE_KEY, paramNext);
-      } catch (e) {
-        console.warn("failed to store post-login next", e);
-      }
-    }
+    if (!paramNext) return;
+    localStorage.setItem(STORAGE_KEY, paramNext);
   }, [paramNext]);
 
-  // resolve final next (param > stored > fallback "/")
   const storedNext =
     typeof window !== "undefined" ? localStorage.getItem(STORAGE_KEY) : null;
+
   const next = paramNext || storedNext || "/";
 
   useEffect(() => {
-    // debug log to see what's happening during redirect
-    console.debug("Login page state:", {
-      user,
-      profile,
-      profileLoading,
-      next,
-      paramNext,
-      storedNext,
-    });
+    if (!user) return;
+    if (profileLoading) return;
 
-    if (user && profile && !profileLoading) {
-      // navigate back to intended page and clear the stored next
-      try {
-        router.replace(next);
-        if (typeof window !== "undefined") localStorage.removeItem(STORAGE_KEY);
-      } catch {
-        if (typeof window !== "undefined") {
-          window.location.href = next;
-          localStorage.removeItem(STORAGE_KEY);
-        }
-      }
-    }
-  }, [user, profile, profileLoading, router, next, paramNext, storedNext]);
+    router.replace(next);
+    localStorage.removeItem(STORAGE_KEY);
+  }, [user, profileLoading, next, router]);
 
   if (user && profileLoading) return null;
   if (user && profile) return null;
