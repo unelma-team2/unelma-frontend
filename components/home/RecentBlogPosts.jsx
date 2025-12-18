@@ -24,9 +24,9 @@ export default function RecentBlogPosts() {
   const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com"
 
   const placeholderImages = [
-    "/images/blog/blog1.jpg",
-    "/images/blog/blog2.jpg",
-    "/images/blog/blog3.jpg",
+    "/images/blog/blog1.png",
+    "/images/blog/blog2.png",
+    "/images/blog/blog3.png",
   ]
 
   const getPlaceholderImage = (id) => {
