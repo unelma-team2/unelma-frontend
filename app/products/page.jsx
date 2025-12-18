@@ -1,279 +1,313 @@
-"use client";
+"use client"
 
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import ProductsPageHero from "@/components/products/ProductsPageHero";
-import {
-  Box,
-  Tabs,
-  Tab,
-  useTheme,
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel,
-  Grid,
-  Typography,
-  TextField,
-} from "@mui/material";
-import ProductCard from "@/components/ProductCard";
-import ServiceCard from "@/components/ServiceCard"; 
-import LoadingSpinner from "@/components/LoadingSpinner";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useState, useEffect } from "react"
+import axios from "axios"
+import ProductsPageHero from "@/components/products/ProductsPageHero"
+import { Box, Tabs, Tab, useTheme, Select, MenuItem, FormControl, Typography } from "@mui/material"
+import ProductCard from "@/components/ProductCard"
+import ServiceCard from "@/components/ServiceCard"
+import LoadingSpinner from "@/components/LoadingSpinner"
+import SearchInput from "@/components/SearchInput"
+import { useRouter, useSearchParams } from "next/navigation"
+import BackToTopButton from "@/components/BackToTopButton"
 
 export default function ProductsPage() {
-  const theme = useTheme();
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const tabParam = searchParams.get("tab");
+  const theme = useTheme()
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const tabParam = searchParams.get("tab")
 
-  const [tab, setTab] = useState(tabParam === "services" ? 1 : 0); // 0: Products, 1: Services
-  const [subTab, setSubTab] = useState(0);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [sortBy, setSortBy] = useState("");
-  const [services, setServices] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [products, setProducts] = useState([]);
-  const [bannerSection, setBannerSection] = useState(null);
+  const [tab, setTab] = useState(tabParam === "services" ? 1 : 0)
+  const [categoryTab, setCategoryTab] = useState(0)
+  const [searchQuery, setSearchQuery] = useState("")
+  const [sortBy, setSortBy] = useState("")
+  const [services, setServices] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+  const [products, setProducts] = useState([])
 
-  const API_URL =
-    process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com";
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com"
 
-  // Fetch product page data
+  const productCategories = ["All", "Enterprise Software", "Open Source", "E-Commerce", "Accessories"]
+  const serviceCategories = ["All", "Web Development", "Website Design", "Mobile Development", "Cyber Support"]
+
   useEffect(() => {
     axios
-      .get(
-        `${API_URL}/api/product?populate[ProductBannerSection][populate]=*&populate[all_products][populate]=*`
-      )
+      .get(`${API_URL}/api/product?populate[ProductBannerSection][populate]=*&populate[all_products][populate]=*`)
       .then((res) => {
-        const productPage = res.data?.data; // SINGLE TYPE → not array
-  
-        setBannerSection(productPage?.ProductBannerSection || null);
-  
-        const allProducts = productPage?.all_products || [];
-  
-        console.log("Fetched Products:", allProducts);
-  
-        setProducts(allProducts);
+        const productPage = res.data?.data
+        const allProducts = productPage?.all_products || []
+        console.log("[v0] Products loaded:", allProducts)
+        console.log(
+          "[v0] Product categories:",
+          allProducts.map((p) => p.category),
+        )
+        setProducts(allProducts)
       })
       .catch((err) => setError(err))
-      .finally(() => setLoading(false));
-  }, [API_URL]);
-  
+      .finally(() => setLoading(false))
+  }, [API_URL])
 
   useEffect(() => {
-    // Fetch services data
     axios
       .get(`${API_URL}/api/service-page?populate[ServiceBannerDection][populate]=*&populate[all_services][populate]=*`)
       .then((res) => {
-        const servicePage = res.data?.data;
-        console.log("Service Page Data:", servicePage);
-        const allServices = servicePage?.all_services || [];
-
-        console.log("Fetched Services:", allServices);
-  
-        setServices(allServices);
+        const servicePage = res.data?.data
+        const allServices = servicePage?.all_services || []
+        console.log("[v0] Services loaded:", allServices)
+        console.log(
+          "[v0] Service categories:",
+          allServices.map((s) => s.category),
+        )
+        setServices(allServices)
       })
       .catch((err) => setError(err))
-      .finally(() => setLoading(false));
+      .finally(() => setLoading(false))
   }, [API_URL])
 
   const handleTabChange = (event, newValue) => {
-    setTab(newValue);
-    setSubTab(0);
+    setTab(newValue)
+    setCategoryTab(0)
     if (newValue === 0) {
-    router.push("/products?tab=products");
-  } else {
-    router.push("/products?tab=services");
+      router.push("/products?tab=products")
+    } else {
+      router.push("/products?tab=services")
+    }
   }
-  };
 
-  const handleSubTabChange = (event, newValue) => {
-    setSubTab(newValue);
-  };
+  const handleCategoryTabChange = (event, newValue) => {
+    setCategoryTab(newValue)
+  }
 
   const handleSortChange = (event) => {
-    setSortBy(event.target.value);
-  };
+    setSortBy(event.target.value)
+  }
 
-  // Subtabs
-  const productsSubTabs = [
-    "All",
-    "Enterprise Software",
-    "Open Source",
-    "E-Commerce",
-    "Accessories",
-  ];
-  const servicesSubTabs = [
-    "All",
-    "Web Development",
-    "Website Design",
-    "Mobile Development",
-    "Cyber Support",
-  ];
+  const handleSearch = (query) => {
+    setSearchQuery(query)
+  }
 
-  // Filter products by search
-  const filteredProducts = searchQuery
-    ? products.filter((product) =>
-        product?.title?.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredProducts = products.filter((product) => {
+    const matchesSearch = searchQuery ? product?.title?.toLowerCase().includes(searchQuery.toLowerCase()) : true
+    const matchesCategory = categoryTab === 0 ? true : product?.category === productCategories[categoryTab]
+    if (categoryTab > 0) {
+      console.log(
+        "[v0] Filtering product:",
+        product.title,
+        "Category:",
+        product.category,
+        "Expected:",
+        productCategories[categoryTab],
+        "Matches:",
+        matchesCategory,
       )
-    : products;
+    }
+    return matchesSearch && matchesCategory
+  })
 
-  // Filter services by search
-  const filteredServices = searchQuery
-    ? services.filter((service) =>
-        service?.attributes?.title
-          ?.toLowerCase()
-          .includes(searchQuery.toLowerCase())
+  const filteredServices = services.filter((service) => {
+    const matchesSearch = searchQuery ? service?.service_name?.toLowerCase().includes(searchQuery.toLowerCase()) : true
+    const matchesCategory = categoryTab === 0 ? true : service?.category === serviceCategories[categoryTab]
+    if (categoryTab > 0) {
+      console.log(
+        "[v0] Filtering service:",
+        service.service_name,
+        "Category:",
+        service.category,
+        "Expected:",
+        serviceCategories[categoryTab],
+        "Matches:",
+        matchesCategory,
       )
-    : services;
+    }
+    return matchesSearch && matchesCategory
+  })
 
-  // Sorting logic
   const sortedProducts = [...filteredProducts].sort((a, b) => {
-    if (sortBy === "newest") return new Date(b.createdAt) - new Date(a.createdAt);
-    if (sortBy === "oldest") return new Date(a.createdAt) - new Date(b.createdAt);
-    if (sortBy === "low-to-high") return a.price - b.price;
-    if (sortBy === "high-to-low") return b.price - a.price;
-    return 0;
-  });
+    if (sortBy === "newest") return new Date(b.createdAt) - new Date(a.createdAt)
+    if (sortBy === "oldest") return new Date(a.createdAt) - new Date(b.createdAt)
+    if (sortBy === "low-to-high") return a.price - b.price
+    if (sortBy === "high-to-low") return b.price - a.price
+    return 0
+  })
 
   const sortedServices = [...filteredServices].sort((a, b) => {
-    const aAttr = a.attributes;
-    const bAttr = b.attributes;
+    if (sortBy === "newest") return new Date(b.createdAt) - new Date(a.createdAt)
+    if (sortBy === "oldest") return new Date(a.createdAt) - new Date(b.createdAt)
+    if (sortBy === "low-to-high") return (a.price || 0) - (b.price || 0)
+    if (sortBy === "high-to-low") return (b.price || 0) - (a.price || 0)
+    return 0
+  })
 
-    if (sortBy === "newest")
-      return new Date(bAttr.createdAt) - new Date(aAttr.createdAt);
-    if (sortBy === "oldest")
-      return new Date(aAttr.createdAt) - new Date(bAttr.createdAt);
-    if (sortBy === "low-to-high") return aAttr.price - bAttr.price;
-    if (sortBy === "high-to-low") return bAttr.price - aAttr.price;
-    return 0;
-  });
-
-  if (loading) return <LoadingSpinner />;
-  if (error) return <p>Error: {error.message}</p>;
+  if (loading) return <LoadingSpinner />
+  if (error) return <Typography sx={{ textAlign: "center", py: 4 }}>Error: {error.message}</Typography>
 
   return (
-    <Box sx={{ py: 4, px: 2 }}>
-      <ProductsPageHero bannerSection={bannerSection} apiUrl={API_URL}/>
+    <Box sx={{ mb: 10 }}>
+      <ProductsPageHero />
+      <Box sx={{ mx: { xs: 2, md: "150px" }, mt: 6 }}>
+        <Box sx={{ borderBottom: `2px solid ${theme.palette.primary.main}`, mb: 2 }}>
+          <Tabs
+            value={tab}
+            onChange={handleTabChange}
+            sx={{
+              "& .MuiTab-root": {
+                ...theme.typography.bodyFontTitle_M_Card,
+                textTransform: "uppercase",
+                minWidth: 150,
+                py: 2,
+                transition: "all 0.25s ease",
+                "&:hover": {
+                  backgroundColor: theme.palette.section.products.soft,
+                  transform: "scale(1.05)",
+                },
+              },
+              "& .Mui-selected": {
+                backgroundColor: theme.palette.section.products.pastel,
+                color: theme.palette.primary.main,
+                fontWeight: 700,
+              },
+              "& .MuiTabs-indicator": {
+                height: 4,
+                backgroundColor: theme.palette.section.products.vibrant,
+              },
+            }}
+          >
+            <Tab label="Products" />
+            <Tab label="Services" />
+          </Tabs>
+        </Box>
 
-      {/* Tabs */}
-      <Box sx={{ mb: 4 }}>
-        <Tabs value={tab} onChange={handleTabChange}>
-          <Tab label="Products" />
-          <Tab label="Services" />
-        </Tabs>
+        <Box sx={{ borderBottom: `1px solid ${theme.palette.divider}`, mb: 4 }}>
+          <Tabs
+            value={categoryTab}
+            onChange={handleCategoryTabChange}
+            variant="scrollable"
+            scrollButtons="auto"
+            sx={{
+              "& .MuiTab-root": {
+                ...theme.typography.bodyFont_L,
+                textTransform: "capitalize",
+                minWidth: 100,
+                py: 1.5,
+                transition: "all 0.25s ease",
+                "&:hover": {
+                  backgroundColor: theme.palette.section.products.soft,
+                },
+              },
+              "& .Mui-selected": {
+                backgroundColor: theme.palette.section.products.pastel,
+                color: theme.palette.primary.main,
+                fontWeight: 600,
+              },
+              "& .MuiTabs-indicator": {
+                height: 3,
+                backgroundColor: theme.palette.section.products.main,
+              },
+            }}
+          >
+            {(tab === 0 ? productCategories : serviceCategories).map((category, index) => (
+              <Tab key={index} label={category} />
+            ))}
+          </Tabs>
+        </Box>
 
         <Box
           sx={{
-            mt: 2,
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
+            border: theme.mixins.borderStyle,
+            borderRadius: 2,
+            p: 4,
+            backgroundColor: theme.palette.background.paper,
           }}
         >
-          {/* Sub Tabs */}
-          <Tabs value={subTab} onChange={handleSubTabChange}>
-            {(tab === 0 ? productsSubTabs : servicesSubTabs).map(
-              (label, index) => (
-                <Tab key={index} label={label} />
-              )
-            )}
-          </Tabs>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              mb: 4,
+              gap: 3,
+              flexDirection: { xs: "column", md: "row" },
+            }}
+          >
+            {/* Search Input */}
+            <Box sx={{ flex: 1, maxWidth: { xs: "100%", md: 400 } }}>
+              <SearchInput placeholder={`Search ${tab === 0 ? "products" : "services"}...`} onSearch={handleSearch} />
+            </Box>
 
-          {/* Sorting */}
-          <FormControl sx={{ minWidth: 200 }}>
-            <InputLabel id="sort-by-label">Sort by</InputLabel>
-            <Select
-              labelId="sort-by-label"
-              value={sortBy}
-              onChange={handleSortChange}
-              label="Sort by"
+            {/* Sort By Filter */}
+            <FormControl sx={{ minWidth: 200 }}>
+              <Select
+                value={sortBy}
+                onChange={handleSortChange}
+                displayEmpty
+                sx={{
+                  ...theme.typography.bodyFont_M,
+                  border: theme.mixins.borderStyle,
+                  borderRadius: 1,
+                  "& .MuiOutlinedInput-notchedOutline": { border: "none" },
+                }}
+              >
+                <MenuItem value="">
+                  <Typography sx={{ ...theme.typography.bodyFont_M }}>Sort by</Typography>
+                </MenuItem>
+                <MenuItem value="newest">Newest</MenuItem>
+                <MenuItem value="oldest">Oldest</MenuItem>
+                <MenuItem value="low-to-high">Price: Low to High</MenuItem>
+                <MenuItem value="high-to-low">Price: High to Low</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
+
+          <Box
+            sx={{
+              display: "grid",
+              gridTemplateColumns: {
+                xs: "1fr",
+                sm: "repeat(2, 1fr)",
+                md: "repeat(3, 1fr)",
+              },
+              gap: 4,
+              justifyItems: "center",
+            }}
+          >
+            {tab === 0
+              ? sortedProducts.map((product) => {
+                  const imageUrl = product.product_logo?.url
+                    ? product.product_logo.url.startsWith("http")
+                      ? product.product_logo.url
+                      : `${API_URL}${product.product_logo.url}`
+                    : null
+
+                  return <ProductCard key={product.id} product={product} imageUrl={imageUrl} apiUrl={API_URL} />
+                })
+              : sortedServices.map((service) => {
+                  const imageUrl = service.service_logo?.url
+                    ? service.service_logo.url.startsWith("http")
+                      ? service.service_logo.url
+                      : `${API_URL}${service.service_logo.url}`
+                    : null
+
+                  return <ServiceCard key={service.id} service={service} imageUrl={imageUrl} apiUrl={API_URL} />
+                })}
+          </Box>
+
+          {((tab === 0 && sortedProducts.length === 0) || (tab === 1 && sortedServices.length === 0)) && (
+            <Typography
+              sx={{
+                ...theme.typography.bodyFont_L,
+                textAlign: "center",
+                py: 8,
+                color: theme.palette.text.secondary,
+              }}
             >
-              <MenuItem value="">None</MenuItem>
-              <MenuItem value="newest">Newest</MenuItem>
-              <MenuItem value="oldest">Oldest</MenuItem>
-              <MenuItem value="low-to-high">Low Price</MenuItem>
-              <MenuItem value="high-to-low">High Price</MenuItem>
-            </Select>
-          </FormControl>
+              No {tab === 0 ? "products" : "services"} found
+            </Typography>
+          )}
         </Box>
       </Box>
 
-      {/* Main Content */}
-      <Grid container spacing={3}>
-        {/* Search */}
-        <Grid item xs={12} md={3}>
-          <Box
-            sx={{
-              border: `2px solid ${theme.palette.primary.main}`,
-              borderRadius: "8px",
-              padding: "1rem",
-              background: "#fff",
-            }}
-          >
-            <Typography variant="h3" sx={{ marginBottom: "1rem" }}>
-              Search
-            </Typography>
-            <TextField
-              fullWidth
-              placeholder={`Search ${tab === 0 ? "products" : "services"}`}
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              sx={{
-                borderRadius: "6px",
-                "& .MuiOutlinedInput-root": {
-                  border: `2px solid ${theme.palette.primary.main}`,
-                  boxShadow: "0px 2px 4px rgba(0,0,0,0.1)",
-                },
-              }}
-            />
-          </Box>
-        </Grid>
-
-        {/* Cards */}
-        <Grid item xs={12} md={9}>
-  {tab === 0 ? (
-    <Grid container spacing={4}>
-      {sortedProducts.map((product) => {
-        
-        const imageUrl = product.product_logo?.url
-          ? product.product_logo.url.startsWith("http")
-            ? product.product_logo.url
-            : `${API_URL}${product.product_logo.url}`
-          : null;
-
-        return (
-          <Grid item xs={12} sm={6} md={4} key={product.id}>
-            <ProductCard 
-              product={product} 
-              imageUrl={imageUrl}   // ← pass to card if needed
-              apiUrl={API_URL}
-            />
-          </Grid>
-        );
-      })}
-    </Grid>
-          ) : (
-            <Grid container spacing={4}>
-              {sortedServices.map((service) => {
-
-              const imageUrl = service.service_logo?.url
-              ? service.service_logo.url.startsWith("http")
-                ? service.service_logo.url
-                : `${API_URL}${service.service_logo.url}`
-              : null;
-
-return (
-                <Grid item xs={12} sm={4} md={4} lg={4} key={service.id}>
-                  <ServiceCard service={service} imageUrl={imageUrl} apiUrl={API_URL} />
-                </Grid>
-)})}
-            </Grid>
-          )}
-        </Grid>
-      </Grid>
+      <BackToTopButton />
     </Box>
-  );
+  )
 }

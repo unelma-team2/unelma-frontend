@@ -35,6 +35,9 @@ export default function BlogPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [searchQuery, setSearchQuery] = useState("")
+  const [selectedCategory, setSelectedCategory] = useState("All")
+  const [selectedYear, setSelectedYear] = useState(null)
+  const [selectedMonth, setSelectedMonth] = useState(null)
   const [yearArchive, setYearArchive] = useState({})
   const [openYears, setOpenYears] = useState({})
   const [currentPage, setCurrentPage] = useState(1)
@@ -85,11 +88,26 @@ export default function BlogPage() {
 
   const [featured, ...rest] = sortedBlogs
 
-  const filteredBlogs = rest.filter(
-    (blog) =>
+  const filteredBlogs = rest.filter((blog) => {
+    const matchesSearch =
       blog.Title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      blog.Description?.toLowerCase().includes(searchQuery.toLowerCase()),
-  )
+      blog.Description?.toLowerCase().includes(searchQuery.toLowerCase())
+
+    const matchesCategory = selectedCategory === "All" || (blog.category || "Other") === selectedCategory
+
+    let matchesDate = true
+    if (selectedYear && selectedMonth) {
+      const date = blog.date || blog.publishedAt || blog.createdAt
+      if (date) {
+        const d = new Date(date)
+        const blogYear = d.getFullYear()
+        const blogMonth = d.toLocaleString("en-US", { month: "long" })
+        matchesDate = blogYear === selectedYear && blogMonth === selectedMonth
+      }
+    }
+
+    return matchesSearch && matchesCategory && matchesDate
+  })
 
   const totalPages = Math.max(1, Math.ceil(filteredBlogs.length / postsPerPage))
   const paginatedPosts = filteredBlogs.slice((currentPage - 1) * postsPerPage, currentPage * postsPerPage)
@@ -154,7 +172,7 @@ export default function BlogPage() {
                   )}
                   <Box sx={{ display: "flex", flexDirection: "column", p: 5 }}>
                     <Box sx={{ display: "flex", gap: 4, alignItems: "center", mb: 4, flexWrap: "wrap" }}>
-                      <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                      <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
                         <IconButton
                           size="small"
                           sx={{
@@ -174,9 +192,9 @@ export default function BlogPage() {
                             },
                           }}
                         >
-                          <CalendarTodayIcon sx={{ fontSize: 20 }} />
+                          <CalendarTodayIcon sx={{ fontSize: 24 }} />
                         </IconButton>
-                        <Typography sx={{ ...theme.typography.bodyFont_M }}>
+                        <Typography sx={{ ...theme.typography.bodyFontTitle_S }}>
                           {formatBlogDate(featured.date || featured.publishedAt)}
                         </Typography>
                       </Box>
@@ -201,9 +219,9 @@ export default function BlogPage() {
                             },
                           }}
                         >
-                          <EditNoteIcon sx={{ fontSize: 20 }} />
+                          <EditNoteIcon sx={{ fontSize: 24 }} />
                         </IconButton>
-                        <Typography sx={{ ...theme.typography.bodyFont_M }}>
+                        <Typography sx={{ ...theme.typography.bodyFontTitle_S }}>
                           {featured.author_name || "Author's Name"}
                         </Typography>
                       </Box>
@@ -228,9 +246,9 @@ export default function BlogPage() {
                             },
                           }}
                         >
-                          <CategoryIcon sx={{ fontSize: 20 }} />
+                          <CategoryIcon sx={{ fontSize: 24 }} />
                         </IconButton>
-                        <Typography sx={{ ...theme.typography.bodyFont_M }}>
+                        <Typography sx={{ ...theme.typography.bodyFontTitle_S }}>
                           {featured.category || "Category"}
                         </Typography>
                       </Box>
@@ -245,7 +263,7 @@ export default function BlogPage() {
                         color: theme.palette.text.secondary,
                         mb: 5,
                         textAlign: "justify",
-                        lineHeight: 1.3,
+                        lineHeight: 1.8,
                       }}
                     >
                       {featured.Description?.slice(0, 600) || ""}
@@ -272,13 +290,12 @@ export default function BlogPage() {
                               },
                             }}
                           >
-                            <ShareIcon sx={{ fontSize: 20 }} />
+                            <ShareIcon sx={{ fontSize: 24 }} />
                           </IconButton>
                           <Typography
                             sx={{
-                              ...theme.typography.bodyFont_M,
+                              ...theme.typography.bodyFontTitle_S,
                               cursor: "pointer",
-                            
                             }}
                           >
                             Share
@@ -304,11 +321,11 @@ export default function BlogPage() {
                               },
                             }}
                           >
-                            <CommentIcon sx={{ fontSize: 20 }} />
+                            <CommentIcon sx={{ fontSize: 24 }} />
                           </IconButton>
                           <Typography
                             sx={{
-                              ...theme.typography.bodyFont_M,
+                              ...theme.typography.bodyFontTitle_S,
                               cursor: "pointer",
                             }}
                           >
@@ -438,7 +455,7 @@ export default function BlogPage() {
                               },
                             }}
                           >
-                            <EditNoteIcon sx={{ fontSize: 20 }} />
+                            <EditNoteIcon sx={{ fontSize: 24 }} />
                           </IconButton>
                           <Typography sx={{ ...theme.typography.bodyFont_M }}>
                             {blog.author_name || "Author's Name"}
@@ -465,7 +482,7 @@ export default function BlogPage() {
                               },
                             }}
                           >
-                            <CategoryIcon sx={{ fontSize: 20 }} />
+                            <CategoryIcon sx={{ fontSize: 24 }} />
                           </IconButton>
                           <Typography sx={{ ...theme.typography.bodyFont_M }}>{blog.category || "Category"}</Typography>
                         </Box>
@@ -478,7 +495,7 @@ export default function BlogPage() {
                           color: theme.palette.text.secondary,
                           flex: 1,
                           textAlign: "justify",
-                          lineHeight: 1.3,
+                          lineHeight: 1.7,
                         }}
                       >
                         {blog.Description ? blog.Description.slice(0, 350) + "..." : ""}
@@ -506,11 +523,11 @@ export default function BlogPage() {
                                 },
                               }}
                             >
-                              <ShareIcon sx={{ fontSize: 20 }} />
+                              <ShareIcon sx={{ fontSize: 24 }} />
                             </IconButton>
                             <Typography
                               sx={{
-                                ...theme.typography.bodyFont_M,
+                                ...theme.typography.bodyFontTitle_S,
                                 cursor: "pointer",
                               }}
                             >
@@ -537,11 +554,11 @@ export default function BlogPage() {
                                 },
                               }}
                             >
-                              <CommentIcon sx={{ fontSize: 20 }} />
+                              <CommentIcon sx={{ fontSize: 24 }} />
                             </IconButton>
                             <Typography
                               sx={{
-                                ...theme.typography.bodyFont_,
+                                ...theme.typography.bodyFontTitle_S,
                                 cursor: "pointer",
                               }}
                             >
@@ -606,11 +623,10 @@ export default function BlogPage() {
             {/* Sidebar */}
             <Box sx={{ width: { xs: "100%", lg: 350 }, display: "flex", flexDirection: "column", gap: 4 }}>
               {/* Search */}
-              <Box sx={{ ...theme.mixins.borderStyle, p: 4 }}>
+              <Box sx={{ ...theme.mixins.borderStyle, p: 3 }}>
                 <Typography
                   sx={{
-                    ...theme.typography.bodyFontTitle_M_Card,
-                    color: theme.palette.text.primary,
+                    ...theme.typography.bodyFontTitle_L,
                     textTransform: "uppercase",
                     textAlign: "center",
                     mb: 3,
@@ -625,7 +641,7 @@ export default function BlogPage() {
               <Box sx={{ ...theme.mixins.borderStyle, p: 3 }}>
                 <Typography
                   sx={{
-                    ...theme.typography.bodyFontTitle_M_Card,
+                    ...theme.typography.bodyFontTitle_L,
                     textTransform: "uppercase",
                     textAlign: "center",
                     mb: 3,
@@ -634,6 +650,29 @@ export default function BlogPage() {
                   Blog Categories
                 </Typography>
                 <ul style={{ listStyle: "none", padding: 0 }}>
+                  <li style={{ marginBottom: "0.5rem" }}>
+                    <Box
+                      onClick={() => {
+                        setSelectedCategory("All")
+                        setSelectedYear(null)
+                        setSelectedMonth(null)
+                        setCurrentPage(1)
+                      }}
+                      sx={{
+                        ...theme.typography.bodyFont_M,
+                        p: 1.5,
+                        cursor: "pointer",
+                        transition: "all 0.25s ease",
+                        color: theme.palette.text.primary,
+                        backgroundColor: selectedCategory === "All" ? theme.palette.section.blog.pastel : "transparent",
+                        "&:hover": {
+                          backgroundColor: theme.palette.section.blog.pastel,
+                        },
+                      }}
+                    >
+                      All ({blogs.length - 1})
+                    </Box>
+                  </li>
                   {[
                     "Digital Marketing",
                     "E-Commerce",
@@ -645,23 +684,29 @@ export default function BlogPage() {
                   ].map((category) => {
                     const count = categories[category] || 0
                     return (
-                      <li key={category} style={{ marginBottom: "0.2rem" }}>
-                        <Link href={`/category/${category}`} style={{ textDecoration: "none" }}>
-                          <Box
-                            sx={{
-                              ...theme.typography.bodyFont_M,
-                              p: 0.5,
-                              cursor: "pointer",
-                              transition: "all 0.25s ease",
-                              color: theme.palette.text.primary,
-                              "&:hover": {
-                                backgroundColor: theme.palette.section.blog.pastel,
-                              },
-                            }}
-                          >
-                            {category} ({count})
-                          </Box>
-                        </Link>
+                      <li key={category} style={{ marginBottom: "0.5rem" }}>
+                        <Box
+                          onClick={() => {
+                            setSelectedCategory(category)
+                            setSelectedYear(null)
+                            setSelectedMonth(null)
+                            setCurrentPage(1)
+                          }}
+                          sx={{
+                            ...theme.typography.bodyFont_M,
+                            p: 1.5,
+                            cursor: "pointer",
+                            transition: "all 0.25s ease",
+                            color: theme.palette.text.primary,
+                            backgroundColor:
+                              selectedCategory === category ? theme.palette.section.blog.pastel : "transparent",
+                            "&:hover": {
+                              backgroundColor: theme.palette.section.blog.pastel,
+                            },
+                          }}
+                        >
+                          {category} ({count})
+                        </Box>
                       </li>
                     )
                   })}
@@ -672,10 +717,10 @@ export default function BlogPage() {
               <Box sx={{ ...theme.mixins.borderStyle, p: 3 }}>
                 <Typography
                   sx={{
-                    ...theme.typography.bodyFontTitle_M_Card,
+                    ...theme.typography.bodyFontTitle_L,
                     textTransform: "uppercase",
                     textAlign: "center",
-                    mb: 2,
+                    mb: 3,
                   }}
                 >
                   Blog Archive
@@ -697,6 +742,11 @@ export default function BlogPage() {
                               justifyContent: "space-between",
                               p: 1.5,
                               transition: "all 0.25s ease",
+                              color: theme.palette.text.primary,
+                              backgroundColor:
+                                selectedYear === Number.parseInt(year) && !selectedMonth
+                                  ? theme.palette.section.blog.pastel
+                                  : "transparent",
                               "&:hover": {
                                 backgroundColor: theme.palette.section.blog.pastel,
                               },
@@ -711,24 +761,32 @@ export default function BlogPage() {
                             <ul style={{ listStyle: "none", padding: 0, marginTop: "0.5rem" }}>
                               {Object.keys(months).map((month) => (
                                 <li key={month}>
-                                  <Link href={`/archive/${year}/${month}`} style={{ textDecoration: "none" }}>
-                                    <Box
-                                      sx={{
-                                        ...theme.typography.bodyFont_M,
-                                        pl: 4,
-                                        p: 1,
-                                        cursor: "pointer",
-                                        transition: "all 0.25s ease",
-                                        color: theme.palette.text.secondary,
-                                        "&:hover": {
-                                          backgroundColor: theme.palette.section.blog.pastel,
-                                          color: theme.palette.text.primary,
-                                        },
-                                      }}
-                                    >
-                                      {month} ({months[month]})
-                                    </Box>
-                                  </Link>
+                                  <Box
+                                    onClick={() => {
+                                      setSelectedYear(Number.parseInt(year))
+                                      setSelectedMonth(month)
+                                      setSelectedCategory("All")
+                                      setCurrentPage(1)
+                                    }}
+                                    sx={{
+                                      ...theme.typography.bodyFont_M,
+                                      pl: 4,
+                                      p: 1,
+                                      cursor: "pointer",
+                                      transition: "all 0.25s ease",
+                                      color: theme.palette.text.secondary,
+                                      backgroundColor:
+                                        selectedYear === Number.parseInt(year) && selectedMonth === month
+                                          ? theme.palette.section.blog.pastel
+                                          : "transparent",
+                                      "&:hover": {
+                                        backgroundColor: theme.palette.section.blog.pastel,
+                                        color: theme.palette.text.primary,
+                                      },
+                                    }}
+                                  >
+                                    {month} ({months[month]})
+                                  </Box>
                                 </li>
                               ))}
                             </ul>
