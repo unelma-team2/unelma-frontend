@@ -31,16 +31,14 @@ export default function ServiceCard({ service, apiUrl, imageUrl }) {
 
         "&:hover": {
           transform: "translateY(-4px)",
-          boxShadow: `-2px -2px 0px  ${theme.palette.section.services.main}, 
-          -4px -4px 0px  ${theme.palette.section.services.vibrant}`,
+          boxShadow: `-10px -8px 0px  ${theme.palette.section.services.vibrant}`,
           transition: "transform 0.25s ease",
         },
 
         /* Sync hover effects */
         "&:hover .iconCircle": {
           transform: "scale(1.08)",
-          boxShadow: `-2px -2px 0px  ${theme.palette.section.services.vibrant}, 
-            -2px -2px 0px ${theme.palette.section.services.main}`,
+          boxShadow: `inset -4px -3px 0px ${theme.palette.section.services.vibrant}`,
         },
 
         "&:hover .serviceTitle": {
@@ -61,8 +59,8 @@ export default function ServiceCard({ service, apiUrl, imageUrl }) {
               borderRadius: "50%",
               backgroundColor: theme.palette.section.services.soft,
               border: theme.mixins.borderStyle,
-               boxShadow: `-2px -2px 0px  ${theme.palette.section.services.main}, 
-                -2px -2px 0px  ${theme.palette.section.services.main}`,
+              boxShadow: `-4px -3px 0px ${theme.palette.section.services.main}`,
+              
               display: "flex",
               alignItems: "center",
               justifyContent: "center",

@@ -26,7 +26,7 @@ export default function Services({ services, API_URL }) {
         <Box
           sx={{
             ...theme.mixins.homeBoxLeft,
-              boxShadow: `inset 0px -8px 0px ${theme.palette.section.services.muted}, inset -2px -2px 0px ${theme.palette.section.services.vibrant}`,
+              boxShadow: `inset 0px -5px 0px ${theme.palette.section.services.pastel}, inset 0px -14px 0px ${theme.palette.section.services.main}`,
           }}
         />
 
@@ -34,7 +34,7 @@ export default function Services({ services, API_URL }) {
         <Box
           sx={{
             ...theme.mixins.homeTitleRight,
-              boxShadow: `-10px -8px 0px ${theme.palette.section.services.vibrant}, -4px -4px 0px ${theme.palette.section.services.main}`,
+              boxShadow: `0px -3px 0px ${theme.palette.section.services.pastel}, 0px -12px 0px ${theme.palette.section.services.main}`,
           }}
         >
           <Typography

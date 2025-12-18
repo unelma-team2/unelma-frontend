@@ -9,6 +9,10 @@ const PLACEHOLDER_AVATARS = [
   "/images/feedback/avatar1.png",
   "/images/feedback/avatar2.png",
   "/images/feedback/avatar3.png",
+  "/images/feedback/avatar4.png",
+  "/images/feedback/avatar5.png",
+  "/images/feedback/avatar6.png",
+  "/images/feedback/avatar7.png",
 ]
 
 // Simple hash function to get consistent avatar for same name
@@ -50,8 +54,7 @@ export default function FeedbackCard({ name, message, avatar }) {
 
         "&:hover": {
           transform: "translateY(-4px)",
-          boxShadow: `-4px -2px 0px  ${theme.palette.section.feedback.main}, 
-        -10px -6px 0px  ${theme.palette.section.feedback.vibrant}`,
+          boxShadow: `-10px -8px 0px  ${theme.palette.section.feedback.vibrant}`,
         },
 
         "&:hover .avatarCircle": {
@@ -62,7 +65,7 @@ export default function FeedbackCard({ name, message, avatar }) {
 
         "&:hover .feedbackName": {
           transform: "scale(1.05)",
-          color: theme.palette.primary.blue1,
+          color: theme.palette.section.products.vibrant
         },
       }}
     >
@@ -80,7 +83,7 @@ export default function FeedbackCard({ name, message, avatar }) {
           overflow: "hidden",
         }}
       >
-        <Image src="/images/feedback/quote2.png" alt="quote" width={100} height={100} style={{ objectFit: "cover" }} />
+        <Image src="/images/feedback/icons8-quote.png" alt="quote" width={100} height={100} style={{ objectFit: "cover" }} />
       </Box>
 
       {/* Message */}
@@ -114,8 +117,8 @@ export default function FeedbackCard({ name, message, avatar }) {
           className="avatarCircle"
           src={avatarUrl}
           sx={{
-            width: 55,
-            height: 55,
+            width: 60,
+            height: 60,
             mr: 2,
             border: theme.mixins.borderStyle,
             borderRadius: "50%",

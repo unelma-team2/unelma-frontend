@@ -45,7 +45,7 @@ export default function ClientFeedback() {
         <Box
           sx={{
             ...theme.mixins.homeTitleLeft,
-           boxShadow: `-10px -8px 0px ${theme.palette.section.feedback.main}, -14px -12px 0px ${theme.palette.section.feedback.vibrant}`,
+            boxShadow: `0px -3px 0px ${theme.palette.section.feedback.pastel}, 0px -12px 0px ${theme.palette.section.feedback.main}`,
             pb: { xs: 1, md: 2 }, 
           }}
         >
@@ -66,7 +66,7 @@ export default function ClientFeedback() {
         <Box
           sx={{
             ...theme.mixins.homeBoxRight,
-               boxShadow: `inset 0px -8px 0px ${theme.palette.section.feedback.main}, inset -0px -12px 0px ${theme.palette.section.feedback.vibrant}`,
+            boxShadow: `inset 0px -5px 0px ${theme.palette.section.feedback.pastel}, inset -0px -14px 0px ${theme.palette.section.feedback.main}`,
           }}
         />
 

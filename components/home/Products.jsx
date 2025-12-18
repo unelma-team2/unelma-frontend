@@ -25,7 +25,7 @@ export default function Products({ products, API_URL }) {
         <Box
           sx={{
             ...theme.mixins.homeTitleLeft,
-            boxShadow: `-10px -8px 0px ${theme.palette.section.products.main}, -14px -12px 0px ${theme.palette.section.products.vibrant}`,
+            boxShadow: `0px -3px 0px ${theme.palette.section.products.pastel}, 0px -12px 0px ${theme.palette.section.products.main}`,
 
           }}
         >
@@ -44,7 +44,7 @@ export default function Products({ products, API_URL }) {
          <Box
           sx={{
             ...theme.mixins.homeBoxRight,
-               boxShadow: `inset 0px -8px 0px ${theme.palette.section.products.main}, inset -0px -12px 0px ${theme.palette.section.products.vibrant}`,
+               boxShadow: `inset 0px -5px 0px ${theme.palette.section.products.pastel}, inset -0px -14px 0px ${theme.palette.section.products.main}`,
           }}
         />
 

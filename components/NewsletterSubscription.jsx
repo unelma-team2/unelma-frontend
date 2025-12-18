@@ -17,23 +17,22 @@ export default function SubscriptionBox() {
         alignItems: "center",
         justifyContent: "center",
         p: { xs: 0.5, sm: 1, md: 1 },
-        border: "4px solid #1D2340",
-        borderRadius: "4px",
+        border: "2px solid #1D2340",
         overflow: "hidden",
         maxWidth: 550,
         width: "100%",
         mx: "auto",
-        color: "primary.main",
-        boxShadow: `-5px -5px 0px  ${theme.palette.section.careers.vibrant}, -10px -10px 0px ${theme.palette.section.careers.main}, -15px -15px 0px ${theme.palette.section.careers.pastel}`,
+        color: theme.palette.primary.main,
+        boxShadow: `-4px -4px 0px  ${theme.palette.section.contact.pastel}, -14px -12px 0px ${theme.palette.section.contact.main}`,
         backgroundColor: theme.palette.section.caseStudies.soft,
       }}
     >
       {/* Left Image */}
       <Box
         sx={{
-          flex: { xs: 0.3, sm: 0.5 },
+          flex: { xs: 0.3, sm: 0.5, md: 0.5 },
           position: "relative",
-          minHeight: { xs: 150, sm: 180, md: 200 },
+          minHeight: { xs: 150, sm: 180, md: 250 },
           width: "auto",
         }}
       >
@@ -44,19 +43,19 @@ export default function SubscriptionBox() {
       <Box
         sx={{
           flex: 1,
-          p: { xs: 1.5, sm: 3, md: 4 },
-          paddingLeft: { xs: 1, sm: 0 },
+          p: { xs: 1.5, sm: 3, md: 3 },
+          paddingLeft: { xs: 1, sm: 0, md: 0 },
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
         }}
       >
         <Typography
-          fontWeight={700}
           sx={{
+            ...theme.typography.bodyFontTitle_M_Card,
             mb: { xs: 1.5, sm: 2.5, md: 3 },
             fontSize: { xs: 16, sm: 24, md: 26 },
-            color: "primary.main",
+            color: theme.palette.primary.main,  
             letterSpacing: 0.8,
           }}
         >
@@ -81,26 +80,7 @@ export default function SubscriptionBox() {
             placeholder="Email"
             name="EMAIL"
             fullWidth
-            sx={{
-              bgcolor: "#fff",
-              "& .MuiOutlinedInput-root": {
-                borderRadius: "6px",
-                border: "2px solid" + theme.palette.primary.main,
-                "& .MuiOutlinedInput-notchedOutline": { border: "none" },
-                "&:hover .MuiOutlinedInput-notchedOutline": {
-                  border: "2px solid" + theme.palette.primary.blue1,
-                  borderRadius: "4px",
-                },
-                "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                  border: "2px solid" + theme.palette.primary.blue1,
-                  borderRadius: "4px",
-                },
-              },
-              "& .MuiInputBase-input": {
-                padding: { xs: "6px 8px", sm: "8px 12px" },
-                fontSize: { xs: 13, sm: 14 },
-              },
-            }}
+       
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -117,18 +97,10 @@ export default function SubscriptionBox() {
             sx={{
               ml: { xs: 0, sm: 2 },
               mt: { xs: 2, sm: 0 },
-              fontWeight: 700,
+              fontWeight: 600,
               px: { xs: 1.5, sm: 2.5, md: 3 },
               py: 0.5,
-              textTransform: "uppercase",
               fontSize: { xs: 13, sm: 17, md: 18 },
-              transition: "0.25s ease",
-              "&:hover": {
-                boxShadow: "0px 6px 6px rgba(0,0,0,0.20)",
-                backgroundColor: theme.palette.primary.violet,
-                transform: "scale(1.1)",
-                cursor: "pointer",
-              },
             }}
           >
             Submit
@@ -136,11 +108,9 @@ export default function SubscriptionBox() {
         </Box>
 
         <Typography
-          component="p"
-          variant="body2"
           sx={{
-            color: "primary.main",
-            fontSize: { xs: 11, sm: 14, md: 15 },
+            ...theme.typography.bodyFont_S,
+            color: theme.palette.text.secondary,
             mt: 1,
           }}
         >

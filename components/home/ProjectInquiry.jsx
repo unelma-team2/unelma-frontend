@@ -33,7 +33,7 @@ export default function ProjectInquiry({ projectInquiry }) {
           right: 0,
           bottom: 0,
           width: "100%",
-          height: { xs: "100%", sm: "90%", md: "calc(100% + 245px)" },
+          height: { xs: "100%", sm: "90%", md: "calc(100% + 240px)" },
           display: "flex",
           alignItems: { xs: "center", sm: "center", md: "flex-start" },
           justifyContent: { xs: "center", sm: "center", md: "flex-start" },
@@ -91,9 +91,10 @@ export default function ProjectInquiry({ projectInquiry }) {
                 boxShadow: `-8px -6px 0px ${theme.palette.section.blog.muted}`,
                 transition: "transform 0.27s ease, box-shadow 0.27s ease",
                 "&:hover": {
-                  backgroundColor: theme.palette.section.caseStudies.main,
+                  backgroundColor: theme.palette.section.products.soft,
                   border: "none",
-                  boxShadow: `-10px -8px 0px ${theme.palette.section.caseStudies.soft}`,
+                  boxShadow: `-10px -8px 0px ${theme.palette.section.products.pastel}`,
+                  border: "2px solid " + theme.palette.section.products.vibrant,
                 },
               }}
             >

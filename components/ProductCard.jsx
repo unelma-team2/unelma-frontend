@@ -29,17 +29,14 @@ export default function ProductCard({ product, imageUrl, apiUrl }) {
 
         "&:hover": {
           transform: "translateY(-4px)",
-            boxShadow: `-4px -2px 0px  ${theme.palette.section.products.main}, 
-              -10px -6px 0px  ${theme.palette.section.products.vibrant}`,
+            boxShadow: `-10px -8px 0px  ${theme.palette.section.products.vibrant}`,
             transition: "transform 0.25s ease",
         },
 
         "&:hover .productImage": {
           transform: "scale(1.08)",
-          boxShadow: `-4px -4px 0px  ${theme.palette.section.products.main}, 
-            -4px -4px 0px  ${theme.palette.section.products.vibrant}`,
+          boxShadow: `inset -4px -3px 0px ${theme.palette.section.products.vibrant}`,
         },
-
         "&:hover .productTitle": {
           transform: "scale(1.05)",
           color: theme.palette.primary.main,
@@ -55,7 +52,7 @@ export default function ProductCard({ product, imageUrl, apiUrl }) {
             height: 158,
             borderRadius: 50,
             border: theme.mixins.borderStyle,
-            boxShadow: `-4px -2px 0px  ${theme.palette.section.products.main}, `,
+            boxShadow: `-4px -3px 0px ${theme.palette.section.products.main}`,
             display: "flex",
             alignItems: "center",
             justifyContent: "center",

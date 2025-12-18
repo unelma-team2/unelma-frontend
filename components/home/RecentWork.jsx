@@ -30,7 +30,7 @@ export default function RecentWorkSection({ works = [], categories = [], API_URL
         <Box
           sx={{
             ...theme.mixins.homeBoxLeft,
-            boxShadow: `inset 0px -8px 0px ${theme.palette.section.caseStudies.main}, inset -0px -12px 0px ${theme.palette.section.caseStudies.vibrant}`,
+            boxShadow: `inset 0px -5px 0px ${theme.palette.section.caseStudies.pastel}, inset -0px -14px 0px ${theme.palette.section.caseStudies.main}`,
           }}
         />
 
@@ -38,7 +38,7 @@ export default function RecentWorkSection({ works = [], categories = [], API_URL
         <Box
           sx={{
             ...theme.mixins.homeTitleRight,
-            boxShadow: `-10px -8px 0px ${theme.palette.section.caseStudies.main}, -14px -1px 0px ${theme.palette.section.caseStudies.vibrant}`,
+               boxShadow: `-0px -3px 0px ${theme.palette.section.caseStudies.pastel}, 0px -12px 0px ${theme.palette.section.caseStudies.main}`,
           }}
         >
           <Typography

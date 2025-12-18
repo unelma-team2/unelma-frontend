@@ -28,7 +28,7 @@ export default function Footer() {
         background: "linear-gradient(180deg, #FFDDBB 0%, #FFBBBB 100%)",
         color: theme.palette.primary.main,
         borderTop: "2px solid #1D2340",
-        boxShadow: `0px -8px 0px ${theme.palette.section.careers.pastel}, -2px -2px 0px ${theme.palette.section.contact.pastel}`,
+        boxShadow: `0px -2px 0px ${theme.palette.section.careers.soft}, 0px -4px 0px ${theme.palette.section.careers.pastel}, 0px -14px 0px ${theme.palette.section.careers.main}`,
         mt: { xs: 8, sm: 12, md: 18 },
       }}
     >

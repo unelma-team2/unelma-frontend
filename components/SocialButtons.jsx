@@ -35,12 +35,12 @@ export default function SocialButtons() {
             overflow: "hidden",
             padding: 0,
             transition: "all 0.25s ease",
-            boxShadow: "-2px -2px 0px #0000FF",
+            boxShadow: "-4px -3px 0px #0000FF",
             "&:hover": {
-              boxShadow: "-4px -4px 0px #0000FF",
+              boxShadow: "inset -4px -3px 0px #0000FF",
               backgroundColor: "#8888FF",
               transform: "scale(1.1)",
-              border: "2px solid #1D2340",
+              border: theme.mixins.borderStyle,
             },
           }}
         >

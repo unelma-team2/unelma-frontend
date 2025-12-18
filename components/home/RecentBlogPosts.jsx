@@ -10,8 +10,10 @@ import ShareIcon from "@mui/icons-material/Share"
 import CommentIcon from "@mui/icons-material/Comment"
 import EditNoteIcon from "@mui/icons-material/EditNote"
 import CategoryIcon from "@mui/icons-material/Category"
+import CreateIcon from '@mui/icons-material/Create';
 import Carousel from "@/components/Carousel.jsx"
 import LoadingSpinner from "@/components/LoadingSpinner"
+//import { o } from "framer-motion/dist/types.d-DagZKalS"
 
 export default function RecentBlogPosts() {
   const theme = useTheme()
@@ -22,9 +24,9 @@ export default function RecentBlogPosts() {
   const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://unelma-backend.onrender.com"
 
   const placeholderImages = [
-    "/images/blog/blog_placeholder1.jpg",
-    "/images/blog/blog_placeholder2.jpg",
-    "/images/blog/blog_placeholder3.jpg",
+    "/images/blog/blog1.jpg",
+    "/images/blog/blog2.jpg",
+    "/images/blog/blog3.jpg",
   ]
 
   const getPlaceholderImage = (id) => {
@@ -40,7 +42,7 @@ export default function RecentBlogPosts() {
       .finally(() => setLoading(false))
   }, [API_URL])
 
-  if (loading) return <LoadingSpinner />
+  //if (loading) return <LoadingSpinner />
   if (error) return <p>Error loading blogs: {error.message}</p>
   if (!blogs?.length) return <p>No blogs found.</p>
 
@@ -65,7 +67,7 @@ export default function RecentBlogPosts() {
           width: 300,
           minWidth: 300,
           height: 800,
-          boxShadow: `-10px -8px 0px ${theme.palette.section.blog.main}`,
+          boxShadow: `-8px -6px 0px ${theme.palette.section.blog.main}`,
           overflow: "hidden",
           display: "flex",
           flexDirection: "column",
@@ -75,12 +77,12 @@ export default function RecentBlogPosts() {
 
           "&:hover": {
             transform: "translateY(-4px)",
-            boxShadow: `-4px -4px 0px ${theme.palette.section.blog.main}, -6px -6px 0px ${theme.palette.section.blog.vibrant}`,
+            boxShadow: `-10px -8px 0px ${theme.palette.section.blog.vibrant}`,
           },
 
           "&:hover .dateBadge": {
             transform: "scale(1.08)",
-            boxShadow: `-2px -2px 0px ${theme.palette.section.blog.vibrant}`,
+            boxShadow: `inset -4px -3px 0px ${theme.palette.primary.main}`,
           },
 
           "&:hover .blogTitle": {
@@ -107,12 +109,13 @@ export default function RecentBlogPosts() {
                 width: 90,
                 height: 90,
                 borderRadius: "50%",
-                border: `2px solid ${theme.palette.primary.main}`,
+                border: theme.mixins.borderStyle,
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
                 justifyContent: "center",
                 transition: "transform 0.25s ease, box-shadow 0.25s ease",
+                boxShadow: `-4px -3px 0px ${theme.palette.primary.main}`,
               }}
             >
               <Typography sx={{ ...theme.typography.bodyFontTitle_S }}>{dayMonth}</Typography>
@@ -122,10 +125,10 @@ export default function RecentBlogPosts() {
         </Link>
 
         <CardContent sx={{ flexGrow: 1 }}>
-          <Stack direction="row" spacing={2} mb={4}>
+          <Stack direction="row" spacing={4} mb={4}>
             <Stack
               direction="row"
-              spacing={0.5}
+              spacing={0.8}
               alignItems="center"
               component={Link}
               href="#"
@@ -133,18 +136,28 @@ export default function RecentBlogPosts() {
                 textDecoration: "none",
                 transition: "transform 0.25s ease",
                 "&:hover": {
-                  transform: "scale(1.1)",
+                  transform: "scale(1.2)",
                 },
               }}
             >
-              <EditNoteIcon sx={{ fontSize: 20, color: theme.palette.section.blog.muted }} />
-              <Typography sx={{ ...theme.typography.bodyFont_S, color: theme.palette.section.blog.muted }}>
+              <CreateIcon sx={{ 
+                fontSize: 28, 
+                color: theme.palette.text.secondary,  
+                borderRadius: 100,
+                border: "2px solid" + theme.palette.text.secondary, 
+                padding: 0.5, 
+                backgroundColor: theme.palette.section.blog.soft,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }} />
+              <Typography sx={{ ...theme.typography.bodyFont_S, color: theme.palette.text.secondary }}>
                 Author
               </Typography>
             </Stack>
             <Stack
               direction="row"
-              spacing={0.5}
+              spacing={0.7}
               alignItems="center"
               component={Link}
               href="#"
@@ -152,12 +165,22 @@ export default function RecentBlogPosts() {
                 textDecoration: "none",
                 transition: "transform 0.25s ease",
                 "&:hover": {
-                  transform: "scale(1.1)",
+                  transform: "scale(1.2)",
                 },
               }}
             >
-              <CategoryIcon sx={{ fontSize: 20, color: theme.palette.section.blog.muted }} />
-              <Typography sx={{ ...theme.typography.bodyFont_S, color: theme.palette.section.blog.muted }}>
+              <CategoryIcon sx={{ 
+                fontSize: 28, 
+                color: theme.palette.text.secondary,  
+                borderRadius: 100,
+                border: "2px solid" + theme.palette.text.secondary, 
+                padding: 0.5, 
+                backgroundColor: theme.palette.section.blog.soft,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }} />
+              <Typography sx={{ ...theme.typography.bodyFont_S, color: theme.palette.text.secondary }}>
                 Category
               </Typography>
             </Stack>
@@ -167,10 +190,13 @@ export default function RecentBlogPosts() {
             className="blogTitle"
             sx={{
               ...theme.typography.bodyFontTitle_M_Card,
-              mb: 2,
+              mb: 4,
               textAlign: "center",
               transition: "transform 0.25s ease, color 0.25s ease",
-            }}
+                  "&:hover": {
+            transform: "scale(1.07)",
+            color: theme.palette.primary.main,
+          }}}
           >
             {Title}
           </Typography>
@@ -184,26 +210,44 @@ export default function RecentBlogPosts() {
             <IconButton
               size="small"
               sx={{
-                color: theme.palette.section.careers.main,
+                borderRadius: 100,
+                border: theme.mixins.borderStyle,
+                p: 0.6,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center", 
+                color: theme.palette.primary.main,
+                backgroundColor: theme.palette.section.blog.pastel,
                 transition: "transform 0.25s ease",
                 "&:hover": {
-                  transform: "scale(1.1)",
+                  transform: "scale(1.2)",
+                  backgroundColor: theme.palette.section.shopOrder.soft,
+                   boxShadow: "none"
                 },
               }}
             >
-              <ShareIcon sx={{ fontSize: 20 }} />
+              <ShareIcon sx={{ fontSize: 24 }} />
             </IconButton>
             <IconButton
               size="small"
               sx={{
-                color: theme.palette.section.careers.main,
+                borderRadius: 100,
+                border: theme.mixins.borderStyle,
+                p: 0.6,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center", 
+                color: theme.palette.primary.main,
+                backgroundColor: theme.palette.section.blog.pastel,
                 transition: "transform 0.25s ease",
                 "&:hover": {
-                  transform: "scale(1.1)",
+                  transform: "scale(1.2)",
+                  backgroundColor: theme.palette.section.shopOrder.soft,
+                   boxShadow: "none"
                 },
               }}
             >
-              <CommentIcon sx={{ fontSize: 20 }} />
+              <CommentIcon sx={{ fontSize: 24 }} />
             </IconButton>
           </Stack>
 
@@ -211,7 +255,7 @@ export default function RecentBlogPosts() {
             <Typography
               sx={{
                 ...theme.typography.bodyFontTitle_S,
-                color: theme.palette.section.contact.muted,
+                color: theme.palette.section.about.main,
                 textTransform: "uppercase",
                 display: "flex",
                 alignItems: "center",
@@ -219,12 +263,12 @@ export default function RecentBlogPosts() {
                 cursor: "pointer",
                 transition: "all 0.25s ease",
                 "&:hover": {
-                  color: theme.palette.section.careers.main,
+                  color: theme.palette.section.products.vibrant,
                   transform: "scale(1.05)",
                 },
               }}
             >
-              Read More <ArrowForwardIcon sx={{ fontSize: 20 }} />
+              Read More <ArrowForwardIcon sx={{ fontSize: 24 }} />
             </Typography>
           </Link>
         </Box>
@@ -246,14 +290,14 @@ export default function RecentBlogPosts() {
         <Box
           sx={{
             ...theme.mixins.homeBoxLeft,
-            boxShadow: `inset 0px -8px 0px ${theme.palette.section.blog.main}, inset -0px -12px 0px ${theme.palette.section.blog.vibrant}`,
+            boxShadow: `inset 0px -5px 0px ${theme.palette.section.blog.pastel}, inset -0px -14px 0px ${theme.palette.section.blog.main}`,
           }}
         />
 
         <Box
           sx={{
             ...theme.mixins.homeTitleRight,
-            boxShadow: `-10px -8px 0px ${theme.palette.section.blog.main}, -14px -12px 0px ${theme.palette.section.blog.vibrant}`,
+              boxShadow: `-0px -3px 0px ${theme.palette.section.blog.pastel}, 0px -12px 0px ${theme.palette.section.blog.main}`,
           }}
         >
           <Typography

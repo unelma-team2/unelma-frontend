@@ -386,13 +386,13 @@ const theme = createTheme({
 
     bodyFont_S: {
       fontFamily: bodyFont,
-      fontWeight: 400,
+      fontWeight: 500,
       fontSize: {
         xs: "0.75rem", // 12px
         sm: "0.875rem", // ~14px
         md: "1rem", // 16px (12pt target)
       },
-      lineHeight: 1.1,
+      lineHeight: 1.3,
     },
 
     bodyFont_XS_Label: {
@@ -545,16 +545,15 @@ const theme = createTheme({
           backgroundColor: "#1D2340",
           border: "2px solid #1D2340",
           borderRadius: 8,
-          boxShadow: "-4px -2px 0px  #62d3d3ff",
-          transition: "transform 0.27s ease, box-shadow 0.27s ease",
+          transition: "transform 0.25s ease, box-shadow 0.25s ease",
           cursor: "pointer",
           "&:hover": {
             transform: "scale(1.07)",
-            color: "#1D2340",
-            backgroundColor:"#00FF80",
-            border: "2px solid #1D2340",
+            color: "#0000FF",
+            backgroundColor: "#BBBBFF",
+            border: "2px solid #0000FF",
             cursor: "pointer",
-            boxShadow: "-6px -4px 0px #16bb86ff",
+            boxShadow: "-2px -1px 0px #0000FF, -4px -2px 0px #8888FF",
           },
         },
       },
@@ -595,12 +594,10 @@ const theme = createTheme({
           border: "2px solid #1D2340",
           "& .MuiOutlinedInput-notchedOutline": { border: "none" },
           "&:hover .MuiOutlinedInput-notchedOutline": {
-            border: "2px solid #1E88E5",
-            borderRadius: 4,
+            border: "2px solid #0000FF",
           },
           "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-            border: "2px solid #1E88E5",
-            borderRadius: 4,
+            border: "2px solidd #0000FF",
           },
         }),
       },
@@ -612,7 +609,7 @@ const theme = createTheme({
       styleOverrides: {
         root: ({ theme }) => ({
           marginTop: theme.spacing(1),
-          color: "#0000FF",
+          color: "#8E24AA",
           fontSize: "18px",
           fontWeight: 700,
           display: "inline-flex",
@@ -635,7 +632,7 @@ const theme = createTheme({
           "&:hover": {
             transform: "scale(1.05)",
             textDecoration: "none",
-            color: "#0080FF",
+            color: "#0000FF",
           },
         }),
       },
@@ -653,6 +650,7 @@ const theme = createTheme({
           props: { color: "arrowButton" },
           style: {
             color: "#1D2340",
+            border: "2px solid #1D2340",
             backgroundColor: "#FFFFFF",
             borderRadius: "50%",
             width: 60,
@@ -660,41 +658,17 @@ const theme = createTheme({
             boxShadow: "0px 4px 4px rgba(0,0,0,0.15)",
             "&:hover": {
               boxShadow: "0px 6px 6px rgba(0,0,0,0.2)",
-              backgroundColor: "#1D2340",
-              color: "#00b6d6ff",
+              backgroundColor:"#BBBBFF",
+              border: "2px solid #1D2340",
+              color: "#0000FF",
               transform: "scale(1.1)",
             },
           },
         },
-      ],
-    },
 
-       variants: [
-      
 
-        
-        {
-          props: { color: "topButton" },
-          style: ({ theme }) => ({
-            color: "#1D2340",
-            background: "transparent",
-            borderRadius: "50%",
-              transition: "transform 0.25s ease",
-           // width: { xs: 60, sm: 70, md: 40 },
-           // height: { xs: 60, sm: 70, md: 40 },
-            boxShadow: "none",
-            "&:hover": {
-           //   boxShadow: "0px 6px 6px rgba(0,0,0,0.2)",
-            //  color: "#ff5678ff",
-              backgroundColor: "transparent",
-            borderRadius: "50%",
-              boxShadow: "none",
-           //   border: "2px solid #1D2340",
-            },
-          }),
-        },
-        {
-       props: { color: "socialButton" },
+    {
+      props: { color: "socialButton" },
        style: ({ theme }) => ({
             color: "#1D2340",
             backgroundColor: "#BBBBFF",
@@ -720,7 +694,7 @@ const theme = createTheme({
           },
       ],
     },
-  
+  }
 })
 
 export default theme
