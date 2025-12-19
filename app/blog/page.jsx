@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import axios from "axios"
 import Image from "next/image"
 import Link from "next/link"
-import { Box, Typography, useTheme, IconButton, Pagination } from "@mui/material"
+import { Box, Typography, useTheme, IconButton, Pagination, Grid } from "@mui/material"
 import BlogPageHero from "@/components/blog/BlogPageHero"
 import ShareIcon from "@mui/icons-material/Share"
 import CommentIcon from "@mui/icons-material/Comment"
@@ -150,22 +150,24 @@ export default function BlogPage() {
                     "&:hover": {
                       transform: "translateY(-4px)",
                     },
-                    minHeight: 600,
+                    minHeight: { xs: "auto", md: 600 }, // don't force tall box on mobile
                   }}
                 >
                   {featured.blog_image?.url && (
                     <Box
                       sx={{
                         width: "100%",
-                        height: 450,
+                        height: { xs: 220, sm: 320, md: 450 }, // responsive heights
                         position: "relative",
+                        overflow: "hidden",
                       }}
                     >
                       <Image
-                        src="/images/blog/pngwing.com - 2025-11-17T021857.109 copy.png"
+                        src={featured.blog_image?.url ? featured.blog_image.url : "/images/blog-placeholder.png"}
                         alt={featured.Title || "Featured Blog Image"}
                         fill
-                        style={{ objectFit: "cover" }}
+                        sizes="(max-width:600px) 100vw, (max-width:1200px) 50vw, 33vw"
+                        style={{ objectFit: "cover", width: "100%", height: "100%" }}
                         priority
                       />
                     </Box>
@@ -382,147 +384,45 @@ export default function BlogPage() {
                 }}
               >
                 {currentBlogs.map((blog) => (
-                  <Box
-                    key={blog.id}
-                    component={Link}
-                    href={`/blog/${blog.slug}`}
-                    sx={{
-                      display: "flex",
-                      flexDirection: { xs: "column", md: "row" },
-                      ...theme.mixins.borderStyle,
-                      overflow: "hidden",
-                      cursor: "pointer",
-                      textDecoration: "none",
-                      transition: "all 0.25s ease",
-                      "&:hover": {
-                        transform: "translateY(-2px)",
-                      },
-                      minHeight: 380,
-                    }}
-                  >
-                    {blog.blog_image?.url && (
-                      <Box
-                        sx={{
-                          minWidth: { xs: "100%", md: 300 },
-                          height: { xs: 250, md: "100%" },
-                          position: "relative",
-                          flexShrink: 0,
-                        }}
-                      >
-                        <Image
-                          src="/images/blog/pngwing.com - 2025-11-17T021857.109 copy.png"
-                          alt={blog.Title || "Blog Image"}
-                          fill
-                          style={{ objectFit: "cover" }}
-                        />
-                      </Box>
-                    )}
-                    <Box sx={{ flex: 1, display: "flex", flexDirection: "column", p: 4, gap: 3 }}>
-                      <Box sx={{ display: "flex", gap: 3, alignItems: "center", flexWrap: "wrap" }}>
-                        <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
-                          <IconButton
-                            size="small"
-                            sx={{
-                              borderRadius: 100,
-                              border: theme.mixins.borderStyle,
-                              p: 0.6,
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-                              color: theme.palette.primary.main,
-                              backgroundColor: theme.palette.section.blog.pastel,
-                              transition: "transform 0.25s ease",
-                              "&:hover": {
-                                transform: "scale(1.2)",
-                                backgroundColor: theme.palette.section.shopOrder.soft,
-                                boxShadow: "none",
-                              },
-                            }}
-                          >
-                            <CalendarTodayIcon sx={{ fontSize: 24 }} />
-                          </IconButton>
-                          <Typography sx={{ ...theme.typography.bodyFont_M }}>
-                            {formatBlogDate(blog.date || blog.publishedAt)}
-                          </Typography>
+                  <Grid key={blog.id ?? blog.slug ?? blog._id} item xs={12} sm={6} md={3}>
+                    <Box
+                      key={blog.id}
+                      component={Link}
+                      href={`/blog/${blog.slug}`}
+                      sx={{
+                        display: "flex",
+                        flexDirection: { xs: "column", md: "row" },
+                        ...theme.mixins.borderStyle,
+                        overflow: "hidden",
+                        cursor: "pointer",
+                        textDecoration: "none",
+                        transition: "all 0.25s ease",
+                        "&:hover": {
+                          transform: "translateY(-2px)",
+                        },
+                        minHeight: 380,
+                      }}
+                    >
+                      {blog.blog_image?.url && (
+                        <Box
+                          sx={{
+                            minWidth: { xs: "100%", md: 300 },
+                            height: { xs: 250, md: "100%" },
+                            position: "relative",
+                            flexShrink: 0,
+                          }}
+                        >
+                          <Image
+                            src={blog.blog_image?.url ? blog.blog_image.url : "/images/blog-placeholder.png"}
+                            alt={blog.Title || "Blog Image"}
+                            fill
+                            sizes="(max-width:600px) 100vw, (max-width:1200px) 50vw, 33vw"
+                            style={{ objectFit: "cover" }}
+                          />
                         </Box>
-
-                        <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
-                          <IconButton
-                            size="small"
-                            sx={{
-                              borderRadius: 100,
-                              border: theme.mixins.borderStyle,
-                              p: 0.6,
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-                              color: theme.palette.primary.main,
-                              backgroundColor: theme.palette.section.blog.pastel,
-                              transition: "transform 0.25s ease",
-                              "&:hover": {
-                                transform: "scale(1.2)",
-                                backgroundColor: theme.palette.section.shopOrder.soft,
-                                boxShadow: "none",
-                              },
-                            }}
-                          >
-                            <EditNoteIcon sx={{ fontSize: 24 }} />
-                          </IconButton>
-                          <Typography sx={{ ...theme.typography.bodyFont_M }}>
-                            {blog.author_name || "Author's Name"}
-                          </Typography>
-                        </Box>
-
-                        <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
-                          <IconButton
-                            size="small"
-                            sx={{
-                              borderRadius: 100,
-                              border: theme.mixins.borderStyle,
-                              p: 0.6,
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-                              color: theme.palette.primary.main,
-                              backgroundColor: theme.palette.section.blog.pastel,
-                              transition: "transform 0.25s ease",
-                              "&:hover": {
-                                transform: "scale(1.2)",
-                                backgroundColor: theme.palette.section.shopOrder.soft,
-                                boxShadow: "none",
-                              },
-                            }}
-                          >
-                            <CategoryIcon sx={{ fontSize: 24 }} />
-                          </IconButton>
-                          <Typography sx={{ ...theme.typography.bodyFont_M }}>{blog.category || "Category"}</Typography>
-                        </Box>
-                      </Box>
-
-                      <Typography sx={{ ...theme.typography.bodyFontTitle_S, mt: 1 }}>{blog.Title}</Typography>
-                      <Typography
-                        sx={{
-                          ...theme.typography.bodyFont_M,
-                          color: theme.palette.text.secondary,
-                          flex: 1,
-                          textAlign: "justify",
-                          lineHeight: 1.7,
-                        }}
-                      >
-                        {blog.Description ? blog.Description.slice(0, 350) + "..." : ""}
-                      </Typography>
-
-                      <Box
-                        sx={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                          gap: 3,
-                          mt: 2,
-                          flexWrap: "nowrap", // keep everything on one line
-                        }}
-                      >
-                        <Box sx={{ display: "flex", gap: 4, alignItems: "center", minWidth: 0, flex: 1 }}>
+                      )}
+                      <Box sx={{ flex: 1, display: "flex", flexDirection: "column", p: 4, gap: 3 }}>
+                        <Box sx={{ display: "flex", gap: 3, alignItems: "center", flexWrap: "wrap" }}>
                           <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
                             <IconButton
                               size="small"
@@ -543,17 +443,13 @@ export default function BlogPage() {
                                 },
                               }}
                             >
-                              <ShareIcon sx={{ fontSize: 24 }} />
+                              <CalendarTodayIcon sx={{ fontSize: 24 }} />
                             </IconButton>
-                            <Typography
-                              sx={{
-                                ...theme.typography.bodyFontTitle_S,
-                                cursor: "pointer",
-                              }}
-                            >
-                              Share
+                            <Typography sx={{ ...theme.typography.bodyFont_M }}>
+                              {formatBlogDate(blog.date || blog.publishedAt)}
                             </Typography>
                           </Box>
+
                           <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
                             <IconButton
                               size="small"
@@ -574,46 +470,155 @@ export default function BlogPage() {
                                 },
                               }}
                             >
-                              <CommentIcon sx={{ fontSize: 24 }} />
+                              <EditNoteIcon sx={{ fontSize: 24 }} />
                             </IconButton>
-                            <Typography
-                              sx={{
-                                ...theme.typography.bodyFontTitle_S,
-                                cursor: "pointer",
-                              }}
-                            >
-                              Comment
+                            <Typography sx={{ ...theme.typography.bodyFont_M }}>
+                              {blog.author_name || "Author's Name"}
                             </Typography>
                           </Box>
+
+                          <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+                            <IconButton
+                              size="small"
+                              sx={{
+                                borderRadius: 100,
+                                border: theme.mixins.borderStyle,
+                                p: 0.6,
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                color: theme.palette.primary.main,
+                                backgroundColor: theme.palette.section.blog.pastel,
+                                transition: "transform 0.25s ease",
+                                "&:hover": {
+                                  transform: "scale(1.2)",
+                                  backgroundColor: theme.palette.section.shopOrder.soft,
+                                  boxShadow: "none",
+                                },
+                              }}
+                            >
+                              <CategoryIcon sx={{ fontSize: 24 }} />
+                            </IconButton>
+                            <Typography sx={{ ...theme.typography.bodyFont_M }}>{blog.category || "Category"}</Typography>
+                          </Box>
                         </Box>
+
+                        <Typography sx={{ ...theme.typography.bodyFontTitle_S, mt: 1 }}>{blog.Title}</Typography>
+                        <Typography
+                          sx={{
+                            ...theme.typography.bodyFont_M,
+                            color: theme.palette.text.secondary,
+                            flex: 1,
+                            textAlign: "justify",
+                            lineHeight: 1.7,
+                          }}
+                        >
+                          {blog.Description ? blog.Description.slice(0, 350) + "..." : ""}
+                        </Typography>
 
                         <Box
                           sx={{
-                            display: "inline-flex",
+                            display: "flex",
+                            justifyContent: "space-between",
                             alignItems: "center",
-                            gap: 1,
-                            color: theme.palette.section.about.main,
-                            transition: "all 0.25s ease",
-                            whiteSpace: "nowrap", // prevent wrapping of Read More
-                            "&:hover": {
-                              color: theme.palette.section.products.vibrant,
-                              transform: "scale(1.05)",
-                            },
+                            gap: 3,
+                            mt: 2,
+                            flexWrap: "nowrap", // keep everything on one line
                           }}
                         >
-                          <Typography
+                          <Box sx={{ display: "flex", gap: 4, alignItems: "center", minWidth: 0, flex: 1 }}>
+                            <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+                              <IconButton
+                                size="small"
+                                sx={{
+                                  borderRadius: 100,
+                                  border: theme.mixins.borderStyle,
+                                  p: 0.6,
+                                  display: "flex",
+                                  alignItems: "center",
+                                  justifyContent: "center",
+                                  color: theme.palette.primary.main,
+                                  backgroundColor: theme.palette.section.blog.pastel,
+                                  transition: "transform 0.25s ease",
+                                  "&:hover": {
+                                    transform: "scale(1.2)",
+                                    backgroundColor: theme.palette.section.shopOrder.soft,
+                                    boxShadow: "none",
+                                  },
+                                }}
+                              >
+                                <ShareIcon sx={{ fontSize: 24 }} />
+                              </IconButton>
+                              <Typography
+                                sx={{
+                                  ...theme.typography.bodyFontTitle_S,
+                                  cursor: "pointer",
+                                }}
+                              >
+                                Share
+                              </Typography>
+                            </Box>
+                            <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+                              <IconButton
+                                size="small"
+                                sx={{
+                                  borderRadius: 100,
+                                  border: theme.mixins.borderStyle,
+                                  p: 0.6,
+                                  display: "flex",
+                                  alignItems: "center",
+                                  justifyContent: "center",
+                                  color: theme.palette.primary.main,
+                                  backgroundColor: theme.palette.section.blog.pastel,
+                                  transition: "transform 0.25s ease",
+                                  "&:hover": {
+                                    transform: "scale(1.2)",
+                                    backgroundColor: theme.palette.section.shopOrder.soft,
+                                    boxShadow: "none",
+                                  },
+                                }}
+                              >
+                                <CommentIcon sx={{ fontSize: 24 }} />
+                              </IconButton>
+                              <Typography
+                                sx={{
+                                  ...theme.typography.bodyFontTitle_S,
+                                  cursor: "pointer",
+                                }}
+                              >
+                                Comment
+                              </Typography>
+                            </Box>
+                          </Box>
+
+                          <Box
                             sx={{
-                              ...theme.typography.bodyFontTitle_S,
-                              textTransform: "uppercase",
+                              display: "inline-flex",
+                              alignItems: "center",
+                              gap: 1,
+                              color: theme.palette.section.about.main,
+                              transition: "all 0.25s ease",
+                              whiteSpace: "nowrap", // prevent wrapping of Read More
+                              "&:hover": {
+                                color: theme.palette.section.products.vibrant,
+                                transform: "scale(1.05)",
+                              },
                             }}
                           >
-                            Read More
-                          </Typography>
-                          <ArrowForward sx={{ fontSize: 20 }} />
+                            <Typography
+                              sx={{
+                                ...theme.typography.bodyFontTitle_S,
+                                textTransform: "uppercase",
+                              }}
+                            >
+                              Read More
+                            </Typography>
+                            <ArrowForward sx={{ fontSize: 20 }} />
+                          </Box>
                         </Box>
                       </Box>
                     </Box>
-                  </Box>
+                  </Grid>
                 ))}
               </Box>
 
