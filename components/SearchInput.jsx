@@ -12,14 +12,8 @@ export default function SearchInput({ placeholder = "Search…", size = "medium"
 
   const handleSearch = () => {
     const query = searchQuery.trim()
-  
     if (onSearch) {
-      // Call onSearch with query, even if empty
-      onSearch(query) 
-    } else {
-      // If query is empty, navigate to /search without query param
-      const url = query ? `/search?q=${encodeURIComponent(query)}` : "/search"
-      router.push(url)
+      onSearch(query) // always filter in-place
     }
   }
 
@@ -39,8 +33,8 @@ export default function SearchInput({ placeholder = "Search…", size = "medium"
       value={searchQuery}
       onChange={(e) => {
         setSearchQuery(e.target.value)
-        if (e.target.value === "" && onSearch) {
-          onSearch("") // reset filter when cleared
+        if (onSearch) {
+          onSearch(e.target.value.trim()) // update filter immediately
         }
       }}
       onKeyPress={handleKeyPress}
