@@ -180,7 +180,7 @@ export default function ProductsPage() {
 
   const filteredProducts = products.filter((product) => {
     const matchesSearch = searchQuery
-      ? product?.title?.toLowerCase().includes(searchQuery.toLowerCase())
+      ? product?.product_name?.toLowerCase().includes(searchQuery.toLowerCase())
       : true
 
     // read product_category first (Strapi field), fall back to generic category

@@ -11,12 +11,9 @@ export default function SearchInput({ placeholder = "Search…", size = "medium"
   const theme = useTheme()
 
   const handleSearch = () => {
-    if (searchQuery.trim()) {
-      if (onSearch) {
-        onSearch(searchQuery.trim())
-      } else {
-        router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`)
-      }
+    const query = searchQuery.trim()
+    if (onSearch) {
+      onSearch(query) // always filter in-place
     }
   }
 
@@ -34,7 +31,12 @@ export default function SearchInput({ placeholder = "Search…", size = "medium"
       size="small"
       placeholder={placeholder}
       value={searchQuery}
-      onChange={(e) => setSearchQuery(e.target.value)}
+      onChange={(e) => {
+        setSearchQuery(e.target.value)
+        if (onSearch) {
+          onSearch(e.target.value.trim()) // update filter immediately
+        }
+      }}
       onKeyPress={handleKeyPress}
       sx={{
         width: "100%",
