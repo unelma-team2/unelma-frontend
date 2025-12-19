@@ -25,12 +25,21 @@ export default function AboutPage() {
   const [error, setError] = useState(null)
 
   useEffect(() => {
-    setLoading(true)
-    axios
-      .get(
-        `${API_URL}/api/about?populate[AboutBannerSection][populate]=*&populate[WelcomeSection]=*&populate[BulletPoints]=*&populate[PhilosophySection]=*&populate[NetworkSection][populate]=*&populate[InnovationSection]=*&populate[PromiseSection][populate]=*&populate[AboutImageList][populate]=*`,
-      )
-      .then((res) => {
+    let mounted = true
+
+    ;(async () => {
+      try {
+        // defer to microtask to avoid synchronous setState in effect body
+        await Promise.resolve()
+        if (!mounted) return
+
+        setLoading(true)
+
+        const res = await axios.get(
+          `${API_URL}/api/about?populate[AboutBannerSection][populate]=*&populate[WelcomeSection]=*&populate[BulletPoints]=*&populate[PhilosophySection]=*&populate[NetworkSection][populate]=*&populate[InnovationSection]=*&populate[PromiseSection][populate]=*&populate[AboutImageList][populate]=*`,
+        )
+
+        if (!mounted) return
         const data = res.data?.data || {}
         setBannerSection(data.AboutBannerSection || null)
         setWelcomeSection(data.WelcomeSection || null)
@@ -40,13 +49,19 @@ export default function AboutPage() {
         setInnovationSection(data.InnovationSection || null)
         setPromiseSection(data.PromiseSection || null)
         setImageList(data.AboutImageList || null)
-        setLoading(false)
-      })
-      .catch((err) => {
+        if (mounted) setLoading(false)
+      } catch (err) {
         console.error(err)
-        setError(err)
-        setLoading(false)
-      })
+        if (mounted) {
+          setError(err)
+          setLoading(false)
+        }
+      }
+    })()
+
+    return () => {
+      mounted = false
+    }
   }, [API_URL])
 
   if (loading) return <LoadingSpinner />
@@ -165,7 +180,7 @@ export default function AboutPage() {
             </Typography>
           </Box>
 
-          <Box
+          {/* <Box
             component="img"
             src={imageUrl(network_image)}
             alt="Global Map"
@@ -175,7 +190,7 @@ export default function AboutPage() {
               borderRadius: "10px",
               objectFit: "cover",
             }}
-          />
+          /> */}
 
           <Box>
             <Typography sx={{ ...theme.typography.headingFont_M, mb: { xs: 2, md: 4 }, color: theme.palette.text.primary }}>
@@ -372,7 +387,7 @@ export default function AboutPage() {
             </Box>
 
             {/* Global Map Image */}
-            <Box
+            {/* <Box
               component="img"
               src={imageUrl(network_image)}
               alt="Global Map"
@@ -384,7 +399,7 @@ export default function AboutPage() {
                 opacity: 0.8,
                 objectFit: "cover",
               }}
-            />
+            /> */}
 
             {/* Promise Section */}
             <Box
