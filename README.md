@@ -1,5 +1,6 @@
 # 🧭 Unelma Platforms Redesign
 
+> Project status: Completed and presented (Dec 2025)
 > **Final Project — Business College Helsinki (Full Stack Web Developer Program)**  
 > Duration: Oct–Dec 2025  
 > Team: 4 members
@@ -26,7 +27,7 @@ This project is a **redesign of Unelma Platforms** (https://www.unelmaplatforms.
 | **Frontend** | Next.js (React) |
 | **Styling** | MUI + Custom CSS |
 | **Backend** | Strapi (Headless CMS) + Supabase (Database) |
-| **Deployment** | Frontend: Local (presentation) • Backend: Strapi deployed on Render (URL withheld) |
+| **Deployment** | Frontend: Local (used for project presentation) • Backend: Strapi deployed on Render (URL withheld) |
 | **Version Control** | GitHub (Organization: `unelma-team2`) |
 | **Design Tool** | Figma (Wireframes) |
 
@@ -40,6 +41,14 @@ This project is a **redesign of Unelma Platforms** (https://www.unelmaplatforms.
 - Fizza — @Fizzaishfaq110
 
 All team members contributed across design, development, testing and project coordination.
+
+---
+
+## 🔒 Backend Access
+
+The backend (Strapi + Supabase) is hosted in a private repository under the same organization
+and maintained by the project team.
+It is not publicly accessible due to configuration, credentials, and service-level constraints.
 
 ---
 
@@ -79,8 +88,14 @@ npm run dev
 # open http://localhost:3000
 ```
 
-4) (Optional) Run Strapi locally — only if you have backend repo access
-- Clone the backend repo (private). Follow its README to install and create `.env` and database.
+4) (Optional) Run Strapi locally — internal team setup
+
+The backend repository is private and maintained within the organization.
+This step is intended for team members or reviewers with granted access.
+
+If you do not have backend access, you can still:
+- Run the frontend using the deployed Strapi instance (URL provided on request), or
+- Review the frontend code and architecture independently.
 - Typical commands (may vary by repo):
 ```bash
 git clone git@github.com:unelma-team2/unelma-backend.git
