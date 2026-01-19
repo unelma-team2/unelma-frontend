@@ -158,7 +158,7 @@ export default function ProfilePage() {
 
   return (
     <>
-      <HeroPage title="My Profile" compact />
+      <HeroPage title="My Profile" compact showImages={false}/>
       <Box component="main" sx={{ px: { xs: 2, md: 6 }, py: 8, maxWidth: 1200, mx: "auto" }}>
         <Grid container spacing={4} sx={{ display: "flex" }}>
 

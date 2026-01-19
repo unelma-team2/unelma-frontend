@@ -38,8 +38,8 @@ export default function OrderSuccessPage() {
     <>
       <HeroPage
         title="Order Success"
-        image1={{ src: "/blog/blog-hero-1.png", alt: "Order Success Hero 1", width: 244, height: 261 }}
-        image2={{ src: "/blog/blog-hero-2.png", alt: "Order Success Hero 2", width: 272, height: 309 }}
+        // image1={{ src: "/blog/blog-hero-1.png", alt: "Order Success Hero 1", width: 244, height: 261 }}
+        // image2={{ src: "/blog/blog-hero-2.png", alt: "Order Success Hero 2", width: 272, height: 309 }}
       />
 
       <Box sx={{ py: 8, maxWidth: 900, mx: "auto" }}>

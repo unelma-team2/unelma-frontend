@@ -82,6 +82,7 @@ export default function BlogPage() {
       .finally(() => setLoading(false))
   }, [API_URL])
 
+
   const sortedBlogs = [...blogs].sort(
     (a, b) => new Date(b.date || b.publishedAt || b.createdAt) - new Date(a.date || a.publishedAt || a.createdAt),
   )

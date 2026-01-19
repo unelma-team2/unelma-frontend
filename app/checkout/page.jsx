@@ -223,8 +223,8 @@ export default function CheckoutPage() {
     <>
       <HeroPage
         title="Checkout"
-        image1={{ src: "/blog/blog-hero-1.png", alt: "Checkout Hero 1", width: 244, height: 261 }}
-        image2={{ src: "/blog/blog-hero-2.png", alt: "Checkout Hero 2", width: 272, height: 309 }}
+        // image1={{ src: ""/images/shipping&billing_hero.png"", alt: "Checkout Hero 1", width: 244, height: 261 }}
+        // image2={{ src: "/blog/blog-hero-2.png", alt: "Checkout Hero 2", width: 272, height: 309 }}
       />
       <Grid
         container
